@@ -1,0 +1,105 @@
+
+Date: 28/02/2026  
+Time: 11:00 AM – 12:08 PM  
+Location: Discord
+
+Attendance:
+- Emma Robinson
+- Jonte Te Moni
+- Will Lucas
+
+Apologies:
+- Lewis Watt (Camping)
+- Euan Campbell (Work)
+  Also Present: None
+
+Meeting Opened: 11:18 AM
+## Agenda / Business
+1. Apologies Disclaimer
+2. Roles Discussion
+3. Member Information Collection
+4. Week 1 Tutorial Exercise: Shapes 2D
+5. Architecture
+6. Brainstorming Ideas for Project
+7. To-Do
+## 1. Apologies Disclaimer
+- Meeting was planned last minute, which is why some members were unable to attend
+- Group discussed having a weekly recurring meeting to allow scheduling
+- Planned weekly meeting: Fridays, 9:00 AM on campus, with possibility for remote call-in
+## 2. Roles Discussion
+- Recording meeting minutes
+- GitHub repo management
+## 3. Member Information Collection
+- Emily (Emma) Robinson – n10876324
+- Euan Campbell – n11027991
+- Jonte Te Moni – n12057291
+- Lewis Watt
+- Will Lucas – n11966246
+## 4. Week 1 Tutorial Exercise: Shapes 2D
+- Reviewed errors encountered during the exercise
+- Identified shape information being printed twice in the Main function
+- Discussed work that still needs to be done
+## 5. Architecture
+- Emma: Apple M1 MacBook Air, Windows 11 PC
+- Euan: Windows 11
+- Jonte: Windows 11
+- Lewis: Linux/Win10
+- Will: Linux/Win11
+## 6. Brainstorming Ideas for Project
+**Project Theme:** Desktop App – Living, Learning, Working with AI
+### AI-Assisted Skill Degradation Monitor
+- AI automates tasks, causing potential skill loss (writing, mental math, memory, researching)
+- Tracks and prevents skill degradation
+- Features:
+    - Tracks tasks offloaded to AI (writing help, solving, summarizing)
+    - Detects over-reliance patterns
+    - Suggests where to rely on AI less
+    - Generates small exercises to maintain skills
+    - Offers "AI-free mode" challenges
+### AI Bias-Aware Writing Assistant (BAWA)
+- Evaluates user writing for unintended bias
+- Helps users write responsibly with AI assistance
+- Features:
+    - Analyzes sentences for biased language
+    - Finds stereotypes, unfair implications, one-sided framing
+    - Suggests neutral alternatives
+    - Shows bias-distribution heatmaps
+### AI-Integrated Digital Well-being Dashboard
+- Tracks and manages user AI usage patterns (across platforms if feasible)
+- Features:
+    - Shows frequency of AI interactions
+    - Classifies usage: work, learning, entertainment, automation
+    - Detects unhealthy patterns (e.g., over-delegating tasks)
+    - Offers healthy habit suggestions
+### Explain-My-AI Transparency Tool
+- Helps users understand AI decision-making
+- Features:
+    - Loads AI model outputs (from API)
+    - Generates step-by-step simplified explanations
+    - Shows visual trace (weights, keywords, decision layers)
+    - Flags suspicious or risk-prone outputs
+### AI-Powered Adaptive Home Workflow Planner
+- Helps users organize daily tasks using AI
+- Features:
+    - Learns user habits
+    - Analyzes tasks like recipes to estimate duration and scheduling
+    - Auto-adjusts schedule based on energy patterns
+    - Suggests alternatives (e.g., rescheduling chores based on weather)
+    - Connects to external data (weather, calendar)
+### AI-Image Generator with Reference Production
+- Addresses challenges with generative AI datasets
+- Features:
+    - Tracks tasks offloaded to AI
+    - Detects over-reliance patterns
+    - Suggests areas to reduce AI dependency
+    - Generates small exercises to maintain skills
+    - Offers "AI-free mode" challenges
+## 7. To-Do
+**Emma**
+- Fix `containsPoint` methods in EquilateralTriangle and Circle classes
+- Implement challenge part of Shapes2D exercise
+  **Jonte**
+- Implement EquilateralTriangle's getters and setters
+---
+Meeting Closed: 12:08 PM
+Next Meeting: Friday 06/03/2025, 9:00 AM, QUT Library GP-V404

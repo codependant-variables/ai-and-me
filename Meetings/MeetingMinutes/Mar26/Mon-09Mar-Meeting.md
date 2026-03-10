@@ -1,0 +1,40 @@
+
+Date: 09/03/2026
+Time: 3:00 PM – 5:00PM
+Location: In-Person, GP-F101 (During tutorial)
+Members Present:
+- Emily (Emma) Robinson
+- Jonte Te Moni
+- Lewis Watt
+- Euan Campbell
+- Will Lucas
+- Daniel Santic
+
+Meeting Opened: 3:00 PM
+## Agenda / Business
+1. Sprint Planning
+2. Group Member Update
+3. Project Voting
+4. Scheduling Next Meeting
+5. User Stories Discussion
+## 1. Sprint
+* Sprint 1 has begun as of Monday 9/3/26, 3:00 PM
+* Sprint 1 milestone will be due Sunday 29/3/26, 3:00 PM (approx.)
+* Each member will be able to provide 10 user stories each
+* User stories will be stored in GitHub Projects
+## 2. Group Member Update
+* New group member: Daniel Santic
+* Updating on project
+## 3. Project Voting
+* Discussed voting on the project
+* Daniel created a poll for the group to vote
+## 4. Scheduling Next Meeting
+* Discussed adjusting availability for the next meeting
+* Created a When2Meet poll to coordinate schedules
+## 5. User Stories Discussion
+* Rolled back on creating user stories for now
+* Decided it is too early to create user stories before the project idea is finalized
+
+---
+Meeting Closed: 5:00PM
+Next Meeting: Friday 13/03/2026, In-Person, QUT Library GP-V404 
