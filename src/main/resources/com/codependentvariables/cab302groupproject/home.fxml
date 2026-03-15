@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codependentvariables.cab302groupproject.controller.HomeController">
+    <ListView fx:id="usersListView" />
+
+    <ButtonBar prefHeight="21.0" prefWidth="532.0">
+      <buttons>
+          <Button onAction="#onCreateClick" text="Create User" />
+          <Button onAction="#onDeleteClick" text="Delete User" />
+      </buttons></ButtonBar>
+    <HBox alignment="CENTER" prefHeight="56.0" prefWidth="532.0">
+        <Label text="Name"/>
+        <TextField fx:id="nameTextField"/>
+        <Label text="Email"/>
+        <TextField fx:id="emailTextField"/>
+    </HBox>
+</VBox>
