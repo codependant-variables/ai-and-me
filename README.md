@@ -1,29 +1,6 @@
-# Enter project name here
+<<<<<<< HEAD
 
-## Introduction
----
+CAB302 assignment
 
+Test
 
-
-
-
-## Key features
----
-
-
-
-
-
-## Installation
----
-
-
-
-## Conception idea's
-enter overleaf link here
-
-
-
-### Credits
----
-See [[Contributors]] page.
