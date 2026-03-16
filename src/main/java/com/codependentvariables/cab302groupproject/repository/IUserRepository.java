@@ -1,6 +1,6 @@
-package com.codependentvariables.cab302groupproject.repository;
+package com.codependentvariables.aiandme.repository;
 
-import com.codependentvariables.cab302groupproject.model.User;
+import com.codependentvariables.aiandme.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

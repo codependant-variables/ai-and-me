@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codependentvariables.cab302groupproject.controller.HomeController">
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codependentvariables.aiandme.controller.HomeController">
     <ListView fx:id="usersListView" />
 
     <ButtonBar prefHeight="21.0" prefWidth="532.0">

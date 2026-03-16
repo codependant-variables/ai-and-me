@@ -1,7 +1,7 @@
-package com.codependentvariables.cab302groupproject.controller;
+package com.codependentvariables.aiandme.controller;
 
-import com.codependentvariables.cab302groupproject.model.User;
-import com.codependentvariables.cab302groupproject.service.IUserService;
+import com.codependentvariables.aiandme.model.User;
+import com.codependentvariables.aiandme.service.IUserService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListCell;

@@ -1,4 +1,4 @@
-package com.codependentvariables.cab302groupproject.model;
+package com.codependentvariables.aiandme.model;
 import jakarta.persistence.*;
 import lombok.*;
 
