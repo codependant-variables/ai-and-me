@@ -1,4 +1,4 @@
-package com.codependentvariables.cab302groupproject;
+package com.codependentvariables.aiandme;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

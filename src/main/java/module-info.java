@@ -1,4 +1,4 @@
-module com.codependentvariables.cab302groupproject {
+module com.codependentvariables.aiandme {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
@@ -14,15 +14,15 @@ module com.codependentvariables.cab302groupproject {
     requires jakarta.transaction;
     requires static lombok;
 
-    exports com.codependentvariables.cab302groupproject;
-    exports com.codependentvariables.cab302groupproject.controller;
-    exports com.codependentvariables.cab302groupproject.model;
-    exports com.codependentvariables.cab302groupproject.repository;
-    exports com.codependentvariables.cab302groupproject.service;
+    exports com.codependentvariables.aiandme;
+    exports com.codependentvariables.aiandme.controller;
+    exports com.codependentvariables.aiandme.model;
+    exports com.codependentvariables.aiandme.repository;
+    exports com.codependentvariables.aiandme.service;
 
-    opens com.codependentvariables.cab302groupproject;
-    opens com.codependentvariables.cab302groupproject.controller;
-    opens com.codependentvariables.cab302groupproject.model;
-    opens com.codependentvariables.cab302groupproject.repository;
-    opens com.codependentvariables.cab302groupproject.service;
+    opens com.codependentvariables.aiandme;
+    opens com.codependentvariables.aiandme.controller;
+    opens com.codependentvariables.aiandme.model;
+    opens com.codependentvariables.aiandme.repository;
+    opens com.codependentvariables.aiandme.service;
 }

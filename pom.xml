@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.example</groupId>
-    <artifactId>CAB302GroupProject</artifactId>
+    <artifactId>AIAndMe</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>CAB302GroupProject</name>
+    <name>AIAndMe</name>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -103,7 +103,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>com.example.cab302groupproject/com.codependentvariables.cab302groupproject.Application</mainClass>
+                            <mainClass>com.example.aiandme/com.codependentvariables.aiandme.Application</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>

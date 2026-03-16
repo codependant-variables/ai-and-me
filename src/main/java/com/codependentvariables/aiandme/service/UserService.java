@@ -1,7 +1,7 @@
-package com.codependentvariables.cab302groupproject.service;
+package com.codependentvariables.aiandme.service;
 
-import com.codependentvariables.cab302groupproject.model.User;
-import com.codependentvariables.cab302groupproject.repository.IUserRepository;
+import com.codependentvariables.aiandme.model.User;
+import com.codependentvariables.aiandme.repository.IUserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;

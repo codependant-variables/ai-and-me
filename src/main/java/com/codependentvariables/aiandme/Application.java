@@ -1,4 +1,4 @@
-package com.codependentvariables.cab302groupproject;
+package com.codependentvariables.aiandme;
 
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
