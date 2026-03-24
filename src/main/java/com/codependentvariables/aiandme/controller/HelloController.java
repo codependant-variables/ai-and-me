@@ -1,6 +1,6 @@
-package com.example.aiandme.controller;
+package com.codependentvariables.aiandme.controller;
 
-import com.example.aiandme.HelloApplication;
+import com.codependentvariables.aiandme.HelloApplication;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

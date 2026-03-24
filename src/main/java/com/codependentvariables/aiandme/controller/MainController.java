@@ -1,9 +1,8 @@
-package com.example.aiandme.controller;
+package com.codependentvariables.aiandme.controller;
 
-import com.example.aiandme.model.Contact;
-import com.example.aiandme.model.IContactDAO;
-import com.example.aiandme.model.MockContactDAO;
-import com.example.aiandme.model.SqliteContactDAO;
+import com.codependentvariables.aiandme.model.Contact;
+import com.codependentvariables.aiandme.model.IContactDAO;
+import com.codependentvariables.aiandme.model.SqliteContactDAO;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
