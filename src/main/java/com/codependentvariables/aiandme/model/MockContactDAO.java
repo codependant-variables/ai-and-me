@@ -1,4 +1,4 @@
-package com.example.aiandme.model;
+package com.codependentvariables.aiandme.model;
 
 import java.util.ArrayList;
 import java.util.List;

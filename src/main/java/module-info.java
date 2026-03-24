@@ -1,13 +1,13 @@
-module com.example.aiandme {
+module com.codependentvariables.aiandme {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
 
 
-    opens com.example.aiandme to javafx.fxml;
-    exports com.example.aiandme;
-    exports com.example.aiandme.controller;
-    opens com.example.aiandme.controller to javafx.fxml;
-    exports com.example.aiandme.model;
-    opens com.example.aiandme.model to javafx.fxml;
+    opens com.codependentvariables.aiandme to javafx.fxml;
+    exports com.codependentvariables.aiandme;
+    exports com.codependentvariables.aiandme.controller;
+    opens com.codependentvariables.aiandme.controller to javafx.fxml;
+    exports com.codependentvariables.aiandme.model;
+    opens com.codependentvariables.aiandme.model to javafx.fxml;
 }

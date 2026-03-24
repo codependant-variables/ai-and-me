@@ -1,4 +1,4 @@
-package com.example.aiandme.model;
+package com.codependentvariables.aiandme.model;
 
 public class Contact {
     private int id;
