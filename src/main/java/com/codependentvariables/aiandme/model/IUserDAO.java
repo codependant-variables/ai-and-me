@@ -23,16 +23,15 @@ public interface IUserDAO {
      */
     public void deleteUser(User user);
     /**
+     * Retrieves all users from the database.
+     * @return A list of all users in the database.
+     */
+    public List<User> getAllUsers();
+    /**
      * Retrieves a user from the database.
      * @param id The id of the user to retrieve.
      * @return The user with the given id, or null if not found.
      */
     public User get(int id);
-    /**
-     * Retrieves all users from the database.
-     * @return A list of all users in the database.
-     */
-    public List<User> getAllUsers();
-
     public User getByEmail(String email);
 }
