@@ -11,13 +11,16 @@ public class SqliteUserDAO implements IUserDAO, IDatabaseEntity {
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY,
             name VARCHAR NOT NULL,
-            email VARCHAR NOT NULL
+            email VARCHAR UNIQUE NOT NULL,
+            password VARCHAR NOT NULL
         );
     """;
     private static final String seedDataQuery = """
-        INSERT INTO users (name, email) VALUES ('Amy Adams', 'amy.adams@mydomain.gov');
-        INSERT INTO users (name, email) VALUES ('Bob Builder', 'bobthebulider23@swagmail.net');
+        INSERT INTO users (name, email, password) VALUES ('Amy Adams', 'amy.adams@mydomain.gov', 'password1');
+        INSERT INTO users (name, email, password) VALUES ('Bob Builder', 'bobthebulider23@swagmail.net', 'Insecure');
     """;
+
+    private static final String EncryptionKey = "";
 
     public SqliteUserDAO() {
         connection = SqliteConnection.getInstance();
@@ -34,11 +37,10 @@ public class SqliteUserDAO implements IUserDAO, IDatabaseEntity {
     @Override
     public void addUser(User user) {
         try {
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO users (firstName, lastName, phone, email) VALUES (?, ?, ?, ?)");
-            statement.setString(1, user.getFirstName());
-            statement.setString(2, user.getLastName());
-            statement.setString(3, user.getPhone());
-            statement.setString(4, user.getEmail());
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO users (name, email, password) VALUES (?, ?, ?)");
+            statement.setString(1, user.getName());
+            statement.setString(2, user.getEmail());
+            statement.setString(3, user.getPassword());
             statement.executeUpdate();
             // Set the id of the new user
             ResultSet generatedKeys = statement.getGeneratedKeys();
@@ -52,12 +54,11 @@ public class SqliteUserDAO implements IUserDAO, IDatabaseEntity {
     @Override
     public void updateUser(User user) {
         try {
-            PreparedStatement statement = connection.prepareStatement("UPDATE users SET firstName = ?, lastName = ?, phone = ?, email = ? WHERE id = ?");
-            statement.setString(1, user.getFirstName());
-            statement.setString(2, user.getLastName());
-            statement.setString(3, user.getPhone());
-            statement.setString(4, user.getEmail());
-            statement.setLong(5, user.getId());
+            PreparedStatement statement = connection.prepareStatement("UPDATE users SET name = ?, email = ?, password = ? WHERE id = ?");
+            statement.setString(1, user.getName());
+            statement.setString(2, user.getEmail());
+            statement.setString(3, user.getPassword());
+            statement.setLong(4, user.getId());
             statement.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -75,20 +76,41 @@ public class SqliteUserDAO implements IUserDAO, IDatabaseEntity {
         }
     }
 
+    private User mapUser(ResultSet resultSet) throws SQLException {
+        User user = new User(
+            resultSet.getString("name"),
+            resultSet.getString("email"),
+            resultSet.getString("password")
+        );
+        user.setId(resultSet.getInt("id"));
+        return user;
+    }
+
     @Override
-    public User getUser(int id) {
+    public List<User> getAllUsers() {
+        final String query = "SELECT * FROM users";
+
+        List<User> users = new ArrayList<>();
         try {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE id = ?");
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+            while (resultSet.next()) {
+                users.add(mapUser(resultSet));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
+
+    @Override
+    public User get(int id) {
+        try {
+            final PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE id = ?");
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                String firstName = resultSet.getString("firstName");
-                String lastName = resultSet.getString("lastName");
-                String phone = resultSet.getString("phone");
-                String email = resultSet.getString("email");
-                User user = new User(firstName, lastName, phone, email);
-                user.setId(id);
-                return user;
+                return mapUser(resultSet);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -97,25 +119,17 @@ public class SqliteUserDAO implements IUserDAO, IDatabaseEntity {
     }
 
     @Override
-    public List<User> getAllUsers() {
-        List<User> users = new ArrayList<>();
+    public User getByEmail(String email) {
         try {
-            Statement statement = connection.createStatement();
-            String query = "SELECT * FROM users";
-            ResultSet resultSet = statement.executeQuery(query);
-            while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String firstName = resultSet.getString("firstName");
-                String lastName = resultSet.getString("lastName");
-                String phone = resultSet.getString("phone");
-                String email = resultSet.getString("email");
-                User user = new User(firstName, lastName, phone, email);
-                user.setId(id);
-                users.add(user);
+            final PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE email = ?");
+            statement.setString(1, email);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return mapUser(resultSet);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return users;
+        return null;
     }
 }

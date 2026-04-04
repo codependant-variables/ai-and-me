@@ -2,6 +2,7 @@ module com.codependentvariables.aiandme {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
+    requires jdk.compiler;
 
 
     opens com.codependentvariables.aiandme to javafx.fxml;

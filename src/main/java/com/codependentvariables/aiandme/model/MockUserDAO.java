@@ -2,6 +2,7 @@ package com.codependentvariables.aiandme.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MockUserDAO implements IUserDAO {
     /**
@@ -12,9 +13,9 @@ public class MockUserDAO implements IUserDAO {
 
     public MockUserDAO() {
         // Add some initial users to the mock database
-        addUser(new User("John", "Doe", "johndoe@example.com", "0423423423"));
-        addUser(new User("Jane", "Doe", "janedoe@example.com", "0423423424"));
-        addUser(new User("Jay", "Doe", "jaydoe@example.com", "0423423425"));
+        addUser(new User("John Doe", "johndoe@example.com", "test1"));
+        addUser(new User("Jane Doe", "janedoe@example.com", "test2"));
+        addUser(new User("Jay Doe", "jaydoe@example.com", "test3"));
     }
 
     @Override
@@ -39,7 +40,12 @@ public class MockUserDAO implements IUserDAO {
     }
 
     @Override
-    public User getUser(int id) {
+    public List<User> getAllUsers() {
+        return new ArrayList<>(users);
+    }
+
+    @Override
+    public User get(int id) {
         for (User user : users) {
             if (user.getId() == id) {
                 return user;
@@ -49,7 +55,12 @@ public class MockUserDAO implements IUserDAO {
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return new ArrayList<>(users);
+    public User getByEmail(String email) {
+        for (User user : users) {
+            if (Objects.equals(user.getEmail(), email)) {
+                return user;
+            }
+        }
+        return null;
     }
 }

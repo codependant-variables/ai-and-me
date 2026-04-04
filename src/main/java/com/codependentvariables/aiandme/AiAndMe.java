@@ -9,13 +9,13 @@ import java.io.IOException;
 
 public class  AiAndMe extends Application {
     // Constants defining the window title and size
-    public static final String TITLE = "Address Book";
+    public static final String TITLE = "AI & Me";
     public static final int WIDTH = 640;
     public static final int HEIGHT = 360;
 
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(AiAndMe.class.getResource("hello-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(AiAndMe.class.getResource("main-view.fxml"));
 
         Scene scene = new Scene(fxmlLoader.load(), WIDTH, HEIGHT);
 
@@ -27,6 +27,7 @@ public class  AiAndMe extends Application {
 
         stage.setTitle(TITLE);
         stage.setScene(scene);
+        stage.setMaximized(true);
         stage.show();
     }
 
