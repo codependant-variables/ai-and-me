@@ -1,8 +1,8 @@
 package com.codependentvariables.aiandme.controller;
 
-import com.codependentvariables.aiandme.model.Contact;
-import com.codependentvariables.aiandme.model.IContactDAO;
-import com.codependentvariables.aiandme.model.SqliteContactDAO;
+import com.codependentvariables.aiandme.model.User;
+import com.codependentvariables.aiandme.model.IUserDAO;
+import com.codependentvariables.aiandme.model.SqliteUserDAO;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
@@ -12,8 +12,8 @@ import java.util.List;
 
 public class MainController {
     @FXML
-    private ListView<Contact> contactsListView;
-    private IContactDAO contactDAO;
+    private ListView<User> usersListView;
+    private IUserDAO userDAO;
     @FXML
     private TextField firstNameTextField;
     @FXML
@@ -23,136 +23,136 @@ public class MainController {
     @FXML
     private TextField phoneTextField;
     @FXML
-    private VBox contactContainer;
+    private VBox userContainer;
     public MainController() {
-        contactDAO = new SqliteContactDAO();
+        userDAO = new SqliteUserDAO();
     }
 
     /**
-     * Programmatically selects a contact in the list view and
-     * updates the text fields with the contact's information.
-     * @param contact The contact to select.
+     * Programmatically selects a user in the list view and
+     * updates the text fields with the user's information.
+     * @param user The user to select.
      */
-    private void selectContact(Contact contact) {
-        contactsListView.getSelectionModel().select(contact);
-        firstNameTextField.setText(contact.getFirstName());
-        lastNameTextField.setText(contact.getLastName());
-        emailTextField.setText(contact.getEmail());
-        phoneTextField.setText(contact.getPhone());
+    private void selectUser(User user) {
+        usersListView.getSelectionModel().select(user);
+        firstNameTextField.setText(user.getFirstName());
+        lastNameTextField.setText(user.getLastName());
+        emailTextField.setText(user.getEmail());
+        phoneTextField.setText(user.getPhone());
     }
 
     /**
-     * Renders a cell in the contacts list view by setting the text to the contact's full name.
-     * @param contactListView The list view to render the cell for.
+     * Renders a cell in the users list view by setting the text to the user's full name.
+     * @param userListView The list view to render the cell for.
      * @return The rendered cell.
      */
-    private ListCell<Contact> renderCell(ListView<Contact> contactListView) {
+    private ListCell<User> renderCell(ListView<User> userListView) {
         return new ListCell<>() {
             /**
-             * Handles the event when a contact is selected in the list view.
+             * Handles the event when a user is selected in the list view.
              * @param mouseEvent The event to handle.
              */
-            private void onContactSelected(MouseEvent mouseEvent) {
-                ListCell<Contact> clickedCell = (ListCell<Contact>) mouseEvent.getSource();
-                // Get the selected contact from the list view
-                Contact selectedContact = clickedCell.getItem();
-                if (selectedContact != null) selectContact(selectedContact);
+            private void onUserSelected(MouseEvent mouseEvent) {
+                ListCell<User> clickedCell = (ListCell<User>) mouseEvent.getSource();
+                // Get the selected user from the list view
+                User selectedUser = clickedCell.getItem();
+                if (selectedUser != null) selectUser(selectedUser);
             }
 
             /**
-             * Updates the item in the cell by setting the text to the contact's full name.
-             * @param contact The contact to update the cell with.
+             * Updates the item in the cell by setting the text to the user's full name.
+             * @param user The user to update the cell with.
              * @param empty Whether the cell is empty.
              */
             @Override
-            protected void updateItem(Contact contact, boolean empty) {
-                super.updateItem(contact, empty);
-                // If the cell is empty, set the text to null, otherwise set it to the contact's full name
-                if (empty || contact == null || contact.getFullName() == null) {
+            protected void updateItem(User user, boolean empty) {
+                super.updateItem(user, empty);
+                // If the cell is empty, set the text to null, otherwise set it to the user's full name
+                if (empty || user == null || user.getFullName() == null) {
                     setText(null);
-                    super.setOnMouseClicked(this::onContactSelected);
+                    super.setOnMouseClicked(this::onUserSelected);
                 } else {
-                    setText(contact.getFullName());
+                    setText(user.getFullName());
                 }
             }
         };
     }
 
     /**
-     * Synchronizes the contacts list view with the contacts in the database.
+     * Synchronizes the users list view with the users in the database.
      */
-    private void syncContacts() {
-        contactsListView.getItems().clear();
-        List<Contact> contacts = contactDAO.getAllContacts();
-        boolean hasContact = !contacts.isEmpty();
-        if (hasContact) {
-            contactsListView.getItems().addAll(contacts);
+    private void syncUsers() {
+        usersListView.getItems().clear();
+        List<User> users = userDAO.getAllUsers();
+        boolean hasUser = !users.isEmpty();
+        if (hasUser) {
+            usersListView.getItems().addAll(users);
         }
-        // Show / hide based on whether there are contacts
-        contactContainer.setVisible(hasContact);
+        // Show / hide based on whether there are users
+        userContainer.setVisible(hasUser);
     }
 
     @FXML
     public void initialize() {
-        contactsListView.setCellFactory(this::renderCell);
-        syncContacts();
-        // Select the first contact and display its information
-        contactsListView.getSelectionModel().selectFirst();
-        Contact firstContact = contactsListView.getSelectionModel().getSelectedItem();
-        if (firstContact != null) {
-            selectContact(firstContact);
+        usersListView.setCellFactory(this::renderCell);
+        syncUsers();
+        // Select the first user and display its information
+        usersListView.getSelectionModel().selectFirst();
+        User firstUser = usersListView.getSelectionModel().getSelectedItem();
+        if (firstUser != null) {
+            selectUser(firstUser);
         }
     }
 
     @FXML
     private void onEditConfirm() {
-        // Get the selected contact from the list view
-        Contact selectedContact = contactsListView.getSelectionModel().getSelectedItem();
-        if (selectedContact != null) {
-            selectedContact.setFirstName(firstNameTextField.getText());
-            selectedContact.setLastName(lastNameTextField.getText());
-            selectedContact.setEmail(emailTextField.getText());
-            selectedContact.setPhone(phoneTextField.getText());
-            contactDAO.updateContact(selectedContact);
-            syncContacts();
+        // Get the selected user from the list view
+        User selectedUser = usersListView.getSelectionModel().getSelectedItem();
+        if (selectedUser != null) {
+            selectedUser.setFirstName(firstNameTextField.getText());
+            selectedUser.setLastName(lastNameTextField.getText());
+            selectedUser.setEmail(emailTextField.getText());
+            selectedUser.setPhone(phoneTextField.getText());
+            userDAO.updateUser(selectedUser);
+            syncUsers();
         }
     }
 
     @FXML
     private void onDelete() {
-        // Get the selected contact from the list view
-        Contact selectedContact = contactsListView.getSelectionModel().getSelectedItem();
-        if (selectedContact != null) {
-            contactDAO.deleteContact(selectedContact);
-            syncContacts();
+        // Get the selected user from the list view
+        User selectedUser = usersListView.getSelectionModel().getSelectedItem();
+        if (selectedUser != null) {
+            userDAO.deleteUser(selectedUser);
+            syncUsers();
         }
     }
 
     @FXML
     private void onAdd() {
-        // Default values for a new contact
+        // Default values for a new user
         final String DEFAULT_FIRST_NAME = "New";
-        final String DEFAULT_LAST_NAME = "Contact";
+        final String DEFAULT_LAST_NAME = "User";
         final String DEFAULT_EMAIL = "";
         final String DEFAULT_PHONE = "";
-        Contact newContact = new Contact(DEFAULT_FIRST_NAME, DEFAULT_LAST_NAME, DEFAULT_EMAIL, DEFAULT_PHONE);
-        // Add the new contact to the database
-        contactDAO.addContact(newContact);
-        syncContacts();
-        // Select the new contact in the list view
+        User newUser = new User(DEFAULT_FIRST_NAME, DEFAULT_LAST_NAME, DEFAULT_EMAIL, DEFAULT_PHONE);
+        // Add the new user to the database
+        userDAO.addUser(newUser);
+        syncUsers();
+        // Select the new user in the list view
         // and focus the first name text field
-        selectContact(newContact);
+        selectUser(newUser);
         firstNameTextField.requestFocus();
     }
 
     @FXML
     private void onCancel() {
-        // Find the selected contact
-        Contact selectedContact = contactsListView.getSelectionModel().getSelectedItem();
-        if (selectedContact != null) {
-            // Since the contact hasn't been modified,
+        // Find the selected user
+        User selectedUser = usersListView.getSelectionModel().getSelectedItem();
+        if (selectedUser != null) {
+            // Since the user hasn't been modified,
             // we can just re-select it to refresh the text fields
-            selectContact(selectedContact);
+            selectUser(selectedUser);
         }
     }
 }

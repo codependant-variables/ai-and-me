@@ -1,24 +1,24 @@
 package com.codependentvariables.aiandme.model;
 
-public class Contact {
-    private int id;
+public class User {
+    private long id;
     private String firstName;
     private String lastName;
     private String email;
     private String phone;
 
-    public Contact(String firstName, String lastName, String email, String phone) {
+    public User(String firstName, String lastName, String email, String phone) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phone = phone;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

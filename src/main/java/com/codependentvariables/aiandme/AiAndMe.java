@@ -7,7 +7,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class  HelloApplication extends Application {
+public class  AiAndMe extends Application {
     // Constants defining the window title and size
     public static final String TITLE = "Address Book";
     public static final int WIDTH = 640;
@@ -15,8 +15,16 @@ public class  HelloApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(AiAndMe.class.getResource("hello-view.fxml"));
+
         Scene scene = new Scene(fxmlLoader.load(), WIDTH, HEIGHT);
+
+        java.net.URL stylesheetResource = Application.class.getResource("stylesheet.css");
+        if (stylesheetResource != null) {
+            String stylesheet = stylesheetResource.toExternalForm();
+            scene.getStylesheets().add(stylesheet);
+        }
+
         stage.setTitle(TITLE);
         stage.setScene(scene);
         stage.show();

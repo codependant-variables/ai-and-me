@@ -1,6 +1,6 @@
 package com.codependentvariables.aiandme.controller;
 
-import com.codependentvariables.aiandme.HelloApplication;
+import com.codependentvariables.aiandme.AiAndMe;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -45,8 +45,8 @@ Elementum nibh tellus molestie nunc non blandit massa.""");
     @FXML
     protected void onNextButtonClick() throws IOException {
         Stage stage = (Stage) nextButton.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("main-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
+        FXMLLoader fxmlLoader = new FXMLLoader(AiAndMe.class.getResource("main-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), AiAndMe.WIDTH, AiAndMe.HEIGHT);
         stage.setScene(scene);
     }
 
