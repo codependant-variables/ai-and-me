@@ -19,7 +19,7 @@ public class  AiAndMe extends Application {
 
         Scene scene = new Scene(fxmlLoader.load(), WIDTH, HEIGHT);
 
-        java.net.URL stylesheetResource = Application.class.getResource("stylesheet.css");
+        java.net.URL stylesheetResource = AiAndMe.class.getResource("stylesheet.css");
         if (stylesheetResource != null) {
             String stylesheet = stylesheetResource.toExternalForm();
             scene.getStylesheets().add(stylesheet);
