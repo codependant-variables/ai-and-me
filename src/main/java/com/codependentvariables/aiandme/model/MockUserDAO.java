@@ -14,7 +14,7 @@ public class MockUserDAO implements IUserDAO {
     public MockUserDAO() {
         // Add some initial users to the mock database
         addUser(new User("Amy Adams", "amy.adams@mydomain.gov", "Zl3QG3XY5/Gsus8Ec4WTi6jMcM7EkrCGCqBMgwwYUzg=", "sKH9XkLaT2i1XR687zjlHQ=="));
-        addUser(new User("Bob Builder", "bobthebulider23@swagmail.net", "Qf15LlrXz/ghNuMGZG3heBeqH3xeuzITnsRhHTDxzR4=", "0akeeTvljQojvcWqb4cg/Q=="));
+        addUser(new User("Bob Builder", "bobthebuilder23@swagmail.net", "Qf15LlrXz/ghNuMGZG3heBeqH3xeuzITnsRhHTDxzR4=", "0akeeTvljQojvcWqb4cg/Q=="));
     }
 
     @Override

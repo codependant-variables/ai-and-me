@@ -1,8 +1,6 @@
 package com.codependentvariables.aiandme.services;
 
 import com.codependentvariables.aiandme.model.User;
-import javafx.util.Pair;
-
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.security.NoSuchAlgorithmException;

@@ -13,7 +13,7 @@ public class SqliteUserDAO implements IUserDAO, IDatabaseEntity {
             name VARCHAR NOT NULL,
             email VARCHAR UNIQUE NOT NULL,
             password VARCHAR NOT NULL,
-            salt CHAR(16) NOT NULL
+            salt CHAR(24) NOT NULL
         );
     """;
     private static final String seedDataQuery = """

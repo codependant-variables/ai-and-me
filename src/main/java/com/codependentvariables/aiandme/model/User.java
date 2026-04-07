@@ -1,11 +1,6 @@
 package com.codependentvariables.aiandme.model;
 
 import com.codependentvariables.aiandme.services.UserService;
-import javafx.util.Pair;
-
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-import java.util.Objects;
 
 public class User {
     private long id;

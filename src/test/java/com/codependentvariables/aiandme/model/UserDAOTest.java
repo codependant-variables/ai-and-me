@@ -12,13 +12,13 @@ public class UserDAOTest {
     public void get() {
         User user = userDAO.get(1);
         assertNotNull(user);
-        assertEquals("John Doe", user.getName());
+        assertEquals("Amy Adams", user.getName());
     }
 
     @Test
     public void getByEmail() {
-        User user = userDAO.getByEmail("johndoe@example.com");
+        User user = userDAO.getByEmail("bobthebuilder23@swagmail.net");
         assertNotNull(user);
-        assertEquals("John Doe", user.getName());
+        assertEquals("Bob Builder", user.getName());
     }
 }
