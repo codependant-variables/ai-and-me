@@ -12,12 +12,13 @@ public class SqliteUserDAO implements IUserDAO, IDatabaseEntity {
             id INTEGER PRIMARY KEY,
             name VARCHAR NOT NULL,
             email VARCHAR UNIQUE NOT NULL,
-            password VARCHAR NOT NULL
+            password VARCHAR NOT NULL,
+            salt CHAR(16) NOT NULL
         );
     """;
     private static final String seedDataQuery = """
-        INSERT INTO users (name, email, password) VALUES ('Amy Adams', 'amy.adams@mydomain.gov', 'password1');
-        INSERT INTO users (name, email, password) VALUES ('Bob Builder', 'bobthebulider23@swagmail.net', 'Insecure');
+        INSERT INTO users (name, email, password, salt) VALUES ('Amy Adams', 'amy.adams@mydomain.gov', 'Zl3QG3XY5/Gsus8Ec4WTi6jMcM7EkrCGCqBMgwwYUzg=', 'sKH9XkLaT2i1XR687zjlHQ==');
+        INSERT INTO users (name, email, password, salt) VALUES ('Bob Builder', 'bobthebulider23@swagmail.net', 'Qf15LlrXz/ghNuMGZG3heBeqH3xeuzITnsRhHTDxzR4=', '0akeeTvljQojvcWqb4cg/Q==');
     """;
 
     private static final String EncryptionKey = "";
@@ -37,10 +38,11 @@ public class SqliteUserDAO implements IUserDAO, IDatabaseEntity {
     @Override
     public void addUser(User user) {
         try {
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO users (name, email, password) VALUES (?, ?, ?)");
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO users (name, email, password, salt) VALUES (?, ?, ?, ?)");
             statement.setString(1, user.getName());
             statement.setString(2, user.getEmail());
             statement.setString(3, user.getPassword());
+            statement.setString(4, user.getSalt());
             statement.executeUpdate();
             // Set the id of the new user
             ResultSet generatedKeys = statement.getGeneratedKeys();
@@ -54,11 +56,12 @@ public class SqliteUserDAO implements IUserDAO, IDatabaseEntity {
     @Override
     public void updateUser(User user) {
         try {
-            PreparedStatement statement = connection.prepareStatement("UPDATE users SET name = ?, email = ?, password = ? WHERE id = ?");
+            PreparedStatement statement = connection.prepareStatement("UPDATE users SET name = ?, email = ?, password = ?, salt = ? WHERE id = ?");
             statement.setString(1, user.getName());
             statement.setString(2, user.getEmail());
             statement.setString(3, user.getPassword());
-            statement.setLong(4, user.getId());
+            statement.setString(4, user.getSalt());
+            statement.setLong(5, user.getId());
             statement.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -80,7 +83,8 @@ public class SqliteUserDAO implements IUserDAO, IDatabaseEntity {
         User user = new User(
             resultSet.getString("name"),
             resultSet.getString("email"),
-            resultSet.getString("password")
+            resultSet.getString("password"),
+            resultSet.getString("salt")
         );
         user.setId(resultSet.getInt("id"));
         return user;

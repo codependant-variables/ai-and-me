@@ -1,15 +1,24 @@
 package com.codependentvariables.aiandme.model;
 
+import com.codependentvariables.aiandme.services.UserService;
+import javafx.util.Pair;
+
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.util.Objects;
+
 public class User {
     private long id;
     private String name;
     private String email;
     private String password;
+    private String salt;
 
-    public User(String name, String email, String password) {
+    public User(String name, String email, String password, String salt) {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.salt = salt;
     }
 
     public long getId() {
@@ -41,6 +50,12 @@ public class User {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        UserService.HashResult hashResult = UserService.hash(password);
+        this.password = hashResult.hash();
+        this.salt = hashResult.salt();
+    }
+
+    public String getSalt() {
+        return salt;
     }
 }

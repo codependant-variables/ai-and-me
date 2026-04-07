@@ -3,6 +3,7 @@ package com.codependentvariables.aiandme.controller;
 import com.codependentvariables.aiandme.model.User;
 import com.codependentvariables.aiandme.model.IUserDAO;
 import com.codependentvariables.aiandme.model.SqliteUserDAO;
+import com.codependentvariables.aiandme.services.UserService;
 import com.sun.source.tree.ReturnTree;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -120,6 +121,7 @@ public class MainController {
             selectedUser.setName(nameTextField.getText());
             selectedUser.setEmail(emailTextField.getText());
             selectedUser.setPassword(passwordTextField.getText());
+            passwordTextField.setText(selectedUser.getPassword());
             userDAO.updateUser(selectedUser);
             syncUsers();
         }
@@ -141,7 +143,8 @@ public class MainController {
         final String DEFAULT_NAME = "New User";
         final String DEFAULT_EMAIL = "";
         final String DEFAULT_PASSWORD = "";
-        User newUser = new User(DEFAULT_NAME, DEFAULT_EMAIL, DEFAULT_PASSWORD);
+        final String DEFAULT_SALT = "";
+        User newUser = new User(DEFAULT_NAME, DEFAULT_EMAIL, DEFAULT_PASSWORD, DEFAULT_SALT);
         // Add the new user to the database
         userDAO.addUser(newUser);
         syncUsers();
@@ -183,7 +186,7 @@ public class MainController {
             return;
         }
 
-        if (!Objects.equals(user.getPassword(), password)) {
+        if (!UserService.comparePassword(user, password)) {
             setLoginMessage("Incorrect password", true);
             return;
         }
