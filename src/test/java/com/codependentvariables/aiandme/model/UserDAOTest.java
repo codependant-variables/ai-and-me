@@ -1,5 +1,5 @@
-import com.codependentvariables.aiandme.model.MockUserDAO;
-import com.codependentvariables.aiandme.model.User;
+package com.codependentvariables.aiandme.model;
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
