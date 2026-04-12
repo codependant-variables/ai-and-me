@@ -6,20 +6,17 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class SqliteConnection {
-    private static final Connection Instance;
+    private static SqliteConnection instance;
+    private final Connection connection;
     private static final String DB_PATH = "app.db";
 
-    // Static constructor to follow a
-    static {
+    private SqliteConnection() {
         try {
-            boolean isNewDatabase = false;
             File dbFile = new File(DB_PATH);
-            if (!dbFile.exists()) {
-                isNewDatabase = true;
-            }
+            boolean isNewDatabase = !dbFile.exists();
 
             String url = "jdbc:sqlite:" + DB_PATH;
-            Instance = DriverManager.getConnection(url);
+            connection = DriverManager.getConnection(url);
 
             if (isNewDatabase)
                 setupSchema();
@@ -28,20 +25,27 @@ public class SqliteConnection {
         }
     }
 
+    public static SqliteConnection getInstance() {
+        if (instance == null) {
+            instance = new SqliteConnection();
+        }
+        return instance;
+    }
+
     /**
      * Creates schema and seeds data for any class that implements IDatabaseEntity
      * @throws SQLException
      */
-    private static void setupSchema() throws SQLException {
+    private void setupSchema() throws SQLException {
         // Add an instance of the IDatabaseEntity class to this array
         IDatabaseEntity[] entities = {
             new SqliteUserDAO()
         };
 
         try {
-            Instance.setAutoCommit(false);
+            connection.setAutoCommit(false);
 
-            Statement statement = Instance.createStatement();
+            Statement statement = connection.createStatement();
             for (IDatabaseEntity entity : entities) {
                 String schemaQuery = entity.getSchemaQuery();
                 statement.executeUpdate(schemaQuery);
@@ -49,16 +53,16 @@ public class SqliteConnection {
                 statement.executeUpdate(seedDataQuery);
             }
 
-            Instance.commit();
-            Instance.setAutoCommit(true);
+            connection.commit();
+            connection.setAutoCommit(true);
         } catch (SQLException e) {
             System.err.println("Transaction failed; rolling back schema changes.");
-            Instance.rollback();
+            connection.rollback();
             throw e;
         }
     }
 
-    public static Connection getInstance() {
-        return Instance;
+    public static Connection getConnection() {
+        return getInstance().connection;
     }
 }

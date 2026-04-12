@@ -22,7 +22,7 @@ public class SqliteUserDAO implements IUserDAO, IDatabaseEntity {
     """;
 
     public SqliteUserDAO() {
-        connection = SqliteConnection.getInstance();
+        connection = SqliteConnection.getConnection();
     }
 
     public String getSchemaQuery() {
