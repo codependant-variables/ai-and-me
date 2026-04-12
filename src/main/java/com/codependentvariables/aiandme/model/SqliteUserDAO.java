@@ -21,8 +21,6 @@ public class SqliteUserDAO implements IUserDAO, IDatabaseEntity {
         INSERT INTO users (name, email, password, salt) VALUES ('Bob Builder', 'bobthebulider23@swagmail.net', 'Qf15LlrXz/ghNuMGZG3heBeqH3xeuzITnsRhHTDxzR4=', '0akeeTvljQojvcWqb4cg/Q==');
     """;
 
-    private static final String EncryptionKey = "";
-
     public SqliteUserDAO() {
         connection = SqliteConnection.getInstance();
     }

@@ -28,10 +28,15 @@ public interface IUserDAO {
      */
     public List<User> getAllUsers();
     /**
-     * Retrieves a user from the database.
+     * Retrieves a user by id.
      * @param id The id of the user to retrieve.
      * @return The user with the given id, or null if not found.
      */
     public User get(int id);
+    /**
+     * Retrieves a user by email.
+     * @param email The email of the user to retrieve.
+     * @return The user with the given email, or null if not found.
+     */
     public User getByEmail(String email);
 }

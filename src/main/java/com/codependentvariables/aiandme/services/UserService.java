@@ -16,8 +16,9 @@ public class UserService {
     public record HashResult(String hash, String salt) {}
 
     /**
-     * Hashes the input and returns a tuple of hash and salt.
-     * @return <hash, salt>
+     * Hashes the input string using a newly generated salt. Intended use is when setting a new password.
+     * @param value to hash.
+     * @return HashResult of hash string and salt string.
      */
     public static HashResult hash(String value) {
         byte[] salt = new byte[16];
@@ -26,12 +27,24 @@ public class UserService {
         return hash(value, salt);
     }
 
+    /**
+     * Hashes the input string using the provided salt. Decodes the string to a byte array for ease of use. Intended use is when creating a hash from an existing salt for comparison, e.g. comparing a password.
+     * @param value to hash.
+     * @param salt to hash with.
+     * @return HashResult of hash string and salt string.
+     */
     public static HashResult hash(String value, String salt) {
         return hash(value, Base64.getDecoder().decode(salt));
     }
 
-    public static HashResult hash(String value, byte[] salt) {
-        KeySpec spec = new PBEKeySpec(value.toCharArray(), salt, 600000, 256);
+    /**
+     * Shared internal method for hashing a string using a salt as byte array.
+     * @param value to hash.
+     * @param salt to hash with.
+     * @return HashResult of hash string and salt string.
+     */
+    private static HashResult hash(String value, byte[] salt) {
+        KeySpec spec = new PBEKeySpec(value.toCharArray(), salt, 600000, 256); // OWASP recommendation to use a work factor of 600,000 -  https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
         try {
             SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
             byte[] hash = factory.generateSecret(spec).getEncoded();
@@ -42,6 +55,12 @@ public class UserService {
         }
     }
 
+    /**
+     * Compares the user's password against a provided string.
+     * @param user User whose password to compare.
+     * @param password Password to compare to the user's.
+     * @return If password equals that of the user.
+     */
     public static boolean comparePassword(User user, String password) {
         if (user == null || user.getPassword() == null || user.getSalt() == null)
             return false;

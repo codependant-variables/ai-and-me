@@ -9,6 +9,7 @@ public class SqliteConnection {
     private static final Connection Instance;
     private static final String DB_PATH = "app.db";
 
+    // Static constructor to follow a
     static {
         try {
             boolean isNewDatabase = false;
@@ -27,7 +28,12 @@ public class SqliteConnection {
         }
     }
 
+    /**
+     * Creates schema and seeds data for any class that implements IDatabaseEntity
+     * @throws SQLException
+     */
     private static void setupSchema() throws SQLException {
+        // Add an instance of the IDatabaseEntity class to this array
         IDatabaseEntity[] entities = {
             new SqliteUserDAO()
         };
