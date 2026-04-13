@@ -10,7 +10,7 @@ public class SqliteCategoryDAO implements ICategoryDAO {
     private Connection connection;
 
     public SqliteCategoryDAO() { // constructor?
-        connection = SqliteConnection.getInstance();
+        connection = SqliteConnection.getConnection();
         createTable();
     }
 
