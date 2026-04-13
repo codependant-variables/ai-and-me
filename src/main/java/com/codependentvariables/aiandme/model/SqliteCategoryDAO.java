@@ -1,7 +1,8 @@
 package com.codependentvariables.aiandme.model;
 
 import java.sql.*;
-java.util.List;
+import java.util.List;
+import java.util.ArrayList;
 
 // Comments for Emma, meant to be removed before PR
 // Developed based on SQliteContactDAO
@@ -66,5 +67,43 @@ public class SqliteCategoryDAO implements ICategoryDAO {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public Category getCategory(int id) {
+        try {
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM categories WHERE id = ?");
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            if(resultSet.next()) {
+                String name = resultSet.getString("name");
+                Category category = new Category(name);
+                category.setId(id);
+                return category;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public List<Category> getAllCategories() {
+        List<Category> categories =new ArrayList<>();
+        try {
+            Statement statement = connection.createStatement();
+            String query = "SELECT * FROM categories";
+            ResultSet resultSet = statement.executeQuery(query);
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                Category category = new Category(name);
+                category.setId(id);
+                categories.add(category);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return categories;
     }
 }
