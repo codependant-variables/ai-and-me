@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
-<VBox alignment="TOP_LEFT" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
+<VBox spacing="20.0" xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.codependentvariables.aiandme.controller.MainController"
 >
     <padding>
@@ -19,31 +19,47 @@
     <Label text="Select a contact to view or edit." />
     <HBox VBox.vgrow="ALWAYS" spacing="20.0">
         <VBox spacing="10.0">
-            <ListView fx:id="contactsListView"  />
+            <ListView fx:id="usersListView"  />
             <HBox spacing="10.0">
                 <Button text="New" onAction="#onAdd" maxWidth="Infinity"/>
             </HBox>
         </VBox>
-        <VBox spacing="10.0" prefWidth="400" fx:id="contactContainer">
+        <VBox spacing="10.0" prefWidth="400" fx:id="userContainer">
             <Label text="Enter the contact's details below." />
             <GridPane hgap="5.0" vgap="5.0" >
                 <columnConstraints>
                     <ColumnConstraints minWidth="70" />
                     <ColumnConstraints hgrow="ALWAYS"/>
                 </columnConstraints>
-                <Label text="First Name:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                <Label text="Last Name:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                <Label text="Email:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-                <Label text="Phone:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-                <TextField fx:id="firstNameTextField" GridPane.columnIndex="1" GridPane.rowIndex="0" maxWidth="Infinity"/>
-                <TextField fx:id="lastNameTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                <TextField fx:id="emailTextField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                <TextField fx:id="phoneTextField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <Label text="Name:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                <Label text="Email:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                <Label text="Password:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                <TextField fx:id="nameTextField" GridPane.columnIndex="1" GridPane.rowIndex="0" maxWidth="Infinity"/>
+                <TextField fx:id="emailTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <TextField fx:id="passwordTextField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             </GridPane>
             <HBox spacing="10.0" alignment="CENTER">
                 <Button text="Confirm" onAction="#onEditConfirm"/>
                 <Button text="Cancel" onAction="#onCancel"/>
                 <Button text="Delete" onAction="#onDelete"/>
+            </HBox>
+        </VBox>
+        <VBox spacing="10.0" prefWidth="400" fx:id="loginContainer">
+            <Label text="Login" textAlignment="CENTER" />
+            <GridPane hgap="5.0" vgap="5.0" >
+                <columnConstraints>
+                    <ColumnConstraints minWidth="70" />
+                    <ColumnConstraints hgrow="ALWAYS"/>
+                </columnConstraints>
+                <Label text="Email:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                <Label text="Password:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                <TextField fx:id="emailField" GridPane.columnIndex="1" GridPane.rowIndex="0" maxWidth="Infinity"/>
+                <TextField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            </GridPane>
+            <Label visible="false" fx:id="loginMessage" />
+            <HBox spacing="10.0" alignment="CENTER">
+                <Button text="Login" onAction="#onLogin"/>
+                <Button styleClass="logout" text="Logout" onAction="#onLogout"/>
             </HBox>
         </VBox>
     </HBox>
