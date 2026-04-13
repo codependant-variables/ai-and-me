@@ -3,7 +3,6 @@ package com.codependentvariables.aiandme.model;
 import java.util.List;
 
 public interface ICategoryDAO {
-    // why are we doing this again?
     /**
      * Adds a new category to the database.
      * @param category The category to add.

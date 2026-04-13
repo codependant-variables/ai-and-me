@@ -8,18 +8,25 @@ import java.util.ArrayList;
 // - Refactor db ops to use try-with-resources so Statement and ResultSet are automatically closed
 // - Replace printStackTrace() with a proper logging framework for better error handling in production
 
-// Implementation for handling category objects with SQLite
+/**
+ * Implementation for handling category objects with SQLite
+ */
 public class SqliteCategoryDAO implements ICategoryDAO {
     private Connection connection;
 
-    // Constructor: get db connection and ensure table exists
+
+    /**
+     * Constructor: get database connection and ensure table exists
+     */
     public SqliteCategoryDAO() {
         connection = SqliteConnection.getConnection();
         createTable();
     }
 
+    /**
+     * Create table if not existing
+     */
     private void createTable() {
-        // Create table if not existing
         try {
             Statement statement = connection.createStatement();
             String query = "CREATE TABLE IF NOT EXISTS categories ("
@@ -32,7 +39,10 @@ public class SqliteCategoryDAO implements ICategoryDAO {
         }
     }
 
-    // Inserts a new category into db
+    /**
+     * Inserts a new category into database
+     * @param category The category to add.
+     */
     @Override
     public void addCategory(Category category) {
         try{
@@ -52,7 +62,10 @@ public class SqliteCategoryDAO implements ICategoryDAO {
         }
     }
 
-    // Updates an existing category's name by ID
+    /**
+     * Updates an existing category's name by ID
+     * @param category The category to update.
+     */
     @Override
     public void updateCategory(Category category) {
         try {
@@ -65,7 +78,10 @@ public class SqliteCategoryDAO implements ICategoryDAO {
         }
     }
 
-    // Deletes a category from the db by ID
+    /**
+     * Deletes a category from the database by ID
+     * @param category The category to delete.
+     */
     @Override
     public void deleteCategory(Category category) {
         try {
@@ -77,7 +93,11 @@ public class SqliteCategoryDAO implements ICategoryDAO {
         }
     }
 
-    // Retrieves single category by ID
+    /**
+     * Retrieves single category by ID
+     * @param id The id of the category to retrieve.
+     * @return the details of the category if found, else null
+     */
     @Override
     public Category getCategory(int id) {
         try {
@@ -95,8 +115,10 @@ public class SqliteCategoryDAO implements ICategoryDAO {
         }
         return null;
     }
-
-    // Retrieves all categories from db
+    /**
+     * Retrieves all categories from database
+     * @return the list of categories
+     */
     @Override
     public List<Category> getAllCategories() {
         List<Category> categories =new ArrayList<>();
