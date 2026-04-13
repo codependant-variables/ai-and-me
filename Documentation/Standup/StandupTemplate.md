@@ -7,12 +7,14 @@
 ---
 ## 1. Attendance
 
-| Name | Present (Y/N) | Notes |     |
-| ---- | ------------- | ----- | --- |
-|      |               |       |     |
-|      |               |       |     |
-|      |               |       |     |
-|      |               |       |     |
+| Name                  | Present | Notes                  |
+| --------------------- | ------- | ---------------------- |
+| Emily (Emma) Robinson | Y/N     |                        |
+| Jonte Te Moni         | Y/N     |                        |
+| Will Lucas            | Y/N     |                        |
+| Lewis Watt            | Y/N     |                        |
+| Daniel Santic         | Y/N     |                        |
+| Euan Campbell         | Y/N     |                        |
 
 ---
 
@@ -141,32 +143,7 @@
 
 ---
 
-## 9. Action Items
-
-| Task | Assigned To | Deadline | Status |
-|------|------------|----------|--------|
-| Task 1 | Member Name | [Date] | Not Started / In Progress / Done |
-| Task 2 | Member Name | [Date] | Not Started / In Progress / Done |
-| Task 3 | Member Name | [Date] | Not Started / In Progress / Done |
-
----
-
-## 10. Issues / Risks
-
-| Issue or Risk | Impact | Proposed Solution | Owner |
-|---------------|--------|------------------|-------|
-| [Describe issue] | Low / Med / High | [Solution] | Member |
-
----
-
-## 11. Decisions Made
-- Decision 1: [Description]
-- Decision 2: [Description]
-- Decision 3: [Description]
-
----
-
-## 12. Next Meeting
+## 9. Next Meeting
 
 **Date:** [YYYY-MM-DD]  
 **Time:** [Start–End]  
