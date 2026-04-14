@@ -3,7 +3,7 @@ package com.codependentvariables.aiandme.model;
 import com.codependentvariables.aiandme.services.UserService;
 
 public class User {
-    private long id;
+    private int id;
     private String name;
     private String email;
     private String password;
@@ -16,11 +16,11 @@ public class User {
         this.salt = salt;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

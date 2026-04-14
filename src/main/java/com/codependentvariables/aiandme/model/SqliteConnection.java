@@ -34,11 +34,11 @@ public class SqliteConnection {
 
     /**
      * Creates schema and seeds data for any class that implements IDatabaseEntity
-     * @throws SQLException
      */
     private void setupSchema() throws SQLException {
-        // Add an instance of the IDatabaseEntity class to this array
+        // Add instances of each IDatabaseEntity class to this array
         IDatabaseEntity[] entities = {
+            new SqliteCategoryDAO(),
             new SqliteUserDAO()
         };
 
@@ -62,6 +62,9 @@ public class SqliteConnection {
         }
     }
 
+    /**
+     * Gets shared Sqlite connection.
+     */
     public static Connection getConnection() {
         return getInstance().connection;
     }

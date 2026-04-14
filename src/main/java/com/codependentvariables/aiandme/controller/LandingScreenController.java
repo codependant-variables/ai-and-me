@@ -6,28 +6,16 @@ import javafx.fxml.FXML;
 public class LandingScreenController {
     @FXML
     private void handleGoToGuest() {
-        try {
-            AiAndMe.showUserView();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        AiAndMe.showUserView();
     }
 
     @FXML
     private void handleGoToSignUp() {
-        try {
-            AiAndMe.showSignUp();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        AiAndMe.showSignUp();
     }
 
     @FXML
     private void handleGoToLogin() {
-        try {
-            AiAndMe.showLogin();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        AiAndMe.showLogin();
     }
 }
