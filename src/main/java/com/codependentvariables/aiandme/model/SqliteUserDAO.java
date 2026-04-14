@@ -84,7 +84,7 @@ public class SqliteUserDAO extends BaseDAO implements IUserDAO, IDatabaseEntity 
 
     @Override
     public User get(int id) {
-        final String query = "SELECT TOP 1 * FROM users WHERE id = ?";
+        final String query = "SELECT * FROM users WHERE id = ? LIMIT 1";
 
         List<User> users = executeQuery(query, preparedStatement -> preparedStatement.setInt(1, id), USER_MAPPER);
         return firstOrNull(users);
@@ -92,7 +92,7 @@ public class SqliteUserDAO extends BaseDAO implements IUserDAO, IDatabaseEntity 
 
     @Override
     public User getByEmail(String email) {
-        final String query = "SELECT TOP 1 * FROM users WHERE email = ?";
+        final String query = "SELECT * FROM users WHERE email = ? LIMIT 1";
 
         List<User> users = executeQuery(query, preparedStatement -> preparedStatement.setString(1, email), USER_MAPPER);
         return firstOrNull(users);

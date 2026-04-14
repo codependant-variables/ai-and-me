@@ -67,7 +67,7 @@ public class SqliteCategoryDAO extends BaseDAO implements ICategoryDAO, IDatabas
 
     @Override
     public Category get(int id) {
-        final String query = "SELECT TOP 1 * FROM categories WHERE id = ?";
+        final String query = "SELECT * FROM categories WHERE id = ? LIMIT 1";
 
         List<Category> categories = executeQuery(query, statement -> statement.setInt(1, id), CATEGORY_MAPPER);
         return firstOrNull(categories);
