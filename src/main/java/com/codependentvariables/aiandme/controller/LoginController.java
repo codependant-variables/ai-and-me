@@ -15,7 +15,6 @@ import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 
-
 public class LoginController {
     @FXML
     private TextField emailField;
