@@ -13,8 +13,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 
-import java.util.ArrayList;
-
 public class LoginController {
     @FXML
     private TextField emailField;
