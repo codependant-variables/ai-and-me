@@ -3,15 +3,14 @@ package com.codependentvariables.aiandme.model;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Mock database implementation for storing category data.
+ */
 public class MockCategoryDAO implements ICategoryDAO {
-    /**
-     * A static list of categories to be used as a mock database.
-     */
-    public static final ArrayList<Category> categories = new ArrayList<>();
+    private static final ArrayList<Category> categories = new ArrayList<>();
     private static int autoIncrementId = 0;
 
     public MockCategoryDAO() {
-        // Add some initial categories to the mock database
         addCategory(new Category("Mental Math"));
         addCategory(new Category("Puzzle"));
         addCategory(new Category("Literacy"));
@@ -48,5 +47,7 @@ public class MockCategoryDAO implements ICategoryDAO {
     }
 
     @Override
-    public List<Category> getAllCategories() { return new ArrayList<>(categories); }
+    public List<Category> getAllCategories() {
+        return new ArrayList<>(categories);
+    }
 }
