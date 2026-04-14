@@ -9,6 +9,6 @@ public class MinStringLengthValidator implements IValidator<String> {
 
     @Override
     public String validate(String value, String display) {
-        return value != null && value.length() > length ? null : String.format("%s is less than %d characters.", display, length);
+        return value != null && value.length() >= length ? null : String.format("%s is less than %d characters.", display, length);
     }
 }

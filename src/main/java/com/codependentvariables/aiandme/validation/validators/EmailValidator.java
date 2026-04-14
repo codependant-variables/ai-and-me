@@ -9,7 +9,7 @@ public class EmailValidator implements IValidator<String> {
             return error;
 
         int atIndex = value.indexOf('@');
-        int dotIndex = value.indexOf('.', atIndex + 1);
+        int dotIndex = value.lastIndexOf('.');
 
         if (atIndex < 1 || dotIndex == -1 || dotIndex >= value.length() - 2 || atIndex + 2 >= dotIndex)
             return error;

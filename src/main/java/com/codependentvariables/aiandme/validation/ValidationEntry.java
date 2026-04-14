@@ -7,6 +7,8 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class ValidationEntry<T> {
+    private static final String defaultDisplay = "Field";
+
     private final Supplier<T> valueSupplier;
     private final Supplier<String> displaySupplier;
     private final IValidator<T>[] validators;
@@ -20,8 +22,12 @@ public class ValidationEntry<T> {
     public ValidationEntry(Supplier<T> valueSupplier, IValidator<T>... validators) {
         this.valueSupplier = valueSupplier;
         this.displaySupplier = () -> {
-            String display = this.valueSupplier.get().toString();
-            return display == null ? "Field" : display;
+            T value = this.valueSupplier.get();
+            if (value == null)
+                return defaultDisplay;
+
+            String display = value.toString();
+            return display == null ? defaultDisplay : display;
         };
         this.validators = validators;
     }

@@ -26,17 +26,17 @@ public class LoginController {
     private final IUserDAO userDAO = new SqliteUserDAO();
 
     private final FormValidator loginValidator = new FormValidator(
-        errors -> setLoginMessage(String.join(" ", errors), true),
-        new ValidationEntry<String>(
-            () -> this.emailField.getText(),
-            "Email",
-            new EmailValidator()
-        ),
-        new ValidationEntry<String>(
-            () -> this.passwordField.getText(),
-            "Password",
-            new StringNotEmptyValidator()
-        )
+            errors -> setLoginMessage(String.join(" ", errors), true),
+            new ValidationEntry<>(
+                    () -> this.emailField.getText(),
+                    "Email",
+                    new EmailValidator()
+            ),
+            new ValidationEntry<>(
+                    () -> this.passwordField.getText(),
+                    "Password",
+                    new StringNotEmptyValidator()
+            )
     );
 
     @FXML
