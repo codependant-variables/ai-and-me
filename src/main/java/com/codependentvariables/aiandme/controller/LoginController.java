@@ -5,17 +5,18 @@ import com.codependentvariables.aiandme.model.IUserDAO;
 import com.codependentvariables.aiandme.model.SqliteUserDAO;
 import com.codependentvariables.aiandme.model.User;
 import com.codependentvariables.aiandme.services.UserService;
+import com.codependentvariables.aiandme.validation.FormValidator;
+import com.codependentvariables.aiandme.validation.ValidationEntry;
+import com.codependentvariables.aiandme.validation.validators.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+
+import java.util.ArrayList;
 
 
 public class LoginController {
-
-    @FXML
-    private VBox loginContainer;
     @FXML
     private TextField emailField;
     @FXML
@@ -24,28 +25,33 @@ public class LoginController {
     private Label loginMessage;
     private final IUserDAO userDAO = new SqliteUserDAO();
 
+    private final FormValidator loginValidator = new FormValidator(
+        errors -> setLoginMessage(String.join(" ", errors), true),
+        new ValidationEntry<String>(
+            () -> this.emailField.getText(),
+            "Email",
+            new EmailValidator()
+        ),
+        new ValidationEntry<String>(
+            () -> this.passwordField.getText(),
+            "Password",
+            new StringNotEmptyValidator()
+        )
+    );
+
     @FXML
     private void onLogin() {
-        String email = emailField.getText();
-        String password = passwordField.getText();
-
-        if (email.isEmpty()) {
-            setLoginMessage("Please enter an email", true);
+        if (!loginValidator.validate()) {
             return;
         }
 
-        if (password.isEmpty()) {
-            setLoginMessage("Please enter a password", true);
-            return;
-        }
-
-        User user = userDAO.getByEmail(email);
+        User user = userDAO.getByEmail(this.emailField.getText());
         if (user == null) {
             setLoginMessage("User not found", true);
             return;
         }
 
-        if (!UserService.comparePassword(user, password)) {
+        if (!UserService.comparePassword(user, this.passwordField.getText())) {
             setLoginMessage("Incorrect password", true);
             return;
         }
@@ -53,9 +59,9 @@ public class LoginController {
         setLoginMessage("Success", false);
     }
 
-    private void setLoginMessage(String message, boolean isRed) {
+    private void setLoginMessage(String message, boolean isError) {
         loginMessage.setText(message);
-        loginMessage.setTextFill(isRed ? Color.RED : Color.BLACK);
+        loginMessage.setTextFill(isError ? Color.RED : Color.BLACK);
         loginMessage.setVisible(true);
     }
 
@@ -68,28 +74,16 @@ public class LoginController {
 
     @FXML
     private void handleGoToLandingScreen() {
-        try {
-            AiAndMe.showLandingScreen();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        AiAndMe.showLandingScreen();
     }
 
     @FXML
     private void handleGoToGuest() {
-        try {
-            AiAndMe.showUserView();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        AiAndMe.showUserView();
     }
 
     @FXML
     private void handleGoToSignUp() {
-        try {
-            AiAndMe.showSignUp();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        AiAndMe.showSignUp();
     }
 }
