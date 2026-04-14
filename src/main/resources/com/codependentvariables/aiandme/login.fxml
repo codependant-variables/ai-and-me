@@ -11,41 +11,14 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <VBox spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.codependentvariables.aiandme.controller.MainController"
->
+      fx:controller="com.codependentvariables.aiandme.controller.LoginController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
-    <Label text="Select a contact to view or edit." />
     <HBox VBox.vgrow="ALWAYS" spacing="20.0">
-        <VBox spacing="10.0">
-            <ListView fx:id="usersListView"  />
-            <HBox spacing="10.0">
-                <Button text="New" onAction="#onAdd" maxWidth="Infinity"/>
-            </HBox>
-        </VBox>
-        <VBox spacing="10.0" prefWidth="400" fx:id="userContainer">
-            <Label text="Enter the contact's details below." />
-            <GridPane hgap="5.0" vgap="5.0" >
-                <columnConstraints>
-                    <ColumnConstraints minWidth="70" />
-                    <ColumnConstraints hgrow="ALWAYS"/>
-                </columnConstraints>
-                <Label text="Name:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                <Label text="Email:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                <Label text="Password:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-                <TextField fx:id="nameTextField" GridPane.columnIndex="1" GridPane.rowIndex="0" maxWidth="Infinity"/>
-                <TextField fx:id="emailTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                <TextField fx:id="passwordTextField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            </GridPane>
-            <HBox spacing="10.0" alignment="CENTER">
-                <Button text="Confirm" onAction="#onEditConfirm"/>
-                <Button text="Cancel" onAction="#onCancel"/>
-                <Button text="Delete" onAction="#onDelete"/>
-            </HBox>
-        </VBox>
         <VBox spacing="10.0" prefWidth="400" fx:id="loginContainer">
             <Label text="Login" textAlignment="CENTER" />
+            <Button text="Return to Landing Screen" onAction="#handleGoToLandingScreen"/>
             <GridPane hgap="5.0" vgap="5.0" >
                 <columnConstraints>
                     <ColumnConstraints minWidth="70" />
@@ -60,6 +33,10 @@
             <HBox spacing="10.0" alignment="CENTER">
                 <Button text="Login" onAction="#onLogin"/>
                 <Button styleClass="logout" text="Logout" onAction="#onLogout"/>
+            </HBox>
+            <HBox spacing="10.0" alignment="CENTER">
+                <Button text="Sign Up" onAction="#handleGoToSignUp"/>
+                <Button text="View as Guest" onAction="#handleGoToGuest"/>
             </HBox>
         </VBox>
     </HBox>

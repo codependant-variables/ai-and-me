@@ -1,20 +1,17 @@
 package com.codependentvariables.aiandme.controller;
 
+import com.codependentvariables.aiandme.AiAndMe;
 import com.codependentvariables.aiandme.model.User;
 import com.codependentvariables.aiandme.model.IUserDAO;
 import com.codependentvariables.aiandme.model.SqliteUserDAO;
-import com.codependentvariables.aiandme.services.UserService;
-import com.sun.source.tree.ReturnTree;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 
 import java.util.List;
-import java.util.Objects;
 
-public class MainController {
+public class GuestController {
     private final IUserDAO userDAO = new SqliteUserDAO();
 
     @FXML
@@ -30,13 +27,22 @@ public class MainController {
     private TextField passwordTextField;
 
     @FXML
-    private VBox loginContainer;
+    private void handleGoToLogin() {
+        try {
+            AiAndMe.showLogin();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @FXML
-    private TextField emailField;
-    @FXML
-    private TextField passwordField;
-    @FXML
-    private Label loginMessage;
+    private void handleGoToLandingScreen() {
+        try {
+            AiAndMe.showLandingScreen();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Programmatically selects a user in the list view and
@@ -163,47 +169,5 @@ public class MainController {
             // we can just re-select it to refresh the text fields
             selectUser(selectedUser);
         }
-    }
-
-    @FXML
-    private void onLogin() {
-        String email = emailField.getText();
-        String password = passwordField.getText();
-
-        if (email.isEmpty()) {
-            setLoginMessage("Please enter an email", true);
-            return;
-        }
-
-        if (password.isEmpty()) {
-            setLoginMessage("Please enter a password", true);
-            return;
-        }
-
-        User user = userDAO.getByEmail(email);
-        if (user == null) {
-            setLoginMessage("User not found", true);
-            return;
-        }
-
-        if (!UserService.comparePassword(user, password)) {
-            setLoginMessage("Incorrect password", true);
-            return;
-        }
-
-        setLoginMessage("Success", false);
-    }
-
-    private void setLoginMessage(String message, boolean isRed) {
-        loginMessage.setText(message);
-        loginMessage.setTextFill(isRed ? Color.RED : Color.BLACK);
-        loginMessage.setVisible(true);
-    }
-
-    @FXML
-    private void onLogout() {
-        emailField.setText("");
-        passwordField.setText("");
-        setLoginMessage("Logged out", false);
     }
 }
