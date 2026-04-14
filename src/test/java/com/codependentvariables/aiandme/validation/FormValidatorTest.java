@@ -13,10 +13,10 @@ public class FormValidatorTest {
 
     @Test
     public void exactly_one_entry() {
-        // Passes
+        // Fails
         assertValidationResult(null, false, "Field is required.");
 
-        // Fails Empty
+        // Passes
         assertValidationResult("not empty", true, "");
     }
 
