@@ -7,7 +7,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class ValidationEntry<T> {
-    private static final String defaultDisplay = "Field";
+    private static final String DEFAULT_DISPLAY = "Field";
 
     private final Supplier<T> valueSupplier;
     private final Supplier<String> displaySupplier;
@@ -24,10 +24,10 @@ public class ValidationEntry<T> {
         this.displaySupplier = () -> {
             T value = this.valueSupplier.get();
             if (value == null)
-                return defaultDisplay;
+                return DEFAULT_DISPLAY;
 
             String display = value.toString();
-            return display == null ? defaultDisplay : display;
+            return display == null ? DEFAULT_DISPLAY : display;
         };
         this.validators = validators;
     }
@@ -62,14 +62,17 @@ public class ValidationEntry<T> {
      * Get a value and validate against all validators.
      * @param errorConsumer Consumer method that accepts a validation message. In practice, adds the message to an error list.
      */
-    public void validate(Consumer<String> errorConsumer) {
+    public boolean validate(Consumer<String> errorConsumer) {
+        boolean isValid = true;
         T value = valueSupplier.get();
         String display = displaySupplier.get();
         for (IValidator<T> validator : validators) {
             String message = validator.validate(value, display);
             if (message != null) {
                 errorConsumer.accept(message);
+                isValid = false;
             }
         }
+        return isValid;
     }
 }
