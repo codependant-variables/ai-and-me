@@ -12,11 +12,12 @@ import static org.junit.jupiter.api.Assertions.*;
 public class FormValidatorTest {
 
     @Test
-    public void exactly_one_entry() {
-        // Fails
+    public void exactly_one_entry_invalid() {
         assertValidationResult(null, false, "Field is required.");
+    }
 
-        // Passes
+    @Test
+    public void exactly_one_entry_valid() {
         assertValidationResult("not empty", true, "");
     }
 
@@ -32,14 +33,19 @@ public class FormValidatorTest {
     }
 
     @Test
-    public void more_than_one_entry() {
+    public void more_than_one_entry_invalid_1() {
         // Both fail
         assertValidation(null, null, false, "Field is required. Field is less than 2 characters.");
+    }
 
+    @Test
+    public void more_than_one_entry_invalid_2() {
         // One fails
         assertValidation(723, "a", false, "a is less than 2 characters.");
+    }
 
-        // Both pass
+    @Test
+    public void more_than_one_entry_valid() {
         assertValidation(723, "ab", true, null);
     }
 
