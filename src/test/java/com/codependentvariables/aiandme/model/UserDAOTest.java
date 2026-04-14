@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class UserDAOTest {
-    private final MockUserDAO userDAO = new MockUserDAO();
+    private final IUserDAO userDAO = new MockUserDAO();
 
     @Test
     public void get() {

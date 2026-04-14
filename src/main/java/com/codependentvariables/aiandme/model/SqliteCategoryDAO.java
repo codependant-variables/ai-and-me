@@ -4,138 +4,72 @@ import java.sql.*;
 import java.util.List;
 import java.util.ArrayList;
 
-// TODO:
-// - Refactor db ops to use try-with-resources so Statement and ResultSet are automatically closed
-// - Replace printStackTrace() with a proper logging framework for better error handling in production
+public class SqliteCategoryDAO extends BaseDAO implements ICategoryDAO, IDatabaseEntity {
+    private static final String schemaQuery = """
+        CREATE TABLE IF NOT EXISTS categories (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name VARCHAR NOT NULL
+        );
+    """;
 
-/**
- * Implementation for handling category objects with SQLite
- */
-public class SqliteCategoryDAO implements ICategoryDAO {
-    private Connection connection;
+    private static final String seedDataQuery = """
+        INSERT INTO categories (name) VALUES ('Arithmetic');
+        INSERT INTO categories (name) VALUES ('Comprehension');
+    """;
 
-
-    /**
-     * Constructor: get database connection and ensure table exists
-     */
-    public SqliteCategoryDAO() {
-        connection = SqliteConnection.getConnection();
-        createTable();
+    public String getSchemaQuery() {
+        return schemaQuery;
     }
 
-    /**
-     * Create table if not existing
-     */
-    private void createTable() {
-        try {
-            Statement statement = connection.createStatement();
-            String query = "CREATE TABLE IF NOT EXISTS categories ("
-                    + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                    + "name VARCHAR NOT NULL"
-                    + ")";
-            statement.execute(query);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public String getSeedDataQuery() {
+        return seedDataQuery;
     }
 
-    /**
-     * Inserts a new category into database
-     * @param category The category to add.
-     */
+    private static final IRowMapper<Category> CATEGORY_MAPPER = (resultSet) -> {
+        Category category = new Category(resultSet.getString("name"));
+        category.setId(resultSet.getInt("id"));
+        return category;
+    };
+
     @Override
     public void addCategory(Category category) {
-        try{
-            PreparedStatement statement = connection.prepareStatement(
-                    "INSERT INTO categories(name) VALUES(?)",
-                    Statement.RETURN_GENERATED_KEYS
-            );
-            statement.setString(1, category.getName());
-            statement.executeUpdate();
+        final String query = "INSERT INTO categories(name) VALUES(?)";
 
-            ResultSet generatedKeys = statement.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                category.setId(generatedKeys.getInt(1));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        var id = executeSqlWithGeneratedKeys(query, statement -> statement.setString(1, category.getName()));
+
+        category.setId(id);
     }
 
-    /**
-     * Updates an existing category's name by ID
-     * @param category The category to update.
-     */
     @Override
     public void updateCategory(Category category) {
-        try {
-            PreparedStatement statement = connection.prepareStatement("UPDATE categories SET name = ? WHERE id = ?");
-            statement.setString(1, category.getName());
-            statement.setInt(2, category.getId());
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        final String query = "UPDATE categories SET name = ? WHERE id = ?";
+
+        executeSql(query,
+            statement -> {
+                statement.setString(1, category.getName());
+                statement.setInt(2, category.getId());
+            });
     }
 
-    /**
-     * Deletes a category from the database by ID
-     * @param category The category to delete.
-     */
     @Override
     public void deleteCategory(Category category) {
-        try {
-            PreparedStatement statement = connection.prepareStatement("DELETE FROM categories WHERE id = ?");
-            statement.setInt(1, category.getId());
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        final String query = "DELETE FROM categories WHERE id = ?";
+
+        executeSql(query, statement -> statement.setInt(1, category.getId()));
     }
 
-    /**
-     * Retrieves single category by ID
-     * @param id The id of the category to retrieve.
-     * @return the details of the category if found, else null
-     */
-    @Override
-    public Category getCategory(int id) {
-        try {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM categories WHERE id = ?");
-            statement.setInt(1, id);
-            ResultSet resultSet = statement.executeQuery();
-            if(resultSet.next()) {
-                String name = resultSet.getString("name");
-                Category category = new Category(name);
-                category.setId(id);
-                return category;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-    /**
-     * Retrieves all categories from database
-     * @return the list of categories
-     */
     @Override
     public List<Category> getAllCategories() {
-        List<Category> categories =new ArrayList<>();
-        try {
-            Statement statement = connection.createStatement();
-            String query = "SELECT * FROM categories";
-            ResultSet resultSet = statement.executeQuery(query);
-            while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String name = resultSet.getString("name");
-                Category category = new Category(name);
-                category.setId(id);
-                categories.add(category);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return categories;
+        final String query = "SELECT * FROM categories";
+
+        return executeQuery(query, CATEGORY_MAPPER);
+    }
+
+    @Override
+    public Category get(int id) {
+        final String query = "SELECT TOP 1 * FROM categories WHERE id = ?";
+
+        List<Category> categories = executeQuery(query, statement -> statement.setInt(1, id), CATEGORY_MAPPER);
+        return firstOrNull(categories);
     }
 }

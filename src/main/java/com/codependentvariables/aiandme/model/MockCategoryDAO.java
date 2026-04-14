@@ -8,12 +8,11 @@ import java.util.List;
  */
 public class MockCategoryDAO implements ICategoryDAO {
     private static final ArrayList<Category> categories = new ArrayList<>();
-    private static int autoIncrementId = 0;
+    private static int autoIncrementId = 1;
 
     public MockCategoryDAO() {
-        addCategory(new Category("Mental Math"));
-        addCategory(new Category("Puzzle"));
-        addCategory(new Category("Literacy"));
+        addCategory(new Category("Arithmetic"));
+        addCategory(new Category("Comprehension"));
     }
 
     @Override
@@ -34,10 +33,12 @@ public class MockCategoryDAO implements ICategoryDAO {
     }
 
     @Override
-    public void deleteCategory(Category category) { categories.remove(category); }
+    public void deleteCategory(Category category) {
+        categories.remove(category);
+    }
 
     @Override
-    public Category getCategory(int id) {
+    public Category get(int id) {
         for(Category category : categories ) {
             if(category.getId() == id) {
                 return category;

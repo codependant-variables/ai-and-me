@@ -10,61 +10,57 @@ import java.io.IOException;
 public class  AiAndMe extends Application {
     // Constants defining the window title and size
     public static final String TITLE = "AI & Me";
-    public static final int WIDTH = 640;
-    public static final int HEIGHT = 360;
+    public static final Double width = 800.0;
+    public static final Double height = 600.0;
     public static Stage primaryStage;
+    private static String stylesheetUrl;
+
+    public static void main(String[] args) {
+        launch();
+    }
 
     @Override
     public void start(Stage stage) throws IOException {
         primaryStage = stage;
-        showLandingScreen();
-    }
-
-    public static void showLandingScreen() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(AiAndMe.class.getResource("landing-screen.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), WIDTH, HEIGHT);
-
-        primaryStage.setScene(scene);
-        primaryStage.setTitle(TITLE);
-        primaryStage.show();
-    }
-
-    public static void showLogin() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(AiAndMe.class.getResource("login.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), WIDTH, HEIGHT);
-
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Login");
-        primaryStage.show();
-    }
-
-    public static void showSignUp() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(AiAndMe.class.getResource("signup.fxml"));
-
-        Scene scene = new Scene(fxmlLoader.load(), WIDTH, HEIGHT);
-
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Sign Up");
-        primaryStage.show();
-    }
-
-    public static void showUserView() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(AiAndMe.class.getResource("guest-view.fxml"));
-
-        Scene scene = new Scene(fxmlLoader.load(), WIDTH, HEIGHT);
+        primaryStage.setMaximized(true);
+        // TODO: decide if we want to disable resizing or enforce max height and width on startup
 
         java.net.URL stylesheetResource = AiAndMe.class.getResource("stylesheet.css");
         if (stylesheetResource != null) {
-            String stylesheet = stylesheetResource.toExternalForm();
-            scene.getStylesheets().add(stylesheet);
+            stylesheetUrl = stylesheetResource.toExternalForm();
         }
 
-        primaryStage.setTitle(TITLE);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        showLandingScreen();
     }
 
-    public static void main(String[] args) {
-        launch();
+    private static void changeScene(String resourceName) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(AiAndMe.class.getResource(resourceName));
+            Scene scene = new Scene(fxmlLoader.load(), width, height);
+            if (stylesheetUrl != null) {
+                scene.getStylesheets().add(stylesheetUrl);
+            }
+
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        } catch (IOException ex) {
+            throw new RuntimeException(String.format("Could not load resource: %s", resourceName), ex);
+        }
+    }
+
+    public static void showLandingScreen() {
+        changeScene("landing-screen.fxml");
+    }
+
+    public static void showLogin() {
+        changeScene("login.fxml");
+    }
+
+    public static void showSignUp() {
+        changeScene("signup.fxml");
+    }
+
+    public static void showUserView() {
+        changeScene("guest-view.fxml");
     }
 }

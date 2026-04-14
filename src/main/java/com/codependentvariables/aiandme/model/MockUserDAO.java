@@ -9,7 +9,7 @@ public class MockUserDAO implements IUserDAO {
      * A static list of users to be used as a mock database.
      */
     public static final ArrayList<User> users = new ArrayList<>();
-    private static long autoIncrementedId = 1;
+    private static int autoIncrementedId = 1;
 
     public MockUserDAO() {
         // Add some initial users to the mock database
