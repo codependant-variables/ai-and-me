@@ -6,6 +6,10 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+/**
+ * Stores validators that will be validated against the provided value at a later time.
+ * @param <T>
+ */
 public class ValidationEntry<T> {
     private static final String DEFAULT_DISPLAY = "Field";
 
@@ -14,7 +18,7 @@ public class ValidationEntry<T> {
     private final IValidator<T>[] validators;
 
     /**
-     * Stores validators that will be validated against the provided value at a later time. Display is value toString().
+     * Default display is value.toString() else "Field".
      * @param valueSupplier Supplier of a value to validate
      * @param validators Validators to use for the value
      */
@@ -33,7 +37,7 @@ public class ValidationEntry<T> {
     }
 
     /**
-     * Stores validators that will be validated against the provided value at a later time.
+     * Display string is statically provided to each IValidator.
      * @param valueSupplier Supplier of a value to validate
      * @param display String to provide for validation messages
      * @param validators Validators to use for the value
@@ -46,7 +50,6 @@ public class ValidationEntry<T> {
     }
 
     /**
-     * Stores validators that will be validated against the provided value at a later time.
      * @param valueSupplier Supplier of a value to validate
      * @param displaySupplier Supplier of a display for validation messages
      * @param validators Validators to use for the value

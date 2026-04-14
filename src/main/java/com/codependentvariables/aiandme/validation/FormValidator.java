@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * Validates an array of ValidationEntry, where if any are invalid, invokes a provided onError method.
+ */
 public class FormValidator {
     private final ValidationEntry<?>[] validationEntries;
     private final Consumer<List<String>> onError;

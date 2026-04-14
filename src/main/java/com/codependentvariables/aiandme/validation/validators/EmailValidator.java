@@ -1,5 +1,8 @@
 package com.codependentvariables.aiandme.validation.validators;
 
+/**
+ * Validates a String is a valid email, as if in regex \w+@\w{2,}\.w{2,}
+ */
 public class EmailValidator implements IValidator<String> {
     @Override
     public String validate(String value, String display) {

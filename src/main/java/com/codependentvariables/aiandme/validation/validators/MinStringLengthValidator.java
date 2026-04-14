@@ -1,5 +1,8 @@
 package com.codependentvariables.aiandme.validation.validators;
 
+/**
+ * Requires strings to be greater than or equal to the provided length.
+ */
 public class MinStringLengthValidator implements IValidator<String> {
     private final int length;
 
