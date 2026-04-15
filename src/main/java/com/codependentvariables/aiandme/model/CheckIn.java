@@ -5,25 +5,45 @@ import java.time.LocalDateTime;
 public class CheckIn {
     private int id;
     private int userId;
-    private int use;
-    private int happiness;
-    private int dependence;
+    private float aiUse;
+    private float aiHappiness;
+    private float aiDependence;
     private LocalDateTime completedAt;
 
-    public CheckIn(int userId, int use, int happiness, int dependence) {
-        this.userId = userId; // maybe in future change to currentUser.getId()? Open for comments.
-        this.use = use;
-        this.happiness = happiness;
-        this.dependence = dependence;
-        completedAt = LocalDateTime.now();
+    public CheckIn(int userId, float aiUse, float aiHappiness,float aiDependence, LocalDateTime completedAt) {
+        this.userId = userId;
+        this.aiUse = aiUse;
+        this.aiHappiness = aiHappiness;
+        this.aiDependence = aiDependence;
+        this.completedAt = completedAt;
     }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
-    public int getUserId() { return userId; }
-    public int getUse() { return use; }
-    public int getHappiness() { return happiness; }
-    public int getDependence() { return dependence; }
-    public LocalDateTime getCompletedAt() { return completedAt; }
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public float getUse() {
+        return aiUse;
+    }
+
+    public float getHappiness() {
+        return aiHappiness;
+    }
+
+    public float getDependence() {
+        return aiDependence;
+    }
+
+    public LocalDateTime getCompletedAt() {
+        return completedAt;
+    }
 
 }

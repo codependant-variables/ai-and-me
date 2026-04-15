@@ -1,7 +1,7 @@
 package com.codependentvariables.aiandme.model;
 
 import java.sql.*;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,9 +12,9 @@ public class SqliteCheckInDAO implements ICheckInDAO, IDatabaseEntity {
             CREATE TABLE IF NOT EXISTS checkins (
                 id integer PRIMARY KEY,
                 userId integer NOT NULL,
-                use integer NOT NULL,
-                happiness NOT NULL,
-                dependency NOT NULL,
+                aiUse decimal NOT NULL,
+                aiHappiness decimal NOT NULL,
+                aiDependency decimal NOT NULL,
                 completedAt datetime NOT NULL
                 CONSTRAINT fk_userId
                 FOREIGN KEY (userId)
@@ -23,8 +23,8 @@ public class SqliteCheckInDAO implements ICheckInDAO, IDatabaseEntity {
             """;
 
     private static final String seedDataQuery = """
-            INSERT INTO checkins (userId, use, happiness, dependency, completedAt) VALUES (1, 50, 50, 50, '2026-04-14 17:28:00');
-            INSERT INTO checkins (userId, use, happiness, dependency, completedAt) VALUES (2, 75, 25, 75, '2026-04-14 17:29:00');
+            INSERT INTO checkins (userId, aiUse, aiHappiness, aiDependency, completedAt) VALUES (1, 5.0, 5.0, 5.0, '2026-04-14 17:28:00');
+            INSERT INTO checkins (userId, aiUse, aiHappiness, aiDependency, completedAt) VALUES (2, 7.5, 2.5, 7.5, '2026-04-14 17:29:00');
             """; // assuming the userId of seed values in table users are 1 and 2.
 
     public SqliteCheckInDAO() { connection = SqliteConnection.getConnection(); }
@@ -35,14 +35,13 @@ public class SqliteCheckInDAO implements ICheckInDAO, IDatabaseEntity {
 
     public void addCheckIn(CheckIn checkIn) {
         try {
-            String query = "INSERT INTO checkins (userId, use, happiness, dependency, completedAt) VALUES (?, ?, ?, ?, ?)";
+            String query = "INSERT INTO checkins (userId, aiUse, aiHappiness, aiDependency, completedAt) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(query);
-            DateTimeFormatter datetimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"); // ensures correct format before adding date to db (hopefully)
             statement.setInt(1, checkIn.getUserId());
-            statement.setInt(2, checkIn.getUse());
-            statement.setInt(3, checkIn.getHappiness());
-            statement.setInt(4, checkIn.getDependence());
-            statement.setString(5, checkIn.getCompletedAt().format(datetimeFormat));
+            statement.setFloat(2, checkIn.getUse());
+            statement.setFloat(3, checkIn.getHappiness());
+            statement.setFloat(4, checkIn.getDependence());
+            statement.setObject(5, checkIn.getCompletedAt());
             statement.executeUpdate();
             ResultSet generatedKeys = statement.getGeneratedKeys();
             if (generatedKeys.next()) {
@@ -67,9 +66,10 @@ public class SqliteCheckInDAO implements ICheckInDAO, IDatabaseEntity {
     private CheckIn mapCheckIn(ResultSet results) throws SQLException {
         CheckIn checkIn = new CheckIn(
                 results.getInt("userId"),
-                results.getInt("use"),
-                results.getInt("happiness"),
-                results.getInt("dependence")
+                results.getFloat("aiUse"),
+                results.getFloat("aiHappiness"),
+                results.getFloat("aiDependence"),
+                results.getObject("completedAt", LocalDateTime.class)
         );
         checkIn.setId(results.getInt("id"));
         return checkIn;

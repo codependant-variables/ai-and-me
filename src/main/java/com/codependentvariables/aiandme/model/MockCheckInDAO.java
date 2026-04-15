@@ -1,5 +1,6 @@
 package com.codependentvariables.aiandme.model;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,9 +12,9 @@ public class MockCheckInDAO implements ICheckInDAO {
     private static int autoIncrementId = 1;
 
     public MockCheckInDAO() {
-        addCheckIn(new CheckIn(autoIncrementId+10, 64, 32, 50));
-        addCheckIn(new CheckIn(autoIncrementId+10, 30, 75, 10));
-        addCheckIn(new CheckIn(autoIncrementId+11, 96, 50, 75));
+        addCheckIn(new CheckIn(1, 6.4f, 3.2f, 5.0f, LocalDateTime.now()));
+        addCheckIn(new CheckIn(1, 3.0f, 7.5f, 1.0f, LocalDateTime.now()));
+        addCheckIn(new CheckIn(2, 9.6f, 5.0f, 7.5f, LocalDateTime.now()));
     }
 
     @Override
