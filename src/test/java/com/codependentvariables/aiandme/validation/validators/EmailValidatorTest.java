@@ -1,7 +1,5 @@
 package com.codependentvariables.aiandme.validation.validators;
 
-import com.codependentvariables.aiandme.model.User;
-import com.codependentvariables.aiandme.services.UserService;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

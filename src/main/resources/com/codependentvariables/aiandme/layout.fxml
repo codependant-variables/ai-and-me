@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+        xmlns:fx="http://javafx.com/fxml"
+        fx:controller="com.codependentvariables.aiandme.controller.LayoutController">
+    <top>
+        <HBox prefHeight="100.0" spacing="10.0" alignment="CENTER">
+            <Button onAction="#navigateHome">Home</Button>
+            <Button onAction="#navigateQuizLibrary">Quiz Library</Button>
+            <Button onAction="#navigateLogin">Login</Button>
+            <Button onAction="#navigateSignup">Signup</Button>
+        </HBox>
+    </top>
+    <center>
+        <BorderPane fx:id="contentRef"/>
+    </center>
+</BorderPane>
