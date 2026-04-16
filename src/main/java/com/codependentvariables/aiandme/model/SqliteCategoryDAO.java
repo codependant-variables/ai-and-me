@@ -45,10 +45,10 @@ public class SqliteCategoryDAO extends BaseDAO implements ICategoryDAO, IDatabas
         final String query = "UPDATE categories SET name = ? WHERE id = ?";
 
         executeSql(query,
-            statement -> {
-                statement.setString(1, category.getName());
-                statement.setInt(2, category.getId());
-            });
+                statement -> {
+                    statement.setString(1, category.getName());
+                    statement.setInt(2, category.getId());
+                });
     }
 
     @Override
@@ -67,7 +67,7 @@ public class SqliteCategoryDAO extends BaseDAO implements ICategoryDAO, IDatabas
 
     @Override
     public Category get(int id) {
-        final String query = "SELECT TOP 1 * FROM categories WHERE id = ?";
+        final String query = "SELECT * FROM categories WHERE id = ? LIMIT 1";
 
         List<Category> categories = executeQuery(query, statement -> statement.setInt(1, id), CATEGORY_MAPPER);
         return firstOrNull(categories);
