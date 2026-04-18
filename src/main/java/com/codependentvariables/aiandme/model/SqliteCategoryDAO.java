@@ -13,8 +13,7 @@ public class SqliteCategoryDAO extends BaseDAO implements ICategoryDAO, IDatabas
     """;
 
     private static final String seedDataQuery = """
-        INSERT INTO categories (name) VALUES ('Arithmetic');
-        INSERT INTO categories (name) VALUES ('Comprehension');
+        INSERT OR IGNORE INTO categories (id, name) VALUES (1, 'Arithmetic'), (2, 'Comprehension');
     """;
 
     public String getSchemaQuery() {

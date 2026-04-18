@@ -90,3 +90,4 @@ public class SqliteQuizTemplateDAO extends BaseDAO implements IQuizTemplateDAO, 
         return executeQuery(query, statement -> statement.setInt(1, categoryId), QUIZ_TEMPLATE_MAPPER);
     }
 }
+

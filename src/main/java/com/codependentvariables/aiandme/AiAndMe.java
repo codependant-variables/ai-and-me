@@ -63,4 +63,8 @@ public class  AiAndMe extends Application {
     public static void showUserView() {
         changeScene("guest-view.fxml");
     }
+
+    public static void showQuizLibrary() {
+        changeScene("quiz-library.fxml");
+    }
 }

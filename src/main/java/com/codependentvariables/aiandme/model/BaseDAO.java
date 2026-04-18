@@ -18,7 +18,7 @@ public abstract class BaseDAO {
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.NO_GENERATED_KEYS)) {
             preparedStatementBinder.accept(preparedStatement);
             logger.info(String.format("Executing SQL: %s", preparedStatement.toString()));
-            // execute
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw handleException(sql, e);
         }
@@ -35,6 +35,7 @@ public abstract class BaseDAO {
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatementBinder.accept(preparedStatement);
             logger.info(String.format("Executing SQL: %s", preparedStatement.toString()));
+            preparedStatement.executeUpdate();
 
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             if (resultSet.next()) {

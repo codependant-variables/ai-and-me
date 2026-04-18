@@ -7,8 +7,8 @@ import java.util.List;
  * Mock database implementation for storing quiz template data.
  */
 public class MockQuizTemplateDAO implements IQuizTemplateDAO {
-    private static final ArrayList<QuizTemplate> templates = new ArrayList<>();
-    private static int autoIncrementId = 1;
+    private final ArrayList<QuizTemplate> templates = new ArrayList<>();
+    private int autoIncrementId = 1;
 
     @Override
     public void addTemplate(QuizTemplate quizTemplate) {
