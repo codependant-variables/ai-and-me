@@ -11,4 +11,6 @@ module com.codependentvariables.aiandme {
     opens com.codependentvariables.aiandme.controller to javafx.fxml;
     exports com.codependentvariables.aiandme.model;
     opens com.codependentvariables.aiandme.model to javafx.fxml;
+    exports com.codependentvariables.aiandme.navigation;
+    opens com.codependentvariables.aiandme.navigation to javafx.fxml;
 }
