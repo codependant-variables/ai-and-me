@@ -36,24 +36,4 @@ public class  AiAndMe extends Application {
             throw new RuntimeException("Could not load AppController.", ex);
         }
     }
-
-    public static void showLandingScreen() {
-        changeScene("landing-screen.fxml");
-    }
-
-    public static void showLogin() {
-        changeScene("login.fxml");
-    }
-
-    public static void showSignUp() {
-        changeScene("signup.fxml");
-    }
-
-    public static void showUserView() {
-        changeScene("guest-view.fxml");
-    }
-
-    public static void showQuizLibrary() {
-        changeScene("quiz-library.fxml");
-    }
 }
