@@ -1,6 +1,7 @@
 package com.codependentvariables.aiandme.controller;
 
-import com.codependentvariables.aiandme.AiAndMe;
+import com.codependentvariables.aiandme.navigation.Router;
+import com.codependentvariables.aiandme.navigation.View;
 import com.codependentvariables.aiandme.model.IUserDAO;
 import com.codependentvariables.aiandme.model.SqliteUserDAO;
 import com.codependentvariables.aiandme.model.User;
@@ -70,17 +71,12 @@ public class LoginController {
     }
 
     @FXML
-    private void handleGoToLandingScreen() {
-        AiAndMe.showLandingScreen();
+    private void navigateHome() {
+        Router.navigateLayout(View.HOME);
     }
 
     @FXML
-    private void handleGoToGuest() {
-        AiAndMe.showUserView();
-    }
-
-    @FXML
-    private void handleGoToSignUp() {
-        AiAndMe.showSignUp();
+    private void navigateSignUp() {
+        Router.navigateApp(View.SIGNUP);
     }
 }

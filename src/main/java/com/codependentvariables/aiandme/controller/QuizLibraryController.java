@@ -1,6 +1,7 @@
 package com.codependentvariables.aiandme.controller;
 
-import com.codependentvariables.aiandme.AiAndMe;
+import com.codependentvariables.aiandme.navigation.Router;
+import com.codependentvariables.aiandme.navigation.View;
 import com.codependentvariables.aiandme.model.User;
 import com.codependentvariables.aiandme.model.IUserDAO;
 import com.codependentvariables.aiandme.model.SqliteUserDAO;
@@ -8,10 +9,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-
 import java.util.List;
 
-public class GuestController {
+public class QuizLibraryController {
     private final IUserDAO userDAO = new SqliteUserDAO();
 
     @FXML
@@ -25,24 +25,6 @@ public class GuestController {
     private TextField emailTextField;
     @FXML
     private TextField passwordTextField;
-
-    @FXML
-    private void handleGoToLogin() {
-        try {
-            AiAndMe.showLogin();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void handleGoToLandingScreen() {
-        try {
-            AiAndMe.showLandingScreen();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     /**
      * Programmatically selects a user in the list view and

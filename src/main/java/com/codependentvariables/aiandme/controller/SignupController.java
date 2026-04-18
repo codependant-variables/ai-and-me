@@ -1,10 +1,10 @@
 package com.codependentvariables.aiandme.controller;
 
-import com.codependentvariables.aiandme.AiAndMe;
+import com.codependentvariables.aiandme.navigation.Router;
+import com.codependentvariables.aiandme.navigation.View;
 import com.codependentvariables.aiandme.model.IUserDAO;
 import com.codependentvariables.aiandme.model.SqliteUserDAO;
 import com.codependentvariables.aiandme.model.User;
-import com.codependentvariables.aiandme.services.UserService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -12,7 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
-public class SignUpController {
+public class SignupController {
 
     @FXML
     private VBox signUpContainer;
@@ -60,7 +60,8 @@ public class SignUpController {
 
         try {
             setSignUpMessage("Success", false);
-            AiAndMe.showLogin();
+            // TODO: change this flow to automatically log the user in after creating a user
+            navigateLogin();
         } catch (Exception e) {
             e.printStackTrace();
             setSignUpMessage("Sign up failed", true);
@@ -74,29 +75,12 @@ public class SignUpController {
     }
 
     @FXML
-    private void handleGoToLandingScreen() {
-        try {
-            AiAndMe.showLandingScreen();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    private void navigateHome() {
+        Router.navigateLayout(View.HOME);
     }
 
     @FXML
-    private void handleGoToLogin() {
-        try {
-            AiAndMe.showLogin();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void handleGoToGuest() {
-        try {
-            AiAndMe.showUserView();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    private void navigateLogin() {
+        Router.navigateApp(View.LOGIN);
     }
 }

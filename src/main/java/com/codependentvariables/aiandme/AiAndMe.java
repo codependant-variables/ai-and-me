@@ -1,66 +1,39 @@
 package com.codependentvariables.aiandme;
 
+import com.codependentvariables.aiandme.navigation.View;
+import com.codependentvariables.aiandme.navigation.ViewUtils;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
 
 public class  AiAndMe extends Application {
-    // Constants defining the window title and size
     public static final String TITLE = "AI & Me";
-    public static final Double width = 800.0;
-    public static final Double height = 600.0;
-    public static Stage primaryStage;
-    private static String stylesheetUrl;
-
-    public static void main(String[] args) {
-        launch();
-    }
+    public static final Double WIDTH = 800.0;
+    public static final Double HEIGHT = 600.0;
 
     @Override
-    public void start(Stage stage) throws IOException {
-        primaryStage = stage;
-        primaryStage.setMaximized(true);
+    public void start(Stage stage) {
+        stage.setTitle(TITLE);
+        stage.setMaximized(true);
         // TODO: decide if we want to disable resizing or enforce max height and width on startup
 
-        java.net.URL stylesheetResource = AiAndMe.class.getResource("stylesheet.css");
-        if (stylesheetResource != null) {
-            stylesheetUrl = stylesheetResource.toExternalForm();
-        }
+        URL stylesheetResource = AiAndMe.class.getResource("stylesheet.css");
 
-        showLandingScreen();
-    }
-
-    private static void changeScene(String resourceName) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(AiAndMe.class.getResource(resourceName));
-            Scene scene = new Scene(fxmlLoader.load(), width, height);
-            if (stylesheetUrl != null) {
-                scene.getStylesheets().add(stylesheetUrl);
+            FXMLLoader fxmlLoader = new FXMLLoader(AiAndMe.class.getResource(ViewUtils.getResourceName(View.APP)));
+            Scene scene = new Scene(fxmlLoader.load(), WIDTH, HEIGHT);
+            if (stylesheetResource != null) {
+                scene.getStylesheets().add(stylesheetResource.toExternalForm());
             }
 
-            primaryStage.setScene(scene);
-            primaryStage.show();
+            stage.setScene(scene);
+            stage.show();
         } catch (IOException ex) {
-            throw new RuntimeException(String.format("Could not load resource: %s", resourceName), ex);
+            throw new RuntimeException("Could not load AppController.", ex);
         }
-    }
-
-    public static void showLandingScreen() {
-        changeScene("landing-screen.fxml");
-    }
-
-    public static void showLogin() {
-        changeScene("login.fxml");
-    }
-
-    public static void showSignUp() {
-        changeScene("signup.fxml");
-    }
-
-    public static void showUserView() {
-        changeScene("guest-view.fxml");
     }
 }
