@@ -23,7 +23,7 @@ public class  AiAndMe extends Application {
     public static final Double WIDTH = 800.0;
     public static final Double HEIGHT = 600.0;
 
-    public static void crossFadeTransition(Scene newScene, Scene oldScene) {
+    /*public static void crossFadeTransition(Scene newScene, Scene oldScene) {
         FadeTransition fadeOut = new FadeTransition(Duration.millis(300), oldScene);
         fadeOut.setFromValue(1);
         fadeOut.setToValue(0);
@@ -33,7 +33,7 @@ public class  AiAndMe extends Application {
         fadeIn.setFromValue(0);
         fadeIn.setToValue(1);
         fadeIn.play();
-    }
+    }*/
 
 
     @Override
