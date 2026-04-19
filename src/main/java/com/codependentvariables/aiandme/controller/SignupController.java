@@ -5,6 +5,7 @@ import com.codependentvariables.aiandme.navigation.View;
 import com.codependentvariables.aiandme.model.IUserDAO;
 import com.codependentvariables.aiandme.model.SqliteUserDAO;
 import com.codependentvariables.aiandme.model.User;
+import com.codependentvariables.aiandme.validation.validators.PasswordValidator;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -25,6 +26,7 @@ public class SignupController {
     @FXML
     private Label signUpMessage;
     private final IUserDAO userDAO = new SqliteUserDAO();
+    private final PasswordValidator passwordValidator = new PasswordValidator();
 
     @FXML
     private void onSignUp() {
@@ -53,8 +55,9 @@ public class SignupController {
             return;
         }
 
-        if (password.length() < 8) {
-            setSignUpMessage("Password must be 8 characters.", true);
+        String passwordError = passwordValidator.validate(password, "Password");
+        if (passwordError != null) {
+            setSignUpMessage(passwordError, true);
             return;
         }
 
