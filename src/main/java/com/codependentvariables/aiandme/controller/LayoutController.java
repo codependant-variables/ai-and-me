@@ -5,6 +5,9 @@ import com.codependentvariables.aiandme.navigation.View;
 import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
 public class LayoutController {
     @FXML
     private BorderPane contentRef;
@@ -33,4 +36,11 @@ public class LayoutController {
     public void navigateSignup() {
         Router.navigateApp(View.SIGNUP);
     }
+
+    @FXML
+    public void navigateSettings() { Router.navigateApp(View.SETTINGS); }
+
+    @FXML
+    public void navigateCheckin() { Router.navigateApp(View.CHECKIN); }
+
 }
