@@ -5,7 +5,7 @@ import java.util.List;
 public class SqliteCategoryDAO extends BaseSqliteDAO implements ICategoryDAO, IDatabaseEntity {
     private static final String schemaQuery = """
             CREATE TABLE IF NOT EXISTS categories (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                id INTEGER PRIMARY KEY,
                 name VARCHAR NOT NULL
             );
         """;
