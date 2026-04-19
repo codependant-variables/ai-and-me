@@ -7,6 +7,5 @@ public enum View {
     LOADING,
     LOGIN,
     QUIZ_LIBRARY,
-    SIGNUP,
-    QUIZ
+    SIGNUP
 }
