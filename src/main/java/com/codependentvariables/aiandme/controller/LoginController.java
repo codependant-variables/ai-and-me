@@ -2,8 +2,6 @@ package com.codependentvariables.aiandme.controller;
 
 import com.codependentvariables.aiandme.navigation.Router;
 import com.codependentvariables.aiandme.navigation.View;
-import com.codependentvariables.aiandme.model.IUserDAO;
-import com.codependentvariables.aiandme.model.SqliteUserDAO;
 import com.codependentvariables.aiandme.model.User;
 import com.codependentvariables.aiandme.services.UserService;
 import com.codependentvariables.aiandme.validation.FormValidator;
@@ -21,7 +19,7 @@ public class LoginController {
     private TextField passwordField;
     @FXML
     private Label loginMessage;
-    private final IUserDAO userDAO = new SqliteUserDAO();
+    private final UserService userService = UserService.getInstance();
 
     private final FormValidator loginValidator = new FormValidator(
             errors -> setLoginMessage(String.join(" ", errors), true),
@@ -43,13 +41,13 @@ public class LoginController {
             return;
         }
 
-        User user = userDAO.getByEmail(this.emailField.getText());
+        User user = userService.getByEmail(this.emailField.getText());
         if (user == null) {
             setLoginMessage("User not found", true);
             return;
         }
 
-        if (!UserService.comparePassword(user, this.passwordField.getText())) {
+        if (!userService.comparePassword(user, this.passwordField.getText())) {
             setLoginMessage("Incorrect password", true);
             return;
         }

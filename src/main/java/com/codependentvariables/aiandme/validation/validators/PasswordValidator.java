@@ -9,27 +9,40 @@ package com.codependentvariables.aiandme.validation.validators;
  * 1+ symbol
  */
 public class PasswordValidator implements IValidator<String> {
+    private final static int MIN_LENGTH = 10;
+    private final static int MIN_LOWERCASE = 1;
+    private final static int MIN_UPPERCASE = 1;
+    private final static int MIN_DIGITS = 1;
+    private final static int MIN_SYMBOLS = 1;
+
     @Override
     public String validate(String value, String display) {
-        String error = String.format("%s must contain at least 1 lowercase, 1 uppercase, 1 number, and 1 symbol.", display);
-
-        if (value == null || value.isBlank())
-            return error;
+        if (value == null || value.isBlank()) {
+            return String.format("%s must be at least %d characters and contain at least %d lowercase, %d uppercase, %d number, and %d symbol.", display, MIN_LENGTH, MIN_LOWERCASE, MIN_UPPERCASE, MIN_DIGITS, MIN_SYMBOLS);
+        }
 
         boolean hasLower = false;
         boolean hasUpper = false;
         boolean hasDigit = false;
         boolean hasSymbol = false;
 
-        for(char c : value.toCharArray()) {
-            if(Character.isLowerCase(c)) hasLower = true;
-            else if(Character.isUpperCase(c)) hasUpper = true;
-            else if(Character.isDigit(c)) hasDigit = true;
+        for (char c : value.toCharArray()) {
+            if (Character.isLowerCase(c)) hasLower = true;
+            else if (Character.isUpperCase(c)) hasUpper = true;
+            else if (Character.isDigit(c)) hasDigit = true;
             else hasSymbol = true;
         }
 
-        if (!hasLower || !hasUpper || !hasDigit || !hasSymbol)
-            return error;
+        java.util.StringJoiner missing = new java.util.StringJoiner(", ");
+        if (value.length() < MIN_LENGTH) missing.add(String.format("%d characters", MIN_LENGTH));
+        if (!hasLower) missing.add(String.format("%d lowercase", MIN_LOWERCASE));
+        if (!hasUpper) missing.add(String.format("%d uppercase", MIN_UPPERCASE));
+        if (!hasDigit) missing.add(String.format("%d number", MIN_DIGITS));
+        if (!hasSymbol) missing.add(String.format("%d symbol", MIN_SYMBOLS));
+
+        if (missing.length() > 0) {
+            return String.format("%s is missing: %s.", display, missing.toString());
+        }
 
         return null;
     }
