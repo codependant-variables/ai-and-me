@@ -8,12 +8,14 @@ public class User {
     private String email;
     private String password;
     private String salt;
+    private boolean isDarkMode;
 
     public User(String name, String email, String password, String salt) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.salt = salt;
+        this.isDarkMode = false;
     }
 
     public int getId() {
@@ -53,5 +55,13 @@ public class User {
 
     public String getSalt() {
         return salt;
+    }
+
+    public boolean getIsDarkMode() {
+        return this.isDarkMode;
+    }
+
+    public void setIsDarkMode(boolean isDarkMode) {
+        this.isDarkMode = isDarkMode;
     }
 }

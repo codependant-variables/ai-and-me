@@ -1,5 +1,7 @@
 package com.codependentvariables.aiandme;
 
+import atlantafx.base.theme.NordDark;
+import atlantafx.base.theme.NordLight;
 import com.codependentvariables.aiandme.model.SqliteConnection;
 import com.codependentvariables.aiandme.navigation.View;
 import com.codependentvariables.aiandme.navigation.ViewUtils;
@@ -16,6 +18,21 @@ public class  AiAndMe extends Application {
     public static final Double WIDTH = 800.0;
     public static final Double HEIGHT = 600.0;
 
+    public static final String LightModeStylesheet = new NordLight().getUserAgentStylesheet();
+    public static final String DarkModeStylesheet = new NordDark().getUserAgentStylesheet();
+
+    /*public static void crossFadeTransition(Scene newScene, Scene oldScene) {
+        FadeTransition fadeOut = new FadeTransition(Duration.millis(300), oldScene);
+        fadeOut.setFromValue(1);
+        fadeOut.setToValue(0);
+        fadeOut.play();
+
+        FadeTransition fadeIn = new FadeTransition(Duration.millis(300), newScene);
+        fadeIn.setFromValue(0);
+        fadeIn.setToValue(1);
+        fadeIn.play();
+    }*/
+
     @Override
     public void start(Stage stage) {
         SqliteConnection.getConnection(); // Frontload db connection load time at app startup
@@ -25,6 +42,7 @@ public class  AiAndMe extends Application {
         // TODO: decide if we want to disable resizing or enforce max height and width on startup
 
         URL stylesheetResource = AiAndMe.class.getResource("stylesheet.css");
+        Application.setUserAgentStylesheet((new NordLight()).getUserAgentStylesheet()); //<<use this to replace old stylesheet
 
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(AiAndMe.class.getResource(ViewUtils.getResourceName(View.APP)));
