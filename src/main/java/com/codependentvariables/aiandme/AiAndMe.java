@@ -5,15 +5,10 @@ import atlantafx.base.theme.NordLight;
 import com.codependentvariables.aiandme.model.SqliteConnection;
 import com.codependentvariables.aiandme.navigation.View;
 import com.codependentvariables.aiandme.navigation.ViewUtils;
-import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.SVGPath;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
@@ -22,6 +17,9 @@ public class  AiAndMe extends Application {
     public static final String TITLE = "AI & Me";
     public static final Double WIDTH = 800.0;
     public static final Double HEIGHT = 600.0;
+
+    public static final String LightModeStylesheet = new NordLight().getUserAgentStylesheet();
+    public static final String DarkModeStylesheet = new NordDark().getUserAgentStylesheet();
 
     /*public static void crossFadeTransition(Scene newScene, Scene oldScene) {
         FadeTransition fadeOut = new FadeTransition(Duration.millis(300), oldScene);
@@ -34,7 +32,6 @@ public class  AiAndMe extends Application {
         fadeIn.setToValue(1);
         fadeIn.play();
     }*/
-
 
     @Override
     public void start(Stage stage) {

@@ -43,6 +43,10 @@ public class Router {
         setLoading(app);
         ViewUtils.loadView(app, view);
         currentAppView = view;
+
+        if (currentAppView != View.LAYOUT) {
+            currentLayoutView = null;
+        }
     }
 
     public static void navigateLayout(View view) {
