@@ -13,8 +13,7 @@ public class SqliteCategoryDAO extends BaseDAO implements ICategoryDAO, IDatabas
     """;
 
     private static final String seedDataQuery = """
-        INSERT INTO categories (name) VALUES ('Arithmetic');
-        INSERT INTO categories (name) VALUES ('Comprehension');
+        INSERT OR IGNORE INTO categories (id, name) VALUES (1, 'Arithmetic'), (2, 'Comprehension');
     """;
 
     public String getSchemaQuery() {
@@ -45,10 +44,10 @@ public class SqliteCategoryDAO extends BaseDAO implements ICategoryDAO, IDatabas
         final String query = "UPDATE categories SET name = ? WHERE id = ?";
 
         executeSql(query,
-            statement -> {
-                statement.setString(1, category.getName());
-                statement.setInt(2, category.getId());
-            });
+                statement -> {
+                    statement.setString(1, category.getName());
+                    statement.setInt(2, category.getId());
+                });
     }
 
     @Override
