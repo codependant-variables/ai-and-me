@@ -1,5 +1,7 @@
 package com.codependentvariables.aiandme.services;
 
+import com.codependentvariables.aiandme.model.IUserDAO;
+import com.codependentvariables.aiandme.model.SqliteUserDAO;
 import com.codependentvariables.aiandme.model.User;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -11,7 +13,25 @@ import java.util.Base64;
 import java.util.Objects;
 
 public class UserService {
-    private final static SecureRandom random = new SecureRandom();
+    private static UserService instance;
+    private final SecureRandom random = new SecureRandom();
+    private final IUserDAO userDAO;
+
+    private UserService() {
+        this(new SqliteUserDAO());
+    }
+
+    // Package-private constructor for unit tests
+    UserService(IUserDAO userDAO) {
+        this.userDAO = userDAO;
+    }
+
+    public static UserService getInstance() {
+        if (instance == null) {
+            instance = new UserService();
+        }
+        return instance;
+    }
 
     public record HashResult(String hash, String salt) {}
 
@@ -20,7 +40,7 @@ public class UserService {
      * @param value to hash.
      * @return HashResult of hash string and salt string.
      */
-    public static HashResult hash(String value) {
+    public HashResult hash(String value) {
         byte[] salt = new byte[16];
         random.nextBytes(salt);
 
@@ -33,7 +53,7 @@ public class UserService {
      * @param salt to hash with.
      * @return HashResult of hash string and salt string.
      */
-    public static HashResult hash(String value, String salt) {
+    public HashResult hash(String value, String salt) {
         return hash(value, Base64.getDecoder().decode(salt));
     }
 
@@ -43,7 +63,7 @@ public class UserService {
      * @param salt to hash with.
      * @return HashResult of hash string and salt string.
      */
-    private static HashResult hash(String value, byte[] salt) {
+    private HashResult hash(String value, byte[] salt) {
         KeySpec spec = new PBEKeySpec(value.toCharArray(), salt, 600000, 256); // OWASP recommendation to use a work factor of 600,000 -  https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
         try {
             SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
@@ -61,12 +81,27 @@ public class UserService {
      * @param password Password to compare to the user's.
      * @return If password equals that of the user.
      */
-    public static boolean comparePassword(User user, String password) {
+    public boolean comparePassword(User user, String password) {
         if (user == null || user.getPassword() == null || user.getSalt() == null)
             return false;
 
         String computedHash = hash(password, user.getSalt()).hash();
 
         return Objects.equals(user.getPassword(), computedHash);
+    }
+
+    public User getByEmail(String email) {
+        return userDAO.getByEmail(email);
+    }
+
+    public boolean isUniqueEmail(String email) {
+        return userDAO.getByEmail(email) == null;
+    }
+
+    public User createUser(String name, String email, String password) {
+        HashResult hashResult = hash(password);
+        User user = new User(name, email, hashResult.hash, hashResult.salt);
+        userDAO.add(user);
+        return user;
     }
 }

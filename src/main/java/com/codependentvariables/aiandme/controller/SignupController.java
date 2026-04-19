@@ -1,11 +1,12 @@
 package com.codependentvariables.aiandme.controller;
 
+import com.codependentvariables.aiandme.model.User;
 import com.codependentvariables.aiandme.navigation.Router;
 import com.codependentvariables.aiandme.navigation.View;
-import com.codependentvariables.aiandme.model.IUserDAO;
-import com.codependentvariables.aiandme.model.SqliteUserDAO;
-import com.codependentvariables.aiandme.model.User;
-import com.codependentvariables.aiandme.validation.validators.PasswordValidator;
+import com.codependentvariables.aiandme.services.UserService;
+import com.codependentvariables.aiandme.validation.FormValidator;
+import com.codependentvariables.aiandme.validation.ValidationEntry;
+import com.codependentvariables.aiandme.validation.validators.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -25,55 +26,42 @@ public class SignupController {
     private PasswordField passwordField;
     @FXML
     private Label signUpMessage;
-    private final IUserDAO userDAO = new SqliteUserDAO();
-    private final PasswordValidator passwordValidator = new PasswordValidator();
+    private final UserService userService = UserService.getInstance();
+
+    private final FormValidator signupValidator = new FormValidator(
+            errors -> setSignUpMessage(String.join(" ", errors), true),
+            new ValidationEntry<>(
+                    () -> this.nameField.getText(),
+                    "Name",
+                    new StringNotEmptyValidator()
+            ),
+            new ValidationEntry<>(
+                    () -> this.emailField.getText(),
+                    "Email",
+                    new EmailValidator(),
+                    new DynamicValidator<String>((value, display) -> userService.isUniqueEmail(value) ? null : String.format("%s is already in use.", display))
+            ),
+            new ValidationEntry<>(
+                    () -> this.passwordField.getText(),
+                    "Password",
+                    new PasswordValidator()
+            )
+    );
 
     @FXML
     private void onSignUp() {
-        String name = nameField.getText().trim();
-        String email = emailField.getText().trim();
-        String password = passwordField.getText();
-
-        if (name.isEmpty()) {
-            setSignUpMessage("Please enter a name", true);
+        if (!signupValidator.validate()) {
             return;
         }
 
-        if (email.isEmpty()) {
-            setSignUpMessage("Please enter an email", true);
-            return;
-        }
-
-        if (password.isEmpty()) {
-            setSignUpMessage("Please enter a password", true);
-            return;
-        }
-
-        User user = userDAO.getByEmail(email);
-        if (user != null) {
-            setSignUpMessage("User already exists", true);
-            return;
-        }
-
-        String passwordError = passwordValidator.validate(password, "Password");
-        if (passwordError != null) {
-            setSignUpMessage(passwordError, true);
-            return;
-        }
-
-        try {
-            setSignUpMessage("Success", false);
-            // TODO: change this flow to automatically log the user in after creating a user
-            navigateLogin();
-        } catch (Exception e) {
-            e.printStackTrace();
-            setSignUpMessage("Sign up failed", true);
-        }
+        User user = userService.createUser(this.nameField.getText(), this.emailField.getText(), this.passwordField.getText());
+        // TODO: update app state with new logged in user
+        navigateHome();
     }
 
-    private void setSignUpMessage(String message, boolean isRed) {
+    private void setSignUpMessage(String message, boolean isError) {
         signUpMessage.setText(message);
-        signUpMessage.setTextFill(isRed ? Color.RED : Color.BLACK);
+        signUpMessage.setTextFill(isError ? Color.RED : Color.BLACK);
         signUpMessage.setVisible(true);
     }
 

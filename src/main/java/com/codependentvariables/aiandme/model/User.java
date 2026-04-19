@@ -45,7 +45,8 @@ public class User {
     }
 
     public void setPassword(String password) {
-        UserService.HashResult hashResult = UserService.hash(password);
+        UserService userService = UserService.getInstance();
+        UserService.HashResult hashResult = userService.hash(password);
         this.password = hashResult.hash();
         this.salt = hashResult.salt();
     }
