@@ -14,15 +14,6 @@
    <HBox prefHeight="100.0" prefWidth="200.0">
       <children>
             <Label text="Welcome!" textAlignment="CENTER" />
-           <Button onMouseClicked="#switchTheme" style="-height: 30px; -width: 30px;" textFill="#d0e41a">
-               <graphic>
-                   <SVGPath fx:id="themeToggleIcon" content="M29.2,26.72A12.07,12.07,0,0,1,22.9,4.44,13.68,13.68,0,0,0,19.49,4a14,14,0,0,0,0,28,13.82,13.82,0,0,0,10.9-5.34A11.71,11.71,0,0,1,29.2,26.72Z" fill="MEDIUMSLATEBLUE" nodeOrientation="LEFT_TO_RIGHT">
-                       <cursor>
-                           <Cursor fx:constant="HAND" />
-                       </cursor>
-                   </SVGPath>
-               </graphic>
-           </Button>
       </children>
    </HBox>
     

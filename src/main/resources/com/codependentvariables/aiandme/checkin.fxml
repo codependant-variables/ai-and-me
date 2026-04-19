@@ -3,11 +3,11 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="563.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codependentvariables.aiandme.controller.CheckInController">
-   <BorderPane prefHeight="200.0" prefWidth="200.0">
-      <top>
+   <BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codependentvariables.aiandme.controller.CheckInController" prefHeight="563.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <center>
       
               <VBox alignment="CENTER" prefHeight="200.0" prefWidth="594.0" BorderPane.alignment="CENTER">
       
@@ -107,8 +107,15 @@
                   <Insets top="40.0" />
                </VBox.margin>
             </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#navigateHome">
+                     <graphic>
+                        <SVGPath content="M14.611 6.622 8.927 2.221a0.438 0.438 0 0 0 -0.541 0.005L2.879 6.627a0.467 0.467 0 0 0 -0.163 0.341v7.961a0.438 0.438 0 0 0 0.439 0.439h3.271a0.438 0.438 0 0 0 0.439 -0.439V10.057h3.771v4.876a0.438 0.438 0 0 0 0.439 0.439h3.271a0.438 0.438 0 0 0 0.439 -0.439V6.972a0.467 0.467 0 0 0 -0.168 -0.345" />
+                     </graphic>
+                  </Button>
+               </children>
+            </HBox>
               </VBox>
-      </top>
+      </center>
    </BorderPane>
-
-</AnchorPane>
