@@ -38,9 +38,10 @@ public class SqliteConnection {
     private void setupSchema() throws SQLException {
         // Add instances of each IDatabaseEntity class to this array
         IDatabaseEntity[] entities = {
-                new SqliteCategoryDAO(),
                 new SqliteUserDAO(),
-                new SqliteCheckinDAO()
+                new SqliteCategoryDAO(),
+                new SqliteCheckinDAO(),
+                new SqliteQuizTemplateDAO()
         };
 
         try {

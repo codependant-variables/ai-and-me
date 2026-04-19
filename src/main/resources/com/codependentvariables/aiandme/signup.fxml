@@ -30,8 +30,12 @@
                 <TextField fx:id="emailField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                 <PasswordField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             </GridPane>
-            <Label visible="false" fx:id="signUpMessage" />
+            <Label fx:id="signUpMessage"
+                   visible="false"
+                   wrapText="true"
+                   maxWidth="350" />
             <HBox spacing="10.0" alignment="CENTER">
+                <Button text="Sign Up" onAction="#onSignUp"/>
                 <Button text="Have an Account?" onAction="#navigateLogin"/>
                 <Button text="Use as a Guest" onAction="#navigateHome"/>
             </HBox>
