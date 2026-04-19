@@ -38,7 +38,7 @@ public class QuizAttemptDAOTest {
 
         assertNotNull(attempts);
         assertEquals(1, attempts.size());
-        assertEquals("Emma's Quiz Attempt", attempts.get(0).getName());
+        assertEquals("Emma's Quiz Attempt", attempts.getFirst().getName());
     }
 
     /**
@@ -53,7 +53,7 @@ public class QuizAttemptDAOTest {
                 Timestamp.valueOf("2026-04-18 10:30:00")
         );
 
-        quizAttemptDAO.addQuizAttempt(quizAttempt);
+        quizAttemptDAO.add(quizAttempt);
 
         QuizAttempt retrieved = quizAttemptDAO.get(quizAttempt.getId());
 
@@ -67,13 +67,13 @@ public class QuizAttemptDAOTest {
      */
     @Test
     public void getLatestByUserId() {
-        quizAttemptDAO.addQuizAttempt(new QuizAttempt(
+        quizAttemptDAO.add(new QuizAttempt(
                 1,
                 "Older Attempt",
                 Timestamp.valueOf("2026-04-16 09:00:00")
         ));
 
-        quizAttemptDAO.addQuizAttempt(new QuizAttempt(
+        quizAttemptDAO.add(new QuizAttempt(
                 1,
                 "Newest Attempt",
                 Timestamp.valueOf("2026-04-18 12:00:00")

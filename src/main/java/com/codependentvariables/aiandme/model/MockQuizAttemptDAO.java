@@ -17,14 +17,14 @@ public class MockQuizAttemptDAO implements IQuizAttemptDAO {
      * Constructor seeds initial mock data.
      */
     public MockQuizAttemptDAO() {
-        addQuizAttempt(new QuizAttempt(1, "Emma's Quiz Attempt", Timestamp.valueOf("2026-04-17 00:00:00")));
+        add(new QuizAttempt(1, "Emma's Quiz Attempt", Timestamp.valueOf("2026-04-17 00:00:00")));
     }
 
     /**
      * Adds a new QuizAttempt to the mock database.
      */
     @Override
-    public void addQuizAttempt(QuizAttempt quizAttempt) {
+    public void add(QuizAttempt quizAttempt) {
         quizAttempt.setId(autoIncrementId);
         autoIncrementId++;
         quizAttempts.add(quizAttempt);
@@ -34,7 +34,7 @@ public class MockQuizAttemptDAO implements IQuizAttemptDAO {
      * Updates an existing QuizAttempt.
      */
     @Override
-    public void updateQuizAttempt(QuizAttempt quizAttempt) {
+    public void update(QuizAttempt quizAttempt) {
         for (int i = 0; i < quizAttempts.size(); i++) {
             if (quizAttempts.get(i).getId() == quizAttempt.getId()) {
                 quizAttempts.set(i, quizAttempt);
@@ -47,7 +47,7 @@ public class MockQuizAttemptDAO implements IQuizAttemptDAO {
      * Deletes a QuizAttempt.
      */
     @Override
-    public void deleteQuizAttempt(QuizAttempt quizAttempt) {
+    public void delete(QuizAttempt quizAttempt) {
         quizAttempts.remove(quizAttempt);
     }
 
@@ -68,7 +68,7 @@ public class MockQuizAttemptDAO implements IQuizAttemptDAO {
      * Retrieves all QuizAttempts.
      */
     @Override
-    public List<QuizAttempt> getAllQuizAttempts() {
+    public List<QuizAttempt> getAll() {
         return new ArrayList<>(quizAttempts);
     }
 

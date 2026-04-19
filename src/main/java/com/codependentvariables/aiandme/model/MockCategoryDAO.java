@@ -3,27 +3,24 @@ package com.codependentvariables.aiandme.model;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Mock database implementation for storing category data.
- */
 public class MockCategoryDAO implements ICategoryDAO {
     private static final ArrayList<Category> categories = new ArrayList<>();
     private static int autoIncrementId = 1;
 
     public MockCategoryDAO() {
-        addCategory(new Category("Arithmetic"));
-        addCategory(new Category("Comprehension"));
+        add(new Category("Arithmetic"));
+        add(new Category("Comprehension"));
     }
 
     @Override
-    public void addCategory(Category category) {
+    public void add(Category category) {
         category.setId(autoIncrementId);
         autoIncrementId++;
         categories.add(category);
     }
 
     @Override
-    public void updateCategory(Category category) {
+    public void update(Category category) {
         for(int i = 0; i < categories.size(); i++) {
             if(categories.get(i).getId() == category.getId()) {
                 categories.set(i, category);
@@ -33,8 +30,13 @@ public class MockCategoryDAO implements ICategoryDAO {
     }
 
     @Override
-    public void deleteCategory(Category category) {
+    public void delete(Category category) {
         categories.remove(category);
+    }
+
+    @Override
+    public List<Category> getAll() {
+        return new ArrayList<>(categories);
     }
 
     @Override
@@ -45,10 +47,5 @@ public class MockCategoryDAO implements ICategoryDAO {
             }
         }
         return null;
-    }
-
-    @Override
-    public List<Category> getAllCategories() {
-        return new ArrayList<>(categories);
     }
 }

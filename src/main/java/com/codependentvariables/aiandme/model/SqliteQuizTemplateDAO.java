@@ -3,14 +3,14 @@ package com.codependentvariables.aiandme.model;
 import java.sql.*;
 import java.util.List;
 
-public class SqliteQuizTemplateDAO extends BaseDAO implements IQuizTemplateDAO, IDatabaseEntity {
+public class SqliteQuizTemplateDAO extends BaseSqliteDAO implements IQuizTemplateDAO, IDatabaseEntity {
     private static final String schemaQuery = """
         CREATE TABLE IF NOT EXISTS quiz_templates (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name VARCHAR NOT NULL,
-            categoryId INTEGER NOT NULL,
+            category_id INTEGER NOT NULL,
             status VARCHAR NOT NULL DEFAULT 'draft',
-            FOREIGN KEY (categoryId) REFERENCES categories(id)
+            FOREIGN KEY (category_id) REFERENCES categories(id)
         );
     """;
 
@@ -29,7 +29,7 @@ public class SqliteQuizTemplateDAO extends BaseDAO implements IQuizTemplateDAO, 
     private static final IRowMapper<QuizTemplate> QUIZ_TEMPLATE_MAPPER = (resultSet) -> {
         QuizTemplate template = new QuizTemplate(
                 resultSet.getString("name"),
-                resultSet.getInt("categoryId"),
+                resultSet.getInt("category_id"),
                 resultSet.getString("status")
         );
         template.setId(resultSet.getInt("id"));
@@ -37,8 +37,8 @@ public class SqliteQuizTemplateDAO extends BaseDAO implements IQuizTemplateDAO, 
     };
 
     @Override
-    public void addTemplate(QuizTemplate quizTemplate) {
-        final String query = "INSERT INTO quiz_templates(name, categoryId, status) VALUES(?, ?, ?)";
+    public void add(QuizTemplate quizTemplate) {
+        final String query = "INSERT INTO quiz_templates(name, category_id, status) VALUES(?, ?, ?)";
 
         var id = executeSqlWithGeneratedKeys(query, statement -> {
             statement.setString(1, quizTemplate.getName());
@@ -50,8 +50,8 @@ public class SqliteQuizTemplateDAO extends BaseDAO implements IQuizTemplateDAO, 
     }
 
     @Override
-    public void updateTemplate(QuizTemplate quizTemplate) {
-        final String query = "UPDATE quiz_templates SET name = ?, categoryId = ?, status = ? WHERE id = ?";
+    public void update(QuizTemplate quizTemplate) {
+        final String query = "UPDATE quiz_templates SET name = ?, category_id = ?, status = ? WHERE id = ?";
 
         executeSql(query, statement -> {
             statement.setString(1, quizTemplate.getName());
@@ -62,7 +62,7 @@ public class SqliteQuizTemplateDAO extends BaseDAO implements IQuizTemplateDAO, 
     }
 
     @Override
-    public void deleteTemplate(QuizTemplate quizTemplate) {
+    public void delete(QuizTemplate quizTemplate) {
         final String query = "DELETE FROM quiz_templates WHERE id = ?";
 
         executeSql(query, statement -> statement.setInt(1, quizTemplate.getId()));
@@ -77,15 +77,15 @@ public class SqliteQuizTemplateDAO extends BaseDAO implements IQuizTemplateDAO, 
     }
 
     @Override
-    public List<QuizTemplate> getAllTemplates() {
+    public List<QuizTemplate> getAll() {
         final String query = "SELECT * FROM quiz_templates";
 
         return executeQuery(query, QUIZ_TEMPLATE_MAPPER);
     }
 
     @Override
-    public List<QuizTemplate> getTemplatesByCategory(int categoryId) {
-        final String query = "SELECT * FROM quiz_templates WHERE categoryId = ?";
+    public List<QuizTemplate> getByCategoryId(int categoryId) {
+        final String query = "SELECT * FROM quiz_templates WHERE category_id = ?";
 
         return executeQuery(query, statement -> statement.setInt(1, categoryId), QUIZ_TEMPLATE_MAPPER);
     }

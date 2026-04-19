@@ -5,23 +5,21 @@ import java.util.List;
 
 /**
  * SQLite implementation of the IQuizAttemptDAO interface.
- *
  * Handles all database operations related to QuizAttempt entities,
  * including schema creation, seeding, and CRUD operations.
  */
-public class SqliteQuizAttemptDAO extends BaseDAO implements IQuizAttemptDAO, IDatabaseEntity {
-
+public class SqliteQuizAttemptDAO extends BaseSqliteDAO implements IQuizAttemptDAO, IDatabaseEntity {
     /**
      * SQL statement to create the quizAttempts table if it does not exist.
      * Includes a foreign key reference to the users table.
      */
     private static final String schemaQuery = """
-        CREATE TABLE IF NOT EXISTS quizAttempts (
+        CREATE TABLE IF NOT EXISTS quiz_attempts (
             id INTEGER PRIMARY KEY,
-            userId INTEGER NOT NULL,
+            user_id INTEGER NOT NULL,
             name VARCHAR NOT NULL,
-            completedAt TIMESTAMP NOT NULL,
-            FOREIGN KEY (userId) REFERENCES users(id)
+            completed_at TIMESTAMP NOT NULL,
+            FOREIGN KEY (user_id) REFERENCES users(id)
         );
     """;
 
@@ -29,7 +27,7 @@ public class SqliteQuizAttemptDAO extends BaseDAO implements IQuizAttemptDAO, ID
      * Seed data inserted when the database is initialised.
      */
     private static final String seedDataQuery = """
-        INSERT INTO quizAttempts (userId, name, completedAt)
+        INSERT INTO quiz_attempts (user_id, name, completed_at)
         VALUES (1, 'Emma''s Quiz Attempt', '2026-04-17 00:00:00');
     """;
 
@@ -48,9 +46,9 @@ public class SqliteQuizAttemptDAO extends BaseDAO implements IQuizAttemptDAO, ID
      */
     public static final IRowMapper<QuizAttempt> QUIZ_ATTEMPT_MAPPER = (resultSet) -> {
         QuizAttempt quizAttempt = new QuizAttempt(
-                resultSet.getInt("userId"),
+                resultSet.getInt("user_id"),
                 resultSet.getString("name"),
-                resultSet.getTimestamp("completedAt")
+                resultSet.getTimestamp("completed_at")
         );
         quizAttempt.setId(resultSet.getInt("id"));
         return quizAttempt;
@@ -61,8 +59,8 @@ public class SqliteQuizAttemptDAO extends BaseDAO implements IQuizAttemptDAO, ID
      * The generated ID is assigned back to the object.
      */
     @Override
-    public void addQuizAttempt(QuizAttempt quizAttempt) {
-        final String query = "INSERT INTO quizAttempts (userId, name, completedAt) VALUES (?, ?, ?)";
+    public void add(QuizAttempt quizAttempt) {
+        final String query = "INSERT INTO quiz_attempts (user_id, name, completed_at) VALUES (?, ?, ?)";
 
         int id = executeSqlWithGeneratedKeys(query, statement -> {
             statement.setInt(1, quizAttempt.getUserId());
@@ -77,8 +75,8 @@ public class SqliteQuizAttemptDAO extends BaseDAO implements IQuizAttemptDAO, ID
      * Updates an existing QuizAttempt in the database.
      */
     @Override
-    public void updateQuizAttempt(QuizAttempt quizAttempt) {
-        final String query = "UPDATE quizAttempts SET userId = ?, name = ?, completedAt = ? WHERE id = ?";
+    public void update(QuizAttempt quizAttempt) {
+        final String query = "UPDATE quiz_attempts SET user_id = ?, name = ?, completed_at = ? WHERE id = ?";
 
         executeSql(query, statement -> {
             statement.setInt(1, quizAttempt.getUserId());
@@ -92,8 +90,8 @@ public class SqliteQuizAttemptDAO extends BaseDAO implements IQuizAttemptDAO, ID
      * Deletes a QuizAttempt from the database by its ID.
      */
     @Override
-    public void deleteQuizAttempt(QuizAttempt quizAttempt) {
-        final String query = "DELETE FROM quizAttempts WHERE id = ?";
+    public void delete(QuizAttempt quizAttempt) {
+        final String query = "DELETE FROM quiz_attempts WHERE id = ?";
 
         executeSql(query, statement -> statement.setInt(1, quizAttempt.getId()));
     }
@@ -104,8 +102,8 @@ public class SqliteQuizAttemptDAO extends BaseDAO implements IQuizAttemptDAO, ID
      * @return list of all quiz attempts
      */
     @Override
-    public List<QuizAttempt> getAllQuizAttempts() {
-        final String query = "SELECT * FROM quizAttempts";
+    public List<QuizAttempt> getAll() {
+        final String query = "SELECT * FROM quiz_attempts";
 
         return executeQuery(query, QUIZ_ATTEMPT_MAPPER);
     }
@@ -118,48 +116,33 @@ public class SqliteQuizAttemptDAO extends BaseDAO implements IQuizAttemptDAO, ID
      */
     @Override
     public QuizAttempt get(int id) {
-        final String query = "SELECT * FROM quizAttempts WHERE id = ? LIMIT 1";
+        final String query = "SELECT * FROM quiz_attempts WHERE id = ? LIMIT 1";
 
-        List<QuizAttempt> quizAttempts =
-                executeQuery(query, preparedStatement -> preparedStatement.setInt(1, id), QUIZ_ATTEMPT_MAPPER);
-
+        List<QuizAttempt> quizAttempts = executeQuery(query, preparedStatement -> preparedStatement.setInt(1, id), QUIZ_ATTEMPT_MAPPER);
         return firstOrNull(quizAttempts);
     }
 
     /**
      * Retrieves all QuizAttempts for a specific user.
-     *
      * @param userId the user ID
      * @return list of quiz attempts belonging to the user
      */
     @Override
     public List<QuizAttempt> getByUserId(int userId) {
-        final String query = "SELECT * FROM quizAttempts WHERE userId = ?";
+        final String query = "SELECT * FROM quiz_attempts WHERE user_id = ?";
 
-        return executeQuery(
-                query,
-                preparedStatement -> preparedStatement.setInt(1, userId),
-                QUIZ_ATTEMPT_MAPPER
-        );
+        return executeQuery(query, preparedStatement -> preparedStatement.setInt(1, userId), QUIZ_ATTEMPT_MAPPER);
     }
 
     /**
      * Retrieves the most recent QuizAttempt for a given user.
-     *
      * @param userId the user ID
      * @return the latest quiz attempt or null if none exist
      */
     public QuizAttempt getLatestByUserId(int userId) {
-        final String query = """
-            SELECT * FROM quizAttempts
-            WHERE userId = ?
-            ORDER BY completedAt DESC
-            LIMIT 1
-        """;
+        final String query = "SELECT * FROM quiz_attempts WHERE user_id = ? ORDER BY completed_at DESC LIMIT 1";
 
-        List<QuizAttempt> attempts =
-                executeQuery(query, preparedStatement -> preparedStatement.setInt(1, userId), QUIZ_ATTEMPT_MAPPER);
-
+        List<QuizAttempt> attempts = executeQuery(query, preparedStatement -> preparedStatement.setInt(1, userId), QUIZ_ATTEMPT_MAPPER);
         return firstOrNull(attempts);
     }
 }

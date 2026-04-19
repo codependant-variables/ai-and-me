@@ -11,14 +11,14 @@ public class MockQuizTemplateDAO implements IQuizTemplateDAO {
     private int autoIncrementId = 1;
 
     @Override
-    public void addTemplate(QuizTemplate quizTemplate) {
+    public void add(QuizTemplate quizTemplate) {
         quizTemplate.setId(autoIncrementId);
         autoIncrementId++;
         templates.add(quizTemplate);
     }
 
     @Override
-    public void updateTemplate(QuizTemplate quizTemplate) {
+    public void update(QuizTemplate quizTemplate) {
         for (int i = 0; i < templates.size(); i++) {
             if (templates.get(i).getId() == quizTemplate.getId()) {
                 templates.set(i, quizTemplate);
@@ -28,7 +28,7 @@ public class MockQuizTemplateDAO implements IQuizTemplateDAO {
     }
 
     @Override
-    public void deleteTemplate(QuizTemplate quizTemplate) {
+    public void delete(QuizTemplate quizTemplate) {
         templates.remove(quizTemplate);
     }
 
@@ -43,12 +43,12 @@ public class MockQuizTemplateDAO implements IQuizTemplateDAO {
     }
 
     @Override
-    public List<QuizTemplate> getAllTemplates() {
+    public List<QuizTemplate> getAll() {
         return new ArrayList<>(templates);
     }
 
     @Override
-    public List<QuizTemplate> getTemplatesByCategory(int categoryId) {
+    public List<QuizTemplate> getByCategoryId(int categoryId) {
         List<QuizTemplate> result = new ArrayList<>();
         for (QuizTemplate template : templates) {
             if (template.getCategoryId() == categoryId) {

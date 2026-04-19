@@ -7,19 +7,19 @@ public interface IQuizTemplateDAO {
      * Adds a new quiz template to the database.
      * @param quizTemplate The quiz template to add.
      */
-    void addTemplate(QuizTemplate quizTemplate);
+    void add(QuizTemplate quizTemplate);
 
     /**
      * Updates an existing quiz template in the database.
      * @param quizTemplate The quiz template to update.
      */
-    void updateTemplate(QuizTemplate quizTemplate);
+    void update(QuizTemplate quizTemplate);
 
     /**
      * Deletes a quiz template from the database.
      * @param quizTemplate The quiz template to delete.
      */
-    void deleteTemplate(QuizTemplate quizTemplate);
+    void delete(QuizTemplate quizTemplate);
 
     /**
      * Retrieves a quiz template by id.
@@ -32,13 +32,13 @@ public interface IQuizTemplateDAO {
      * Retrieves all quiz templates.
      * @return A list of all quiz templates.
      */
-    List<QuizTemplate> getAllTemplates();
+    List<QuizTemplate> getAll();
 
     /**
      * Retrieves all quiz templates for a given category.
      * @param categoryId The category id to filter by.
      * @return A list of quiz templates belonging to the given category.
      */
-    List<QuizTemplate> getTemplatesByCategory(int categoryId);
+    List<QuizTemplate> getByCategoryId(int categoryId);
 }
 

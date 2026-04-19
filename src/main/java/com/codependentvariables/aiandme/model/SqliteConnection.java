@@ -40,6 +40,7 @@ public class SqliteConnection {
         IDatabaseEntity[] entities = {
                 new SqliteUserDAO(),
                 new SqliteCategoryDAO(),
+                new SqliteCheckinDAO(),
                 new SqliteQuizTemplateDAO()
         };
 

@@ -58,7 +58,7 @@ public class QuizLibraryController {
         selectedCard = null;
         updateActionButtons();
 
-        List<Category> categories = categoryDAO.getAllCategories();
+        List<Category> categories = categoryDAO.getAll();
         for (Category category : categories) {
             categoryContainer.getChildren().add(buildCategoryCard(category));
         }
@@ -69,7 +69,7 @@ public class QuizLibraryController {
      * Shows the category name and how many templates it contains.
      */
     private VBox buildCategoryCard(Category category) {
-        int templateCount = templateDAO.getTemplatesByCategory(category.getId()).size();
+        int templateCount = templateDAO.getByCategoryId(category.getId()).size();
 
         Label nameLabel = new Label(category.getName());
         nameLabel.setFont(Font.font("System", FontWeight.BOLD, 14));
@@ -127,7 +127,7 @@ public class QuizLibraryController {
      */
     @FXML
     private void handleCreate() {
-        List<Category> categories = categoryDAO.getAllCategories();
+        List<Category> categories = categoryDAO.getAll();
 
         // ---- Build dialog content ----
         Dialog<ButtonType> dialog = new Dialog<>();
@@ -221,9 +221,9 @@ public class QuizLibraryController {
         if (newCategoryCheck.isSelected()) {
             String newCatName = newCategoryField.getText().trim();
             Category newCat = new Category(newCatName);
-            categoryDAO.addCategory(newCat);
+            categoryDAO.add(newCat);
             // Fetch the just-added category so we have its DB-assigned id
-            targetCategory = categoryDAO.getAllCategories().stream()
+            targetCategory = categoryDAO.getAll().stream()
                     .filter(c -> c.getName().equalsIgnoreCase(newCatName))
                     .findFirst().orElse(newCat);
         } else {
@@ -231,7 +231,7 @@ public class QuizLibraryController {
         }
 
         QuizTemplate template = new QuizTemplate(templateName, targetCategory.getId(), "draft");
-        templateDAO.addTemplate(template);
+        templateDAO.add(template);
         refreshCategories();
         showInfo("Template \"" + templateName + "\" created in category \"" + targetCategory.getName() + "\".");
     }
@@ -243,16 +243,16 @@ public class QuizLibraryController {
     private void handleModify() {
         if (selectedCategory == null) return;
 
-        List<QuizTemplate> templates = templateDAO.getTemplatesByCategory(selectedCategory.getId());
+        List<QuizTemplate> templates = templateDAO.getByCategoryId(selectedCategory.getId());
         if (templates.isEmpty()) {
             showWarning("No templates in " + selectedCategory.getName() + " to modify.");
             return;
         }
 
         // Let the user pick which template to modify
-        ChoiceDialog<QuizTemplate> picker = new ChoiceDialog<>(templates.get(0), templates);
+        ChoiceDialog<QuizTemplate> picker = new ChoiceDialog<>(templates.getFirst(), templates);
         picker.setTitle("Modify Template");
-        picker.setHeaderText("Select a template to modify in " + selectedCategory.getName() + "");
+        picker.setHeaderText("Select a template to modify in " + selectedCategory.getName());
         picker.setContentText("Template:");
         // Display template names in the picker
         picker.getItems().setAll(templates);
@@ -266,13 +266,13 @@ public class QuizLibraryController {
 
         TextInputDialog nameDialog = new TextInputDialog(chosen.getName());
         nameDialog.setTitle("Rename Template");
-        nameDialog.setHeaderText("Rename " + chosen.getName() + "");
+        nameDialog.setHeaderText("Rename " + chosen.getName());
         nameDialog.setContentText("New name:");
 
         Optional<String> nameResult = nameDialog.showAndWait();
         nameResult.map(String::trim).filter(s -> !s.isEmpty()).ifPresent(newName -> {
             chosen.setName(newName);
-            templateDAO.updateTemplate(chosen);
+            templateDAO.update(chosen);
             refreshCategories();
             showInfo("Template renamed to " + newName + ".");
         });
@@ -285,15 +285,15 @@ public class QuizLibraryController {
     private void handleDelete() {
         if (selectedCategory == null) return;
 
-        List<QuizTemplate> templates = templateDAO.getTemplatesByCategory(selectedCategory.getId());
+        List<QuizTemplate> templates = templateDAO.getByCategoryId(selectedCategory.getId());
         if (templates.isEmpty()) {
             showWarning("No templates in " + selectedCategory.getName() + " to delete.");
             return;
         }
 
-        ChoiceDialog<QuizTemplate> picker = new ChoiceDialog<>(templates.get(0), templates);
+        ChoiceDialog<QuizTemplate> picker = new ChoiceDialog<>(templates.getFirst(), templates);
         picker.setTitle("Delete Template");
-        picker.setHeaderText("Select a template to delete from " + selectedCategory.getName() + "");
+        picker.setHeaderText("Select a template to delete from " + selectedCategory.getName());
         picker.setContentText("Template:");
 
         Optional<QuizTemplate> pickerResult = picker.showAndWait();
@@ -308,7 +308,7 @@ public class QuizLibraryController {
         confirm.setHeaderText(null);
 
         confirm.showAndWait().filter(b -> b == ButtonType.YES).ifPresent(b -> {
-            templateDAO.deleteTemplate(chosen);
+            templateDAO.delete(chosen);
             refreshCategories();
             showInfo("Template " + chosen.getName() + " deleted.");
         });

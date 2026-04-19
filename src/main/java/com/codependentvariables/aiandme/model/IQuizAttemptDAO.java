@@ -11,25 +11,25 @@ public interface IQuizAttemptDAO {
      * Adds a new quiz attempt to the database.
      * @param quizAttempt the quiz attempt to add
      */
-    void addQuizAttempt(QuizAttempt quizAttempt);
+    void add(QuizAttempt quizAttempt);
 
     /**
      * Updates an existing quiz attempt in the database.
      * @param quizAttempt the quiz attempt to update
      */
-    void updateQuizAttempt(QuizAttempt quizAttempt);
+    void update(QuizAttempt quizAttempt);
 
     /**
      * Deletes a quiz attempt from the database.
      * @param quizAttempt the quiz attempt to delete
      */
-    void deleteQuizAttempt(QuizAttempt quizAttempt);
+    void delete(QuizAttempt quizAttempt);
 
     /**
      * Retrieves all quiz attempts from the database.
      * @return a list of all quiz attempts
      */
-    List<QuizAttempt> getAllQuizAttempts();
+    List<QuizAttempt> getAll();
 
     /**
      * Retrieves a quiz attempt by id.

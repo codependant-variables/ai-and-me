@@ -1,5 +1,6 @@
 package com.codependentvariables.aiandme;
 
+import com.codependentvariables.aiandme.model.SqliteConnection;
 import com.codependentvariables.aiandme.navigation.View;
 import com.codependentvariables.aiandme.navigation.ViewUtils;
 import javafx.application.Application;
@@ -17,6 +18,8 @@ public class  AiAndMe extends Application {
 
     @Override
     public void start(Stage stage) {
+        SqliteConnection.getConnection(); // Frontload db connection load time at app startup
+
         stage.setTitle(TITLE);
         stage.setMaximized(true);
         // TODO: decide if we want to disable resizing or enforce max height and width on startup

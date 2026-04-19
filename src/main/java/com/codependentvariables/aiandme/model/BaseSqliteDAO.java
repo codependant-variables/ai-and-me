@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-public abstract class BaseDAO {
-    private static final Logger logger = Logger.getLogger(BaseDAO.class.getName());
+public abstract class BaseSqliteDAO {
+    private static final Logger logger = Logger.getLogger(BaseSqliteDAO.class.getName());
 
     /**
      * For executing SQL without getting back generated keys, e.g. update or delete.

@@ -1,20 +1,19 @@
 package com.codependentvariables.aiandme.model;
 
-import java.sql.*;
 import java.util.List;
-import java.util.ArrayList;
 
-public class SqliteCategoryDAO extends BaseDAO implements ICategoryDAO, IDatabaseEntity {
+public class SqliteCategoryDAO extends BaseSqliteDAO implements ICategoryDAO, IDatabaseEntity {
     private static final String schemaQuery = """
-        CREATE TABLE IF NOT EXISTS categories (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name VARCHAR NOT NULL
-        );
-    """;
+            CREATE TABLE IF NOT EXISTS categories (
+                id INTEGER PRIMARY KEY,
+                name VARCHAR NOT NULL
+            );
+        """;
 
     private static final String seedDataQuery = """
-        INSERT OR IGNORE INTO categories (id, name) VALUES (1, 'Arithmetic'), (2, 'Comprehension');
-    """;
+            INSERT INTO categories (name) VALUES ('Arithmetic');
+            INSERT INTO categories (name) VALUES ('Comprehension');
+        """;
 
     public String getSchemaQuery() {
         return schemaQuery;
@@ -31,7 +30,7 @@ public class SqliteCategoryDAO extends BaseDAO implements ICategoryDAO, IDatabas
     };
 
     @Override
-    public void addCategory(Category category) {
+    public void add(Category category) {
         final String query = "INSERT INTO categories(name) VALUES(?)";
 
         var id = executeSqlWithGeneratedKeys(query, statement -> statement.setString(1, category.getName()));
@@ -40,7 +39,7 @@ public class SqliteCategoryDAO extends BaseDAO implements ICategoryDAO, IDatabas
     }
 
     @Override
-    public void updateCategory(Category category) {
+    public void update(Category category) {
         final String query = "UPDATE categories SET name = ? WHERE id = ?";
 
         executeSql(query,
@@ -51,14 +50,14 @@ public class SqliteCategoryDAO extends BaseDAO implements ICategoryDAO, IDatabas
     }
 
     @Override
-    public void deleteCategory(Category category) {
+    public void delete(Category category) {
         final String query = "DELETE FROM categories WHERE id = ?";
 
         executeSql(query, statement -> statement.setInt(1, category.getId()));
     }
 
     @Override
-    public List<Category> getAllCategories() {
+    public List<Category> getAll() {
         final String query = "SELECT * FROM categories";
 
         return executeQuery(query, CATEGORY_MAPPER);
