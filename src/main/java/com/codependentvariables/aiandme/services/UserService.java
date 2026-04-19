@@ -15,7 +15,16 @@ import java.util.Objects;
 public class UserService {
     private static UserService instance;
     private final SecureRandom random = new SecureRandom();
-    private final IUserDAO userDAO = new SqliteUserDAO();
+    private final IUserDAO userDAO;
+
+    private UserService() {
+        this(new SqliteUserDAO());
+    }
+
+    // Package-private constructor for unit tests
+    UserService(IUserDAO userDAO) {
+        this.userDAO = userDAO;
+    }
 
     public static UserService getInstance() {
         if (instance == null) {
