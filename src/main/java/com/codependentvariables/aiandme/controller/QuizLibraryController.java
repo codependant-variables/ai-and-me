@@ -80,7 +80,7 @@ public class QuizLibraryController {
      */
     private void syncUsers() {
         usersListView.getItems().clear();
-        List<User> users = userDAO.getAllUsers();
+        List<User> users = userDAO.getAll();
         boolean hasUser = !users.isEmpty();
         if (hasUser) {
             usersListView.getItems().addAll(users);
@@ -110,7 +110,7 @@ public class QuizLibraryController {
             selectedUser.setEmail(emailTextField.getText());
             selectedUser.setPassword(passwordTextField.getText());
             passwordTextField.setText(selectedUser.getPassword());
-            userDAO.updateUser(selectedUser);
+            userDAO.update(selectedUser);
             syncUsers();
         }
     }
@@ -120,7 +120,7 @@ public class QuizLibraryController {
         // Get the selected user from the list view
         User selectedUser = usersListView.getSelectionModel().getSelectedItem();
         if (selectedUser != null) {
-            userDAO.deleteUser(selectedUser);
+            userDAO.delete(selectedUser);
             syncUsers();
         }
     }
@@ -134,7 +134,7 @@ public class QuizLibraryController {
         final String DEFAULT_SALT = "";
         User newUser = new User(DEFAULT_NAME, DEFAULT_EMAIL, DEFAULT_PASSWORD, DEFAULT_SALT);
         // Add the new user to the database
-        userDAO.addUser(newUser);
+        userDAO.add(newUser);
         syncUsers();
         // Select the new user in the list view
         // and focus the first name text field

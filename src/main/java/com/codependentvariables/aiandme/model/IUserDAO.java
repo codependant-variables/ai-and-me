@@ -11,32 +11,32 @@ public interface IUserDAO {
      * Adds a new user to the database.
      * @param user The user to add.
      */
-    public void addUser(User user);
+    void add(User user);
     /**
      * Updates an existing user in the database.
      * @param user The user to update.
      */
-    public void updateUser(User user);
+    void update(User user);
     /**
      * Deletes a user from the database.
      * @param user The user to delete.
      */
-    public void deleteUser(User user);
+    void delete(User user);
     /**
      * Retrieves all users from the database.
      * @return A list of all users in the database.
      */
-    public List<User> getAllUsers();
+    List<User> getAll();
     /**
      * Retrieves a user by id.
      * @param id The id of the user to retrieve.
      * @return The user with the given id, or null if not found.
      */
-    public User get(int id);
+    User get(int id);
     /**
      * Retrieves a user by email.
      * @param email The email of the user to retrieve.
      * @return The user with the given email, or null if not found.
      */
-    public User getByEmail(String email);
+    User getByEmail(String email);
 }

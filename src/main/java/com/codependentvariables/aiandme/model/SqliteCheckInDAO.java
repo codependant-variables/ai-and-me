@@ -1,126 +1,83 @@
 package com.codependentvariables.aiandme.model;
 
-import java.sql.*;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDateTime;
 
-public class SqliteCheckInDAO implements ICheckInDAO, IDatabaseEntity {
-    private final Connection connection;
-
+public class SqliteCheckinDAO extends BaseSqliteDAO implements ICheckinDAO, IDatabaseEntity {
     private static final String schemaQuery = """
             CREATE TABLE IF NOT EXISTS checkins (
                 id integer PRIMARY KEY,
-                userId integer NOT NULL,
+                userId integer NOT NULL REFERENCES users(id),
                 aiUse decimal NOT NULL,
                 aiHappiness decimal NOT NULL,
                 aiDependency decimal NOT NULL,
                 completedAt datetime NOT NULL
-                CONSTRAINT fk_userId
-                FOREIGN KEY (userId)
-                REFERENCES users(id)
             );
-            """;
+        """;
 
     private static final String seedDataQuery = """
             INSERT INTO checkins (userId, aiUse, aiHappiness, aiDependency, completedAt) VALUES (1, 5.0, 5.0, 5.0, '2026-04-14 17:28:00');
-            INSERT INTO checkins (userId, aiUse, aiHappiness, aiDependency, completedAt) VALUES (2, 7.5, 2.5, 7.5, '2026-04-14 17:29:00');
-            """; // assuming the userId of seed values in table users are 1 and 2.
+            INSERT INTO checkins (userId, aiUse, aiHappiness, aiDependency, completedAt) VALUES (2, 7.5, 2.5, 7.5, '2026-04-16 14:16:00');
+        """;
 
-    public SqliteCheckInDAO() { connection = SqliteConnection.getConnection(); }
-
-    public String getSchemaQuery() { return schemaQuery; }
-
-    public String getSeedDataQuery() { return seedDataQuery; }
-
-    public void addCheckIn(CheckIn checkIn) {
-        try {
-            String query = "INSERT INTO checkins (userId, aiUse, aiHappiness, aiDependency, completedAt) VALUES (?, ?, ?, ?, ?)";
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setInt(1, checkIn.getUserId());
-            statement.setFloat(2, checkIn.getUse());
-            statement.setFloat(3, checkIn.getHappiness());
-            statement.setFloat(4, checkIn.getDependence());
-            statement.setObject(5, checkIn.getCompletedAt());
-            statement.executeUpdate();
-            ResultSet generatedKeys = statement.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                checkIn.setId(generatedKeys.getInt(1));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public String getSchemaQuery() {
+        return schemaQuery;
     }
 
-    public void deleteCheckIn(CheckIn checkIn) {
-        try {
-            String query = "DELETE FROM checkins WHERE id = ?";
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setInt(1,checkIn.getId());
-            statement.executeUpdate();
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+    public String getSeedDataQuery() {
+        return seedDataQuery;
     }
 
-    private CheckIn mapCheckIn(ResultSet results) throws SQLException {
-        CheckIn checkIn = new CheckIn(
-                results.getInt("userId"),
-                results.getFloat("aiUse"),
-                results.getFloat("aiHappiness"),
-                results.getFloat("aiDependence"),
-                results.getObject("completedAt", LocalDateTime.class)
+    private static final IRowMapper<Checkin> CHECKIN_MAPPER = (resultSet) -> {
+        Checkin checkin = new Checkin(
+                resultSet.getInt("userId"),
+                resultSet.getFloat("aiUse"),
+                resultSet.getFloat("aiHappiness"),
+                resultSet.getFloat("aiDependence"),
+                resultSet.getObject("completedAt", LocalDateTime.class)
         );
-        checkIn.setId(results.getInt("id"));
-        return checkIn;
+        checkin.setId(resultSet.getInt("id"));
+        return checkin;
+    };
+
+    public void add(Checkin checkin) {
+        final String query = "INSERT INTO checkins (userId, aiUse, aiHappiness, aiDependency, completedAt) VALUES (?, ?, ?, ?, ?)";
+
+        int id = executeSqlWithGeneratedKeys(query,
+                statement -> {
+                    statement.setInt(1, checkin.getUserId());
+                    statement.setFloat(2, checkin.getAiUse());
+                    statement.setFloat(3, checkin.getAiHappiness());
+                    statement.setFloat(4, checkin.getAiDependence());
+                    statement.setObject(5, checkin.getCompletedAt());
+                });
+
+        checkin.setId(id);
     }
 
-    public CheckIn get(int id) {
-        try {
-            String query = "SELECT * FROM checkins WHERE id = ?";
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setInt(1, id);
-            ResultSet results = statement.executeQuery();
-            if (results.next()) {
-                return mapCheckIn(results);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+    public void delete(Checkin checkin) {
+        final String query = "DELETE FROM checkins WHERE id = ?";
+
+        executeSql(query, statement -> statement.setInt(1, checkin.getId()));
     }
 
-    public List<CheckIn> getAllCheckIns() {
-        String query = "SELECT * FROM checkins";
-        List<CheckIn> checkIns = new ArrayList<>();
-        try {
-            Statement statement = connection.createStatement();
-            ResultSet results = statement.executeQuery(query);
-            while (results.next()) {
-                checkIns.add(mapCheckIn(results));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (checkIns.isEmpty()) { return null; }
-        return checkIns;
+    public List<Checkin> getAll() {
+        final String query = "SELECT * FROM checkins";
+
+        return executeQuery(query, CHECKIN_MAPPER);
+    }
+
+    public Checkin get(int id) {
+        final String query = "SELECT * FROM checkins id = ? LIMIT 1";
+
+        List<Checkin> checkins = executeQuery(query, statement -> statement.setInt(1, id), CHECKIN_MAPPER);
+        return firstOrNull(checkins);
     }
 
     @Override
-    public List<CheckIn> getAllCheckInsByUserId(int userId) {
-        String query = "SELECT * FROM checkins WHERE userId = ?";
-        List<CheckIn> checkIns = new ArrayList<>();
-        try {
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setInt(1,userId);
-            ResultSet results = statement.executeQuery();
-            while (results.next()) {
-                checkIns.add(mapCheckIn(results));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (checkIns.isEmpty()) { return null; }
-        return checkIns;
+    public List<Checkin> getByUserId(int userId) {
+        final String query = "SELECT * FROM checkins WHERE userId = ?";
+
+        return executeQuery(query, statement -> statement.setInt(1,userId), CHECKIN_MAPPER);
     }
 }

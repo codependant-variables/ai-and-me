@@ -1,24 +1,22 @@
 package com.codependentvariables.aiandme.model;
 
-import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
-public class SqliteUserDAO extends BaseDAO implements IUserDAO, IDatabaseEntity {
+public class SqliteUserDAO extends BaseSqliteDAO implements IUserDAO, IDatabaseEntity {
     private static final String schemaQuery = """
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY,
-            name VARCHAR NOT NULL,
-            email VARCHAR UNIQUE NOT NULL,
-            password VARCHAR NOT NULL,
-            salt CHAR(24) NOT NULL
-        );
-    """;
+            CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY,
+                name VARCHAR NOT NULL,
+                email VARCHAR UNIQUE NOT NULL,
+                password VARCHAR NOT NULL,
+                salt CHAR(24) NOT NULL
+            );
+        """;
 
     private static final String seedDataQuery = """
-        INSERT INTO users (name, email, password, salt) VALUES ('Amy Adams', 'amy.adams@mydomain.gov', 'Zl3QG3XY5/Gsus8Ec4WTi6jMcM7EkrCGCqBMgwwYUzg=', 'sKH9XkLaT2i1XR687zjlHQ==');
-        INSERT INTO users (name, email, password, salt) VALUES ('Bob Builder', 'bobthebulider23@swagmail.net', 'Qf15LlrXz/ghNuMGZG3heBeqH3xeuzITnsRhHTDxzR4=', '0akeeTvljQojvcWqb4cg/Q==');
-    """;
+            INSERT INTO users (name, email, password, salt) VALUES ('Amy Adams', 'amy.adams@mydomain.gov', 'Zl3QG3XY5/Gsus8Ec4WTi6jMcM7EkrCGCqBMgwwYUzg=', 'sKH9XkLaT2i1XR687zjlHQ==');
+            INSERT INTO users (name, email, password, salt) VALUES ('Bob Builder', 'bobthebulider23@swagmail.net', 'Qf15LlrXz/ghNuMGZG3heBeqH3xeuzITnsRhHTDxzR4=', '0akeeTvljQojvcWqb4cg/Q==');
+        """;
 
     public String getSchemaQuery() {
         return schemaQuery;
@@ -40,43 +38,43 @@ public class SqliteUserDAO extends BaseDAO implements IUserDAO, IDatabaseEntity 
     };
 
     @Override
-    public void addUser(User user) {
+    public void add(User user) {
         final String query = "INSERT INTO users (name, email, password, salt) VALUES (?, ?, ?, ?)";
 
         int id = executeSqlWithGeneratedKeys(query,
-            statement -> {
-                statement.setString(1, user.getName());
-                statement.setString(2, user.getEmail());
-                statement.setString(3, user.getPassword());
-                statement.setString(4, user.getSalt());
-            });
+                statement -> {
+                    statement.setString(1, user.getName());
+                    statement.setString(2, user.getEmail());
+                    statement.setString(3, user.getPassword());
+                    statement.setString(4, user.getSalt());
+                });
 
         user.setId(id);
     }
 
     @Override
-    public void updateUser(User user) {
+    public void update(User user) {
         final String query = "UPDATE users SET name = ?, email = ?, password = ?, salt = ? WHERE id = ?";
 
         executeSql(query,
-            statement -> {
-                statement.setString(1, user.getName());
-                statement.setString(2, user.getEmail());
-                statement.setString(3, user.getPassword());
-                statement.setString(4, user.getSalt());
-                statement.setInt(5, user.getId());
-            });
+                statement -> {
+                    statement.setString(1, user.getName());
+                    statement.setString(2, user.getEmail());
+                    statement.setString(3, user.getPassword());
+                    statement.setString(4, user.getSalt());
+                    statement.setInt(5, user.getId());
+                });
     }
 
     @Override
-    public void deleteUser(User user) {
+    public void delete(User user) {
         final String query = "DELETE FROM users WHERE id = ?";
 
-        executeSql(query, statement -> statement.setLong(1, user.getId()));
+        executeSql(query, statement -> statement.setInt(1, user.getId()));
     }
 
     @Override
-    public List<User> getAllUsers() {
+    public List<User> getAll() {
         final String query = "SELECT * FROM users";
 
         return executeQuery(query, USER_MAPPER);
@@ -86,7 +84,7 @@ public class SqliteUserDAO extends BaseDAO implements IUserDAO, IDatabaseEntity 
     public User get(int id) {
         final String query = "SELECT * FROM users WHERE id = ? LIMIT 1";
 
-        List<User> users = executeQuery(query, preparedStatement -> preparedStatement.setInt(1, id), USER_MAPPER);
+        List<User> users = executeQuery(query, statement -> statement.setInt(1, id), USER_MAPPER);
         return firstOrNull(users);
     }
 
@@ -94,7 +92,7 @@ public class SqliteUserDAO extends BaseDAO implements IUserDAO, IDatabaseEntity 
     public User getByEmail(String email) {
         final String query = "SELECT * FROM users WHERE email = ? LIMIT 1";
 
-        List<User> users = executeQuery(query, preparedStatement -> preparedStatement.setString(1, email), USER_MAPPER);
+        List<User> users = executeQuery(query, statement -> statement.setString(1, email), USER_MAPPER);
         return firstOrNull(users);
     }
 }

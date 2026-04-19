@@ -4,50 +4,44 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MockCheckInDAO implements ICheckInDAO {
-    /**
-     * Static list of check-ins acting as mock DB.
-     */
-    public static final ArrayList<CheckIn> checkIns = new ArrayList<>();
+public class MockCheckinDAO implements ICheckinDAO {
+    public static final ArrayList<Checkin> checkins = new ArrayList<>();
     private static int autoIncrementId = 1;
 
-    public MockCheckInDAO() {
-        addCheckIn(new CheckIn(1, 6.4f, 3.2f, 5.0f, LocalDateTime.now()));
-        addCheckIn(new CheckIn(1, 3.0f, 7.5f, 1.0f, LocalDateTime.now()));
-        addCheckIn(new CheckIn(2, 9.6f, 5.0f, 7.5f, LocalDateTime.now()));
+    public MockCheckinDAO() {
+        add(new Checkin(1, 6.4f, 3.2f, 5.0f, LocalDateTime.now().minusDays(3)));
+        add(new Checkin(1, 3.0f, 7.5f, 1.0f, LocalDateTime.now().minusDays(2)));
+        add(new Checkin(2, 9.6f, 5.0f, 7.5f, LocalDateTime.now().minusDays(1)));
     }
 
     @Override
-    public void addCheckIn(CheckIn checkIn) {
-        checkIn.setId(autoIncrementId++);
-        checkIns.add(checkIn);
+    public void add(Checkin checkin) {
+        checkin.setId(autoIncrementId++);
+        checkins.add(checkin);
     }
 
     @Override
-    public void deleteCheckIn(CheckIn checkIn) { checkIns.remove(checkIn); }
+    public void delete(Checkin checkin) {
+        checkins.remove(checkin);
+    }
 
     @Override
-    public CheckIn get(int id) {
-        for (CheckIn checkIn : checkIns) {
-            if (checkIn.getId() == id) {
-                return checkIn;
+    public Checkin get(int id) {
+        for (Checkin checkin : checkins) {
+            if (checkin.getId() == id) {
+                return checkin;
             }
         }
         return null;
     }
 
     @Override
-    public List<CheckIn> getAllCheckIns() { return new ArrayList<>(checkIns); }
+    public List<Checkin> getAll() {
+        return new ArrayList<>(checkins);
+    }
 
     @Override
-    public List<CheckIn> getAllCheckInsByUserId(int userId) {
-        ArrayList<CheckIn> checkInsByUser = new ArrayList<>();
-        for (CheckIn checkIn : checkIns) {
-            if (checkIn.getUserId() == userId) {
-                checkInsByUser.add(checkIn);
-            }
-        }
-        if (checkInsByUser.isEmpty()) { return null; }
-        return checkInsByUser;
+    public List<Checkin> getByUserId(int userId) {
+        return checkins.stream().filter(x -> x.getUserId() == userId).toList();
     }
 }

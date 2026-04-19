@@ -2,7 +2,7 @@ package com.codependentvariables.aiandme.model;
 
 import java.time.LocalDateTime;
 
-public class CheckIn {
+public class Checkin {
     private int id;
     private int userId;
     private float aiUse;
@@ -10,7 +10,7 @@ public class CheckIn {
     private float aiDependence;
     private LocalDateTime completedAt;
 
-    public CheckIn(int userId, float aiUse, float aiHappiness,float aiDependence, LocalDateTime completedAt) {
+    public Checkin(int userId, float aiUse, float aiHappiness, float aiDependence, LocalDateTime completedAt) {
         this.userId = userId;
         this.aiUse = aiUse;
         this.aiHappiness = aiHappiness;
@@ -30,20 +30,19 @@ public class CheckIn {
         return userId;
     }
 
-    public float getUse() {
+    public float getAiUse() {
         return aiUse;
     }
 
-    public float getHappiness() {
+    public float getAiHappiness() {
         return aiHappiness;
     }
 
-    public float getDependence() {
+    public float getAiDependence() {
         return aiDependence;
     }
 
     public LocalDateTime getCompletedAt() {
         return completedAt;
     }
-
 }
