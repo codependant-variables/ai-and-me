@@ -17,7 +17,7 @@ public class PasswordValidator implements IValidator<String> {
 
     @Override
     public String validate(String value, String display) {
-        if (value == null || value.isBlank()) {
+        if (value == null || value.isEmpty()) {
             return String.format("%s must be at least %d characters and contain at least %d lowercase, %d uppercase, %d number, and %d symbol.", display, MIN_LENGTH, MIN_LOWERCASE, MIN_UPPERCASE, MIN_DIGITS, MIN_SYMBOLS);
         }
 

@@ -15,7 +15,7 @@ public class PasswordValidatorTest {
     public void correct_error_message() {
         String error = validator.validate("invalid", "My password");
         assertNotNull(error);
-        assertEquals("My password must contain at least 1 lowercase, 1 uppercase, 1 number, and 1 symbol.", error);
+        assertEquals("My password is missing: 10 characters, 1 uppercase, 1 number, 1 symbol.", error);
     }
 
     @Test
@@ -65,7 +65,7 @@ public class PasswordValidatorTest {
 
     @Test
     public void valid_password_2() {
-        assertNull(validator.validate("Abc123$", ""));
+        assertNull(validator.validate("Abcdef123$", ""));
     }
 
     @Test
