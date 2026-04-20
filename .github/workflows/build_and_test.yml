@@ -1,0 +1,36 @@
+name: BuilZd and test
+on: push
+
+jobs:
+  pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'corretto'
+          cache: maven
+
+      - name: 1. Build
+        run: mvn compile
+
+      - name: 2. Test
+        run: mvn test --batch-mode
+
+      - name: 3. Package & Artifact
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
+        run: |
+          mvn package -DskipTests
+          mkdir staging
+          cp target/*.jar staging/
+
+      - name: Upload to GitHub UI
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-and-me
+          path: staging/
