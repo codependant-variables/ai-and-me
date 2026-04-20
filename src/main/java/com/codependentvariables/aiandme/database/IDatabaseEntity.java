@@ -1,4 +1,4 @@
-package com.codependentvariables.aiandme.model;
+package com.codependentvariables.aiandme.database;
 
 /**
  * For defining a class will be a database entity with a schema and seeding.

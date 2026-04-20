@@ -1,4 +1,6 @@
-package com.codependentvariables.aiandme.model;
+package com.codependentvariables.aiandme.model.dao;
+
+import com.codependentvariables.aiandme.model.Checkin;
 
 import java.util.List;
 

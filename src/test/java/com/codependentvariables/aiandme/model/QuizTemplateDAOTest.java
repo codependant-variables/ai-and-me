@@ -1,5 +1,7 @@
 package com.codependentvariables.aiandme.model;
 
+import com.codependentvariables.aiandme.model.dao.IQuizTemplateDAO;
+import com.codependentvariables.aiandme.model.mock.MockQuizTemplateDAO;
 import org.junit.jupiter.api.*;
 
 import java.util.List;

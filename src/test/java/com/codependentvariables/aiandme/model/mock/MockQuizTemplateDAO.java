@@ -1,4 +1,7 @@
-package com.codependentvariables.aiandme.model;
+package com.codependentvariables.aiandme.model.mock;
+
+import com.codependentvariables.aiandme.model.*;
+import com.codependentvariables.aiandme.model.dao.IQuizTemplateDAO;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,5 +1,7 @@
 package com.codependentvariables.aiandme.model;
 
+import com.codependentvariables.aiandme.model.dao.IQuizAttemptDAO;
+import com.codependentvariables.aiandme.model.mock.MockQuizAttemptDAO;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Timestamp;

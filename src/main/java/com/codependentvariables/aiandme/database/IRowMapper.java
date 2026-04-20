@@ -1,4 +1,4 @@
-package com.codependentvariables.aiandme.model;
+package com.codependentvariables.aiandme.database;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

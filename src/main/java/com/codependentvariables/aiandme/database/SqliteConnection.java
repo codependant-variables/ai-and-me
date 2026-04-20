@@ -1,4 +1,6 @@
-package com.codependentvariables.aiandme.model;
+package com.codependentvariables.aiandme.database;
+
+import com.codependentvariables.aiandme.model.dao.*;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;

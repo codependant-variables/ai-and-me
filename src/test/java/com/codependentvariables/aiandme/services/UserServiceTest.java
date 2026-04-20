@@ -1,6 +1,6 @@
 package com.codependentvariables.aiandme.services;
 
-import com.codependentvariables.aiandme.model.MockUserDAO;
+import com.codependentvariables.aiandme.model.mock.MockUserDAO;
 import com.codependentvariables.aiandme.model.User;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;

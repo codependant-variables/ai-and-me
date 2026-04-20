@@ -1,4 +1,6 @@
-package com.codependentvariables.aiandme.model;
+package com.codependentvariables.aiandme.model.dao;
+
+import com.codependentvariables.aiandme.model.Category;
 
 import java.util.List;
 

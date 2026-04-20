@@ -1,4 +1,7 @@
-package com.codependentvariables.aiandme.model;
+package com.codependentvariables.aiandme.model.dao;
+
+import com.codependentvariables.aiandme.database.*;
+import com.codependentvariables.aiandme.model.*;
 
 import java.util.List;
 import java.time.LocalDateTime;

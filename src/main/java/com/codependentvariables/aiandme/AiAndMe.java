@@ -2,7 +2,7 @@ package com.codependentvariables.aiandme;
 
 import atlantafx.base.theme.NordDark;
 import atlantafx.base.theme.NordLight;
-import com.codependentvariables.aiandme.model.SqliteConnection;
+import com.codependentvariables.aiandme.database.SqliteConnection;
 import com.codependentvariables.aiandme.navigation.View;
 import com.codependentvariables.aiandme.navigation.ViewUtils;
 import javafx.application.Application;
