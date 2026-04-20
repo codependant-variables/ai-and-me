@@ -1,4 +1,4 @@
-name: BuilZd and test
+name: Build and test
 on: push
 
 jobs:
