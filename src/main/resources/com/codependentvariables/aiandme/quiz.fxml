@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane prefHeight="563.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codependentvariables.aiandme.controller.QuizController">
+      <center>
+      
+              <VBox alignment="CENTER" prefHeight="200.0" prefWidth="594.0" BorderPane.alignment="CENTER">
+      
+              <HBox alignment="BOTTOM_CENTER" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="{QUIZ_NAME}" textAlignment="CENTER">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Text>
+                        <Separator prefWidth="200.0" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+              <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="52.0" prefWidth="600.0">
+               <children>
+                  <VBox alignment="TOP_CENTER" prefHeight="73.0" prefWidth="105.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="{QUESTION}" textAlignment="CENTER">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        <font>
+                           <Font size="18.0" />
+                        </font>
+                        </Text>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+         <HBox alignment="CENTER" layoutX="10.0" layoutY="292.0" prefHeight="55.0" prefWidth="600.0">
+            <children>
+               <RadioButton mnemonicParsing="false" text="{ANSWER_1}" />
+            </children>
+         </HBox>
+         <HBox alignment="CENTER" layoutX="10.0" layoutY="345.0" prefHeight="55.0" prefWidth="600.0">
+            <children>
+               <RadioButton mnemonicParsing="false" text="{ANSWER_2}" />
+            </children>
+         </HBox>
+         <HBox alignment="CENTER" layoutX="10.0" layoutY="290.0" prefHeight="55.0" prefWidth="600.0">
+            <children>
+               <RadioButton mnemonicParsing="false" text="{ANSWER_3}" />
+            </children>
+         </HBox>
+         <HBox alignment="CENTER" layoutX="10.0" layoutY="263.0" prefHeight="55.0" prefWidth="600.0">
+            <children>
+               <RadioButton mnemonicParsing="false" text="{ANSWER_4}" />
+            </children>
+         </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+               <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                  <children>
+                        <Button mnemonicParsing="false" text="Submit Quiz" />
+                        <Button mnemonicParsing="false" onAction="#navigateHome">
+                        <graphic>
+                              <SVGPath content="M14.611 6.622 8.927 2.221a0.438 0.438 0 0 0 -0.541 0.005L2.879 6.627a0.467 0.467 0 0 0 -0.163 0.341v7.961a0.438 0.438 0 0 0 0.439 0.439h3.271a0.438 0.438 0 0 0 0.439 -0.439V10.057h3.771v4.876a0.438 0.438 0 0 0 0.439 0.439h3.271a0.438 0.438 0 0 0 0.439 -0.439V6.972a0.467 0.467 0 0 0 -0.168 -0.345" />
+                        </graphic>
+                        <VBox.margin>
+                           <Insets top="20.0" />
+                        </VBox.margin>
+                        </Button>
+                  </children>
+               </VBox>
+               </children>
+            </HBox>
+              </VBox>
+      </center>
+   </BorderPane>
