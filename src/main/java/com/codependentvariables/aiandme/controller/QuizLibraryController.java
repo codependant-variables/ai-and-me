@@ -1,6 +1,7 @@
 package com.codependentvariables.aiandme.controller;
 
 import com.codependentvariables.aiandme.model.*;
+import com.codependentvariables.aiandme.model.dao.*;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

@@ -1,7 +1,7 @@
 package com.codependentvariables.aiandme.services;
 
-import com.codependentvariables.aiandme.model.IUserDAO;
-import com.codependentvariables.aiandme.model.SqliteUserDAO;
+import com.codependentvariables.aiandme.model.dao.IUserDAO;
+import com.codependentvariables.aiandme.model.dao.SqliteUserDAO;
 import com.codependentvariables.aiandme.model.User;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
