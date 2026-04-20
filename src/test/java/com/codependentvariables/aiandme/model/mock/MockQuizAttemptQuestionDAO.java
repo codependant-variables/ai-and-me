@@ -18,8 +18,8 @@ public class MockQuizAttemptQuestionDAO implements IQuizAttemptQuestionDAO {
      * Constructor seeds initial mock data.
      */
     public MockQuizAttemptQuestionDAO() {
-        add(new QuizAttemptQuestion(1, "Arithmetic", "What is 2 + 2?", null));
-        add(new QuizAttemptQuestion(1, "Arithmetic", "What is 5 * 3?", null));
+        add(new QuizAttemptQuestion(1, "What is 2 + 2?", null));
+        add(new QuizAttemptQuestion(1, "What is 5 * 3?", null));
     }
 
     /**

@@ -17,7 +17,6 @@ public class SqliteQuizAttemptQuestionDAO extends BaseSqliteDAO implements IQuiz
     private static final String schemaQuery = """
             CREATE TABLE IF NOT EXISTS quiz_attempt_questions (
             id INTEGER PRIMARY KEY,
-            question_type VARCHAR NOT NULL,
             text VARCHAR NOT NULL,
             image BYTE[],
             FOREIGN KEY (quiz_attempt_id) REFERENCES quiz_attempts(id)
@@ -28,8 +27,8 @@ public class SqliteQuizAttemptQuestionDAO extends BaseSqliteDAO implements IQuiz
      * Seed data inserted when database is initialised.
      */
     private static final String seedDataQuery = """
-            INSERT INTO quiz_attempt_questions (question_type, text, quiz_attempt_id)
-            VALUES ('Arithmetic', 'What is the product of 2+2?', NULL);
+            INSERT INTO quiz_attempt_questions (text, quiz_attempt_id)
+            VALUES ('What is the product of 2+2?', NULL);
     """;
 
     @Override
@@ -48,7 +47,6 @@ public class SqliteQuizAttemptQuestionDAO extends BaseSqliteDAO implements IQuiz
     public static final IRowMapper<QuizAttemptQuestion> QUIZ_ATTEMPT_QUESTION_MAPPER = (resultSet) -> {
         QuizAttemptQuestion quizAttemptQuestion = new QuizAttemptQuestion(
                 resultSet.getInt("quiz_attempt_id"),
-                resultSet.getString("question_type"),
                 resultSet.getString("text"),
                 resultSet.getBytes("image")
         );
@@ -62,13 +60,12 @@ public class SqliteQuizAttemptQuestionDAO extends BaseSqliteDAO implements IQuiz
      */
     @Override
     public void add(QuizAttemptQuestion quizAttemptQuestion) {
-        final String query = "INSERT INTO quiz_attempt_questions (question_type, text, image) VALUES (?, ?, ?)";
+        final String query = "INSERT INTO quiz_attempt_questions (text, image) VALUES (?, ?, ?)";
 
         int id = executeSqlWithGeneratedKeys(query, statement -> {
             statement.setInt(1, quizAttemptQuestion.getQuizAttemptId());
-            statement.setString(2, quizAttemptQuestion.getQuestionType());
-            statement.setString(3, quizAttemptQuestion.getText());
-            statement.setBytes(4, quizAttemptQuestion.getImage());
+            statement.setString(2, quizAttemptQuestion.getText());
+            statement.setBytes(3, quizAttemptQuestion.getImage());
         });
 
         quizAttemptQuestion.setId(id);
@@ -79,12 +76,11 @@ public class SqliteQuizAttemptQuestionDAO extends BaseSqliteDAO implements IQuiz
      */
     @Override
     public void update(QuizAttemptQuestion quizAttemptQuestion) {
-        final String query = "UPDATE quiz_attempt_questions SET question_type = ?, text = ?, image = ? WHERE id = ?";
+        final String query = "UPDATE quiz_attempt_questions SET text = ?, image = ? WHERE id = ?";
 
         executeSql(query, statement -> {
-            statement.setString(1, quizAttemptQuestion.getQuestionType());
-            statement.setString(2, quizAttemptQuestion.getText());
-            statement.setBytes(3, quizAttemptQuestion.getImage());
+            statement.setString(1, quizAttemptQuestion.getText());
+            statement.setBytes(2, quizAttemptQuestion.getImage());
         });
     }
 
