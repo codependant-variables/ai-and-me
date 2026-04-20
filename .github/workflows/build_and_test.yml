@@ -22,14 +22,12 @@ jobs:
         run: mvn test --batch-mode
 
       - name: 3. Package & Artifact
-        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
         run: |
           mvn package -DskipTests
           mkdir staging
           cp target/*.jar staging/
 
       - name: Upload to GitHub UI
-        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
         uses: actions/upload-artifact@v4
         with:
           name: ai-and-me
