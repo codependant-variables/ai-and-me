@@ -47,9 +47,10 @@ public class SqliteQuizAttemptQuestionDAO extends BaseSqliteDAO implements IQuiz
      */
     public static final IRowMapper<QuizAttemptQuestion> QUIZ_ATTEMPT_QUESTION_MAPPER = (resultSet) -> {
         QuizAttemptQuestion quizAttemptQuestion = new QuizAttemptQuestion(
+                resultSet.getInt("quiz_attempt_id"),
                 resultSet.getString("question_type"),
                 resultSet.getString("text"),
-                resultSet.getByte("image")
+                resultSet.getBytes("image")
         );
         quizAttemptQuestion.setId(resultSet.getInt("id"));
         return quizAttemptQuestion;
@@ -64,9 +65,10 @@ public class SqliteQuizAttemptQuestionDAO extends BaseSqliteDAO implements IQuiz
         final String query = "INSERT INTO quiz_attempt_questions (question_type, text, image) VALUES (?, ?, ?)";
 
         int id = executeSqlWithGeneratedKeys(query, statement -> {
-            statement.setString(1, quizAttemptQuestion.getQuestionType());
-            statement.setString(2, quizAttemptQuestion.getText());
-            statement.setByte(3, quizAttemptQuestion.getImage());
+            statement.setInt(1, quizAttemptQuestion.getQuizAttemptId());
+            statement.setString(2, quizAttemptQuestion.getQuestionType());
+            statement.setString(3, quizAttemptQuestion.getText());
+            statement.setBytes(4, quizAttemptQuestion.getImage());
         });
 
         quizAttemptQuestion.setId(id);
@@ -82,7 +84,7 @@ public class SqliteQuizAttemptQuestionDAO extends BaseSqliteDAO implements IQuiz
         executeSql(query, statement -> {
             statement.setString(1, quizAttemptQuestion.getQuestionType());
             statement.setString(2, quizAttemptQuestion.getText());
-            statement.setByte(3, quizAttemptQuestion.getImage());
+            statement.setBytes(3, quizAttemptQuestion.getImage());
         });
     }
 
