@@ -2,7 +2,7 @@ name: Build and test
 on: push
 
 jobs:
-  pipeline:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -15,32 +15,35 @@ jobs:
           distribution: 'corretto'
           cache: maven
 
-      - name: 1. Compile
-        run: mvn compile
-
-      - name: 2. Test
+      - name: Test
         run: mvn test --batch-mode
 
-      - name: 3. mkdir /staging
-        run: mkdir staging
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os-profile: [windows, linux, mac]
 
-      - name: 4. Build Windows Artifact
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'corretto'
+          cache: maven
+
+      - name: Package Artifact (${{ matrix.os-profile }})
         run: |
-          mvn package -DskipTests -Pwindows
-          mv target/*-with-dependencies.jar staging/aiandme-windows.jar
+          mvn package -DskipTests -P${{ matrix.os-profile }}
+          mkdir staging
+          mv target/*-with-dependencies.jar staging/aiandme-${{ matrix.os-profile }}.jar
 
-      - name: 5. Build Linux Artifact
-        run: |
-          mvn package -DskipTests -Plinux
-          mv target/*-with-dependencies.jar staging/aiandme-linux.jar
-
-      - name: 6. Build Mac Artifact
-        run: |
-          mvn package -DskipTests -Pmac
-          mv target/*-with-dependencies.jar staging/aiandme-mac.jar
-
-      - name: 7. Upload All Artifacts
+      - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: multiplatform-builds
+          name: aiandme-${{ matrix.os-profile }}
           path: staging/
