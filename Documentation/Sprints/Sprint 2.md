@@ -2,16 +2,18 @@ Derived from Ai&Me Project Management page [here](https://github.com/orgs/codepe
 
 # Table of contents
 - [[#Abstract]]
-- [[#Sprint 2]]
+- [[#Sprint 1]]
 	- [[#Objectives]]
-		- [[#Priority 1 App Shell & UI Foundation]]
-		- [[#Priority 2 Basic User Experience]]
-		- [[#Priority 3 Authentication & User Identity]]
-		- [[#Priority 4 User Home & Dashboard]]
+	- [[#Sprint 2 Hopeful Outcome]]
+		- [[#Epic 1 Consistency & Polish - Assigned to Lewis and Euan]]
+		- [[#Epic 2 Basic User Experience]]
+		- [[#Epic 3 Authentication, User Identity]]
+		- [[#Epic 4 DB Implementation]]
 - [[#What I NEED from the team today/sunday]]
 - [[#Stories that weren't considered yet.]]
-- [[#Housekeeping]]
+- [[#Housekeeping before Jonte tangents ( KMS]]
 - [[#Conclusion]]
+	- [[#Retro]]
 
 ## Abstract:
 Derived from Atlassian's article [here](https://www.atlassian.com/agile/scrum/sprint-planning), Sprint planning is a preparation process for an upcoming event called a sprint. Process involves identifying what tasks will be completed in the sprint and how that work will be achieved.
@@ -22,53 +24,93 @@ Recommendations for this plan include:
 - Agreed start and finish dates for the proper "Sprint 2".
 - What are we focusing our attention on in the program and how we are splitting up the work.
 - Stepping stones for what work should be done first.
-
-If people are worried of not meeting the time allotment requirement,
 ## Sprint 2
 
 ### Objectives:
-Starting the Development of the Project; Front-end, Back-end.
+- Starting the Development of the Project; Front-end, Back-end.
+- App stores data in a database.
+- Test suite with evidence of Red–Green–Refactor
+- Full-Stack prototype
 
-Total for this sprint is 16.
-#### Epic 1: ==App Shell & UI Foundation==
+### Sprint 2 Hopeful Outcome:
+To have a working demo: UI, login and persistent database.
+#### Epic 1: Consistency & Polish - Assigned to Lewis and Euan
+Objective: Setup MVC Structure
 
-| Issue # | User Story                                                                                       | Reason                                                                                   |
-| ------- | ------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- |
-| 30      | [**Consistent UI Layout**](https://github.com/codependant-variables/ai-and-me/issues/52)         | Standardise and Implement consistency (i.e. spacing, components, placement etc.)         |
-| 50      | [**Clear and Readable Interface**](https://github.com/codependant-variables/ai-and-me/issues/50) | Typography, spacing, color standards set early *(Very similar if not the same as above)* |
-| 53      | [**Navigation Menu**](https://github.com/codependant-variables/ai-and-me/issues/53)              | Support user finding what they need efficiently                                          |
-| 51      | [**Navigation Menu Structure**](https://github.com/codependant-variables/ai-and-me/issues/51)    | The user needs to see a well structured nav menu for the app (kinda similar to #53)      |
-| 66      | [**Nav Menu Items**](https://github.com/codependant-variables/ai-and-me/issues/66)               | Establish the menu with actual routes/links                                              |
-| 57      | [**Interface Theming**](https://github.com/codependant-variables/ai-and-me/issues/57)            | Light/dark mode or themes to meet our accessibility objective                            |
-#### Epic 2: ==Basic User Experience==
+TLDR - Create pages from [Figma](https://www.figma.com/design/j7xM3oUzS0EVGIzsvNk1FY/AI-ME?node-id=40-41&t=QjJdZDdwvEZ6RoJL-1) in our program.
 
-| Issue # | User Story                                                                                    | Reason                                                                                 |
-| ------- | --------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| 38      | [**First Time Visitor**](https://github.com/codependant-variables/ai-and-me/issues/38)        | non-registered user flow the very first thing a new user sees                          |
-| 41      | [**Guest App Use**](https://github.com/codependant-variables/ai-and-me/issues/41)             | Let users explore without committing to sign-up (Establish what they can and cant do.) |
-| 39      | [**Unintrusive Signup Option**](https://github.com/codependant-variables/ai-and-me/issues/39) | Gentle nudge to register without blocking the experience                               |
-| 40      | [**Quick Access**](https://github.com/codependant-variables/ai-and-me/issues/40)              | Reduces friction for returning users                                                   |
+Resources referenced:
+- [Figma](https://www.figma.com/design/j7xM3oUzS0EVGIzsvNk1FY/AI-ME?node-id=40-41&t=QjJdZDdwvEZ6RoJL-1)
 
-#### Epic 3: ==Authentication & User Identity==
+| Issue # | Features                                                                                         | Reason                                                                                   | Status (As of 20/4) |
+| ------- | ------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- | ------------------- |
+| 43      | [**User Dashboard**](https://github.com/codependant-variables/ai-and-me/issues/43)               | The "home base" after login                                                              | 🏎️                 |
+| 44      | [**Recent Activity**](https://github.com/codependant-variables/ai-and-me/issues/44)              | Give the dashboard immediate value show users what they last did                         | 🏎️                 |
+| **50**  | [**Clear and Readable Interface**](https://github.com/codependant-variables/ai-and-me/issues/50) | Typography, spacing, color standards set early *(Very similar if not the same as above)* | 🏎️                 |
+| **51**  | [**Navigation Menu Structure**](https://github.com/codependant-variables/ai-and-me/issues/51)    | The user needs to see a well structured nav menu for the app (kinda similar to #53)      | 🏎️                 |
+| 57      | [**Interface Theming**](https://github.com/codependant-variables/ai-and-me/issues/57)            | Light/dark mode or themes to meet our accessibility objective                            | 🏎️                 |
+| 125     | [Create pages and controllers](https://github.com/codependant-variables/ai-and-me/issues/125)    | Pages that are not made yet                                                              | 🏎️                 |
+| 61      | [Layout Orientation](https://github.com/codependant-variables/ai-and-me/issues/61)               | Vertical/horizontal for device diversity.                                                | 🏎️                 |
+| 67      | [Consistency across screens](https://github.com/codependant-variables/ai-and-me/issues/67)       | Harmonize the style sheet, font, typography program wide                                 | 🏎️                 |
 
-| Issue # | User Story                                                                           | Reason                                               |
-| ------- | ------------------------------------------------------------------------------------ | ---------------------------------------------------- |
-| 48      | [**Register Details**](https://github.com/codependant-variables/ai-and-me/issues/48) | Account creation flow (Incl or Spread out an option) |
-| 49      | [**Log In**](https://github.com/codependant-variables/ai-and-me/issues/49)           | Account access                                       |
-| 47      | [**Log Out**](https://github.com/codependant-variables/ai-and-me/issues/47)          | Session management                                   |
-| 54      | [**Password View**](https://github.com/codependant-variables/ai-and-me/issues/54)    | Essential UX details for auth forms                  |
+#### Epic 2: Basic User Experience
+Objectives: Implement Functionality relating to the user.
+
+| Issue # | Features                                                                                       | Reason                                                                                 | Status (As of 20/4) |
+| ------- | ---------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- | ------------------- |
+| 38      | [**First Time Visitor**](https://github.com/codependant-variables/ai-and-me/issues/38)         | non-registered user flow the very first thing a new user sees                          | 🏎️                 |
+| 39      | [**Unintrusive Signup Option**](https://github.com/codependant-variables/ai-and-me/issues/39)  | Gentle nudge to register without blocking the experience                               | 🏎️                 |
+| 41      | [**Guest App Use**](https://github.com/codependant-variables/ai-and-me/issues/41)              | Let users explore without committing to sign-up (Establish what they can and cant do.) | 🏎️                 |
+| 40      | [**Quick Access**](https://github.com/codependant-variables/ai-and-me/issues/40)               | Reduces friction for returning users                                                   | 🏎️                 |
+| 56      | [Setting rollback](https://github.com/codependant-variables/ai-and-me/issues/56)               | Reset to default settings                                                              | 🏎️                 |
+| 58      | [Daily Quizzes](https://github.com/codependant-variables/ai-and-me/issues/58)                  | Table and functionality for quizzes                                                    | 🏎️                 |
+| 59      | [Daily Puzzles](https://github.com/codependant-variables/ai-and-me/issues/59)                  | Implement a puzzle related functionality                                               | 🏎️                 |
+| 68      | [Notify Over-Reliance on AI](https://github.com/codependant-variables/ai-and-me/issues/68)     | Implement a feature to check over reliance on AI                                       | 🏎️                 |
+| 60      | [Settings Menu](https://github.com/codependant-variables/ai-and-me/issues/60)                  |                                                                                        | 🏎️                 |
+| 64      | [Fast App](https://github.com/codependant-variables/ai-and-me/issues/64)                       | Make the app faster???                                                                 | 🏎️                 |
+| 69      | [Skill Practice Recommendations](https://github.com/codependant-variables/ai-and-me/issues/69) | Implement an algorithm that recommends quizzes                                         | 🏎️                 |
+| 70      | [Quick Regular AI Checkin](https://github.com/codependant-variables/ai-and-me/issues/70)       | Easy to answer questions to uplift skill practice recommendations (69)                 | 🏎️                 |
+| 71      | [Insight Cards](https://github.com/codependant-variables/ai-and-me/issues/71)                  | news/useful info about subject matter.                                                 | 🏎️                 |
+| 93      | [Error Handling](https://github.com/codependant-variables/ai-and-me/issues/93)                 | Human readable messages for possible errors.                                           | ✅                   |
+| 94      | [Input Validation](https://github.com/codependant-variables/ai-and-me/issues/94)               | Confirming whether we have caught abnormal data entered.                               | ✅                   |
+| 115     | [Quiz Creation](https://github.com/codependant-variables/ai-and-me/issues/115)                 | Creation of a Template using UI and edge functionality                                 | 🏎️                 |
 
 
-#### Epic 4: ==User Home & Dashboard==
+#### Epic 3: Authentication, User Identity
+Objectives:
+- Implementation for Database.
+- Write unit tests for authentication
+- Write tests for core features
 
-| Issue # | User Story                                                                          | Reason                                                           |
-| ------- | ----------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
-| 43      | [**User Dashboard**](https://github.com/codependant-variables/ai-and-me/issues/43)  | The "home base" after login                                      |
-| 44      | [**Recent Activity**](https://github.com/codependant-variables/ai-and-me/issues/44) | Give the dashboard immediate value show users what they last did |
+| Issue # | Features                                                                                 | Reason                                                                                   | Status (As of 20/4) |
+| ------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ------------------- |
+| 45      | [User Profile](https://github.com/codependant-variables/ai-and-me/issues/45)             | Implement distinct profile related material                                              | 🏎️                 |
+| 46      | [User Data Transparency](https://github.com/codependant-variables/ai-and-me/issues/46)   | Express to the user what specifically is what their data being used for.                 | 🏎️                 |
+| 48      | [**Register Details**](https://github.com/codependant-variables/ai-and-me/issues/48)     | Account creation flow (Incl database option)                                             | 🏎️                 |
+| 49      | [**Log In**](https://github.com/codependant-variables/ai-and-me/issues/49)               | Account access (Incl database option)                                                    | 🏎️                 |
+| 47      | [**Log Out**](https://github.com/codependant-variables/ai-and-me/issues/47)              | Session management                                                                       | 🏎️                 |
+| 54      | [**Password View**](https://github.com/codependant-variables/ai-and-me/issues/54)        | Essential UX details for auth forms                                                      | 🏎️                 |
+| 55      | [Profile Deletion](https://github.com/codependant-variables/ai-and-me/issues/55)         | User may delete their profile along with all their data.                                 | 🏎️                 |
+| 63      | [Persistent Personal Data](https://github.com/codependant-variables/ai-and-me/issues/63) | Algorithmic data about the user is retained until inactivity expiry or request deletion. | 🏎️                 |
+| 72      | [Account Security](https://github.com/codependant-variables/ai-and-me/issues/72)         | Password related material for security uplift                                            | ✅                   |
+| 95      | [One time Auth Code](https://github.com/codependant-variables/ai-and-me/issues/95)       | Assist with security...                                                                  | 🏎️                 |
 
 
 
-## ==What I NEED from the team Today/Sunday:==
+#### Epic 4: DB Implementation
+Objectives:
+- Implement SQLite Database in-line with [our agreed diagram](https://drive.google.com/file/d/1NfJZajXvnGH1qWkBwXtud5ZD9HLEKT0y/view) 
+- Create model classes
+- Implement persistence layer (DAO)
+
+| Issue #              | DB Task              | Reason                                                                                             | Status (As of 20/4) |
+| -------------------- | -------------------- | -------------------------------------------------------------------------------------------------- | ------------------- |
+| 100                  | Quiz Templates table | Uplifted with [58 - Daily Quizzes](https://github.com/codependant-variables/ai-and-me/issues/58)   | ✅                   |
+| 86                   | Categories table     | Uplifted with [86 - Quiz Categories](https://github.com/codependant-variables/ai-and-me/issues/86) | ✅                   |
+| 34                   | User table           | Uplifted with [Daniel Work Week 6](https://github.com/codependant-variables/ai-and-me/pull/34)     | ✅                   |
+| More to be added.... |                      |                                                                                                    |                     |
+
+## What I NEED from the team Today/Sunday:
 
 **1 of 3 things from each of you:**
 ==Endorsement?== - *You are happy with this.*
@@ -79,44 +121,18 @@ Majority Rules.
 
 **Endorsement Table**:
 
-| #   | **Objective**                                  | ==Emma?== | Reason? | ==Euan?==      | Reason?                        | ==Lewis?== | Reason? | ==Will?==      | Reason? | ==Daniel?== | Reason? | ==Jonte?== | Reason? |
-| --- | ---------------------------------------------- | --------- | ------- | -------------- | ------------------------------ | ---------- | ------- | -------------- | ------- | ----------- | ------- | ---------- | ------- |
-| 1   | [[#Priority 1 App Shell & UI Foundation]]      |           |         | Fully Endorsed | Happy with all of this so far. |            |         | Fully Endorsed |         |             |         |            |         |
-| 2   | [[#Priority 2 Basic User Experience]]          |           |         | Fully Endorsed | as above                       |            |         | Fully Endorsed |         |             |         |            |         |
-| 3   | [[#Priority 3 Authentication & User Identity]] |           |         | Fully Endorsed | as above                       |            |         | Fully Endorsed |         |             |         |            |         |
-| 4   | [[#Priority 4 User Home & Dashboard]]          |           |         | Fully Endorsed | as above                       |            |         | Fully Endorsed |         |             |         |            |         |
-| 5?  | If applicable                                  |           |         |                |                                |            |         |                |         |             |         |            |         |
-|     |                                                |           |         |                |                                |            |         |                |         |             |         |            |         |
+| #   | **Objective**                                                 | ==Emma?==      | Reason? | ==Euan?==      | Reason?                        | ==Lewis?==     | Reason? | ==Will?==      | Reason? | ==Daniel?==    | Reason? | ==Jonte?==     | Reason? |
+| --- | ------------------------------------------------------------- | -------------- | ------- | -------------- | ------------------------------ | -------------- | ------- | -------------- | ------- | -------------- | ------- | -------------- | ------- |
+| 1   | [[#Epic 1 Consistency & Polish - Assigned to Lewis and Euan]] | Fully Endorsed |         | Fully Endorsed | Happy with all of this so far. | Fully Endorsed |         | Fully Endorsed |         | Fully Endorsed |         | Fully Endorsed |         |
+| 2   | [[#Epic 2 Basic User Experience]]                             | Fully Endorsed |         | Fully Endorsed | as above                       | Fully Endorsed |         | Fully Endorsed |         | Fully Endorsed |         | Fully Endorsed |         |
+| 3   | [[#Epic 3 Authentication, User Identity]]                     | Fully Endorsed |         | Fully Endorsed | as above                       | Fully Endorsed |         | Fully Endorsed |         | Fully Endorsed |         | Fully Endorsed |         |
+| 4   | [[#Epic 4 DB Implementation]]                                 | Fully Endorsed |         | Fully Endorsed | as above                       | Fully Endorsed |         | Fully Endorsed |         | Fully Endorsed |         | Fully Endorsed |         |
+| 5?  | If applicable                                                 |                |         |                |                                |                |         |                |         |                |         |                |         |
+|     |                                                               |                |         |                |                                |                |         |                |         |                |         |                |         |
 
-Are their any preferences?
-## Stories that weren't considered yet.
-
-| User Story                         | Sprint | Why Defer?                                             |
-| ---------------------------------- | ------ | ------------------------------------------------------ |
-| **User Profile**                   | 2      | Needs auth system complete                             |
-| **Profile Deletion**               | 2      | Needs profile to exist first                           |
-| **User Data Transparency**         | 2      | Needs user data being stored first                     |
-| **Settings Menu**                  | 2      | Needs UI foundation + auth                             |
-| **Layout Customisation**           | 2      | Needs settings infrastructure                          |
-| **Setting Rollback**               | 2–3    | Needs settings to exist first                          |
-| **Persistent Personal Data**       | 2      | Backend data layer needs core features generating data |
-| **Fast App (Database)**            | 2–3    | Optimization premature before features exist           |
-| **Consistent UI Across Screens**   | 2      | Refinement pass once more screens exist                |
-| **Account Security**               | 2      | Enhanced security after basic auth works               |
-| **Daily Quizzes**                  | 3      | Core content needs foundation                          |
-| **Daily Puzzles**                  | 3      | Core content needs foundation                          |
-| **Quick Daily Skill Exercises**    | 3      | Content feature needs dashboard + content engine       |
-| **Insight Cards**                  | 3–4    | Needs user activity data                               |
-| **Skill Practice Recommendations** | 3–4    | Needs usage patterns                                   |
-| **Notify Over-Reliance on AI**     | 4      | Advanced needs significant usage data                  |
-## Housekeeping
-Housekeeping for Jonte in case he forgets friday.
-- !If a user story has been majority endorsed for sprint 1, re-tag status in projects from "Planning" to "Todo" as a backlog for everyone to see what to focus on.
-- !As is was preparing this sprint plan draft, I had added another bar called "Created By" in the [Projects] board and added everyone's name to their respective user story they created. ==(Probs explain this more simply for everyone.)==, and Freed up assignee's tab.
-	- Reason was because when we use the swim lanes. we can see what we have picked and what we are working on. as opposed to having a large list of things we may not be doing ourselves ==(EXPLAIN THIS BETTER)==.
-	- Assigning people to tasks so they aren't gonna be worried about having stuff for the deadline?
-- !Happy with it in its own folder? or another spot?
 ## Conclusion
-Preferences for User story tasks?
+### Retro
+Awaiting Sprint 2 conclusion...
 
-Assignments via [Sprint x]()
+
+

@@ -15,11 +15,6 @@
     <!-- TOP: Title Bar -->
     <top>
         <VBox prefHeight="131.0" prefWidth="651.0" style="-fx-background-color: #FFFFFF; -fx-padding: 15;" styleClass="header">
-            <ImageView fitHeight="69.0" fitWidth="200.0">
-                <image>
-                    <Image url="@../../../../../../Documentation/Aiandme%20logo.png" />
-                </image>
-            </ImageView>
             <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" style="-fx-text-fill: black; -fx-font-size: 22px; -fx-font-weight: bold;" text="Quiz Library" textAlignment="RIGHT" />
         </VBox>
     </top>
