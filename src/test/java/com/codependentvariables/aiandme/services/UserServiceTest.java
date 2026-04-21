@@ -20,8 +20,8 @@ public class UserServiceTest {
     }
 
     @Test
-    public void comparePassword() {
-        boolean isEqual = userService.comparePassword(new User("", "", hash, salt), password);
+    public void attemptLogin() {
+        boolean isEqual = userService.attemptLogin(new User("", "", hash, salt), password);
         assertTrue(isEqual);
     }
 }
