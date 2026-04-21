@@ -87,12 +87,16 @@ public class UserService {
      * @param password Password to compare to the user's.
      * @return If password equals that of the user.
      */
-    public boolean attemptLogin(User user, String password) {
+    public boolean comparePassword(User user, String password) {
         if (user == null || user.getPassword() == null || user.getSalt() == null)
             return false;
 
         String computedHash = hash(password, user.getSalt()).hash();
-        boolean matches = Objects.equals(user.getPassword(), computedHash);
+        return Objects.equals(user.getPassword(), computedHash);
+    }
+
+    public boolean attemptLogin(User user, String password) {
+        boolean matches = comparePassword(user, password);
         if (matches) {
             login(user);
         }
