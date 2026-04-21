@@ -41,6 +41,6 @@ public class LayoutController {
     public void navigateSettings() { Router.navigateApp(View.SETTINGS); }
 
     @FXML
-    public void navigateCheckin() { Router.navigateApp(View.CHECKIN); }
+    public void navigateCheckin() { Router.navigateLayout(View.CHECKIN); }
 
 }

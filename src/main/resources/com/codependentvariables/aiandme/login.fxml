@@ -18,7 +18,7 @@
     <HBox spacing="20.0" VBox.vgrow="ALWAYS">
         <VBox prefWidth="800" spacing="10.0">
             <Label text="Login" textAlignment="CENTER" />
-            <GridPane hgap="5.0" onMousePressed="#showPassword" prefHeight="57.0" prefWidth="281.0" vgap="5.0">
+            <GridPane hgap="5.0" prefHeight="57.0" prefWidth="281.0" vgap="5.0">
                 <columnConstraints>
                     <ColumnConstraints minWidth="70.0" />
                     <ColumnConstraints hgrow="ALWAYS" maxWidth="690.0" minWidth="610.0" prefWidth="690.0" />
