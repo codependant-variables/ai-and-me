@@ -2,6 +2,7 @@ package com.codependentvariables.aiandme.controller;
 
 import com.codependentvariables.aiandme.navigation.Router;
 import com.codependentvariables.aiandme.navigation.View;
+import com.codependentvariables.aiandme.services.UserService;
 import com.codependentvariables.aiandme.state.AppState;
 import javafx.fxml.FXML;
 import javafx.scene.paint.Color;
@@ -14,6 +15,7 @@ public class SettingsController {
     }
 
     private final AppState appState = AppState.getInstance();
+    private final UserService userService = UserService.getInstance();
 
     @FXML
     private void initialize() {
@@ -32,10 +34,19 @@ public class SettingsController {
         boolean isDarkMode = appState.getIsDarkMode();
         appState.setIsDarkMode(!isDarkMode);
         setThemeContent(!isDarkMode);
+        userService.updateCurrentUser();
     }
 
     private void setThemeContent(boolean isDarkMode) {
         themeToggleIcon.setContent(isDarkMode ? lightSvg : darkSvg);
         themeToggleIcon.setFill(isDarkMode ? Color.DARKORANGE : Color.MEDIUMSLATEBLUE);
+    }
+
+    @FXML
+    public void switchOrientation() {
+        boolean isVertical = appState.getIsVertical();
+        appState.setIsVertical(!isVertical);
+        // TODO: do something when orientation changes
+        userService.updateCurrentUser();
     }
 }

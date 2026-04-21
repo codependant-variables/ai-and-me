@@ -8,14 +8,23 @@ public class User {
     private String email;
     private String password;
     private String salt;
-    private boolean isDarkMode;
+    private boolean isDarkMode = false;
+    private boolean isVertical = false;
 
     public User(String name, String email, String password, String salt) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.salt = salt;
-        this.isDarkMode = false;
+    }
+
+    public User(String name, String email, String password, String salt, boolean isDarkMode, boolean isVertical) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.salt = salt;
+        this.isDarkMode = isDarkMode;
+        this.isVertical = isVertical;
     }
 
     public int getId() {
@@ -63,5 +72,13 @@ public class User {
 
     public void setIsDarkMode(boolean isDarkMode) {
         this.isDarkMode = isDarkMode;
+    }
+
+    public boolean getIsVertical() {
+        return this.isVertical;
+    }
+
+    public void setIsVertical(boolean isVertical) {
+        this.isVertical = isVertical;
     }
 }

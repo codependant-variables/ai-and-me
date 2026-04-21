@@ -1,5 +1,8 @@
 package com.codependentvariables.aiandme.validation;
 
+import com.codependentvariables.aiandme.navigation.Toast;
+import com.codependentvariables.aiandme.navigation.ToastMessageType;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -16,6 +19,11 @@ public class FormValidator {
         this.validationEntries = validationEntries;
     }
 
+    public FormValidator(ValidationEntry<?>... validationEntries) {
+        this.onError = null;
+        this.validationEntries = validationEntries;
+    }
+
     public boolean validate() {
         List<String> errors = new ArrayList<>();
 
@@ -24,7 +32,13 @@ public class FormValidator {
         }
 
         if (!errors.isEmpty()) {
-            onError.accept(errors);
+            if (onError != null) {
+                onError.accept(errors);
+            } else {
+                for (String error : errors) {
+                    Toast.addMessage("Invalid", error, ToastMessageType.WARNING);
+                }
+            }
             return false;
         }
         return true;

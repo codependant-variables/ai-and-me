@@ -7,20 +7,18 @@
 <BorderPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codependentvariables.aiandme.controller.LayoutController">
     <top>
         <HBox alignment="CENTER" prefHeight="100.0" spacing="10.0">
-            <ImageView fitHeight="95.0" fitWidth="294.0" layoutY="10.0" pickOnBounds="true" smooth="false">
-                <image>
-                    <Image url="@logo.png" />
-                </image>
-            </ImageView>
+            <ImageView fx:id="logoRef" fitHeight="95.0" fitWidth="294.0" layoutY="10.0" pickOnBounds="true" smooth="false" />
             <Button onAction="#navigateHome">Home</Button>
             <Button onAction="#navigateQuizLibrary">Quiz Library</Button>
             <Button onAction="#navigateCheckin">Daily Check-in</Button>
-            <Button onAction="#navigateLogin">Login</Button>
-            <Button onAction="#navigateSignup">Signup</Button>
-            <Button onAction="#navigateSettings">Account Settings</Button>
+            <Button fx:id="loginButton" onAction="#navigateLogin">Login</Button>
+            <Button fx:id="signupButton" onAction="#navigateSignup">Signup</Button>
+            <Button fx:id="profileButton" onAction="#navigateProfile">Profile</Button>
+            <Button onAction="#navigateSettings">Settings</Button>
+            <Button fx:id="logoutButton" onAction="#handleLogout">Logout</Button>
         </HBox>
     </top>
     <center>
-        <BorderPane fx:id="contentRef" />
+        <StackPane fx:id="contentRef" />
     </center>
 </BorderPane>

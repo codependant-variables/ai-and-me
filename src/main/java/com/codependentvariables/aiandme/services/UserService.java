@@ -3,6 +3,10 @@ package com.codependentvariables.aiandme.services;
 import com.codependentvariables.aiandme.model.dao.IUserDAO;
 import com.codependentvariables.aiandme.model.dao.SqliteUserDAO;
 import com.codependentvariables.aiandme.model.User;
+import com.codependentvariables.aiandme.navigation.Toast;
+import com.codependentvariables.aiandme.navigation.ToastMessageType;
+import com.codependentvariables.aiandme.state.AppState;
+
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.security.NoSuchAlgorithmException;
@@ -16,6 +20,8 @@ public class UserService {
     private static UserService instance;
     private final SecureRandom random = new SecureRandom();
     private final IUserDAO userDAO;
+
+    private static final AppState appState = AppState.getInstance();
 
     private UserService() {
         this(new SqliteUserDAO());
@@ -81,13 +87,17 @@ public class UserService {
      * @param password Password to compare to the user's.
      * @return If password equals that of the user.
      */
-    public boolean comparePassword(User user, String password) {
+    public boolean attemptLogin(User user, String password) {
         if (user == null || user.getPassword() == null || user.getSalt() == null)
             return false;
 
         String computedHash = hash(password, user.getSalt()).hash();
+        boolean matches = Objects.equals(user.getPassword(), computedHash);
+        if (matches) {
+            login(user);
+        }
 
-        return Objects.equals(user.getPassword(), computedHash);
+        return matches;
     }
 
     public User getByEmail(String email) {
@@ -98,10 +108,27 @@ public class UserService {
         return userDAO.getByEmail(email) == null;
     }
 
-    public User createUser(String name, String email, String password) {
+    public void signup(String name, String email, String password) {
         HashResult hashResult = hash(password);
         User user = new User(name, email, hashResult.hash, hashResult.salt);
         userDAO.add(user);
-        return user;
+        login(user);
+    }
+
+    private void login(User user) {
+        appState.setCurrentUser(user);
+        Toast.addMessage("Logged In", String.format("Welcome, %s!", user.getName()), ToastMessageType.INFORMATION);
+    }
+
+    public void logout() {
+        appState.setCurrentUser(null);
+        Toast.addMessage("Logged Out", "Goodbye!", ToastMessageType.INFORMATION);
+    }
+
+    public void updateCurrentUser() {
+        User currentUser = appState.getCurrentUser();
+        if (currentUser != null) {
+            userDAO.update(currentUser);
+        }
     }
 }

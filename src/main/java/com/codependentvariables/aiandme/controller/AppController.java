@@ -4,12 +4,11 @@ import com.codependentvariables.aiandme.navigation.Router;
 import com.codependentvariables.aiandme.navigation.Toast;
 import com.codependentvariables.aiandme.navigation.View;
 import javafx.fxml.FXML;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 
 public class AppController {
     @FXML
-    public BorderPane layoutRef;
+    public StackPane layoutRef;
 
     @FXML
     public StackPane toastRef;

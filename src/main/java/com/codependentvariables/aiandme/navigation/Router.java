@@ -1,34 +1,28 @@
 package com.codependentvariables.aiandme.navigation;
 
-import com.codependentvariables.aiandme.AiAndMe;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.layout.BorderPane;
-
-import java.io.IOException;
-import java.net.URL;
+import javafx.scene.layout.StackPane;
 
 /**
  * Router for application root.
  */
 public class Router {
-    private static BorderPane app;
-    private static BorderPane layout;
+    private static StackPane app;
+    private static StackPane layout;
     private static View currentAppView;
     private static View currentLayoutView;
 
     /**
      * Invoke this method in AppController.initialize to utilise for routing.
      */
-    public static void setApp(BorderPane borderPane) {
-        app = borderPane;
+    public static void setApp(StackPane stackPane) {
+        app = stackPane;
     }
 
     /**
      * Invoke this method in LayoutController.initialize to utilise for routing.
      */
-    public static void setLayout(BorderPane borderPane) {
-        layout = borderPane;
+    public static void setLayout(StackPane stackPane) {
+        layout = stackPane;
     }
 
     public static void navigateApp(View view) {
@@ -68,7 +62,7 @@ public class Router {
     }
 
     // TODO: decide if this is needed as it loads fast enough to never see Loading..
-    private static void setLoading(BorderPane borderPane) {
-        ViewUtils.loadView(borderPane, View.LOADING);
+    private static void setLoading(StackPane stackPane) {
+        ViewUtils.loadView(stackPane, View.LOADING);
     }
 }

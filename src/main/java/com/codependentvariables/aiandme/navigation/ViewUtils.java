@@ -3,7 +3,7 @@ package com.codependentvariables.aiandme.navigation;
 import com.codependentvariables.aiandme.AiAndMe;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 
 import java.io.IOException;
 import java.net.URL;
@@ -13,10 +13,10 @@ public final class ViewUtils {
 
     /**
      * Loads view onto the provided pane
-     * @param borderPane BorderPane to load view into
+     * @param stackPane StackPane to load view into
      * @param view View to load
      */
-    public static void loadView(BorderPane borderPane, View view) {
+    public static void loadView(StackPane stackPane, View view) {
         String resourceName = getResourceName(view);
         URL resourceUrl = AiAndMe.class.getResource(resourceName);
         if (resourceUrl == null) {
@@ -25,7 +25,7 @@ public final class ViewUtils {
 
         try {
             Node loadedNode = FXMLLoader.load(resourceUrl);
-            borderPane.setCenter(loadedNode);
+            stackPane.getChildren().setAll(loadedNode);
         } catch (IOException ex) {
             throw new RuntimeException(String.format("Could not load resource: %s", resourceName), ex);
         }
