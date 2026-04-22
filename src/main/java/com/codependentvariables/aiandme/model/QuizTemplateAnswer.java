@@ -35,6 +35,11 @@ public class QuizTemplateAnswer {
     public boolean isCorrect() { return isCorrect; }
     public void setCorrect(boolean correct) { isCorrect = correct; }
 
+    /** Returns {@code true} when this answer has non-blank text. */
+    public boolean isValid() {
+        return text != null && !text.isBlank();
+    }
+
     @Override
     public String toString() { return text; }
 }

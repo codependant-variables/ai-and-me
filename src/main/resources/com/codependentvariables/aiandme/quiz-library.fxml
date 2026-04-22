@@ -28,6 +28,7 @@
                     <Button fx:id="btnCreate" maxWidth="Infinity" onAction="#handleCreate" prefHeight="39.0" prefWidth="162.0" style="-fx-background-color: #4caf50; -fx-text-fill: Black; -fx-font-size: 13px; -fx-padding: 10;" text="➕ Create Template" />
                     <Button fx:id="btnModify" maxWidth="Infinity" onAction="#handleModify" style="-fx-background-color: #ff9800; -fx-text-fill: Black; -fx-font-size: 13px; -fx-padding: 10;" text="✏️ Modify Existing Template" />
                     <Button fx:id="btnDelete" maxWidth="Infinity" onAction="#handleDelete" prefHeight="39.0" prefWidth="166.0" style="-fx-background-color: #f44336; -fx-text-fill: Black; -fx-font-size: 13px; -fx-padding: 10;" text="🗑️ Delete Template" />
+                    <Button fx:id="btnEditQuestions" maxWidth="Infinity" onAction="#handleEditQuestions" prefHeight="39.0" prefWidth="180.0" style="-fx-background-color: #9c27b0; -fx-text-fill: White; -fx-font-size: 13px; -fx-padding: 10;" text="📝 Edit Questions" />
                 </children>
             </HBox>
             <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Categories" />
