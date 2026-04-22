@@ -33,6 +33,10 @@ public class  AiAndMe extends Application {
         fadeIn.play();
     }*/
 
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     @Override
     public void start(Stage stage) {
         SqliteConnection.getConnection(); // Frontload db connection load time at app startup
