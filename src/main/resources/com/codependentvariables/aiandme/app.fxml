@@ -2,8 +2,20 @@
 
 <?import javafx.scene.layout.*?>
 
+<?import javafx.geometry.Insets?>
 <AnchorPane xmlns="http://javafx.com/javafx/17.0.12"
-        xmlns:fx="http://javafx.com/fxml/1"
-        fx:controller="com.codependentvariables.aiandme.controller.AppController">
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.codependentvariables.aiandme.controller.AppController">
     <BorderPane fx:id="layoutRef" />
+    <StackPane fx:id="toastRef"
+               alignment="BOTTOM_CENTER"
+               AnchorPane.bottomAnchor="0.0"
+               AnchorPane.leftAnchor="0.0"
+               AnchorPane.rightAnchor="0.0"
+               prefWidth="500.0"
+               minWidth="350.0"
+               maxWidth="800.0"/>
+    <padding>
+        <Insets bottom="20.0" />
+    </padding>
 </AnchorPane>
