@@ -2,6 +2,8 @@ package com.codependentvariables.aiandme.model;
 
 import com.codependentvariables.aiandme.services.UserService;
 
+import java.util.ArrayList;
+
 public class User {
     private int id;
     private String name;
@@ -10,6 +12,7 @@ public class User {
     private String salt;
     private boolean isDarkMode = false;
     private boolean isVertical = false;
+    private ArrayList<Category> preferredCategories;
 
     public User(String name, String email, String password, String salt) {
         this.name = name;
@@ -25,6 +28,7 @@ public class User {
         this.salt = salt;
         this.isDarkMode = isDarkMode;
         this.isVertical = isVertical;
+        this.preferredCategories = new ArrayList<>();
     }
 
     public int getId() {
@@ -80,5 +84,21 @@ public class User {
 
     public void setIsVertical(boolean isVertical) {
         this.isVertical = isVertical;
+    }
+
+    public ArrayList<Category> getPreferredCategories() {
+        return preferredCategories;
+    }
+
+    public void setPreferredCategories(ArrayList<Category> preferredCategories) {
+        this.preferredCategories = preferredCategories;
+    }
+
+    public void addPreferredCategory(Category category) {
+        preferredCategories.add(category);
+    }
+
+    public void removePreferredCategory(Category category) {
+        preferredCategories.remove(category);
     }
 }
