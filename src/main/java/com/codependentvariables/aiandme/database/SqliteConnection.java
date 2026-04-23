@@ -43,7 +43,9 @@ public class SqliteConnection {
                 new SqliteUserDAO(),
                 new SqliteCategoryDAO(),
                 new SqliteCheckinDAO(),
-                new SqliteQuizTemplateDAO()
+                new SqliteQuizTemplateDAO(),
+                new SqliteQuizTemplateQuestionDAO(),
+                new SqliteQuizTemplateAnswerDAO()
         };
 
         try {
