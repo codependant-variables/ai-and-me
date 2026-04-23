@@ -28,7 +28,7 @@
                 <columnConstraints>
                     <ColumnConstraints minWidth="70.0" />
                     <ColumnConstraints hgrow="ALWAYS" maxWidth="690.0" minWidth="610.0" prefWidth="690.0" />
-               <ColumnConstraints hgrow="ALWAYS" maxWidth="110.0" minWidth="10.0" prefWidth="30.0" />
+                    <ColumnConstraints hgrow="ALWAYS" maxWidth="110.0" minWidth="10.0" prefWidth="30.0" />
                 </columnConstraints>
                 <Label text="Email:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                 <Label text="Password:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
