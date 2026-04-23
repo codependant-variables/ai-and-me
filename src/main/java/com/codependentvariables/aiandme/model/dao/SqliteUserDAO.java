@@ -12,11 +12,13 @@ public class SqliteUserDAO extends BaseSqliteDAO implements IUserDAO, IDatabaseE
                 name VARCHAR NOT NULL,
                 email VARCHAR UNIQUE NOT NULL,
                 password VARCHAR NOT NULL,
-                salt CHAR(24) NOT NULL
+                salt CHAR(24) NOT NULL,
+                is_dark_mode BIT NOT NULL DEFAULT FALSE,
+                is_vertical BIT NOT NULL DEFAULT FALSE
             );
         """;
 
-    private static final String seedDataQuery = """
+    private static final String seedDataQuery = """ 
             INSERT INTO users (name, email, password, salt) VALUES ('Amy Adams', 'amy.adams@mydomain.gov', 'Zl3QG3XY5/Gsus8Ec4WTi6jMcM7EkrCGCqBMgwwYUzg=', 'sKH9XkLaT2i1XR687zjlHQ==');
             INSERT INTO users (name, email, password, salt) VALUES ('Bob Builder', 'bobthebulider23@swagmail.net', 'Qf15LlrXz/ghNuMGZG3heBeqH3xeuzITnsRhHTDxzR4=', '0akeeTvljQojvcWqb4cg/Q==');
         """;
@@ -34,7 +36,9 @@ public class SqliteUserDAO extends BaseSqliteDAO implements IUserDAO, IDatabaseE
                 resultSet.getString("name"),
                 resultSet.getString("email"),
                 resultSet.getString("password"),
-                resultSet.getString("salt")
+                resultSet.getString("salt"),
+                resultSet.getBoolean("is_dark_mode"),
+                resultSet.getBoolean("is_vertical")
         );
         user.setId(resultSet.getInt("id"));
         return user;
@@ -42,7 +46,7 @@ public class SqliteUserDAO extends BaseSqliteDAO implements IUserDAO, IDatabaseE
 
     @Override
     public void add(User user) {
-        final String query = "INSERT INTO users (name, email, password, salt) VALUES (?, ?, ?, ?)";
+        final String query = "INSERT INTO users (name, email, password, salt, is_dark_mode, is_vertical) VALUES (?, ?, ?, ?, ?, ?)";
 
         int id = executeSqlWithGeneratedKeys(query,
                 statement -> {
@@ -50,6 +54,8 @@ public class SqliteUserDAO extends BaseSqliteDAO implements IUserDAO, IDatabaseE
                     statement.setString(2, user.getEmail());
                     statement.setString(3, user.getPassword());
                     statement.setString(4, user.getSalt());
+                    statement.setBoolean(5, user.getIsDarkMode());
+                    statement.setBoolean(6, user.getIsVertical());
                 });
 
         user.setId(id);
@@ -57,7 +63,7 @@ public class SqliteUserDAO extends BaseSqliteDAO implements IUserDAO, IDatabaseE
 
     @Override
     public void update(User user) {
-        final String query = "UPDATE users SET name = ?, email = ?, password = ?, salt = ? WHERE id = ?";
+        final String query = "UPDATE users SET name = ?, email = ?, password = ?, salt = ?, is_dark_mode = ?, is_vertical = ? WHERE id = ?";
 
         executeSql(query,
                 statement -> {
@@ -65,7 +71,9 @@ public class SqliteUserDAO extends BaseSqliteDAO implements IUserDAO, IDatabaseE
                     statement.setString(2, user.getEmail());
                     statement.setString(3, user.getPassword());
                     statement.setString(4, user.getSalt());
-                    statement.setInt(5, user.getId());
+                    statement.setBoolean(5, user.getIsDarkMode());
+                    statement.setBoolean(6, user.getIsVertical());
+                    statement.setInt(7, user.getId());
                 });
     }
 

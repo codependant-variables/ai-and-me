@@ -94,7 +94,7 @@ public abstract class BaseSqliteDAO {
     private RuntimeException handleException(String sql, Exception e) {
         logger.severe(String.format("Error executing SQL: %s", e.getMessage()));
 
-        // TODO: more elegantly handle the error, i.e. don't throw here. Throwing will help identify problems during development though
+        // TODO: Remove throw at final submission. Helps identify problems during development
         throw new RuntimeException("Database operation failed. See logs for info. ", e);
     }
 

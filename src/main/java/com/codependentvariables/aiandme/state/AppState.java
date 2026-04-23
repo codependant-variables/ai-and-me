@@ -11,6 +11,7 @@ public class AppState {
     private User currentUser;
 
     private boolean isDarkMode = false;
+    private boolean isVertical = false;
 
     public static AppState getInstance() {
         if (instance == null) {
@@ -36,6 +37,20 @@ public class AppState {
 
     public void setIsDarkMode(boolean isDarkMode) {
         this.isDarkMode = isDarkMode;
-        setUserAgentStylesheet(isDarkMode ? AiAndMe.DarkModeStylesheet : AiAndMe.LightModeStylesheet);
+        if (currentUser != null) {
+            currentUser.setIsDarkMode(isDarkMode);
+        }
+        setUserAgentStylesheet(isDarkMode ? AiAndMe.darkModeStylesheet : AiAndMe.lightModeStylesheet);
+    }
+
+    public boolean getIsVertical() {
+        return this.isVertical;
+    }
+
+    public void setIsVertical(boolean isVertical) {
+        this.isVertical = isVertical;
+        if (currentUser != null) {
+            currentUser.setIsVertical(isVertical);
+        }
     }
 }

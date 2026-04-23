@@ -69,7 +69,7 @@ public class Toast {
         HBox box = new HBox();
 
         String backgroundColour = switch (message.type) {
-            case INFORMATION -> "palegreen";
+            case INFORMATION -> "limegreen";
             case WARNING -> "sandybrown";
             case ERROR -> "orangered";
             default -> throw new RuntimeException("Toast message type not implemented.");
