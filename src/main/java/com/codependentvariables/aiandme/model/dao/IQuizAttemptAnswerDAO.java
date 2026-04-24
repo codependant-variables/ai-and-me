@@ -15,12 +15,6 @@ public interface IQuizAttemptAnswerDAO {
     void add(QuizAttemptAnswer quizAttemptAnswer);
 
     /**
-     * Updates an existing quiz attempt answer in the database.
-     * @param quizAttemptAnswer the quiz attempt answer to update
-     */
-    void update(QuizAttemptAnswer quizAttemptAnswer);
-
-    /**
      * Deletes a quiz attempt answer from the database.
      * @param quizAttemptAnswer the quiz attempt answer to delete
      */
