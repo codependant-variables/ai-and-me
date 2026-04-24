@@ -1,14 +1,17 @@
 package com.codependentvariables.aiandme.controller;
 
+import com.codependentvariables.aiandme.model.User;
 import com.codependentvariables.aiandme.navigation.Router;
 import com.codependentvariables.aiandme.navigation.View;
 import com.codependentvariables.aiandme.services.UserService;
+import com.codependentvariables.aiandme.state.AppState;
 import com.codependentvariables.aiandme.validation.FormValidator;
 import com.codependentvariables.aiandme.validation.ValidationEntry;
 import com.codependentvariables.aiandme.validation.validators.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 
 public class SignupController {
@@ -26,8 +29,12 @@ public class SignupController {
 
     @FXML
     private void initialize() {
+        boolean isDarkMode = AppState.getInstance().getIsDarkMode();
         passwordField.textProperty().bindBidirectional(
                 passwordFieldVisible.textProperty()
+        );
+        viewPasswordIcon.setFill(
+                isDarkMode ? Color.WHITE : Color.BLACK
         );
         passwordFieldVisible.setOnAction(
                 onMousePressed -> showPassword()
@@ -43,7 +50,7 @@ public class SignupController {
         passwordField.setManaged(!PasswordVisible);
         passwordFieldVisible.setVisible(PasswordVisible);
         passwordFieldVisible.setManaged(PasswordVisible);
-    }
+        }
 
     private final UserService userService = UserService.getInstance();
 
