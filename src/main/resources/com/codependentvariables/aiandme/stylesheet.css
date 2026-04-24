@@ -1,4 +1,51 @@
-.logout {
-    -fx-background-color: red;
-    -fx-text-fill: white;
+/*------ Style Class - Background VBox ------*/
+.background-VBox {
+    -fx-background-color: #f0edef;
+}
+
+/*------ Style Class - Widgets ------*/
+.widget-VBox {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #ffffff;
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
+    -fx-effect: dropshadow(three-pass-box, #00000033, 15, 0.1, 5, 5);
+}
+
+/*------ Style Class - structuring content ------*/
+.struct-Box {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-spacing: 15px;
+}
+
+/*------ Style Class - Daily check-in ------*/
+.widget-VBox {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #ffffff;
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
+    -fx-effect: dropshadow(three-pass-box, #00000033, 15, 0.1, 5, 5);
+}
+
+/*------ Style Class - Library Buttons ------*/
+.libraryButton {
+    -fx-background-image: url=("logo.png");
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover;
+    -fx-background-color: transparent;
+}
+
+/*------ Style Class - Nav header Buttons ------*/
+.navButton {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: #000000;
+    -fx-font-size: 15pt:
+}
+
+.navBar {
+    -fx-background-color: #ffffff;
+    -fx-effect: dropshadow(three-pass-box, #00000033, 15, 0.1, 5, 5);
 }
