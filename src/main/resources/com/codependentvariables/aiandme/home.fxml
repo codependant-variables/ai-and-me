@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
@@ -72,21 +77,50 @@
       </VBox>
       <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="578.0" prefWidth="267.0" spacing="10.0">
          <children>
-            <HBox alignment="CENTER_LEFT" prefHeight="128.0" prefWidth="232.0">
+            <HBox alignment="CENTER_LEFT" prefHeight="128.0" prefWidth="232.0" styleClass="dailyCIWidget">
                <children>
-                  <VBox alignment="CENTER" prefHeight="53.0" prefWidth="232.0" styleClass="widget-VBox">
+                  <StackPane prefHeight="150.0" prefWidth="200.0">
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Complete your" textAlignment="CENTER">
+                        <ImageView fitHeight="35.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true" scaleX="2.75" scaleY="2.75" translateX="-10.0" translateY="-15.0">
+                           <image>
+                              <Image url="@Images/streakIcon.png" />
+                           </image>
+                        </ImageView>
+                        <Label text="{#}" translateX="-10.0">
                            <font>
-                              <Font size="18.0" />
+                              <Font size="39.0" />
                            </font>
+                        </Label>
+                     </children>
+                  </StackPane>
+                  <VBox alignment="CENTER" prefHeight="53.0" prefWidth="232.0" styleClass="struct-Box-NS">
+                     <children>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Complete your" textAlignment="CENTER">
+                           <font>
+                              <Font size="11.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
                         </Text>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Daily Check-in" textAlignment="CENTER">
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Daily Check-in" textAlignment="CENTER" translateY="-5.0">
                            <font>
                               <Font size="24.0" />
                            </font>
+                           <VBox.margin>
+                              <Insets bottom="5.0" />
+                           </VBox.margin>
                         </Text>
                      </children>
+                     <padding>
+                        <Insets right="10.0" />
+                     </padding>
                   </VBox>
                </children>
             </HBox>
@@ -133,7 +167,7 @@
          <children>
             <HBox alignment="CENTER" prefHeight="318.0" prefWidth="288.0">
                <children>
-                  <VBox alignment="TOP_CENTER" prefHeight="160.0" prefWidth="285.0" styleClass="widget-VBox">
+                  <VBox alignment="TOP_CENTER" prefHeight="160.0" prefWidth="285.0" styleClass="recomendedQuiz">
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Quiz for you!" textAlignment="CENTER" wrappingWidth="231.13000106811523">
                            <font>
@@ -141,13 +175,27 @@
                            </font>
                         </Text>
                         <Separator minHeight="-Infinity" prefHeight="9.0" prefWidth="243.0" />
+                        <Label text="{recomendedQuiz}">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Button mnemonicParsing="false" text="Start Quiz" />
+                        <ImageView fitHeight="175.0" fitWidth="243.0" pickOnBounds="true" preserveRatio="true" scaleX="1.17" scaleY="1.17" translateY="-14.0">
+                           <image>
+                              <Image url="@Images/PuzzleWidgetIcon.png" />
+                           </image>
+                           <viewport>
+                              <Rectangle2D />
+                           </viewport>
+                        </ImageView>
                      </children>
                   </VBox>
                </children>
             </HBox>
             <HBox alignment="CENTER" layoutX="10.0" layoutY="187.0" prefHeight="341.0" prefWidth="288.0">
                <children>
-                  <VBox alignment="TOP_CENTER" prefHeight="193.0" prefWidth="288.0" styleClass="widget-VBox">
+                  <VBox alignment="TOP_CENTER" prefHeight="193.0" prefWidth="288.0" styleClass="recomendedPuzzle">
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Puzzle for you!" textAlignment="CENTER" wrappingWidth="231.13000106811523">
                            <font>
@@ -155,6 +203,20 @@
                            </font>
                         </Text>
                         <Separator minHeight="-Infinity" prefHeight="9.0" prefWidth="243.0" />
+                        <Label text="{recomendedPuzzle}">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Button mnemonicParsing="false" text="Start Puzzle" />
+                        <ImageView fitHeight="175.0" fitWidth="243.0" pickOnBounds="true" preserveRatio="true" scaleX="1.17" scaleY="1.17" translateY="-8.0">
+                           <image>
+                              <Image url="@Images/PuzzleWidgetIcon.png" />
+                           </image>
+                           <viewport>
+                              <Rectangle2D />
+                           </viewport>
+                        </ImageView>
                      </children>
                   </VBox>
                </children>
