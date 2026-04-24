@@ -36,19 +36,6 @@ public class MockQuizAttemptAnswerDAO implements IQuizAttemptAnswerDAO {
     }
 
     /**
-     * Updates an existing QuizAttemptAnswer.
-     */
-    @Override
-    public void update(QuizAttemptAnswer quizAttemptAnswer) {
-        for (int i = 0; i < answers.size(); i++) {
-            if (answers.get(i).getId() == quizAttemptAnswer.getId()) {
-                answers.set(i, quizAttemptAnswer);
-                break;
-            }
-        }
-    }
-
-    /**
      * Deletes a QuizAttemptAnswer.
      */
     @Override
