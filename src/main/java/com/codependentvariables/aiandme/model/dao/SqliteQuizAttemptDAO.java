@@ -23,6 +23,7 @@ public class SqliteQuizAttemptDAO extends BaseSqliteDAO implements IQuizAttemptD
             name VARCHAR NOT NULL,
             completed_at TIMESTAMP NOT NULL,
             FOREIGN KEY (user_id) REFERENCES users(id)
+            ON DELETE CASCADE
         );
     """;
 
