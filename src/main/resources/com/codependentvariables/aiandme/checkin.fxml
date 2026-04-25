@@ -56,7 +56,7 @@
                            <Insets bottom="5.0" top="5.0" />
                         </VBox.margin>
                      </HBox>
-                        <Slider minWidth="400.0" prefWidth="400.0">
+                        <Slider minWidth="400.0">
                            <VBox.margin>
                               <Insets />
                            </VBox.margin>
