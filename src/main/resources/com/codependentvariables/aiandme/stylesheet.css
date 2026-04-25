@@ -141,3 +141,10 @@
     -fx-pref-row-count: 3;
     -fx-wrap-text: true;
 }
+
+/*------------------------ Page - Quiz/Puzzle ------------------------*/
+/*------ Style Class - Quiz Backing Vbox ------*/
+.Quiz-Backing-VBox {
+    -fx-background-color: #ffffff;
+    -fx-effect: dropshadow(three-pass-box, #00000033, 15, 0.1, 5, 5);
+}
