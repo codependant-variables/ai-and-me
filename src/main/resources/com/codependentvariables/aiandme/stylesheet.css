@@ -6,6 +6,7 @@
     -fx-max-width: 1024px;
     -fx-pref-height: 768px;
     -fx-pref-width: 1024px;
+    -fx-min-height: 768px;
     -fx-padding: 0 0 0 0;
 }
 
@@ -16,6 +17,7 @@
     -fx-max-width: 1024px;
     -fx-pref-height: 768px;
     -fx-pref-width: 1024px;
+    -fx-min-height: 768px;
 }
 
 /*------ Style Class - Widgets ------*/
@@ -146,5 +148,10 @@
 /*------ Style Class - Quiz Backing Vbox ------*/
 .Quiz-Backing-VBox {
     -fx-background-color: #ffffff;
-    -fx-effect: dropshadow(three-pass-box, #00000033, 15, 0.1, 5, 5);
+    -fx-max-height: 768px;
+    -fx-max-width: 500px;
+    -fx-pref-height: 768px;
+    -fx-pref-width: 500px;
+    -fx-min-height: 768px;
+    -fx-effect: dropshadow(three-pass-box, #00000033, 15, 0.1, 5, 0);
 }

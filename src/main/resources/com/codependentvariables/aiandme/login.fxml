@@ -15,7 +15,7 @@
 <?import javafx.scene.shape.SVGPath?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="768.0" minWidth="1024.0" prefHeight="768.0" prefWidth="1024.0" style="-fx-background-image: logo.png;" styleClass="background-AnchorPane" stylesheets="@stylesheet.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/26" fx:controller="com.codependentvariables.aiandme.controller.LoginController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="768.0" minWidth="1024.0" prefHeight="768.0" prefWidth="1024.0" style="-fx-background-image: logo.png;" styleClass="background-AnchorPane" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codependentvariables.aiandme.controller.LoginController">
    <StackPane minHeight="768.0" minWidth="1024.0" styleClass="background-StackPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <children>
          <ImageView fitHeight="768.0" fitWidth="1024.0" opacity="0.5" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_CENTER">
@@ -23,7 +23,7 @@
                <Image url="@Images/PuzzleWidgetIcon.png" />
             </image>
          </ImageView>
-         <VBox alignment="CENTER" maxHeight="350.0" maxWidth="475.0" minHeight="350.0" minWidth="425.0" prefHeight="350.0" prefWidth="425.0" styleClass="widget-VBox">
+         <VBox alignment="CENTER" maxHeight="390.0" maxWidth="475.0" minHeight="350.0" minWidth="425.0" prefHeight="390.0" prefWidth="425.0" styleClass="widget-VBox">
             <children>
                <ImageView fitHeight="77.0" fitWidth="255.0" pickOnBounds="true" preserveRatio="true">
                   <image>
@@ -33,6 +33,11 @@
                      <Insets bottom="25.0" />
                   </VBox.margin>
                </ImageView>
+               <Pane maxHeight="35.0" minHeight="35.0" prefHeight="35.0" prefWidth="200.0">
+                  <VBox.margin>
+                     <Insets bottom="5.0" />
+                  </VBox.margin>
+               </Pane>
                <HBox alignment="TOP_CENTER" prefHeight="10.0" prefWidth="200.0">
                   <children>
                         <Label text="Login" textAlignment="CENTER">
