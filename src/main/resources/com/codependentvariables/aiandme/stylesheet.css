@@ -2,3 +2,18 @@
     -fx-background-color: red;
     -fx-text-fill: white;
 }
+
+
+/*------ Style Class - Submission Button ------*/
+.submissionButton {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 5px;
+    -fx-border-color: #8CC978;
+    -fx-border-radius: 5px;
+     /* -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 10, 0, 0, 5); #Awaiting nums */
+}
+
+/*------ Style Class - Supporting Text ------*/
+.supportingText {
+    -fx-fill: #787878;
+}
