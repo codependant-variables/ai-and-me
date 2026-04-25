@@ -1,7 +1,21 @@
 /*------------------------ Universal ------------------------*/
-/*------ Style Class - Background VBox ------*/
-.background-VBox {
+/*------ Style Class - Background AnchorPane ------*/
+.background-AnchorPane {
     -fx-background-color: #f0edef;
+    -fx-min-height: 768px;
+    -fx-max-width: 1024px;
+    -fx-pref-height: 768px;
+    -fx-pref-width: 1024px;
+    -fx-padding: 0 0 0 0;
+}
+
+/*------ Style Class - Background StackPane ------*/
+.background-StackPane {
+    -fx-background-color: transparent;
+    -fx-min-height: 768px;
+    -fx-max-width: 1024px;
+    -fx-pref-height: 768px;
+    -fx-pref-width: 1024px;
 }
 
 /*------ Style Class - Widgets ------*/
