@@ -1,4 +1,157 @@
-.logout {
-    -fx-background-color: red;
-    -fx-text-fill: white;
+/*------------------------ Universal ------------------------*/
+/*------ Style Class - Background AnchorPane ------*/
+.background-AnchorPane {
+    -fx-background-color: #f0edef;
+    -fx-min-height: 768px;
+    -fx-max-width: 1024px;
+    -fx-pref-height: 768px;
+    -fx-pref-width: 1024px;
+    -fx-min-height: 768px;
+    -fx-padding: 0 0 0 0;
+}
+
+/*------ Style Class - Background StackPane ------*/
+.background-StackPane {
+    -fx-background-color: transparent;
+    -fx-min-height: 768px;
+    -fx-max-width: 1024px;
+    -fx-pref-height: 768px;
+    -fx-pref-width: 1024px;
+    -fx-min-height: 768px;
+}
+
+/*------ Style Class - Widgets ------*/
+.widget-VBox {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #ffffff;
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
+    -fx-effect: dropshadow(three-pass-box, #00000033, 15, 0.1, 5, 5);
+}
+
+/*------ Style Class - structuring content ------*/
+.struct-Box {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-spacing: 15px;
+}
+
+/*------ Style Class - structuring content ------*/
+.struct-Box-NS {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+/*------ Style Class - Submission Button ------*/
+.submissionButton {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 5px;
+    -fx-border-color: #8CC978;
+    -fx-border-radius: 5px;
+    -fx-border-width: 2px;
+     /* -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 10, 0, 0, 5); #Awaiting nums */
+}
+
+/*------ Style Class - Supporting Text ------*/
+.supportingText {
+    -fx-fill: #787878;
+}
+
+/*------------------------ Nav Header ------------------------*/
+/*------ Style Class - Nav header Buttons ------*/
+.navButton {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: #000000;
+    -fx-font-size: 15pt:
+}
+
+/*------ Style Class - Nav header Bar ------*/
+.navBar {
+    -fx-background-color: #ffffff;
+    -fx-effect: dropshadow(three-pass-box, #00000033, 15, 0.1, 5, 5);
+}
+
+/*------------------------ Page - Dashboard ------------------------*/
+/*------ Style Class - Daily check-in ------*/
+.widget-VBox {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #ffffff;
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
+    -fx-effect: dropshadow(three-pass-box, #00000033, 15, 0.1, 5, 5);
+}
+
+/*------ Style Class - Recomended Quiz Widget ------*/
+.recomendedQuiz {
+    -fx-background-color: linear-gradient(to bottom, #ffffff, #ce78b1);
+    -fx-border-color: transparent:;
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
+    -fx-effect: dropshadow(three-pass-box, #00000033, 15, 0.1, 5, 5);
+}
+
+/*------ Style Class - Recomended Puzzle Widget ------*/
+.recomendedPuzzle {
+    -fx-background-color: linear-gradient(to bottom, #ffffff, #79d1ed);
+    -fx-border-color: transparent:;
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
+    -fx-effect: dropshadow(three-pass-box, #00000033, 15, 0.1, 5, 5);
+}
+
+/*------ Style Class - Daily Check in Widget ------*/
+.dailyCIWidget {
+    -fx-background-color: #8cc978;
+    -fx-border-color: transparent:;
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
+    -fx-effect: dropshadow(three-pass-box, #00000033, 15, 0.1, 5, 5);
+}
+
+
+/*------------------------ Page - Quiz/Puzzle Library ------------------------*/
+/*------ Style Class - Library Buttons ------*/
+.libraryButton {
+    -fx-background-color: transparent;
+}
+
+/*------ Style Class - Library Widgets ------*/
+.libraryWidget {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 15px;
+    -fx-effect: dropshadow(three-pass-box, #00000033, 15, 0.1, 5, 5);
+    -fx-pref-width: 370;
+    -fx-pref-width: 130;
+    -fx-min-width: 370;
+    -fx-min-height: 130;
+    -fx-spacing: 15;
+}
+
+/*------ Style Class - Library Vbox ------*/
+.libraryVbox {
+    -fx-background-color: transparent;
+    -fx-pref-width: 190;
+    -fx-pref-width: 130;
+    -fx-min-width: 190;
+    -fx-min-height: 130;
+    -fx-spacing: 15;
+}
+
+/*------ Style Class - Library Widget text area ------*/
+.text-area {
+    -fx-pref-row-count: 3;
+    -fx-wrap-text: true;
+}
+
+/*------------------------ Page - Quiz/Puzzle ------------------------*/
+/*------ Style Class - Quiz Backing Vbox ------*/
+.Quiz-Backing-VBox {
+    -fx-background-color: #ffffff;
+    -fx-max-height: 768px;
+    -fx-max-width: 500px;
+    -fx-pref-height: 768px;
+    -fx-pref-width: 500px;
+    -fx-min-height: 768px;
+    -fx-effect: dropshadow(three-pass-box, #00000033, 15, 0.1, 5, 0);
 }
