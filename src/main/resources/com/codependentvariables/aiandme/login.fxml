@@ -15,7 +15,7 @@
 <?import javafx.scene.shape.SVGPath?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="768.0" minWidth="1024.0" prefHeight="768.0" prefWidth="1024.0" style="-fx-background-image: logo.png;" styleClass="background-AnchorPane" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codependentvariables.aiandme.controller.LoginController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="768.0" minWidth="1024.0" prefHeight="768.0" prefWidth="1024.0" styleClass="background-AnchorPane" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codependentvariables.aiandme.controller.LoginController">
    <StackPane minHeight="768.0" minWidth="1024.0" styleClass="background-StackPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <children>
          <ImageView fitHeight="768.0" fitWidth="1024.0" opacity="0.5" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_CENTER">
@@ -40,7 +40,7 @@
                </Pane>
                <HBox alignment="TOP_CENTER" prefHeight="10.0" prefWidth="200.0">
                   <children>
-                        <Label text="Login" textAlignment="CENTER">
+                        <Label styleClass="title" text="Login" textAlignment="CENTER">
                         <HBox.margin>
                            <Insets bottom="5.0" />
                         </HBox.margin>
@@ -73,7 +73,7 @@
                         </padding>
                      </Label>
                          <PasswordField fx:id="passwordField" maxWidth="250.0" prefHeight="30.0" prefWidth="250.0" />
-                         <TextField fx:id="passwordFieldVisible" managed="false" visible="false" />
+                         <TextField fx:id="passwordTextField" maxWidth="250.0" prefHeight="30.0" prefWidth="250.0" visible="false" />
                      <Pane prefHeight="200.0" prefWidth="90.0">
                         <children>
                                <Button minWidth="-Infinity" onMousePressed="#showPassword" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: transparent;">

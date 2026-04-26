@@ -22,7 +22,7 @@ public class LoginController {
     @FXML
     private PasswordField passwordField;
     @FXML
-    private TextField passwordFieldVisible;
+    private TextField passwordTextField;
     @FXML
     public SVGPath viewPasswordIcon;
     @FXML
@@ -34,17 +34,17 @@ public class LoginController {
     private void initialize() {
         boolean isDarkMode = AppState.getInstance().getIsDarkMode();
         viewPasswordIcon.setFill(isDarkMode ? Color.WHITE : Color.BLACK);
-        passwordField.textProperty().bindBidirectional(passwordFieldVisible.textProperty());
-        passwordFieldVisible.setOnAction(onMousePressed -> showPassword());
+        passwordField.textProperty().bindBidirectional(passwordTextField.textProperty());
+        passwordField.managedProperty().bind(passwordField.visibleProperty());
+        passwordTextField.setOnAction(onMousePressed -> showPassword());
+        passwordTextField.managedProperty().bind(passwordTextField.visibleProperty());
     }
     @FXML
     private void showPassword() {
         boolean PasswordVisible = passwordField.isVisible();
         viewPasswordIcon.setContent(PasswordVisible ? closedEyeSVG : openEyeSVG);
         passwordField.setVisible(!PasswordVisible);
-        passwordField.setManaged(!PasswordVisible);
-        passwordFieldVisible.setVisible(PasswordVisible);
-        passwordFieldVisible.setManaged(PasswordVisible);
+        passwordTextField.setVisible(PasswordVisible);
     }
 
     @FXML
