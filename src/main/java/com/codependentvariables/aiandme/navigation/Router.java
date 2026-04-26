@@ -10,6 +10,9 @@ public class Router {
     private static StackPane layout;
     private static View currentAppView;
     private static View currentLayoutView;
+    private static boolean isCurrentViewLayout;
+    private static View lastView = View.HOME;
+    private static boolean isLastViewLayout = true;
 
     /**
      * Invoke this method in AppController.initialize to utilise for routing.
@@ -34,9 +37,7 @@ public class Router {
             return;
         }
 
-        setLoading(app);
-        ViewUtils.loadView(app, view);
-        currentAppView = view;
+        loadView(app, view);
 
         if (currentAppView != View.LAYOUT) {
             currentLayoutView = null;
@@ -56,9 +57,33 @@ public class Router {
             return;
         }
 
-        setLoading(layout);
-        ViewUtils.loadView(layout, view);
-        currentLayoutView = view;
+        loadView(layout, view);
+    }
+
+    public static void navigateBack() {
+        if (isLastViewLayout) {
+            navigateLayout(lastView);
+        } else {
+            navigateApp(lastView);
+        }
+    }
+
+    private static void loadView(StackPane stackPane, View view) {
+        setLoading(stackPane);
+        ViewUtils.loadView(stackPane, view);
+
+        isLastViewLayout = isCurrentViewLayout;
+        if (isLastViewLayout) {
+            lastView = currentLayoutView;
+        } else {
+            lastView = currentAppView;
+        }
+        isCurrentViewLayout = stackPane == layout;
+        if (isCurrentViewLayout) {
+            currentLayoutView = view;
+        } else {
+            currentAppView = view;
+        }
     }
 
     // TODO: decide if this is needed as it loads fast enough to never see Loading..

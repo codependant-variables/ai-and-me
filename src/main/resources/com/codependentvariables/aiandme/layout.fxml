@@ -10,10 +10,9 @@
 <BorderPane stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codependentvariables.aiandme.controller.LayoutController">
     <top>
         <HBox alignment="CENTER" prefHeight="100.0" spacing="10.0">
-            <ImageView fx:id="logoRef" fitHeight="72.0" fitWidth="223.0" layoutY="10.0" pickOnBounds="true" smooth="false">
-            <image>
-               <Image url="@dark-logo.png" />
-            </image></ImageView>
+            <ImageView fx:id="logoRef" fitHeight="72.0" fitWidth="223.0" layoutY="10.0">
+                <Image url="@dark-logo.png"/>
+            </ImageView>
             <Button onAction="#navigateHome" styleClass="navButton">Home</Button>
             <Button onAction="#navigateQuizLibrary" styleClass="navButton">Quiz Library</Button>
             <Button onAction="#navigateCheckin" styleClass="navButton">Daily Check-in</Button>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.control.Button?>
+<GridPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.codependentvariables.aiandme.controller.ProfileController">
+    <Button text="Export my data" />
+    <Button style="-fx-background-color: indianred;" text="Clear my data" />
+    <Button style="-fx-background-color: red;" text="Delete Account" />
+</GridPane>
