@@ -82,6 +82,12 @@ Button {
     -fx-border-color: #8CC978;
 }
 
+.alert {
+    -fx-background-color: crimson;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+}
+
 /*------------------------ Nav Header ------------------------*/
 /*------ Style Class - Nav header Buttons ------*/
 .navButton {

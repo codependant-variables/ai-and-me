@@ -1,10 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.layout.*?>
-
 <?import javafx.scene.control.Button?>
-<GridPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.codependentvariables.aiandme.controller.ProfileController">
-    <Button text="Export my data" />
-    <Button style="-fx-background-color: indianred;" text="Clear my data" />
-    <Button style="-fx-background-color: red;" text="Delete Account" />
-</GridPane>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.CheckBox?>
+
+<HBox alignment="CENTER" spacing="20" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.codependentvariables.aiandme.controller.ProfileController">
+    <GridPane alignment="CENTER" hgap="5" vgap="10">
+
+        <columnConstraints>
+            <ColumnConstraints prefWidth="80.0" />
+            <ColumnConstraints prefWidth="300.0" />
+            <ColumnConstraints prefWidth="30.0" />
+            <ColumnConstraints prefWidth="30.0" />
+        </columnConstraints>
+
+        <Label text="Edit Details" styleClass="title" GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER" />
+
+        <Label text="Name:" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+        <TextField fx:id="nameField" maxWidth="Infinity" onAction="#editName" disable="true" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+        <Button fx:id="nameButton" text="E" onAction="#editName" GridPane.rowIndex="1" GridPane.columnIndex="2" />
+        <Button fx:id="cancelNameButton" text="X" onAction="#cancelEditName" GridPane.rowIndex="1" GridPane.columnIndex="3" />
+
+        <Label text="Email:" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+        <TextField fx:id="emailField" maxWidth="Infinity" onAction="#editEmail" disable="true" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+        <Button fx:id="emailButton" text="E" onAction="#editEmail" GridPane.rowIndex="2" GridPane.columnIndex="2" />
+        <Button fx:id="cancelEmailButton" text="X" onAction="#cancelEditEmail" GridPane.rowIndex="2" GridPane.columnIndex="3" />
+
+        <Button onAction="#navigateChangePassword" maxWidth="Infinity" text="Change password" GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.columnSpan="2" />
+
+        <HBox alignment="CENTER" spacing="10" GridPane.rowIndex="4" GridPane.columnIndex="0" GridPane.columnSpan="4" GridPane.halignment="CENTER">
+            <Label text="Multi-Factor Authentication:" />
+            <CheckBox fx:id="mfaCheckbox" disable="true" />
+            <Button fx:id="mfaButton" onAction="#clickMfa" text="Setup MFA" />
+        </HBox>
+
+    </GridPane>
+    <VBox alignment="CENTER" spacing="10">
+        <Label text="Actions" styleClass="title" />
+        <Button maxWidth="Infinity" onAction="#exportData" text="Export my data" />
+        <Button maxWidth="Infinity" onAction="#clearData" text="Clear my data" />
+        <Button maxWidth="Infinity" onAction="#deleteUser" text="Delete Account" styleClass="alert" />
+    </VBox>
+</HBox>

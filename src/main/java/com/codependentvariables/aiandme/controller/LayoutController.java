@@ -61,7 +61,7 @@ public class LayoutController {
 
     @FXML
     public void navigateProfile() {
-        throw new RuntimeException("Not implemented.");
+        Router.navigateLayout(View.PROFILE);
     }
 
     @FXML
