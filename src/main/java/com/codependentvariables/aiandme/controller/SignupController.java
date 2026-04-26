@@ -37,8 +37,8 @@ public class SignupController {
     private void initialize() {
         boolean isDarkMode = AppState.getInstance().getIsDarkMode();
 
-        Image newImage = new Image(AiAndMe.getLogoUrlString());
-        logoRef.setImage(newImage);
+        Image image = new Image(AiAndMe.getLogoUrlString());
+        logoRef.setImage(image);
         viewPasswordIcon.setFill(isDarkMode ? Color.WHITE : Color.BLACK);
 
         passwordField.textProperty().bindBidirectional(passwordTextField.textProperty());

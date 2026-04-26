@@ -1,5 +1,6 @@
 package com.codependentvariables.aiandme.controller;
 
+import com.codependentvariables.aiandme.AiAndMe;
 import com.codependentvariables.aiandme.Svg;
 import com.codependentvariables.aiandme.navigation.Router;
 import com.codependentvariables.aiandme.navigation.Toast;
@@ -15,13 +16,18 @@ import com.codependentvariables.aiandme.validation.ValidationEntry;
 import com.codependentvariables.aiandme.validation.validators.*;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 import javafx.util.converter.DefaultStringConverter;
 
 public class LoginController {
+    @FXML
+    public ImageView logoRef;
     @FXML
     private TextField emailField;
     @FXML
@@ -61,6 +67,10 @@ public class LoginController {
     @FXML
     private void initialize() {
         boolean isDarkMode = AppState.getInstance().getIsDarkMode();
+
+        Image image = new Image(AiAndMe.getLogoUrlString());
+        logoRef.setImage(image);
+        setPasswordVisible(false);
         viewPasswordIcon.setFill(isDarkMode ? Color.WHITE : Color.BLACK);
 
         emailField.disableProperty().bind(this.loggingIn.or(this.requireOtp));
@@ -82,7 +92,7 @@ public class LoginController {
     }
 
     @FXML
-    private void togglePasswordVisible() {
+    private void toggleViewPassword() {
         boolean isPasswordVisible = passwordTextField.isVisible();
         setPasswordVisible(!isPasswordVisible);
     }
@@ -149,7 +159,7 @@ public class LoginController {
     }
 
     @FXML
-    private void navigateSignUp() {
+    private void navigateSignup() {
         Router.navigateApp(View.SIGNUP);
     }
 }
