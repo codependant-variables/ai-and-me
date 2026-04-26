@@ -28,8 +28,8 @@ public class QuizLibraryController {
     @FXML private Button btnDelete;
     @FXML private Button btnEditQuestions;
 
-    /** Currently selected category card, null when nothing is selected. */
-    private Category selectedCategory;
+    /** Currently selected template card, null when nothing is selected. */
+    private QuizTemplate selectedTemplate;
 
     /** The VBox card node that is currently highlighted. */
     private VBox selectedCard;
@@ -43,63 +43,70 @@ public class QuizLibraryController {
         refreshCategories();
     }
 
-    // Render
+    // Generate views
 
     /**
-     * Clears and re-renders every category card inside the FlowPane.
+     * Clears and regens every template card inside the FlowPane.
      */
     private void refreshCategories() {
         categoryContainer.getChildren().clear();
-        selectedCategory = null;
+        selectedTemplate = null;
         selectedCard = null;
         updateActionButtons();
 
-        List<Category> categories = categoryDAO.getAll();
-        for (Category category : categories) {
-            categoryContainer.getChildren().add(buildCategoryCard(category));
+        // Build a lookup map so we can resolve category names efficiently
+        java.util.Map<Integer, String> categoryNames = new java.util.HashMap<>();
+        for (Category c : categoryDAO.getAll()) {
+            categoryNames.put(c.getId(), c.getName());
+        }
+
+        List<QuizTemplate> templates = templateDAO.getAll();
+        for (QuizTemplate template : templates) {
+            String categoryName = categoryNames.getOrDefault(template.getCategoryId(), "Unknown");
+            categoryContainer.getChildren().add(buildTemplateCard(template, categoryName));
         }
     }
 
     /**
-     * Builds a styled VBox card for a single category.
-     * Shows the category name and how many templates it contains.
+     * Builds a styled VBox card for a single quiz template.
+     * Shows the template name and which category it belongs to.
      */
-    private VBox buildCategoryCard(Category category) {
-        int templateCount = templateDAO.getByCategoryId(category.getId()).size();
-
-        Label nameLabel = new Label(category.getName());
-        nameLabel.setFont(Font.font("System", FontWeight.BOLD, 14));
+    private VBox buildTemplateCard(QuizTemplate template, String categoryName) {
+        Label nameLabel = new Label(template.getName());
+        nameLabel.setFont(Font.font("System", FontWeight.BOLD, 16));
         nameLabel.setTextFill(Color.web("#333333"));
+        nameLabel.setWrapText(true);
 
-        Label countLabel = new Label(templateCount + " template" + (templateCount == 1 ? "" : "s"));
-        countLabel.setFont(Font.font("System", 11));
-        countLabel.setTextFill(Color.web("#777777"));
+        Label categoryLabel = new Label("Category: " + categoryName);
+        categoryLabel.setFont(Font.font("System", 13));
+        categoryLabel.setTextFill(Color.web("#777777"));
+        categoryLabel.setWrapText(true);
 
-        VBox card = new VBox(6, nameLabel, countLabel);
-        card.setPrefSize(160, 80);
+        VBox card = new VBox(10, nameLabel, categoryLabel);
+        card.setPrefSize(360, 190);
         card.setAlignment(Pos.CENTER);
-        card.setPadding(new Insets(12));
+        card.setPadding(new Insets(20));
         card.setStyle(cardStyle(false));
 
-        card.setOnMouseClicked(e -> selectCard(card, category));
+        card.setOnMouseClicked(e -> selectCard(card, template));
 
         return card;
     }
 
-    private void selectCard(VBox card, Category category) {
+    private void selectCard(VBox card, QuizTemplate template) {
         // Deselect previous card
         if (selectedCard != null) {
             selectedCard.setStyle(cardStyle(false));
         }
 
-        selectedCategory = category;
+        selectedTemplate = template;
         selectedCard = card;
         card.setStyle(cardStyle(true));
         updateActionButtons();
     }
 
     private void updateActionButtons() {
-        boolean hasSelection = selectedCategory != null;
+        boolean hasSelection = selectedTemplate != null;
         btnCreate.setDisable(false); // always enabled
         btnModify.setDisable(!hasSelection);
         btnDelete.setDisable(!hasSelection);
@@ -155,7 +162,6 @@ public class QuizLibraryController {
             }
         });
         // Pre-select the currently highlighted category if any
-        if (selectedCategory != null) categoryCombo.setValue(selectedCategory);
         categoryCombo.setMaxWidth(Double.MAX_VALUE);
 
         // New Category checkbox + text field
@@ -234,80 +240,44 @@ public class QuizLibraryController {
     }
 
     /**
-     * Renames an existing template that belongs to the selected category.
+     * Renames the selected template.
      */
     @FXML
     private void handleModify() {
-        if (selectedCategory == null) return;
+        if (selectedTemplate == null) return;
 
-        List<QuizTemplate> templates = templateDAO.getByCategoryId(selectedCategory.getId());
-        if (templates.isEmpty()) {
-            showWarning("No templates in " + selectedCategory.getName() + " to modify.");
-            return;
-        }
-
-        // Let the user pick which template to modify
-        ChoiceDialog<QuizTemplate> picker = new ChoiceDialog<>(templates.getFirst(), templates);
-        picker.setTitle("Modify Template");
-        picker.setHeaderText("Select a template to modify in " + selectedCategory.getName());
-        picker.setContentText("Template:");
-        // Display template names in the picker
-        picker.getItems().setAll(templates);
-        picker.getDialogPane().lookupButton(ButtonType.OK);
-
-        // Override toString for display inside ChoiceDialog
-        Optional<QuizTemplate> pickerResult = picker.showAndWait();
-        if (pickerResult.isEmpty()) return;
-
-        QuizTemplate chosen = pickerResult.get();
-
-        TextInputDialog nameDialog = new TextInputDialog(chosen.getName());
+        TextInputDialog nameDialog = new TextInputDialog(selectedTemplate.getName());
         nameDialog.setTitle("Rename Template");
-        nameDialog.setHeaderText("Rename " + chosen.getName());
+        nameDialog.setHeaderText("Rename \"" + selectedTemplate.getName() + "\"");
         nameDialog.setContentText("New name:");
 
         Optional<String> nameResult = nameDialog.showAndWait();
         nameResult.map(String::trim).filter(s -> !s.isEmpty()).ifPresent(newName -> {
-            chosen.setName(newName);
-            templateDAO.update(chosen);
+            selectedTemplate.setName(newName);
+            templateDAO.update(selectedTemplate);
             refreshCategories();
-            showInfo("Template renamed to " + newName + ".");
+            showInfo("Template renamed to \"" + newName + "\".");
         });
     }
 
     /**
-     * Deletes a template that belongs to the selected category.
+     * Deletes the selected template.
      */
     @FXML
     private void handleDelete() {
-        if (selectedCategory == null) return;
-
-        List<QuizTemplate> templates = templateDAO.getByCategoryId(selectedCategory.getId());
-        if (templates.isEmpty()) {
-            showWarning("No templates in " + selectedCategory.getName() + " to delete.");
-            return;
-        }
-
-        ChoiceDialog<QuizTemplate> picker = new ChoiceDialog<>(templates.getFirst(), templates);
-        picker.setTitle("Delete Template");
-        picker.setHeaderText("Select a template to delete from " + selectedCategory.getName());
-        picker.setContentText("Template:");
-
-        Optional<QuizTemplate> pickerResult = picker.showAndWait();
-        if (pickerResult.isEmpty()) return;
-
-        QuizTemplate chosen = pickerResult.get();
+        if (selectedTemplate == null) return;
 
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
-                "Delete " + chosen.getName() + "? This cannot be undone.",
+                "Delete \"" + selectedTemplate.getName() + "\"? This cannot be undone.",
                 ButtonType.YES, ButtonType.CANCEL);
         confirm.setTitle("Confirm Delete");
         confirm.setHeaderText(null);
 
         confirm.showAndWait().filter(b -> b == ButtonType.YES).ifPresent(b -> {
-            templateDAO.delete(chosen);
+            String name = selectedTemplate.getName();
+            templateDAO.delete(selectedTemplate);
             refreshCategories();
-            showInfo("Template " + chosen.getName() + " deleted.");
+            showInfo("Template \"" + name + "\" deleted.");
         });
     }
 
@@ -321,25 +291,11 @@ public class QuizLibraryController {
      */
     @FXML
     private void handleEditQuestions() {
-        if (selectedCategory == null) return;
+        if (selectedTemplate == null) return;
 
-        List<QuizTemplate> templates = templateDAO.getByCategoryId(selectedCategory.getId());
-        if (templates.isEmpty()) {
-            showWarning("No templates in " + selectedCategory.getName() + ". Create one first.");
-            return;
-        }
+        QuizTemplate template = selectedTemplate;
 
-        // 1. Pick a template
-        ChoiceDialog<QuizTemplate> picker = new ChoiceDialog<>(templates.getFirst(), templates);
-        picker.setTitle("Edit Questions");
-        picker.setHeaderText("Select a template to edit its questions");
-        picker.setContentText("Template:");
-        Optional<QuizTemplate> pickerResult = picker.showAndWait();
-        if (pickerResult.isEmpty()) return;
-
-        QuizTemplate template = pickerResult.get();
-
-        // 2. Load existing questions + answers into the aggregate
+        // Load existing questions + answers into the aggregate
         List<QuizTemplateQuestion> existingQuestions = questionDAO.getQuestionsByTemplate(template.getId());
         for (QuizTemplateQuestion q : existingQuestions) {
             q.setAnswers(answerDAO.getAnswersByQuestion(q.getId()));
@@ -393,10 +349,10 @@ public class QuizLibraryController {
             answersBox.getChildren().add(row);
         }
 
-        Button btnPrev    = new Button("◀ Prev");
-        Button btnNext    = new Button("Next ▶");
-        Button btnAddQ    = new Button("➕ Add Question");
-        Button btnRemoveQ = new Button("🗑 Remove Question");
+        Button btnPrev    = new Button("<");
+        Button btnNext    = new Button(">");
+        Button btnAddQ    = new Button("Add");
+        Button btnRemoveQ = new Button("Remove");
 
         HBox navBox = new HBox(10, btnPrev, questionCounter, btnNext, new Separator(), btnAddQ, btnRemoveQ);
         navBox.setAlignment(Pos.CENTER_LEFT);
@@ -405,7 +361,7 @@ public class QuizLibraryController {
                 quizNameLabel, titleSep,
                 navBox,
                 questionField,
-                new Label("Answers  (tick at least one as correct):"),
+                new Label("Answers (tick at least one as correct):"),
                 answersBox
         );
         content.setPadding(new Insets(16));
