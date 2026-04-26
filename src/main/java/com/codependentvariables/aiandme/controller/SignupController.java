@@ -1,5 +1,6 @@
 package com.codependentvariables.aiandme.controller;
 
+import com.codependentvariables.aiandme.AiAndMe;
 import com.codependentvariables.aiandme.model.User;
 import com.codependentvariables.aiandme.navigation.Router;
 import com.codependentvariables.aiandme.navigation.View;
@@ -11,11 +12,15 @@ import com.codependentvariables.aiandme.validation.validators.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 
 public class SignupController {
 
+    @FXML
+    public ImageView logoRef;
     @FXML
     private TextField nameField;
     @FXML
@@ -23,7 +28,7 @@ public class SignupController {
     @FXML
     private PasswordField passwordField;
     @FXML
-    private TextField passwordFieldVisible;
+    private TextField passwordTextField;
     @FXML
     public SVGPath viewPasswordIcon;
     @FXML
@@ -34,18 +39,22 @@ public class SignupController {
     @FXML
     private void initialize() {
         boolean isDarkMode = AppState.getInstance().getIsDarkMode();
-        passwordField.textProperty().bindBidirectional(passwordFieldVisible.textProperty());
+
+        Image newImage = new Image(AiAndMe.getLogoUrlString());
+        logoRef.setImage(newImage);
         viewPasswordIcon.setFill(isDarkMode ? Color.WHITE : Color.BLACK);
-        passwordFieldVisible.setOnAction(onMousePressed -> showPassword());
+
+        passwordField.textProperty().bindBidirectional(passwordTextField.textProperty());
+        passwordField.managedProperty().bind(passwordField.visibleProperty());
+        passwordTextField.setOnAction(onMousePressed -> showPassword());
+        passwordTextField.managedProperty().bind(passwordTextField.visibleProperty());
     }
     @FXML
     private void showPassword() {
         boolean PasswordVisible = passwordField.isVisible();
         viewPasswordIcon.setContent(PasswordVisible ? closedEyeSVG : openEyeSVG);
         passwordField.setVisible(!PasswordVisible);
-        passwordField.setManaged(!PasswordVisible);
-        passwordFieldVisible.setVisible(PasswordVisible);
-        passwordFieldVisible.setManaged(PasswordVisible);
+        passwordTextField.setVisible(PasswordVisible);
         }
 
     private final UserService userService = UserService.getInstance();
