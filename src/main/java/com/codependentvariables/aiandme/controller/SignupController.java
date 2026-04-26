@@ -46,16 +46,18 @@ public class SignupController {
 
         passwordField.textProperty().bindBidirectional(passwordTextField.textProperty());
         passwordField.managedProperty().bind(passwordField.visibleProperty());
-        passwordTextField.setOnAction(onMousePressed -> showPassword());
+        passwordTextField.setOnAction(onMousePressed -> toggleViewPassword());
         passwordTextField.managedProperty().bind(passwordTextField.visibleProperty());
+
+        toggleViewPassword();
     }
     @FXML
-    private void showPassword() {
-        boolean PasswordVisible = passwordField.isVisible();
-        viewPasswordIcon.setContent(PasswordVisible ? closedEyeSVG : openEyeSVG);
-        passwordField.setVisible(!PasswordVisible);
-        passwordTextField.setVisible(PasswordVisible);
-        }
+    private void toggleViewPassword() {
+        boolean isVisible = passwordField.isVisible();
+        viewPasswordIcon.setContent(isVisible ? closedEyeSVG : openEyeSVG);
+        passwordField.setVisible(!isVisible);
+        passwordTextField.setVisible(isVisible);
+    }
 
     private final UserService userService = UserService.getInstance();
 
