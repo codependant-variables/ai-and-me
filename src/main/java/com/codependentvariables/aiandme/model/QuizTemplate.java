@@ -1,0 +1,97 @@
+package com.codependentvariables.aiandme.model;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class QuizTemplate {
+    private int id;
+    private String name;
+    private int categoryId;
+    private String status;
+
+    /* Storage in memory temporatily here */
+    private final List<QuizTemplateQuestion> questions = new ArrayList<>();
+
+    public QuizTemplate(String name, int categoryId, String status) {
+        this.name = name;
+        this.categoryId = categoryId;
+        this.status = status;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    /* returns view that cannot be modified directly */
+    public List<QuizTemplateQuestion> getQuestions() {
+        return Collections.unmodifiableList(questions);
+    }
+
+    /* Adds a question to the temporary array and ensures its quizTemplateId is consistent with this template. */
+    public void addQuestion(QuizTemplateQuestion question) {
+        question.setQuizTemplateId(this.id);
+        questions.add(question);
+    }
+
+    /* Removes a question from the temporary array */
+    public void removeQuestion(QuizTemplateQuestion question) {
+        questions.remove(question);
+    }
+
+    /*
+     * Replaces the entire in memory question list (i.e. after loading from DAO).
+     */
+    public void setQuestions(List<QuizTemplateQuestion> questions) {
+        this.questions.clear();
+        this.questions.addAll(questions);
+    }
+
+     /**
+     * Returns {@code true} when properly structured
+     * <ul>
+     *    <li>has a non-empty name</li>
+     *    <li>has a valid categoryId (greater than 0)</li>
+     *    <li>has a valid status (e.g. "active" or "inactive")</li>
+     *   </ul>
+     */
+     public boolean isValid() {
+        if (name == null || name.isBlank()) return false;
+        if (questions.isEmpty()) return false;
+        return questions.stream().allMatch(QuizTemplateQuestion::isValid);
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+}
+

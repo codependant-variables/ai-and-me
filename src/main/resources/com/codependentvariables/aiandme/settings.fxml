@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.SVGPath?>
+
+<?import javafx.scene.layout.BorderPane?>
+<BorderPane prefHeight="200.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codependentvariables.aiandme.controller.SettingsController">
+   <center>
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="275.0" BorderPane.alignment="CENTER">
+         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+            <Button mnemonicParsing="false" onAction="#switchTheme">
+            <graphic>
+                  <SVGPath fx:id="themeToggleIcon" content="M29.2,26.72A12.07,12.07,0,0,1,22.9,4.44,13.68,13.68,0,0,0,19.49,4a14,14,0,0,0,0,28,13.82,13.82,0,0,0,10.9-5.34A11.71,11.71,0,0,1,29.2,26.72Z" fill="MEDIUMSLATEBLUE" nodeOrientation="LEFT_TO_RIGHT">
+            </SVGPath>
+            </graphic></Button>
+         </HBox>
+         <Button text="Change Orientation" onAction="#switchOrientation" />
+         <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0">
+            <Button mnemonicParsing="false" text="Export my data" />
+         </HBox>
+         <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0">
+            <Button mnemonicParsing="false" style="-fx-background-color: indianred;" text="Clear my data" />
+         </HBox>
+         <HBox alignment="CENTER" layoutX="10.0" layoutY="144.0" prefHeight="100.0" prefWidth="200.0">
+            <Button mnemonicParsing="false" style="-fx-background-color: red;" text="Delete Account" />
+         </HBox>
+         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+            <Button mnemonicParsing="false" onAction="#navigateHome">
+               <graphic>
+                  <SVGPath content="M14.611 6.622 8.927 2.221a0.438 0.438 0 0 0 -0.541 0.005L2.879 6.627a0.467 0.467 0 0 0 -0.163 0.341v7.961a0.438 0.438 0 0 0 0.439 0.439h3.271a0.438 0.438 0 0 0 0.439 -0.439V10.057h3.771v4.876a0.438 0.438 0 0 0 0.439 0.439h3.271a0.438 0.438 0 0 0 0.439 -0.439V6.972a0.467 0.467 0 0 0 -0.168 -0.345" />
+               </graphic>
+            </Button>
+         </HBox>
+      </VBox>
+   </center>
+</BorderPane>

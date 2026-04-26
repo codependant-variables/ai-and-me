@@ -1,0 +1,538 @@
+package com.codependentvariables.aiandme.controller;
+
+import com.codependentvariables.aiandme.model.*;
+import com.codependentvariables.aiandme.model.dao.*;
+import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+public class QuizLibraryController {
+
+    private final ICategoryDAO categoryDAO = new SqliteCategoryDAO();
+    private final IQuizTemplateDAO templateDAO = new SqliteQuizTemplateDAO();
+    private final IQuizTemplateQuestionDAO questionDAO = new SqliteQuizTemplateQuestionDAO();
+    private final IQuizTemplateAnswerDAO answerDAO = new SqliteQuizTemplateAnswerDAO();
+
+    @FXML private FlowPane categoryContainer;
+    @FXML private Button btnCreate;
+    @FXML private Button btnModify;
+    @FXML private Button btnDelete;
+    @FXML private Button btnEditQuestions;
+
+    /** Currently selected category card, null when nothing is selected. */
+    private Category selectedCategory;
+
+    /** The VBox card node that is currently highlighted. */
+    private VBox selectedCard;
+
+    @FXML
+    public void initialize() {
+        btnCreate.setDisable(false);
+        btnModify.setDisable(true);
+        btnDelete.setDisable(true);
+        btnEditQuestions.setDisable(true);
+        refreshCategories();
+    }
+
+    // Render
+
+    /**
+     * Clears and re-renders every category card inside the FlowPane.
+     */
+    private void refreshCategories() {
+        categoryContainer.getChildren().clear();
+        selectedCategory = null;
+        selectedCard = null;
+        updateActionButtons();
+
+        List<Category> categories = categoryDAO.getAll();
+        for (Category category : categories) {
+            categoryContainer.getChildren().add(buildCategoryCard(category));
+        }
+    }
+
+    /**
+     * Builds a styled VBox card for a single category.
+     * Shows the category name and how many templates it contains.
+     */
+    private VBox buildCategoryCard(Category category) {
+        int templateCount = templateDAO.getByCategoryId(category.getId()).size();
+
+        Label nameLabel = new Label(category.getName());
+        nameLabel.setFont(Font.font("System", FontWeight.BOLD, 14));
+        nameLabel.setTextFill(Color.web("#333333"));
+
+        Label countLabel = new Label(templateCount + " template" + (templateCount == 1 ? "" : "s"));
+        countLabel.setFont(Font.font("System", 11));
+        countLabel.setTextFill(Color.web("#777777"));
+
+        VBox card = new VBox(6, nameLabel, countLabel);
+        card.setPrefSize(160, 80);
+        card.setAlignment(Pos.CENTER);
+        card.setPadding(new Insets(12));
+        card.setStyle(cardStyle(false));
+
+        card.setOnMouseClicked(e -> selectCard(card, category));
+
+        return card;
+    }
+
+    private void selectCard(VBox card, Category category) {
+        // Deselect previous card
+        if (selectedCard != null) {
+            selectedCard.setStyle(cardStyle(false));
+        }
+
+        selectedCategory = category;
+        selectedCard = card;
+        card.setStyle(cardStyle(true));
+        updateActionButtons();
+    }
+
+    private void updateActionButtons() {
+        boolean hasSelection = selectedCategory != null;
+        btnCreate.setDisable(false); // always enabled
+        btnModify.setDisable(!hasSelection);
+        btnDelete.setDisable(!hasSelection);
+        btnEditQuestions.setDisable(!hasSelection);
+    }
+
+    private String cardStyle(boolean selected) {
+        String border = selected
+                ? "-fx-border-color: #1976d2; -fx-border-width: 2;"
+                : "-fx-border-color: #cccccc; -fx-border-width: 1;";
+        String bg = selected ? "-fx-background-color: #e3f2fd;" : "-fx-background-color: #ffffff;";
+        return bg + border + "-fx-background-radius: 8; -fx-border-radius: 8; -fx-cursor: hand;";
+    }
+
+    // Action Handlers
+
+    /**
+     * Opens a pop-up dialog to create a new template.
+     * The user can select an existing category from a drop-down or tick
+     * "New Category?" to type a new category name which is persisted
+     * and immediately reflected in the library.
+     */
+    @FXML
+    private void handleCreate() {
+        List<Category> categories = categoryDAO.getAll();
+
+        // Build dialog box
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Create Template");
+        dialog.setHeaderText("Create a new quiz template");
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        // Template name
+        Label nameLabel = new Label("Template name:");
+        TextField nameField = new TextField();
+        nameField.setPromptText("Enter template name");
+
+        // Category drop-down
+        Label categoryLabel = new Label("Category:");
+        ComboBox<Category> categoryCombo = new ComboBox<>();
+        categoryCombo.getItems().setAll(categories);
+        categoryCombo.setPromptText("Select a category");
+        categoryCombo.setCellFactory(lv -> new ListCell<>() {
+            @Override protected void updateItem(Category c, boolean empty) {
+                super.updateItem(c, empty);
+                setText(empty || c == null ? null : c.getName());
+            }
+        });
+        categoryCombo.setButtonCell(new ListCell<>() {
+            @Override protected void updateItem(Category c, boolean empty) {
+                super.updateItem(c, empty);
+                setText(empty || c == null ? null : c.getName());
+            }
+        });
+        // Pre-select the currently highlighted category if any
+        if (selectedCategory != null) categoryCombo.setValue(selectedCategory);
+        categoryCombo.setMaxWidth(Double.MAX_VALUE);
+
+        // New Category checkbox + text field
+        CheckBox newCategoryCheck = new CheckBox("New Category?");
+        TextField newCategoryField = new TextField();
+        newCategoryField.setPromptText("Enter new category name");
+        newCategoryField.setVisible(false);
+        newCategoryField.setManaged(false);
+
+        newCategoryCheck.selectedProperty().addListener((obs, wasSelected, isNowSelected) -> {
+            newCategoryField.setVisible(isNowSelected);
+            newCategoryField.setManaged(isNowSelected);
+            categoryCombo.setDisable(isNowSelected);
+            if (isNowSelected) {
+                categoryCombo.setValue(null);
+            }
+        });
+
+        // Validate OK button
+        Button okButton = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
+        okButton.setDisable(true);
+        Runnable validate = () -> {
+            boolean nameOk = !nameField.getText().trim().isEmpty();
+            boolean categoryOk = newCategoryCheck.isSelected()
+                    ? !newCategoryField.getText().trim().isEmpty()
+                    : categoryCombo.getValue() != null;
+            okButton.setDisable(!(nameOk && categoryOk));
+        };
+        nameField.textProperty().addListener((o, ov, nv) -> validate.run());
+        categoryCombo.valueProperty().addListener((o, ov, nv) -> validate.run());
+        newCategoryField.textProperty().addListener((o, ov, nv) -> validate.run());
+        newCategoryCheck.selectedProperty().addListener((o, ov, nv) -> validate.run());
+
+        // Layout
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(15));
+        ColumnConstraints col1 = new ColumnConstraints(120);
+        ColumnConstraints col2 = new ColumnConstraints(220);
+        grid.getColumnConstraints().addAll(col1, col2);
+
+        grid.add(nameLabel, 0, 0);
+        grid.add(nameField, 1, 0);
+        grid.add(categoryLabel, 0, 1);
+        grid.add(categoryCombo, 1, 1);
+        grid.add(newCategoryCheck, 1, 2);
+        grid.add(newCategoryField, 1, 3);
+
+        dialog.getDialogPane().setContent(grid);
+        nameField.requestFocus();
+
+        // Handle result
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isEmpty() || result.get() != ButtonType.OK) return;
+
+        String templateName = nameField.getText().trim();
+        Category targetCategory;
+
+        if (newCategoryCheck.isSelected()) {
+            String newCatName = newCategoryField.getText().trim();
+            Category newCat = new Category(newCatName);
+            categoryDAO.add(newCat);
+            // Fetch the just-added category so we have its DB-assigned id
+            targetCategory = categoryDAO.getAll().stream()
+                    .filter(c -> c.getName().equalsIgnoreCase(newCatName))
+                    .findFirst().orElse(newCat);
+        } else {
+            targetCategory = categoryCombo.getValue();
+        }
+
+        QuizTemplate template = new QuizTemplate(templateName, targetCategory.getId(), "draft");
+        templateDAO.add(template);
+        refreshCategories();
+        showInfo("Template \"" + templateName + "\" created in category \"" + targetCategory.getName() + "\".");
+    }
+
+    /**
+     * Renames an existing template that belongs to the selected category.
+     */
+    @FXML
+    private void handleModify() {
+        if (selectedCategory == null) return;
+
+        List<QuizTemplate> templates = templateDAO.getByCategoryId(selectedCategory.getId());
+        if (templates.isEmpty()) {
+            showWarning("No templates in " + selectedCategory.getName() + " to modify.");
+            return;
+        }
+
+        // Let the user pick which template to modify
+        ChoiceDialog<QuizTemplate> picker = new ChoiceDialog<>(templates.getFirst(), templates);
+        picker.setTitle("Modify Template");
+        picker.setHeaderText("Select a template to modify in " + selectedCategory.getName());
+        picker.setContentText("Template:");
+        // Display template names in the picker
+        picker.getItems().setAll(templates);
+        picker.getDialogPane().lookupButton(ButtonType.OK);
+
+        // Override toString for display inside ChoiceDialog
+        Optional<QuizTemplate> pickerResult = picker.showAndWait();
+        if (pickerResult.isEmpty()) return;
+
+        QuizTemplate chosen = pickerResult.get();
+
+        TextInputDialog nameDialog = new TextInputDialog(chosen.getName());
+        nameDialog.setTitle("Rename Template");
+        nameDialog.setHeaderText("Rename " + chosen.getName());
+        nameDialog.setContentText("New name:");
+
+        Optional<String> nameResult = nameDialog.showAndWait();
+        nameResult.map(String::trim).filter(s -> !s.isEmpty()).ifPresent(newName -> {
+            chosen.setName(newName);
+            templateDAO.update(chosen);
+            refreshCategories();
+            showInfo("Template renamed to " + newName + ".");
+        });
+    }
+
+    /**
+     * Deletes a template that belongs to the selected category.
+     */
+    @FXML
+    private void handleDelete() {
+        if (selectedCategory == null) return;
+
+        List<QuizTemplate> templates = templateDAO.getByCategoryId(selectedCategory.getId());
+        if (templates.isEmpty()) {
+            showWarning("No templates in " + selectedCategory.getName() + " to delete.");
+            return;
+        }
+
+        ChoiceDialog<QuizTemplate> picker = new ChoiceDialog<>(templates.getFirst(), templates);
+        picker.setTitle("Delete Template");
+        picker.setHeaderText("Select a template to delete from " + selectedCategory.getName());
+        picker.setContentText("Template:");
+
+        Optional<QuizTemplate> pickerResult = picker.showAndWait();
+        if (pickerResult.isEmpty()) return;
+
+        QuizTemplate chosen = pickerResult.get();
+
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
+                "Delete " + chosen.getName() + "? This cannot be undone.",
+                ButtonType.YES, ButtonType.CANCEL);
+        confirm.setTitle("Confirm Delete");
+        confirm.setHeaderText(null);
+
+        confirm.showAndWait().filter(b -> b == ButtonType.YES).ifPresent(b -> {
+            templateDAO.delete(chosen);
+            refreshCategories();
+            showInfo("Template " + chosen.getName() + " deleted.");
+        });
+    }
+
+    // Helper methods
+
+    /**
+     * Opens a popup to build/edit questions and answers for a template in the
+     * selected category. The popup mirrors quiz.fxml's Q&A layout but is fully
+     * interactive, backed by the QuizTemplate aggregate and persisted via the
+     * existing Question and Answer DAOs.
+     */
+    @FXML
+    private void handleEditQuestions() {
+        if (selectedCategory == null) return;
+
+        List<QuizTemplate> templates = templateDAO.getByCategoryId(selectedCategory.getId());
+        if (templates.isEmpty()) {
+            showWarning("No templates in " + selectedCategory.getName() + ". Create one first.");
+            return;
+        }
+
+        // 1. Pick a template
+        ChoiceDialog<QuizTemplate> picker = new ChoiceDialog<>(templates.getFirst(), templates);
+        picker.setTitle("Edit Questions");
+        picker.setHeaderText("Select a template to edit its questions");
+        picker.setContentText("Template:");
+        Optional<QuizTemplate> pickerResult = picker.showAndWait();
+        if (pickerResult.isEmpty()) return;
+
+        QuizTemplate template = pickerResult.get();
+
+        // 2. Load existing questions + answers into the aggregate
+        List<QuizTemplateQuestion> existingQuestions = questionDAO.getQuestionsByTemplate(template.getId());
+        for (QuizTemplateQuestion q : existingQuestions) {
+            q.setAnswers(answerDAO.getAnswersByQuestion(q.getId()));
+        }
+        template.setQuestions(existingQuestions);
+
+        // Track questions removed during this session so we can delete them on Save
+        List<QuizTemplateQuestion> removedQuestions = new ArrayList<>();
+
+        // Working mutable copy (template.getQuestions() is unmodifiable)
+        List<QuizTemplateQuestion> workingQuestions = new ArrayList<>(template.getQuestions());
+        if (workingQuestions.isEmpty()) {
+            workingQuestions.add(new QuizTemplateQuestion(template.getId(), ""));
+        }
+
+        // Dialog shell
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Edit Questions – " + template.getName());
+        dialog.setHeaderText(null);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        dialog.getDialogPane().setPrefWidth(560);
+
+        int[] currentIndex = {0};
+        final int MAX_ANSWERS = 4;
+
+        // Widgets
+        Label quizNameLabel = new Label(template.getName());
+        quizNameLabel.setFont(Font.font("System", FontWeight.BOLD, 20));
+
+        Separator titleSep = new Separator();
+
+        Label questionCounter = new Label();
+        questionCounter.setFont(Font.font("System", 12));
+        questionCounter.setTextFill(Color.web("#777777"));
+
+        TextField questionField = new TextField();
+        questionField.setPromptText("Question text…");
+        questionField.setFont(Font.font("System", 16));
+
+        TextField[] answerFields = new TextField[MAX_ANSWERS];
+        CheckBox[] correctChecks = new CheckBox[MAX_ANSWERS];
+        VBox answersBox = new VBox(8);
+
+        for (int i = 0; i < MAX_ANSWERS; i++) {
+            answerFields[i] = new TextField();
+            answerFields[i].setPromptText("Answer " + (i + 1));
+            correctChecks[i] = new CheckBox("Correct");
+            HBox row = new HBox(10, answerFields[i], correctChecks[i]);
+            row.setAlignment(Pos.CENTER_LEFT);
+            HBox.setHgrow(answerFields[i], Priority.ALWAYS);
+            answersBox.getChildren().add(row);
+        }
+
+        Button btnPrev    = new Button("◀ Prev");
+        Button btnNext    = new Button("Next ▶");
+        Button btnAddQ    = new Button("➕ Add Question");
+        Button btnRemoveQ = new Button("🗑 Remove Question");
+
+        HBox navBox = new HBox(10, btnPrev, questionCounter, btnNext, new Separator(), btnAddQ, btnRemoveQ);
+        navBox.setAlignment(Pos.CENTER_LEFT);
+
+        VBox content = new VBox(12,
+                quizNameLabel, titleSep,
+                navBox,
+                questionField,
+                new Label("Answers  (tick at least one as correct):"),
+                answersBox
+        );
+        content.setPadding(new Insets(16));
+        dialog.getDialogPane().setContent(content);
+
+        // Load and save helpers
+        Runnable saveCurrentToModel = () -> {
+            if (workingQuestions.isEmpty()) return;
+            QuizTemplateQuestion q = workingQuestions.get(currentIndex[0]);
+            q.setText(questionField.getText().trim());
+
+            List<QuizTemplateAnswer> updated = new ArrayList<>();
+            List<QuizTemplateAnswer> existing = q.getAnswers();
+            for (int i = 0; i < MAX_ANSWERS; i++) {
+                String aText = answerFields[i].getText().trim();
+                if (!aText.isEmpty()) {
+                    QuizTemplateAnswer ans = (i < existing.size())
+                            ? existing.get(i)
+                            : new QuizTemplateAnswer(q.getId(), aText, correctChecks[i].isSelected());
+                    ans.setText(aText);
+                    ans.setCorrect(correctChecks[i].isSelected());
+                    updated.add(ans);
+                }
+            }
+            q.setAnswers(updated);
+        };
+
+        Runnable loadFromModel = () -> {
+            if (workingQuestions.isEmpty()) return;
+            QuizTemplateQuestion q = workingQuestions.get(currentIndex[0]);
+            questionCounter.setText("Question " + (currentIndex[0] + 1) + " of " + workingQuestions.size());
+            questionField.setText(q.getText());
+            List<QuizTemplateAnswer> answers = q.getAnswers();
+            for (int i = 0; i < MAX_ANSWERS; i++) {
+                if (i < answers.size()) {
+                    answerFields[i].setText(answers.get(i).getText());
+                    correctChecks[i].setSelected(answers.get(i).isCorrect());
+                } else {
+                    answerFields[i].clear();
+                    correctChecks[i].setSelected(false);
+                }
+            }
+            btnPrev.setDisable(currentIndex[0] == 0);
+            btnNext.setDisable(currentIndex[0] >= workingQuestions.size() - 1);
+            btnRemoveQ.setDisable(workingQuestions.size() <= 1);
+        };
+
+        loadFromModel.run();
+
+        btnPrev.setOnAction(e  -> { saveCurrentToModel.run(); currentIndex[0]--; loadFromModel.run(); });
+        btnNext.setOnAction(e  -> { saveCurrentToModel.run(); currentIndex[0]++; loadFromModel.run(); });
+
+        btnAddQ.setOnAction(e -> {
+            saveCurrentToModel.run();
+            workingQuestions.add(new QuizTemplateQuestion(template.getId(), ""));
+            currentIndex[0] = workingQuestions.size() - 1;
+            loadFromModel.run();
+        });
+
+        btnRemoveQ.setOnAction(e -> {
+            if (workingQuestions.size() <= 1) return;
+            QuizTemplateQuestion removed = workingQuestions.remove(currentIndex[0]);
+            if (removed.getId() > 0) removedQuestions.add(removed);
+            if (currentIndex[0] >= workingQuestions.size()) currentIndex[0] = workingQuestions.size() - 1;
+            loadFromModel.run();
+        });
+
+        // Commit on OK
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isEmpty() || result.get() != ButtonType.OK) return;
+        saveCurrentToModel.run();
+
+        // Validate every question before touching the DB
+        boolean allValid = workingQuestions.stream().allMatch(q -> {
+            if (q.getText().isBlank()) return false;
+            long nonBlank = q.getAnswers().stream().filter(a -> !a.getText().isBlank()).count();
+            boolean hasCorrect = q.getAnswers().stream().anyMatch(QuizTemplateAnswer::isCorrect);
+            return nonBlank >= 2 && hasCorrect;
+        });
+        if (!allValid) {
+            showWarning("Each question needs text, at least 2 answers, and one answer marked correct.");
+            return;
+        }
+
+        // Delete removed questions (and their answers)
+        for (QuizTemplateQuestion rq : removedQuestions) {
+            for (QuizTemplateAnswer ra : answerDAO.getAnswersByQuestion(rq.getId())) {
+                answerDAO.deleteAnswer(ra);
+            }
+            questionDAO.deleteQuestion(rq);
+        }
+
+        // Persist working questions
+        for (QuizTemplateQuestion q : workingQuestions) {
+            if (q.getId() == 0) {
+                // Brand-new question
+                questionDAO.addQuestion(q);
+                for (QuizTemplateAnswer a : q.getAnswers()) {
+                    a.setQuizTemplateQuestionId(q.getId());
+                    answerDAO.addAnswer(a);
+                }
+            } else {
+                // Existing question – update text, then replace all answers
+                questionDAO.updateQuestion(q);
+                for (QuizTemplateAnswer old : answerDAO.getAnswersByQuestion(q.getId())) {
+                    answerDAO.deleteAnswer(old);
+                }
+                for (QuizTemplateAnswer a : q.getAnswers()) {
+                    a.setId(0);
+                    a.setQuizTemplateQuestionId(q.getId());
+                    answerDAO.addAnswer(a);
+                }
+            }
+        }
+
+        showInfo("Questions saved for \"" + template.getName() + "\".");
+    }
+
+    private void showInfo(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, message, ButtonType.OK);
+        alert.setHeaderText(null);
+        alert.showAndWait();
+    }
+
+    private void showWarning(String message) {
+        Alert alert = new Alert(Alert.AlertType.WARNING, message, ButtonType.OK);
+        alert.setHeaderText(null);
+        alert.showAndWait();
+    }
+}
