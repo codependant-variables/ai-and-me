@@ -8,6 +8,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <BorderPane prefHeight="600" prefWidth="800" style="-fx-background-color: AEAEAE;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codependentvariables.aiandme.controller.QuizLibraryController">
 
@@ -21,16 +22,24 @@
     <!-- CENTER: Dynamic Category Boxes -->
     <center>
         <VBox prefHeight="349.0" prefWidth="600.0" spacing="10" style="-fx-padding: 20;" stylesheets="@stylesheet.css">
-            <HBox alignment="CENTER_RIGHT" prefHeight="20.0" prefWidth="760.0">
+            <HBox alignment="CENTER" prefHeight="20.0" prefWidth="760.0">
                 <children>
-                    <Label prefHeight="20.0" prefWidth="66.0" style="-fx-font-weight: bold; -fx-font-size: 14px;" text="Options" />
-                    <Button fx:id="btnCreate" maxWidth="Infinity" onAction="#handleCreate" prefHeight="20.0" prefWidth="105.0" style="-fx-background-color: #4caf50; -fx-text-fill: Black; -fx-font-size: 13px; -fx-padding: 10;" text="Create" />
-               <Pane prefHeight="52.0" prefWidth="15.0" />
-                    <Button fx:id="btnModify" maxWidth="Infinity" onAction="#handleModify" prefHeight="20.0" prefWidth="105.0" style="-fx-background-color: #ff9800; -fx-text-fill: Black; -fx-font-size: 13px; -fx-padding: 10;" text="Modify" />
-               <Pane layoutX="316.0" layoutY="10.0" prefHeight="52.0" prefWidth="15.0" />
-                    <Button fx:id="btnDelete" maxWidth="Infinity" onAction="#handleDelete" prefHeight="20.0" prefWidth="105.0" style="-fx-background-color: #f44336; -fx-text-fill: Black; -fx-font-size: 13px; -fx-padding: 10;" text="Delete" />
-               <Pane layoutX="429.0" layoutY="10.0" prefHeight="52.0" prefWidth="15.0" />
-                    <Button fx:id="btnEditQuestions" maxWidth="Infinity" onAction="#handleEditQuestions" prefHeight="20.0" prefWidth="105.0" style="-fx-background-color: #9c27b0; -fx-text-fill: White; -fx-font-size: 13px; -fx-padding: 10;" text="Edit Questions" />
+               <Label layoutX="400.0" layoutY="20.0" prefHeight="20.0" prefWidth="78.0" style="-fx-font-weight: bold; -fx-font-size: 14px;" text="Participate" />
+               <Button fx:id="btnCreate1" maxWidth="Infinity" onAction="#handleCreate" prefHeight="39.0" prefWidth="85.0" style="-fx-background-color: #4caf50; -fx-text-fill: Black; -fx-font-size: 13px; -fx-padding: 10;" text="Start Quiz" />
+               <Pane layoutX="632.0" layoutY="10.0" prefHeight="39.0" prefWidth="5.0" />
+               <Button fx:id="btnModify1" maxWidth="Infinity" onAction="#handleModify" prefHeight="39.0" prefWidth="120.0" style="-fx-background-color: #ff9800; -fx-text-fill: Black; -fx-font-size: 13px; -fx-padding: 10;" text="Reset Attempt" />
+               <Pane prefHeight="39.0" prefWidth="122.0" />
+                    <Label prefHeight="20.0" prefWidth="60.0" style="-fx-font-weight: bold; -fx-font-size: 14px;" text="Options" />
+                    <Button fx:id="btnCreate" maxWidth="Infinity" onAction="#handleCreate" prefHeight="39.0" prefWidth="65.0" style="-fx-background-color: #4caf50; -fx-text-fill: Black; -fx-font-size: 13px; -fx-padding: 10;" text="Create" />
+               <Pane prefHeight="39.0" prefWidth="5.0" />
+                    <Button fx:id="btnModify" maxWidth="Infinity" onAction="#handleModify" prefHeight="39.0" prefWidth="65.0" style="-fx-background-color: #ff9800; -fx-text-fill: Black; -fx-font-size: 13px; -fx-padding: 10;" text="Modify" />
+               <Pane layoutX="316.0" layoutY="10.0" prefHeight="39.0" prefWidth="5.0" />
+                    <Button fx:id="btnDelete" maxWidth="Infinity" onAction="#handleDelete" prefHeight="39.0" prefWidth="60.0" style="-fx-background-color: #f44336; -fx-text-fill: Black; -fx-font-size: 13px; -fx-padding: 10;" text="Delete" />
+               <Pane layoutX="429.0" layoutY="10.0" prefHeight="39.0" prefWidth="5.0" />
+                    <Button fx:id="btnEditQuestions" maxWidth="Infinity" onAction="#handleEditQuestions" prefHeight="20.0" prefWidth="105.0" style="-fx-background-color: #9c27b0; -fx-text-fill: White; -fx-font-size: 13px; -fx-padding: 10;" text="Edit Questions">
+                  <font>
+                     <Font size="7.0" />
+                  </font></Button>
                 </children>
             </HBox>
             <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Quizzes" />
