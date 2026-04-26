@@ -81,7 +81,11 @@ public class ProfileController {
 
         boolean hasMfa = currentUser.getTotpSecret() != null;
         mfaCheckbox.setSelected(hasMfa);
-        mfaButton.setText(hasMfa ? "Remove MFA" : "Setup MFA");
+        mfaButton.textProperty().bind(
+                Bindings.when(mfaCheckbox.selectedProperty())
+                        .then("Remove MFA")
+                        .otherwise("Setup MFA")
+        );
     }
 
     @FXML
@@ -155,7 +159,16 @@ public class ProfileController {
 
     @FXML
     private void clickMfa() {
-        throw new RuntimeException("Click MFA not implemented.");
+        if (currentUser.getTotpSecret() == null) {
+            Router.navigateApp(View.SETUP_MFA);
+            return;
+        }
+
+        // TODO: modal dialogue "Are you sure?"
+        currentUser.setTotpSecret(null);
+        userService.updateCurrentUser();
+        mfaCheckbox.setSelected(false);
+        Toast.addMessage("Success", "MFA removed.", ToastMessageType.INFORMATION);
     }
 
     @FXML

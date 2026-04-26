@@ -41,10 +41,6 @@ public class UserService {
             return LoginResult.INVALID;
         }
 
-        if (user.getTotpSecret() != null) {
-            return LoginResult.REQUIRES_TOTP;
-        }
-
         login(user);
         return LoginResult.VALID;
     }
@@ -53,8 +49,12 @@ public class UserService {
      * Attempt user login with password and TOTP.
      */
     public LoginResult attemptLogin(User user, String password, String totp) {
+        if (user.getTotpSecret() != null && totp.isEmpty()) {
+            return LoginResult.REQUIRES_TOTP;
+        }
+
         LoginResult loginResult = attemptLogin(user, password);
-        if (loginResult != LoginResult.REQUIRES_TOTP || totp.isEmpty()) {
+        if (user.getTotpSecret() == null) {
             return loginResult;
         }
 
@@ -84,7 +84,6 @@ public class UserService {
 
     private void login(User user) {
         appState.setCurrentUser(user);
-        Toast.addMessage("Logged In", String.format("Welcome, %s!", user.getName()), ToastMessageType.INFORMATION);
     }
 
     public void logout() {

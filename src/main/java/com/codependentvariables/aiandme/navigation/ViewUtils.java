@@ -45,6 +45,7 @@ public final class ViewUtils {
             case View.PROFILE -> "profile.fxml";
             case View.QUIZ_LIBRARY -> "quiz-library.fxml";
             case View.SETTINGS -> "settings.fxml";
+            case View.SETUP_MFA -> "setup-mfa.fxml";
             case View.SIGNUP -> "signup.fxml";
             default -> throw new RuntimeException("View translation not implemented: " + view.toString());
         };

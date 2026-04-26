@@ -101,17 +101,17 @@ public class AuthService {
     private final static int MAX_STEP_DRIFT = 2;
     public final static int TOTP_SIZE = 6;
     private final static String TOTP_ALGORITHM = "SHA512";
-    private final static String TOTP_LABEL = "AI & Me";
+    private final static String TOTP_LABEL = "AI and Me";
     private final Mac hmac;
 
     public String createTotpSecret() {
-        byte[] bytes = getRandomBytes(64);
+        byte[] bytes = getRandomBytes(16);
         // TODO: encrypt?
-        return base32.encodeAsString(bytes);
+        return base32.encodeAsString(bytes).replace("=", "");
     }
 
     public String createTotpUri(String totpSecret, String userEmail) {
-        return String.format("otpauth://totp/%s:%s/?secret=%s&algorithm=%s&digits=%s&counter=%d&issuer=%s", TOTP_LABEL, userEmail, totpSecret, TOTP_ALGORITHM, TOTP_SIZE, STEP_SECONDS, TOTP_LABEL);
+        return String.format("otpauth://totp/%s:%s?secret=%s&algorithm=%s&digits=%s&period=%d&issuer=%s", TOTP_LABEL, userEmail, totpSecret, TOTP_ALGORITHM, TOTP_SIZE, STEP_SECONDS, TOTP_LABEL);
     }
 
     /**
@@ -162,8 +162,10 @@ public class AuthService {
     }
 
     public boolean compareTotp(User user, String totp) {
-        String totpSecret = user.getTotpSecret();
+        return compareTotp(user.getTotpSecret(), totp);
+    }
 
+    public boolean compareTotp(String totpSecret, String totp) {
         String currentTotp = getTotp(totpSecret);
         if (Objects.equals(currentTotp, totp)) {
             return true;

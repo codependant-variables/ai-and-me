@@ -69,6 +69,7 @@ public class LayoutController {
         // TODO: implement modal dialogue as "Are you sure?"
         userService.logout();
         setButtonVisibility();
+        Router.navigateLayout(View.HOME); // In case of seeing sensitive data
     }
 
     @FXML

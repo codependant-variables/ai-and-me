@@ -22,11 +22,12 @@ public class User {
         this.salt = salt;
     }
 
-    public User(String name, String email, String password, String salt, boolean isDarkMode, boolean isVertical) {
+    public User(String name, String email, String password, String salt, String totpSecret, boolean isDarkMode, boolean isVertical) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.salt = salt;
+        this.totpSecret = totpSecret;
         this.isDarkMode = isDarkMode;
         this.isVertical = isVertical;
         this.preferredCategories = new ArrayList<>();

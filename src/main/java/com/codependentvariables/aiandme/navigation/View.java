@@ -10,5 +10,6 @@ public enum View {
     PROFILE,
     QUIZ_LIBRARY,
     SETTINGS,
+    SETUP_MFA,
     SIGNUP
 }

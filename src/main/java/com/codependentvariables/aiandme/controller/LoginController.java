@@ -16,7 +16,6 @@ import com.codependentvariables.aiandme.validation.ValidationEntry;
 import com.codependentvariables.aiandme.validation.validators.*;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -55,6 +54,10 @@ public class LoginController {
             "",
             change -> {
                 String newText = change.getControlNewText(); // Proposed new text
+                if (newText.length() > AuthService.TOTP_SIZE) {
+                    return null;
+                }
+
                 for (char c : newText.toCharArray()) {
                     if (!Character.isDigit(c)) {
                         return null; // Reject change
@@ -141,6 +144,7 @@ public class LoginController {
 
         LoginResult loginResult = userService.attemptLogin(user, this.passwordField.getText(), this.otpField.getText());
         if (loginResult == LoginResult.VALID) {
+            Toast.addMessage("Logged In", String.format("Welcome, %s!", user.getName()), ToastMessageType.INFORMATION);
             Router.navigateLayout(View.HOME);
         } else if (loginResult == LoginResult.REQUIRES_TOTP) {
             this.requireOtp.setValue(true);
@@ -148,6 +152,7 @@ public class LoginController {
         } else {
             Toast.addMessage("Error", "Incorrect password.", ToastMessageType.ERROR);
             this.requireOtp.setValue(false);
+            this.otpField.setText("");
         }
 
         this.loggingIn.setValue(false);
