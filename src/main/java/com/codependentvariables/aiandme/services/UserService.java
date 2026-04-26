@@ -10,10 +10,10 @@ import com.codependentvariables.aiandme.services.AuthService.HashResult;
 
 public class UserService {
     private static UserService instance;
-    public static AuthService authService;
-    private final IUserDAO userDAO;
 
+    private final IUserDAO userDAO;
     private static final AppState appState = AppState.getInstance();
+    private static final AuthService authService = AuthService.getInstance();
 
     private UserService() {
         this(new SqliteUserDAO());

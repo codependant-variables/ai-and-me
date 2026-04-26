@@ -26,7 +26,9 @@ public class LoginController {
     @FXML
     private PasswordField passwordField;
     @FXML
-    private TextField passwordFieldVisible;
+    private TextField passwordTextField;
+    @FXML
+    private Button togglePasswordVisibleButton;
     @FXML
     private Label otpLabel;
     @FXML
@@ -63,28 +65,35 @@ public class LoginController {
     private void initialize() {
         boolean isDarkMode = AppState.getInstance().getIsDarkMode();
         viewPasswordIcon.setFill(isDarkMode ? Color.WHITE : Color.BLACK);
-        passwordField.textProperty().bindBidirectional(passwordFieldVisible.textProperty());
-        passwordFieldVisible.setOnAction(onMousePressed -> showPassword());
 
         emailField.disableProperty().bind(this.loggingIn.or(this.requireOtp));
+
+        passwordField.textProperty().bindBidirectional(passwordTextField.textProperty());
         passwordField.disableProperty().bind(this.loggingIn.or(this.requireOtp));
-        passwordFieldVisible.disableProperty().bind(this.loggingIn.or(this.requireOtp));
-        loginButton.disableProperty().bind(this.loggingIn);
+        passwordField.managedProperty().bind(passwordField.visibleProperty());
+        passwordTextField.disableProperty().bind(this.loggingIn.or(this.requireOtp));
+        passwordTextField.managedProperty().bind(passwordTextField.visibleProperty());
+        togglePasswordVisibleButton.disableProperty().bind(this.loggingIn.or(this.requireOtp));
 
         otpLabel.visibleProperty().bind(this.requireOtp);
         otpLabel.managedProperty().bind(otpLabel.visibleProperty());
         otpField.visibleProperty().bind(this.requireOtp);
         otpField.managedProperty().bind(otpField.visibleProperty());
         otpField.setTextFormatter(totpTextFormatter);
+
+        loginButton.disableProperty().bind(this.loggingIn);
     }
+
     @FXML
-    private void showPassword() {
-        boolean PasswordVisible = passwordField.isVisible();
-        viewPasswordIcon.setContent(PasswordVisible ? closedEyeSVG : openEyeSVG);
-        passwordField.setVisible(!PasswordVisible);
-        passwordField.setManaged(!PasswordVisible);
-        passwordFieldVisible.setVisible(PasswordVisible);
-        passwordFieldVisible.setManaged(PasswordVisible);
+    private void togglePasswordVisible() {
+        boolean isPasswordVisible = passwordTextField.isVisible();
+        setPasswordVisible(!isPasswordVisible);
+    }
+
+    private void setPasswordVisible(boolean value) {
+        viewPasswordIcon.setContent(value ? closedEyeSVG : openEyeSVG);
+        passwordField.setVisible(!value);
+        passwordTextField.setVisible(value);
     }
 
     private final FormValidator loginValidator = new FormValidator(
@@ -107,6 +116,7 @@ public class LoginController {
 
     @FXML
     private void onLogin() {
+        setPasswordVisible(false);
         this.loggingIn.setValue(true);
 
         if (!loginValidator.validate()) {

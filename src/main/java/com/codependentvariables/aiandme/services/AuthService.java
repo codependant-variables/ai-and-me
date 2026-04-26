@@ -8,7 +8,6 @@ import javax.crypto.Mac;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.lang.reflect.UndeclaredThrowableException;
 import java.nio.ByteBuffer;
 import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
@@ -23,15 +22,17 @@ public class AuthService {
     private final SecureRandom random = new SecureRandom();
     private final Base32 base32 = new Base32();
 
-    private AuthService() throws NoSuchAlgorithmException {}
+    private AuthService() {
+        try {
+            this.hmac = Mac.getInstance("Hmac" + TOTP_ALGORITHM);
+        } catch (NoSuchAlgorithmException ex) {
+            throw new RuntimeException("Could not find HMAC algorithm.", ex);
+        }
+    }
 
     public static AuthService getInstance() {
         if (instance == null) {
-            try {
-                instance = new AuthService();
-            } catch (NoSuchAlgorithmException ex) {
-                throw new RuntimeException("HMAC algorithm not found.", ex);
-            }
+            instance = new AuthService();
         }
         return instance;
     }
@@ -100,8 +101,8 @@ public class AuthService {
     private final static int MAX_STEP_DRIFT = 2;
     public final static int TOTP_SIZE = 6;
     private final static String TOTP_ALGORITHM = "SHA512";
-    private final Mac hmac = Mac.getInstance("Hmac" + TOTP_ALGORITHM);
     private final static String TOTP_LABEL = "AI & Me";
+    private final Mac hmac;
 
     public String createTotpSecret() {
         byte[] bytes = getRandomBytes(64);

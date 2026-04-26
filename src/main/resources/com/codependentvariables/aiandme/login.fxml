@@ -15,7 +15,7 @@
 <?import javafx.scene.shape.SVGPath?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="768.0" minWidth="1024.0" prefHeight="768.0" prefWidth="1024.0" style="-fx-background-image: logo.png;" styleClass="background-AnchorPane" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codependentvariables.aiandme.controller.LoginController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="768.0" minWidth="1024.0" prefHeight="768.0" prefWidth="1024.0" styleClass="background-AnchorPane" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codependentvariables.aiandme.controller.LoginController">
    <StackPane minHeight="768.0" minWidth="1024.0" styleClass="background-StackPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <children>
          <ImageView fitHeight="768.0" fitWidth="1024.0" opacity="0.5" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_CENTER">
@@ -40,7 +40,7 @@
                </Pane>
                <HBox alignment="TOP_CENTER" prefHeight="10.0" prefWidth="200.0">
                   <children>
-                        <Label text="Login" textAlignment="CENTER">
+                        <Label styleClass="title" text="Login" textAlignment="CENTER">
                         <HBox.margin>
                            <Insets bottom="5.0" />
                         </HBox.margin>
@@ -73,10 +73,10 @@
                         </padding>
                      </Label>
                          <PasswordField fx:id="passwordField" maxWidth="250.0" prefHeight="30.0" prefWidth="250.0" />
-                         <TextField fx:id="passwordFieldVisible" managed="false" visible="false" />
+                         <TextField fx:id="passwordTextField" maxWidth="250.0" prefHeight="30.0" prefWidth="250.0" visible="false" />
                      <Pane prefHeight="200.0" prefWidth="90.0">
                         <children>
-                               <Button minWidth="-Infinity" onMousePressed="#showPassword" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: transparent;">
+                               <Button fx:id="togglePasswordVisibleButton" minWidth="-Infinity" onMousePressed="#togglePasswordVisible" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: transparent;">
                                    <graphic>
                                        <SVGPath fx:id="viewPasswordIcon" content="M21.821 12.43c-.083-.119-2.062-2.944-4.793-4.875-1.416-1.003-3.202-1.555-5.028-1.555-1.825 0-3.611.552-5.03 1.555-2.731 1.931-4.708 4.756-4.791 4.875-.238.343-.238.798 0 1.141.083.119 2.06 2.944 4.791 4.875 1.419 1.002 3.205 1.554 5.03 1.554 1.826 0 3.612-.552 5.028-1.555 2.731-1.931 4.71-4.756 4.793-4.875.239-.342.239-.798 0-1.14zm-9.821 4.07c-1.934 0-3.5-1.57-3.5-3.5 0-1.934 1.566-3.5 3.5-3.5 1.93 0 3.5 1.566 3.5 3.5 0 1.93-1.57 3.5-3.5 3.5zM14 13c0 1.102-.898 2-2 2-1.105 0-2-.898-2-2 0-1.105.895-2 2-2 1.102 0 2 .895 2 2z" />
                                    </graphic>
