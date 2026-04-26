@@ -4,6 +4,7 @@ module com.codependentvariables.aiandme {
     requires java.sql;
     requires jdk.compiler;
     requires atlantafx.base;
+    requires org.apache.commons.codec;
 
 
     opens com.codependentvariables.aiandme to javafx.fxml;

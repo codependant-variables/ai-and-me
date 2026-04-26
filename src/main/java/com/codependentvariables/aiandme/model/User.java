@@ -1,6 +1,6 @@
 package com.codependentvariables.aiandme.model;
 
-import com.codependentvariables.aiandme.services.UserService;
+import com.codependentvariables.aiandme.services.AuthService;
 
 import java.util.ArrayList;
 
@@ -10,6 +10,7 @@ public class User {
     private String email;
     private String password;
     private String salt;
+    private String totpSecret;
     private boolean isDarkMode = false;
     private boolean isVertical = false;
     private ArrayList<Category> preferredCategories;
@@ -60,14 +61,22 @@ public class User {
     }
 
     public void setPassword(String password) {
-        UserService userService = UserService.getInstance();
-        UserService.HashResult hashResult = userService.hash(password);
+        AuthService authService = AuthService.getInstance();
+        AuthService.HashResult hashResult = authService.hash(password);
         this.password = hashResult.hash();
         this.salt = hashResult.salt();
     }
 
     public String getSalt() {
         return salt;
+    }
+
+    public String getTotpSecret() {
+        return totpSecret;
+    }
+
+    public void setTotpSecret(String totpSecret) {
+        this.totpSecret = totpSecret;
     }
 
     public boolean getIsDarkMode() {

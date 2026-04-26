@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class AuthServiceTest {
-    public final AuthService authService = new AuthService();
+    public final AuthService authService = AuthService.getInstance();
 
     public final String password = "password1";
     public final String hash = "Zl3QG3XY5/Gsus8Ec4WTi6jMcM7EkrCGCqBMgwwYUzg=";
@@ -39,8 +39,8 @@ public class AuthServiceTest {
 
     @Test
     public void get_totp() {
-        String totpSeed = authService.createTotpSecret();
-        String totp = authService.getTotp(totpSeed);
+        String totpSecret = authService.createTotpSecret();
+        String totp = authService.getTotp(totpSecret);
         assertNotNull(totp);
         assertEquals(6, totp.length());
         for (char c : totp.toCharArray()) {
@@ -62,6 +62,6 @@ public class AuthServiceTest {
         user.setTotpSecret(totpSecret);
         String totp = authService.getTotp(user.getTotpSecret());
         boolean totpMatches = authService.compareTotp(user, totp);
-        assertFalse(totpMatches);
+        assertTrue(totpMatches);
     }
 }

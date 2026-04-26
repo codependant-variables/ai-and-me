@@ -88,9 +88,22 @@
                      <Insets bottom="5.0" />
                   </VBox.margin>
                </HBox>
+                <HBox alignment="TOP_CENTER" prefHeight="35.0" prefWidth="200.0">
+                    <children>
+                        <Label fx:id="otpLabel" alignment="CENTER_RIGHT" minWidth="65.0" prefHeight="30.0" prefWidth="90.0" text="One-time pasword:" textAlignment="RIGHT">
+                            <padding>
+                                <Insets right="10.0" />
+                            </padding>
+                        </Label>
+                        <TextField fx:id="otpField" visible="false" />
+                    </children>
+                    <VBox.margin>
+                        <Insets bottom="5.0" />
+                    </VBox.margin>
+                </HBox>
                <HBox alignment="TOP_CENTER" prefHeight="35.0" prefWidth="200.0">
                   <children>
-                         <Button maxWidth="250.0" onAction="#onLogin" prefHeight="30.0" prefWidth="250.0" style="-fx-background-color: #8cc978; -fx-text-fill: #ffffff;" text="Login">
+                         <Button fx:id="loginButton" maxWidth="250.0" onAction="#onLogin" prefHeight="30.0" prefWidth="250.0" style="-fx-background-color: #8cc978; -fx-text-fill: #ffffff;" text="Login">
                         <font>
                            <Font name="System Bold" size="13.0" />
                         </font>
