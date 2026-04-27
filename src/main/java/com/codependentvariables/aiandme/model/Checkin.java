@@ -10,8 +10,7 @@ public class Checkin {
     private float aiDependence;
     private LocalDateTime completedAt;
 
-    public Checkin(int userId, float aiUse, float aiHappiness, float aiDependence, LocalDateTime completedAt) {
-        this.userId = userId;
+    public Checkin(float aiUse, float aiHappiness, float aiDependence, LocalDateTime completedAt) {
         this.aiUse = aiUse;
         this.aiHappiness = aiHappiness;
         this.aiDependence = aiDependence;
@@ -28,6 +27,10 @@ public class Checkin {
 
     public int getUserId() {
         return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public float getAiUse() {

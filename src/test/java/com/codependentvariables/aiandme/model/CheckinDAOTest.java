@@ -4,6 +4,8 @@ import com.codependentvariables.aiandme.model.dao.ICheckinDAO;
 import com.codependentvariables.aiandme.model.mock.MockCheckinDAO;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -12,8 +14,16 @@ public class CheckinDAOTest {
 
     @Test
     public void get() {
-        Checkin checkin = checkinDAO.get(1);
-        assertNotNull(checkin);
-        assertEquals(6.4f, checkin.getAiUse());
+        Checkin checkin = new Checkin(6.4f, 5.0f, 5.0f, LocalDateTime.now());
+        checkin.setId(1);
+        checkin.setUserId(1);
+
+        checkinDAO.add(checkin);
+
+        // I've read checkin so much it's starting to look like chicken
+        Checkin result = checkinDAO.get(1);
+
+        assertNotNull(result);
+        assertEquals(6.4f, result.getAiUse());
     }
 }
