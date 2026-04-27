@@ -11,16 +11,6 @@ public class MockCheckinDAO implements ICheckinDAO {
     private final List<Checkin> checkins = new ArrayList<>();
 
     public MockCheckinDAO() {
-        Checkin checkin = new Checkin(
-                6.4f,
-                5.0f,
-                5.0f,
-                LocalDateTime.parse("2026-04-14T17:28:00")
-        );
-        checkin.setId(1);
-        checkin.setUserId(1);
-
-        checkins.add(checkin);
     }
     @Override
     public void add(Checkin checkin) {
