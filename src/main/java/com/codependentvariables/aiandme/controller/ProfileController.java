@@ -24,6 +24,7 @@ public class ProfileController {
     private final UserService userService = UserService.getInstance();
 
     private User currentUser;
+    private boolean accDeletionConfirmed;
 
     @FXML
     public TextField nameField;
@@ -41,6 +42,8 @@ public class ProfileController {
     public CheckBox mfaCheckbox;
     @FXML
     public Button mfaButton;
+    @FXML
+    public Button deleteAccButton;
 
     private final ValidationEntry<String> nameValidator = new ValidationEntry<>(
             () -> this.nameField.getText(),
@@ -63,6 +66,7 @@ public class ProfileController {
         if (currentUser == null) {
             Router.navigateLayout(View.HOME);
         }
+        this.accDeletionConfirmed = false;
 
         nameField.setText(currentUser.getName());
         nameButton.textProperty().bind(
@@ -183,6 +187,15 @@ public class ProfileController {
 
     @FXML
     private void deleteUser() {
-        throw new RuntimeException("Delete user not implemented.");
+        if (!accDeletionConfirmed) {
+            deleteAccButton.setText("Are you sure?");
+            accDeletionConfirmed = true;
+        }
+        else {
+            // FIXME: Navbar shows user as still logged in after account deletion.
+            // Need to find good way to run LayoutController.SetButtonVisibility()
+            Router.navigateLayout(View.HOME);
+            userService.deleteUser(currentUser);
+        }
     }
 }
