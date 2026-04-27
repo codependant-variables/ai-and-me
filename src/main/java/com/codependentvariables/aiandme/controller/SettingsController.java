@@ -2,6 +2,7 @@ package com.codependentvariables.aiandme.controller;
 
 import com.codependentvariables.aiandme.Svg;
 import com.codependentvariables.aiandme.navigation.Router;
+import com.codependentvariables.aiandme.navigation.View;
 import com.codependentvariables.aiandme.services.UserService;
 import com.codependentvariables.aiandme.state.AppState;
 import javafx.fxml.FXML;
@@ -44,5 +45,11 @@ public class SettingsController {
     @FXML
     public void navigateBack() {
         Router.navigateBack();
+    }
+
+    @FXML
+    public void deleteAccount() {
+        userService.deleteUser(appState.getCurrentUser());
+        Router.navigateLayout(View.HOME);
     }
 }
