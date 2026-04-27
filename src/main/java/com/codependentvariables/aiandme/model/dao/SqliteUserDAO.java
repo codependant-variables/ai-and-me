@@ -16,7 +16,6 @@ public class SqliteUserDAO extends BaseSqliteDAO implements IUserDAO, IDatabaseE
                 totp_secret CHAR(30),
                 is_dark_mode BIT NOT NULL DEFAULT FALSE,
                 is_vertical BIT NOT NULL DEFAULT FALSE
-                ON DELETE CASCADE
             );
         """;
 

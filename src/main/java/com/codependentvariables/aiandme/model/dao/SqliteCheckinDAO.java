@@ -15,7 +15,6 @@ public class SqliteCheckinDAO extends BaseSqliteDAO implements ICheckinDAO, IDat
                 ai_happiness decimal NOT NULL,
                 ai_dependency decimal NOT NULL,
                 completed_at datetime NOT NULL
-                ON DELETE CASCADE
             );
         """;
 
