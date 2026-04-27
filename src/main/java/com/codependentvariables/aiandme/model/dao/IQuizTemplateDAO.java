@@ -42,5 +42,12 @@ public interface IQuizTemplateDAO {
      * @return A list of quiz templates belonging to the given category.
      */
     List<QuizTemplate> getByCategoryId(int categoryId);
+
+    /**
+     * Retrieves all quiz templates created by a given user.
+     * @param userId The user id (foreign key) to filter by.
+     * @return A list of quiz templates belonging to the given user.
+     */
+    List<QuizTemplate> getByUserId(int userId);
 }
 
