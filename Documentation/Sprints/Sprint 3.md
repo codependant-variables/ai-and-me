@@ -1,13 +1,11 @@
 Derived from Ai&Me Project Management page [here](https://github.com/orgs/codependant-variables/projects/3) 
-
+By Jonte Te Moni
 # Table of contents
 - [[#Abstract]]
 - [[#Sprint 1]]
 	- [[#Objectives]]
 		- [[#Epic 1 ==Presentation related content==]]
 		- [[#Epic 2 ==User Experience, and General Functionality==]]
-		- [[#Epic 3 ==Account Lifecycle Management==]]
-		- [[#Epic 4 ==Title==]]
 - [[#What I NEED from the team today/sunday]]
 - [[#Stories that weren't considered yet.]]
 - [[#Housekeeping]]
@@ -22,30 +20,37 @@ Recommendations for this plan include:
 ## Sprint 3
 
 ### Objectives:
-Epic 1 and 2 will focus both on Presentation context and What's outstanding from last sprint.
-
-Epic 3 and 4 will focus on new stuff if necessary.
-
+Epic 1 and will focus on Presentation context and What's outstanding from last sprint.
+Epic 2 will focus on User experience related tasks and general functionality.
 #### Epic 1: ==Presentation related content==
 *Reason*
 - Assures coupling and cohesion in preparation for the presentation friday.
+- Tests are a Mandate for the presentation.
 
-| Issue # | User Story                                                                                     | Reason                                                                                                              | Status | Carryover |
-| ------- | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------ | --------- |
-| 107     | [View Past Quiz Attempts](https://github.com/codependant-variables/ai-and-me/issues/107)       | Users/Guests must be able to undertake a quiz.                                                                      | 🏎️    | Yes       |
-| 55      | [Profile Deletion](https://github.com/codependant-variables/ai-and-me/issues/55)               | User may delete their profile along with all their data.                                                            | 🏎️    | Yes       |
-| 58      | [Daily Quizzes](https://github.com/codependant-variables/ai-and-me/issues/58)                  | Table and functionality for quizzes                                                                                 | 🏎️    | Yes       |
-| 115     | [Quiz Creation](https://github.com/codependant-variables/ai-and-me/issues/115)                 | Creation of a Template using UI and edge functionality                                                              | 🏎️    | Yes       |
-| 40      | [Quick Access](https://github.com/codependant-variables/ai-and-me/issues/40)                   | Reduces friction for returning users                                                                                | 🏎️    | Yes       |
-| 43      | [User Dashboard](https://github.com/codependant-variables/ai-and-me/issues/43)                 | The "home base" after login                                                                                         | 🏎️    | Yes       |
-| 69      | [Skill Practice Recommendations](https://github.com/codependant-variables/ai-and-me/issues/69) | Implement an algorithm that recommends quizzes                                                                      | 🏎️    | Yes       |
-| 56      | [Setting rollback](https://github.com/codependant-variables/ai-and-me/issues/56)               | Reset to default settings                                                                                           | 🏎️    | Yes       |
-| 71      | [Insight Cards](https://github.com/codependant-variables/ai-and-me/issues/71)                  | news/useful info about subject matter.                                                                              | 🏎️    | Yes       |
-| 107     | [QuizAttempts](https://github.com/codependant-variables/ai-and-me/issues/107)                  | Uplifted with [View past quiz attempts](https://github.com/codependant-variables/ai-and-me/issues/107)              | 🏎️    | Yes       |
-| 187     | Blank Profile page?                                                                            | Profile settings (Very BASIC) Uplifted with [Profile](https://github.com/codependant-variables/ai-and-me/issues/45) | 🏎️    |           |
-| 148     | Blank Settings page?                                                                           | App settings [Settings](https://github.com/codependant-variables/ai-and-me/issues/60)                               | 🏎️    |           |
-|         | Tests                                                                                          |                                                                                                                     |        |           |
-|         | Services                                                                                       |                                                                                                                     |        |           |
+| Issue # | User Story/*Tasks*                                                                                                   | Reason                                                                                                       | Status | Carryover |
+| ------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------ | --------- |
+| 107     | [View Past Quiz Attempts](https://github.com/codependant-variables/ai-and-me/issues/107)                             | Users/Guests must be able to undertake a quiz.                                                               | 🏎️    | Yes       |
+| 192     | TDD - [Check In Service and Unit Test](https://github.com/codependant-variables/ai-and-me/issues/192)                | **Add TDD for this.** See [183](https://github.com/codependant-variables/ai-and-me/issues/183) for more info | 🏎️    | No        |
+| 55      | [Profile Deletion](https://github.com/codependant-variables/ai-and-me/issues/55)                                     | User may delete their profile along with all their data.                                                     | 🏎️    | Yes       |
+| 196     | TDD - [Implement Tests for profile deletion](https://github.com/codependant-variables/ai-and-me/issues/196)          | **Add TDD for this.** See ^ for more info                                                                    | 🏎️    | No        |
+| 198     | [User Data Deletion](https://github.com/codependant-variables/ai-and-me/issues/198)                                  | **Add TDD for this.** See ^ for more info                                                                    | 🏎️    | No        |
+| 58      | [Daily Quizzes](https://github.com/codependant-variables/ai-and-me/issues/58)                                        | Table and functionality for quizzes                                                                          | 🏎️    | Yes       |
+| 193     | TDD - [Unit Test - GUI Controlers](https://github.com/codependant-variables/ai-and-me/issues/193)                    | **Add TDD for this.** See [183](https://github.com/codependant-variables/ai-and-me/issues/183) for more info | 🏎️    | No        |
+| 115     | [Quiz Creation](https://github.com/codependant-variables/ai-and-me/issues/115)                                       | Creation of a Template using UI and edge functionality                                                       | 🏎️    | Yes       |
+| 185     | TDD - [Implement Unit Testing for Quiz Library](https://github.com/codependant-variables/ai-and-me/issues/185)       | **Add TDD for this.** See [183](https://github.com/codependant-variables/ai-and-me/issues/183) for more info | 🏎️    | No        |
+| 195     | [Refactor Tests in QuizTemplates](https://github.com/codependant-variables/ai-and-me/issues/195)                     | **Fix TDD for this.** See [183](https://github.com/codependant-variables/ai-and-me/issues/183) for more info | 🏎️    | No        |
+| 40      | [Quick Access](https://github.com/codependant-variables/ai-and-me/issues/40)                                         | Reduces friction for returning users                                                                         | 🏎️    | Yes       |
+| 200     | TDD - [Add necessary tests for Attempt/QuizTemplates](https://github.com/codependant-variables/ai-and-me/issues/200) | **Add TDD for this.** See [183](https://github.com/codependant-variables/ai-and-me/issues/183) for more info | 🏎️    | No        |
+| 43      | [User Dashboard](https://github.com/codependant-variables/ai-and-me/issues/43)                                       | The "home base" after login                                                                                  | 🏎️    | Yes       |
+| 69      | [Skill Practice Recommendations](https://github.com/codependant-variables/ai-and-me/issues/69)                       | Implement an algorithm that recommends quizzes                                                               | 🏎️    | Yes       |
+| 56      | [Setting rollback](https://github.com/codependant-variables/ai-and-me/issues/56)                                     | Reset to default settings                                                                                    | 🏎️    | Yes       |
+| 71      | [Insight Cards](https://github.com/codependant-variables/ai-and-me/issues/71)                                        | news/useful info about subject matter.                                                                       | 🏎️    | Yes       |
+| 107     | [QuizAttempts](https://github.com/codependant-variables/ai-and-me/issues/107)                                        | Uplifted with [View past quiz attempts](https://github.com/codependant-variables/ai-and-me/issues/107)       | 🏎️    | Yes       |
+| 60      | [Settings Menu](https://github.com/codependant-variables/ai-and-me/issues/60)                                        | Requires styling                                                                                             | 🏎️    | Yes       |
+| 148     | Settings page?                                                                                                       | Uplifted [Settings](https://github.com/codependant-variables/ai-and-me/issues/60)                            | 🏎️    | No        |
+| 186     | [Implement a Blank/Mock Puzzle Page](https://github.com/codependant-variables/ai-and-me/issues/186)                  | Test Puzzle Page                                                                                             | 🏎️    | No        |
+| 187     | Blank Profile page                                                                                                   | Done...                                                                                                      | ✅      | No        |
+
 
 #### Epic 2: ==User Experience, and General Functionality==
 *Reason*
@@ -55,9 +60,7 @@ Focus on User
 | ------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ | ------ | --------- |
 | 38      | [**First Time Visitor**](https://github.com/codependant-variables/ai-and-me/issues/38)           | non-registered user flow the very first thing a new user sees                                          | 🏎️    | Yes       |
 | 59      | [Daily Puzzles](https://github.com/codependant-variables/ai-and-me/issues/59)                    | Implement a puzzle related functionality                                                               | 🏎️    | Yes       |
-| 186     | - Blank Puzzle page?                                                                             | ^^ Uplifted with ^^                                                                                    |        |           |
 | 68      | [Notify Over-Reliance on AI](https://github.com/codependant-variables/ai-and-me/issues/68)       | Implement a feature to check over reliance on AI                                                       | 🏎️    | Yes       |
-| 60      | [Settings Menu](https://github.com/codependant-variables/ai-and-me/issues/60)                    |                                                                                                        | 🏎️    | Yes       |
 | 64      | [Fast App](https://github.com/codependant-variables/ai-and-me/issues/64)                         | Make the app faster???                                                                                 | 🏎️    | Yes       |
 | 69      | [Skill Practice Recommendations](https://github.com/codependant-variables/ai-and-me/issues/69)   | Implement an algorithm that recommends quizzes                                                         | 🏎️    | Yes       |
 | 70      | [Quick Regular AI Checkin](https://github.com/codependant-variables/ai-and-me/issues/70)         | Easy to answer questions to uplift skill practice recommendations (69)                                 | 🏎️    | Yes       |
