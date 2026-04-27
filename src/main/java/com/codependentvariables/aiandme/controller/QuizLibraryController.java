@@ -3,6 +3,7 @@ package com.codependentvariables.aiandme.controller;
 import com.codependentvariables.aiandme.model.*;
 import com.codependentvariables.aiandme.model.dao.*;
 import com.codependentvariables.aiandme.services.QuizTemplateService;
+import com.codependentvariables.aiandme.state.AppState;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -246,7 +247,9 @@ public class QuizLibraryController {
         }
 
         try {
-            templateService.createTemplate(templateName, targetCategory.getId(), 0);
+            User currentUser = AppState.getInstance().getCurrentUser();
+            int userId = (currentUser != null) ? currentUser.getId() : 0;
+            templateService.createTemplate(templateName, targetCategory.getId(), userId);
             refreshCategories();
             showInfo("Template \"" + templateName + "\" created in category \"" + targetCategory.getName() + "\".");
         } catch (IllegalArgumentException e) {
