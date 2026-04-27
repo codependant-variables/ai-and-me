@@ -6,22 +6,14 @@ import com.codependentvariables.aiandme.model.User;
 import com.codependentvariables.aiandme.navigation.Toast;
 import com.codependentvariables.aiandme.navigation.ToastMessageType;
 import com.codependentvariables.aiandme.state.AppState;
-
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
-import java.util.Base64;
-import java.util.Objects;
+import com.codependentvariables.aiandme.services.AuthService.HashResult;
 
 public class UserService {
     private static UserService instance;
-    private final SecureRandom random = new SecureRandom();
-    private final IUserDAO userDAO;
 
+    private final IUserDAO userDAO;
     private static final AppState appState = AppState.getInstance();
+    private static final AuthService authService = AuthService.getInstance();
 
     private UserService() {
         this(new SqliteUserDAO());
@@ -39,69 +31,40 @@ public class UserService {
         return instance;
     }
 
-    public record HashResult(String hash, String salt) {}
-
     /**
-     * Hashes the input string using a newly generated salt. Intended use is when setting a new password.
-     * @param value to hash.
-     * @return HashResult of hash string and salt string.
+     * Attempt user login with password.
      */
-    public HashResult hash(String value) {
-        byte[] salt = new byte[16];
-        random.nextBytes(salt);
+    public LoginResult attemptLogin(User user, String password) {
+        boolean passwordMatches = authService.comparePassword(user, password);
 
-        return hash(value, salt);
-    }
-
-    /**
-     * Hashes the input string using the provided salt. Decodes the string to a byte array for ease of use. Intended use is when creating a hash from an existing salt for comparison, e.g. comparing a password.
-     * @param value to hash.
-     * @param salt to hash with.
-     * @return HashResult of hash string and salt string.
-     */
-    public HashResult hash(String value, String salt) {
-        return hash(value, Base64.getDecoder().decode(salt));
-    }
-
-    /**
-     * Shared internal method for hashing a string using a salt as byte array.
-     * @param value to hash.
-     * @param salt to hash with.
-     * @return HashResult of hash string and salt string.
-     */
-    private HashResult hash(String value, byte[] salt) {
-        KeySpec spec = new PBEKeySpec(value.toCharArray(), salt, 600000, 256); // OWASP recommendation to use a work factor of 600,000 -  https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
-        try {
-            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
-            byte[] hash = factory.generateSecret(spec).getEncoded();
-
-            return new HashResult(Base64.getEncoder().encodeToString(hash), Base64.getEncoder().encodeToString(salt));
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException ex) {
-            throw new RuntimeException("Error hashing password", ex);
-        }
-    }
-
-    /**
-     * Compares the user's password against a provided string.
-     * @param user User whose password to compare.
-     * @param password Password to compare to the user's.
-     * @return If password equals that of the user.
-     */
-    public boolean comparePassword(User user, String password) {
-        if (user == null || user.getPassword() == null || user.getSalt() == null)
-            return false;
-
-        String computedHash = hash(password, user.getSalt()).hash();
-        return Objects.equals(user.getPassword(), computedHash);
-    }
-
-    public boolean attemptLogin(User user, String password) {
-        boolean matches = comparePassword(user, password);
-        if (matches) {
-            login(user);
+        if (!passwordMatches) {
+            return LoginResult.INVALID;
         }
 
-        return matches;
+        login(user);
+        return LoginResult.VALID;
+    }
+
+    /**
+     * Attempt user login with password and TOTP.
+     */
+    public LoginResult attemptLogin(User user, String password, String totp) {
+        if (user.getTotpSecret() != null && totp.isEmpty()) {
+            return LoginResult.REQUIRES_TOTP;
+        }
+
+        LoginResult loginResult = attemptLogin(user, password);
+        if (user.getTotpSecret() == null) {
+            return loginResult;
+        }
+
+        boolean totpMatches = authService.compareTotp(user, totp);
+        if (!totpMatches) {
+            return LoginResult.INVALID;
+        }
+
+        login(user);
+        return LoginResult.VALID;
     }
 
     public User getByEmail(String email) {
@@ -113,15 +76,14 @@ public class UserService {
     }
 
     public void signup(String name, String email, String password) {
-        HashResult hashResult = hash(password);
-        User user = new User(name, email, hashResult.hash, hashResult.salt);
+        HashResult hashResult = authService.hash(password);
+        User user = new User(name, email, hashResult.hash(), hashResult.salt());
         userDAO.add(user);
         login(user);
     }
 
     private void login(User user) {
         appState.setCurrentUser(user);
-        Toast.addMessage("Logged In", String.format("Welcome, %s!", user.getName()), ToastMessageType.INFORMATION);
     }
 
     public void logout() {

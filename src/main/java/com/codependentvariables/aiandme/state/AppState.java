@@ -2,6 +2,7 @@ package com.codependentvariables.aiandme.state;
 
 import com.codependentvariables.aiandme.AiAndMe;
 import com.codependentvariables.aiandme.model.User;
+import com.codependentvariables.aiandme.navigation.Router;
 
 import static javafx.application.Application.setUserAgentStylesheet;
 
@@ -26,9 +27,8 @@ public class AppState {
 
     public void setCurrentUser(User user) {
         currentUser = user;
-
-        if (user != null) {
-            this.isDarkMode = user.getIsDarkMode();
+        if (user != null && Router.hasApp()) {
+            setIsDarkMode(currentUser.getIsDarkMode());
         }
     }
 
