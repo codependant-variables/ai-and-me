@@ -30,7 +30,7 @@ public class SettingsController {
 
     private void setThemeContent(boolean isDarkMode) {
         themeToggleIcon.setContent(isDarkMode ? Svg.SUN : Svg.MOON);
-        themeToggleIcon.setFill(isDarkMode ? Color.DARKORANGE : Color.MEDIUMSLATEBLUE);
+        themeToggleIcon.setFill(isDarkMode ? Color.LIGHTGOLDENRODYELLOW : Color.MEDIUMSLATEBLUE);
     }
 
     @FXML
