@@ -61,11 +61,11 @@ public class CheckInService {
     private boolean isValid(Checkin checkin) {
         return checkin != null
                 && checkin.getAiDependence() >= 0
-                && checkin.getAiDependence() <= 10
+                && checkin.getAiDependence() <= 100
                 && checkin.getAiHappiness() >= 0
-                && checkin.getAiHappiness() <= 10
+                && checkin.getAiHappiness() <= 100
                 && checkin.getAiUse() >= 0
-                && checkin.getAiUse() <= 10;
+                && checkin.getAiUse() <= 100;
     }
 
     private void safeToast(String title, String msg, ToastMessageType type) {
