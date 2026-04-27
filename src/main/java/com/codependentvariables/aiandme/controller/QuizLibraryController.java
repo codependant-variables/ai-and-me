@@ -19,6 +19,7 @@ public class QuizLibraryController {
 
     private final ICategoryDAO categoryDAO = new SqliteCategoryDAO();
     private final IQuizTemplateDAO templateDAO = new SqliteQuizTemplateDAO();
+    private final IUserDAO userDAO = new SqliteUserDAO();
     private final IQuizTemplateQuestionDAO questionDAO = new SqliteQuizTemplateQuestionDAO();
     private final IQuizTemplateAnswerDAO answerDAO = new SqliteQuizTemplateAnswerDAO();
 
@@ -82,7 +83,19 @@ public class QuizLibraryController {
         categoryLabel.setTextFill(Color.web("#777777"));
         categoryLabel.setWrapText(true);
 
-        VBox card = new VBox(10, nameLabel, categoryLabel);
+        String creatorName;
+        if (template.getUserId() == 0) {
+            creatorName = "Guest";
+        } else {
+            User creator = userDAO.get(template.getUserId());
+            creatorName = (creator != null) ? creator.getName() : "Unknown";
+        }
+        Label creatorLabel = new Label("Created by: " + creatorName);
+        creatorLabel.setFont(Font.font("System", 13));
+        creatorLabel.setTextFill(Color.web("#777777"));
+        creatorLabel.setWrapText(true);
+
+        VBox card = new VBox(10, nameLabel, categoryLabel, creatorLabel);
         card.setPrefSize(360, 190);
         card.setAlignment(Pos.CENTER);
         card.setPadding(new Insets(20));
@@ -233,7 +246,7 @@ public class QuizLibraryController {
             targetCategory = categoryCombo.getValue();
         }
 
-        QuizTemplate template = new QuizTemplate(templateName, targetCategory.getId(), selectedTemplate.getUserId(),"draft");
+        QuizTemplate template = new QuizTemplate(templateName, targetCategory.getId(), 0, "draft");
         templateDAO.add(template);
         refreshCategories();
         showInfo("Template \"" + templateName + "\" created in category \"" + targetCategory.getName() + "\".");
