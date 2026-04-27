@@ -61,7 +61,7 @@ public class LayoutController {
 
     @FXML
     public void navigateProfile() {
-        throw new RuntimeException("Not implemented.");
+        Router.navigateLayout(View.PROFILE);
     }
 
     @FXML
@@ -69,6 +69,7 @@ public class LayoutController {
         // TODO: implement modal dialogue as "Are you sure?"
         userService.logout();
         setButtonVisibility();
+        Router.navigateLayout(View.HOME); // In case of seeing sensitive data
     }
 
     @FXML

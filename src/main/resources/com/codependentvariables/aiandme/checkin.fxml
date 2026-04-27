@@ -146,7 +146,7 @@
                                  <Button mnemonicParsing="false" styleClass="submissionButton" text="Submit Check-in" />
                                  <Button mnemonicParsing="false" onAction="#navigateHome" style="-fx-background-color: #8CC978;" styleClass="submissionButton">
                                     <graphic>
-                                       <SVGPath content="M14.611 6.622 8.927 2.221a0.438 0.438 0 0 0 -0.541 0.005L2.879 6.627a0.467 0.467 0 0 0 -0.163 0.341v7.961a0.438 0.438 0 0 0 0.439 0.439h3.271a0.438 0.438 0 0 0 0.439 -0.439V10.057h3.771v4.876a0.438 0.438 0 0 0 0.439 0.439h3.271a0.438 0.438 0 0 0 0.439 -0.439V6.972a0.467 0.467 0 0 0 -0.168 -0.345" fill="WHITE" styleClass="submissionButton" />
+                                       <SVGPath fx:id="homeSvg" styleClass="submissionButton" />
                                     </graphic>
                                  <HBox.margin>
                                     <Insets left="10.0" />

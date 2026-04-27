@@ -1,0 +1,188 @@
+package com.codependentvariables.aiandme.controller;
+
+import com.codependentvariables.aiandme.model.User;
+import com.codependentvariables.aiandme.navigation.Router;
+import com.codependentvariables.aiandme.navigation.Toast;
+import com.codependentvariables.aiandme.navigation.ToastMessageType;
+import com.codependentvariables.aiandme.navigation.View;
+import com.codependentvariables.aiandme.services.UserService;
+import com.codependentvariables.aiandme.state.AppState;
+import com.codependentvariables.aiandme.validation.ValidationEntry;
+import com.codependentvariables.aiandme.validation.validators.DynamicValidator;
+import com.codependentvariables.aiandme.validation.validators.EmailValidator;
+import com.codependentvariables.aiandme.validation.validators.StringNotEmptyValidator;
+import javafx.beans.binding.Bindings;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.TextField;
+
+import java.util.Objects;
+
+public class ProfileController {
+    private final AppState appState = AppState.getInstance();
+    private final UserService userService = UserService.getInstance();
+
+    private User currentUser;
+
+    @FXML
+    public TextField nameField;
+    @FXML
+    public Button nameButton;
+    @FXML
+    public Button cancelNameButton;
+    @FXML
+    public TextField emailField;
+    @FXML
+    public Button emailButton;
+    @FXML
+    public Button cancelEmailButton;
+    @FXML
+    public CheckBox mfaCheckbox;
+    @FXML
+    public Button mfaButton;
+
+    private final ValidationEntry<String> nameValidator = new ValidationEntry<>(
+            () -> this.nameField.getText(),
+            "Name",
+            new StringNotEmptyValidator()
+    );
+    private final ValidationEntry<String> emailValidator = new ValidationEntry<>(
+            () -> this.emailField.getText(),
+            "Email",
+            new EmailValidator(),
+            new DynamicValidator<>((value, display) -> {
+                User user = userService.getByEmail(value);
+                return user == null || user.getId() == currentUser.getId() ? null : String.format("%s is already in use.", display);
+            })
+    );
+
+    @FXML
+    private void initialize() {
+        this.currentUser = appState.getCurrentUser();
+        if (currentUser == null) {
+            Router.navigateLayout(View.HOME);
+        }
+
+        nameField.setText(currentUser.getName());
+        nameButton.textProperty().bind(
+                Bindings.when(nameField.disableProperty())
+                        .then("E")
+                        .otherwise("S")
+        );
+        cancelNameButton.visibleProperty().bind(nameField.disableProperty().not());
+        emailField.setText(currentUser.getEmail());
+        emailButton.textProperty().bind(
+                Bindings.when(emailField.disableProperty())
+                        .then("E")
+                        .otherwise("S")
+        );
+        cancelEmailButton.visibleProperty().bind(emailField.disableProperty().not());
+
+        boolean hasMfa = currentUser.getTotpSecret() != null;
+        mfaCheckbox.setSelected(hasMfa);
+        mfaButton.textProperty().bind(
+                Bindings.when(mfaCheckbox.selectedProperty())
+                        .then("Remove MFA")
+                        .otherwise("Setup MFA")
+        );
+    }
+
+    @FXML
+    private void editName() {
+        boolean isDisable = nameField.isDisable();
+        if (isDisable) {
+            nameField.setDisable(false);
+            return;
+        }
+
+        if (!nameValidator.validate(this::displayError)) {
+            return;
+        }
+
+        nameField.setDisable(true);
+        if (Objects.equals(nameField.getText(), currentUser.getName())) {
+            return;
+        }
+
+        currentUser.setName(nameField.getText());
+        userService.updateCurrentUser();
+        displaySaved();
+    }
+
+    @FXML
+    private void cancelEditName() {
+        nameField.setDisable(true);
+        nameField.setText(currentUser.getName());
+    }
+
+    @FXML
+    private void editEmail() {
+        boolean isDisable = emailField.isDisable();
+        if (isDisable) {
+            emailField.setDisable(false);
+            return;
+        }
+
+        if (!emailValidator.validate(this::displayError)) {
+            return;
+        }
+
+        emailField.setDisable(true);
+        if (Objects.equals(emailField.getText(), currentUser.getEmail())) {
+            return;
+        }
+
+        currentUser.setEmail(emailField.getText());
+        userService.updateCurrentUser();
+        displaySaved();
+    }
+
+    @FXML
+    private void cancelEditEmail() {
+        emailField.setDisable(true);
+        emailField.setText(currentUser.getEmail());
+    }
+
+    private void displayError(String error) {
+        Toast.addMessage("Invalid", error, ToastMessageType.ERROR);
+    }
+
+    private void displaySaved() {
+        Toast.addMessage("Success", "Saved data.", ToastMessageType.INFORMATION);
+    }
+
+    @FXML
+    private void navigateChangePassword() {
+        throw new RuntimeException("Change password not implemented.");
+    }
+
+    @FXML
+    private void clickMfa() {
+        if (currentUser.getTotpSecret() == null) {
+            Router.navigateApp(View.SETUP_MFA);
+            return;
+        }
+
+        // TODO: modal dialogue "Are you sure?"
+        currentUser.setTotpSecret(null);
+        userService.updateCurrentUser();
+        mfaCheckbox.setSelected(false);
+        Toast.addMessage("Success", "MFA removed.", ToastMessageType.INFORMATION);
+    }
+
+    @FXML
+    private void exportData() {
+        throw new RuntimeException("Export user data not implemented.");
+    }
+
+    @FXML
+    private void clearData() {
+        throw new RuntimeException("Clear user data not implemented.");
+    }
+
+    @FXML
+    private void deleteUser() {
+        throw new RuntimeException("Delete user not implemented.");
+    }
+}
