@@ -2,6 +2,7 @@ package com.codependentvariables.aiandme.controller;
 
 import com.codependentvariables.aiandme.model.*;
 import com.codependentvariables.aiandme.model.dao.*;
+import com.codependentvariables.aiandme.services.QuizTemplateService;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -18,10 +19,8 @@ import java.util.Optional;
 public class QuizLibraryController {
 
     private final ICategoryDAO categoryDAO = new SqliteCategoryDAO();
-    private final IQuizTemplateDAO templateDAO = new SqliteQuizTemplateDAO();
     private final IUserDAO userDAO = new SqliteUserDAO();
-    private final IQuizTemplateQuestionDAO questionDAO = new SqliteQuizTemplateQuestionDAO();
-    private final IQuizTemplateAnswerDAO answerDAO = new SqliteQuizTemplateAnswerDAO();
+    private final QuizTemplateService templateService = QuizTemplateService.getInstance();
 
     @FXML private FlowPane categoryContainer;
     @FXML private Button btnCreate;
@@ -61,7 +60,7 @@ public class QuizLibraryController {
             categoryNames.put(c.getId(), c.getName());
         }
 
-        List<QuizTemplate> templates = templateDAO.getAll();
+        List<QuizTemplate> templates = templateService.getAllTemplates();
         for (QuizTemplate template : templates) {
             String categoryName = categoryNames.getOrDefault(template.getCategoryId(), "Unknown");
             categoryContainer.getChildren().add(buildTemplateCard(template, categoryName));
@@ -246,10 +245,13 @@ public class QuizLibraryController {
             targetCategory = categoryCombo.getValue();
         }
 
-        QuizTemplate template = new QuizTemplate(templateName, targetCategory.getId(), 0, "draft");
-        templateDAO.add(template);
-        refreshCategories();
-        showInfo("Template \"" + templateName + "\" created in category \"" + targetCategory.getName() + "\".");
+        try {
+            templateService.createTemplate(templateName, targetCategory.getId(), 0);
+            refreshCategories();
+            showInfo("Template \"" + templateName + "\" created in category \"" + targetCategory.getName() + "\".");
+        } catch (IllegalArgumentException e) {
+            showWarning(e.getMessage());
+        }
     }
 
     /**
@@ -266,10 +268,13 @@ public class QuizLibraryController {
 
         Optional<String> nameResult = nameDialog.showAndWait();
         nameResult.map(String::trim).filter(s -> !s.isEmpty()).ifPresent(newName -> {
-            selectedTemplate.setName(newName);
-            templateDAO.update(selectedTemplate);
-            refreshCategories();
-            showInfo("Template renamed to \"" + newName + "\".");
+            try {
+                templateService.renameTemplate(selectedTemplate, newName);
+                refreshCategories();
+                showInfo("Template renamed to \"" + newName + "\".");
+            } catch (IllegalArgumentException e) {
+                showWarning(e.getMessage());
+            }
         });
     }
 
@@ -288,7 +293,7 @@ public class QuizLibraryController {
 
         confirm.showAndWait().filter(b -> b == ButtonType.YES).ifPresent(b -> {
             String name = selectedTemplate.getName();
-            templateDAO.delete(selectedTemplate);
+            templateService.deleteTemplate(selectedTemplate);
             refreshCategories();
             showInfo("Template \"" + name + "\" deleted.");
         });
@@ -309,11 +314,7 @@ public class QuizLibraryController {
         QuizTemplate template = selectedTemplate;
 
         // Load existing questions + answers into the aggregate
-        List<QuizTemplateQuestion> existingQuestions = questionDAO.getQuestionsByTemplate(template.getId());
-        for (QuizTemplateQuestion q : existingQuestions) {
-            q.setAnswers(answerDAO.getAnswersByQuestion(q.getId()));
-        }
-        template.setQuestions(existingQuestions);
+        templateService.loadQuestionsIntoTemplate(template);
 
         // Track questions removed during this session so we can delete them on Save
         List<QuizTemplateQuestion> removedQuestions = new ArrayList<>();
@@ -447,50 +448,12 @@ public class QuizLibraryController {
         if (result.isEmpty() || result.get() != ButtonType.OK) return;
         saveCurrentToModel.run();
 
-        // Validate every question before touching the DB
-        boolean allValid = workingQuestions.stream().allMatch(q -> {
-            if (q.getText().isBlank()) return false;
-            long nonBlank = q.getAnswers().stream().filter(a -> !a.getText().isBlank()).count();
-            boolean hasCorrect = q.getAnswers().stream().anyMatch(QuizTemplateAnswer::isCorrect);
-            return nonBlank >= 2 && hasCorrect;
-        });
-        if (!allValid) {
-            showWarning("Each question needs text, at least 2 answers, and one answer marked correct.");
-            return;
+        try {
+            templateService.saveQuestions(template, workingQuestions, removedQuestions);
+            showInfo("Questions saved for \"" + template.getName() + "\".");
+        } catch (IllegalArgumentException e) {
+            showWarning(e.getMessage());
         }
-
-        // Delete removed questions (and their answers)
-        for (QuizTemplateQuestion rq : removedQuestions) {
-            for (QuizTemplateAnswer ra : answerDAO.getAnswersByQuestion(rq.getId())) {
-                answerDAO.deleteAnswer(ra);
-            }
-            questionDAO.deleteQuestion(rq);
-        }
-
-        // Persist working questions
-        for (QuizTemplateQuestion q : workingQuestions) {
-            if (q.getId() == 0) {
-                // Brand-new question
-                questionDAO.addQuestion(q);
-                for (QuizTemplateAnswer a : q.getAnswers()) {
-                    a.setQuizTemplateQuestionId(q.getId());
-                    answerDAO.addAnswer(a);
-                }
-            } else {
-                // Existing question – update text, then replace all answers
-                questionDAO.updateQuestion(q);
-                for (QuizTemplateAnswer old : answerDAO.getAnswersByQuestion(q.getId())) {
-                    answerDAO.deleteAnswer(old);
-                }
-                for (QuizTemplateAnswer a : q.getAnswers()) {
-                    a.setId(0);
-                    a.setQuizTemplateQuestionId(q.getId());
-                    answerDAO.addAnswer(a);
-                }
-            }
-        }
-
-        showInfo("Questions saved for \"" + template.getName() + "\".");
     }
 
     private void showInfo(String message) {
