@@ -9,18 +9,19 @@ import java.time.LocalDateTime;
 public class SqliteCheckinDAO extends BaseSqliteDAO implements ICheckinDAO, IDatabaseEntity {
     private static final String schemaQuery = """
             CREATE TABLE IF NOT EXISTS checkins (
-                id integer PRIMARY KEY,
-                user_id integer NOT NULL REFERENCES users(id),
-                ai_use decimal NOT NULL,
-                ai_happiness decimal NOT NULL,
-                ai_dependency decimal NOT NULL,
-                completed_at datetime NOT NULL
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                ai_use REAL NOT NULL,
+                ai_happiness REAL NOT NULL,
+                ai_dependence REAL NOT NULL,
+                completed_at TEXT NOT NULL,
+                FOREIGN KEY (user_id) REFERENCES users(id)
             );
         """;
 
     private static final String seedDataQuery = """
-            INSERT INTO checkins (user_id, ai_use, ai_happiness, ai_dependency, completed_at) VALUES (1, 5.0, 5.0, 5.0, '2026-04-14 17:28:00');
-            INSERT INTO checkins (user_id, ai_use, ai_happiness, ai_dependency, completed_at) VALUES (2, 7.5, 2.5, 7.5, '2026-04-16 14:16:00');
+            INSERT INTO checkins (user_id, ai_use, ai_happiness, ai_dependence, completed_at) VALUES (1, 5.0, 5.0, 5.0, '2026-04-14T17:28:00');
+            INSERT INTO checkins (user_id, ai_use, ai_happiness, ai_dependence, completed_at) VALUES (2, 7.5, 2.5, 7.5, '2026-04-16T14:16:00');
         """;
 
     public String getSchemaQuery() {
@@ -33,27 +34,36 @@ public class SqliteCheckinDAO extends BaseSqliteDAO implements ICheckinDAO, IDat
 
     private static final IRowMapper<Checkin> CHECKIN_MAPPER = (resultSet) -> {
         Checkin checkin = new Checkin(
-                resultSet.getInt("user_id"),
                 resultSet.getFloat("ai_use"),
                 resultSet.getFloat("ai_happiness"),
                 resultSet.getFloat("ai_dependence"),
-                resultSet.getObject("completed_at", LocalDateTime.class)
+                LocalDateTime.parse(resultSet.getString("completed_at"))
         );
+
         checkin.setId(resultSet.getInt("id"));
+        checkin.setUserId(resultSet.getInt("user_id"));
+
         return checkin;
     };
 
     public void add(Checkin checkin) {
-        final String query = "INSERT INTO checkins (user_id, ai_use, ai_happiness, ai_dependency, completed_at) VALUES (?, ?, ?, ?, ?)";
+        final String query = """
+                INSERT INTO checkins (
+                    user_id,
+                    ai_use,
+                    ai_happiness,
+                    ai_dependence,
+                    completed_at
+                ) VALUES (?, ?, ?, ?, ?)
+                """;
 
-        int id = executeSqlWithGeneratedKeys(query,
-                statement -> {
-                    statement.setInt(1, checkin.getUserId());
-                    statement.setFloat(2, checkin.getAiUse());
-                    statement.setFloat(3, checkin.getAiHappiness());
-                    statement.setFloat(4, checkin.getAiDependence());
-                    statement.setObject(5, checkin.getCompletedAt());
-                });
+        int id = executeSqlWithGeneratedKeys(query, statement -> {
+            statement.setInt(1, checkin.getUserId());
+            statement.setFloat(2, checkin.getAiUse());
+            statement.setFloat(3, checkin.getAiHappiness());
+            statement.setFloat(4, checkin.getAiDependence());
+            statement.setString(5, checkin.getCompletedAt().toString());
+        });
 
         checkin.setId(id);
     }
@@ -71,7 +81,7 @@ public class SqliteCheckinDAO extends BaseSqliteDAO implements ICheckinDAO, IDat
     }
 
     public Checkin get(int id) {
-        final String query = "SELECT * FROM checkins id = ? LIMIT 1";
+        final String query = "SELECT * FROM checkins WHERE id = ? LIMIT 1";
 
         List<Checkin> checkins = executeQuery(query, statement -> statement.setInt(1, id), CHECKIN_MAPPER);
         return firstOrNull(checkins);
@@ -81,6 +91,6 @@ public class SqliteCheckinDAO extends BaseSqliteDAO implements ICheckinDAO, IDat
     public List<Checkin> getByUserId(int userId) {
         final String query = "SELECT * FROM checkins WHERE user_id = ?";
 
-        return executeQuery(query, statement -> statement.setInt(1,userId), CHECKIN_MAPPER);
+        return executeQuery(query, statement -> statement.setInt(1, userId), CHECKIN_MAPPER);
     }
 }

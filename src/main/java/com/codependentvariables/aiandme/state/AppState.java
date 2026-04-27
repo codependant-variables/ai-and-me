@@ -26,8 +26,9 @@ public class AppState {
 
     public void setCurrentUser(User user) {
         currentUser = user;
+
         if (user != null) {
-            setIsDarkMode(currentUser.getIsDarkMode());
+            this.isDarkMode = user.getIsDarkMode();
         }
     }
 
