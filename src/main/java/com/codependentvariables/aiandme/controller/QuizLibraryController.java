@@ -2,6 +2,7 @@ package com.codependentvariables.aiandme.controller;
 
 import com.codependentvariables.aiandme.model.*;
 import com.codependentvariables.aiandme.model.dao.*;
+import com.codependentvariables.aiandme.services.QuizAttemptService;
 import com.codependentvariables.aiandme.services.QuizTemplateService;
 import com.codependentvariables.aiandme.state.AppState;
 import javafx.fxml.FXML;
@@ -12,9 +13,10 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class QuizLibraryController {
@@ -22,12 +24,14 @@ public class QuizLibraryController {
     private final ICategoryDAO categoryDAO = new SqliteCategoryDAO();
     private final IUserDAO userDAO = new SqliteUserDAO();
     private final QuizTemplateService templateService = QuizTemplateService.getInstance();
+    private final QuizAttemptService attemptService = QuizAttemptService.getInstance();
 
     @FXML private FlowPane categoryContainer;
     @FXML private Button btnCreate;
     @FXML private Button btnModify;
     @FXML private Button btnDelete;
     @FXML private Button btnEditQuestions;
+    @FXML private Button btnAttemptQuiz;
 
     /** Currently selected template card, null when nothing is selected. */
     private QuizTemplate selectedTemplate;
@@ -41,6 +45,7 @@ public class QuizLibraryController {
         btnModify.setDisable(true);
         btnDelete.setDisable(true);
         btnEditQuestions.setDisable(true);
+        btnAttemptQuiz.setDisable(true);
         refreshCategories();
     }
 
@@ -124,6 +129,7 @@ public class QuizLibraryController {
         btnModify.setDisable(!hasSelection);
         btnDelete.setDisable(!hasSelection);
         btnEditQuestions.setDisable(!hasSelection);
+        btnAttemptQuiz.setDisable(!hasSelection);
     }
 
     private String cardStyle(boolean selected) {
@@ -303,6 +309,140 @@ public class QuizLibraryController {
     }
 
     // Helper methods
+
+    /**
+     * Steps the user through each question in the selected template,
+     * records their selected answer, then persists the attempt and shows a score.
+     */
+    @FXML
+    private void handleAttemptQuiz() {
+        if (selectedTemplate == null) return;
+
+        QuizTemplate template = selectedTemplate;
+        templateService.loadQuestionsIntoTemplate(template);
+
+        List<QuizTemplateQuestion> questions = template.getQuestions();
+        if (questions.isEmpty()) {
+            showWarning("This quiz has no questions yet. Add some questions before attempting it.");
+            return;
+        }
+
+        // selections: templateQuestionId → chosen answer
+        Map<Integer, QuizTemplateAnswer> selections = new HashMap<>();
+
+        int[] currentIndex = {0};
+
+        // Dialog shell
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Attempt Quiz – " + template.getName());
+        dialog.setHeaderText(null);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.NEXT, ButtonType.CANCEL);
+        dialog.getDialogPane().setPrefWidth(500);
+
+        // Relabel the "Next" button
+        Button nextBtn = (Button) dialog.getDialogPane().lookupButton(ButtonType.NEXT);
+        nextBtn.setText("Next >");
+
+        Label progressLabel = new Label();
+        progressLabel.setFont(Font.font("System", 12));
+        progressLabel.setTextFill(Color.web("#777777"));
+
+        Label questionLabel = new Label();
+        questionLabel.setFont(Font.font("System", FontWeight.BOLD, 16));
+        questionLabel.setWrapText(true);
+
+        VBox answersBox = new VBox(10);
+
+        VBox content = new VBox(14, progressLabel, questionLabel, answersBox);
+        content.setPadding(new Insets(16));
+        dialog.getDialogPane().setContent(content);
+
+        // Loads the current question into the dialog
+        Runnable loadQuestion = () -> {
+            QuizTemplateQuestion q = questions.get(currentIndex[0]);
+            int total = questions.size();
+            int idx   = currentIndex[0];
+
+            progressLabel.setText("Question " + (idx + 1) + " of " + total);
+            questionLabel.setText(q.getText());
+
+            answersBox.getChildren().clear();
+            ToggleGroup group = new ToggleGroup();
+
+            for (QuizTemplateAnswer answer : q.getAnswers()) {
+                RadioButton rb = new RadioButton(answer.getText());
+                rb.setToggleGroup(group);
+                rb.setWrapText(true);
+                rb.setUserData(answer);
+                // Re-select previously chosen answer if navigating back (future-proofing)
+                QuizTemplateAnswer prev = selections.get(q.getId());
+                if (prev != null && prev.getId() == answer.getId()) {
+                    rb.setSelected(true);
+                }
+                answersBox.getChildren().add(rb);
+            }
+
+            // Enable Next/Finish only when an answer is selected
+            nextBtn.setDisable(group.getSelectedToggle() == null);
+            group.selectedToggleProperty().addListener((obs, ov, nv) ->
+                    nextBtn.setDisable(nv == null));
+
+            boolean isLast = (idx == total - 1);
+            nextBtn.setText(isLast ? "Finish" : "Next >");
+        };
+
+        loadQuestion.run();
+
+        // Each click of "Next" saves the selection and advances (or finishes)
+        nextBtn.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
+            event.consume(); // prevent dialog from closing automatically
+
+            QuizTemplateQuestion q = questions.get(currentIndex[0]);
+            ToggleGroup group = null;
+            for (javafx.scene.Node node : answersBox.getChildren()) {
+                if (node instanceof RadioButton rb) {
+                    group = rb.getToggleGroup();
+                    break;
+                }
+            }
+
+            if (group != null && group.getSelectedToggle() != null) {
+                QuizTemplateAnswer chosen = (QuizTemplateAnswer) group.getSelectedToggle().getUserData();
+                selections.put(q.getId(), chosen);
+            }
+
+            if (currentIndex[0] < questions.size() - 1) {
+                currentIndex[0]++;
+                loadQuestion.run();
+            } else {
+                // All questions answered — close the dialog
+                dialog.setResult(ButtonType.OK);
+                dialog.close();
+            }
+        });
+
+        Optional<ButtonType> result = dialog.showAndWait();
+
+        // Only save if the user completed all questions (didn't hit Cancel mid-way)
+        if (result.isEmpty() || result.get() == ButtonType.CANCEL) return;
+        if (selections.size() < questions.size()) return; // incomplete
+
+        // Persist & score
+        User currentUser = AppState.getInstance().getCurrentUser();
+        int userId = (currentUser != null) ? currentUser.getId() : 0;
+
+        try {
+            int correct = attemptService.saveAttempt(template, userId, selections);
+            int total   = questions.size();
+            int pct     = (int) Math.round((double) correct / total * 100);
+
+            showInfo(String.format(
+                    "Quiz complete!%n%nScore: %d / %d  (%d%%)%n%nYour attempt has been saved.",
+                    correct, total, pct));
+        } catch (Exception e) {
+            showWarning("Failed to save attempt: " + e.getMessage());
+        }
+    }
 
     /**
      * Opens a popup to build/edit questions and answers for a template in the

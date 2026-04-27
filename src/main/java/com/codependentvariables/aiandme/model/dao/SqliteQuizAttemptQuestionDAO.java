@@ -17,6 +17,7 @@ public class SqliteQuizAttemptQuestionDAO extends BaseSqliteDAO implements IQuiz
     private static final String schemaQuery = """
             CREATE TABLE IF NOT EXISTS quiz_attempt_questions (
             id INTEGER PRIMARY KEY,
+            quiz_attempt_id INTEGER NOT NULL,
             text VARCHAR NOT NULL,
             image BYTE[],
             FOREIGN KEY (quiz_attempt_id) REFERENCES quiz_attempts(id)
@@ -61,7 +62,7 @@ public class SqliteQuizAttemptQuestionDAO extends BaseSqliteDAO implements IQuiz
      */
     @Override
     public void add(QuizAttemptQuestion quizAttemptQuestion) {
-        final String query = "INSERT INTO quiz_attempt_questions (text, image) VALUES (?, ?, ?)";
+        final String query = "INSERT INTO quiz_attempt_questions (quiz_attempt_id, text, image) VALUES (?, ?, ?)";
 
         int id = executeSqlWithGeneratedKeys(query, statement -> {
             statement.setInt(1, quizAttemptQuestion.getQuizAttemptId());
