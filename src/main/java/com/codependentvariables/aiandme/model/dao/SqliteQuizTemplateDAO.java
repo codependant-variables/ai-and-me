@@ -12,8 +12,10 @@ public class SqliteQuizTemplateDAO extends BaseSqliteDAO implements IQuizTemplat
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name VARCHAR NOT NULL,
             category_id INTEGER NOT NULL,
+            user_id INTEGER NOT NULL,
             status VARCHAR NOT NULL DEFAULT 'draft',
-            FOREIGN KEY (category_id) REFERENCES categories(id)
+            FOREIGN KEY (category_id) REFERENCES categories(id),
+            FOREIGN KEY (user_id) REFERENCES users(id)
         );
     """;
 
@@ -33,6 +35,7 @@ public class SqliteQuizTemplateDAO extends BaseSqliteDAO implements IQuizTemplat
         QuizTemplate template = new QuizTemplate(
                 resultSet.getString("name"),
                 resultSet.getInt("category_id"),
+                resultSet.getInt("user_id"),
                 resultSet.getString("status")
         );
         template.setId(resultSet.getInt("id"));
@@ -41,12 +44,13 @@ public class SqliteQuizTemplateDAO extends BaseSqliteDAO implements IQuizTemplat
 
     @Override
     public void add(QuizTemplate quizTemplate) {
-        final String query = "INSERT INTO quiz_templates(name, category_id, status) VALUES(?, ?, ?)";
+        final String query = "INSERT INTO quiz_templates(name, category_id, user_id, status) VALUES(?, ?, ?, ?)";
 
         var id = executeSqlWithGeneratedKeys(query, statement -> {
             statement.setString(1, quizTemplate.getName());
             statement.setInt(2, quizTemplate.getCategoryId());
-            statement.setString(3, quizTemplate.getStatus());
+            statement.setInt(3, quizTemplate.getUserId());
+            statement.setString(4, quizTemplate.getStatus());
         });
 
         quizTemplate.setId(id);
@@ -54,13 +58,14 @@ public class SqliteQuizTemplateDAO extends BaseSqliteDAO implements IQuizTemplat
 
     @Override
     public void update(QuizTemplate quizTemplate) {
-        final String query = "UPDATE quiz_templates SET name = ?, category_id = ?, status = ? WHERE id = ?";
+        final String query = "UPDATE quiz_templates SET name = ?, category_id = ?, user_id = ?, status = ? WHERE id = ?";
 
         executeSql(query, statement -> {
             statement.setString(1, quizTemplate.getName());
             statement.setInt(2, quizTemplate.getCategoryId());
-            statement.setString(3, quizTemplate.getStatus());
-            statement.setInt(4, quizTemplate.getId());
+            statement.setInt(3, quizTemplate.getUserId());
+            statement.setString(4, quizTemplate.getStatus());
+            statement.setInt(5, quizTemplate.getId());
         });
     }
 
@@ -91,6 +96,13 @@ public class SqliteQuizTemplateDAO extends BaseSqliteDAO implements IQuizTemplat
         final String query = "SELECT * FROM quiz_templates WHERE category_id = ?";
 
         return executeQuery(query, statement -> statement.setInt(1, categoryId), QUIZ_TEMPLATE_MAPPER);
+    }
+
+    @Override
+    public List<QuizTemplate> getByUserId(int userId) {
+        final String query = "SELECT * FROM quiz_templates WHERE user_id = ?";
+
+        return executeQuery(query, statement -> statement.setInt(1, userId), QUIZ_TEMPLATE_MAPPER);
     }
 }
 

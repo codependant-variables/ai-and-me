@@ -233,7 +233,7 @@ public class QuizLibraryController {
             targetCategory = categoryCombo.getValue();
         }
 
-        QuizTemplate template = new QuizTemplate(templateName, targetCategory.getId(), "draft");
+        QuizTemplate template = new QuizTemplate(templateName, targetCategory.getId(), selectedTemplate.getUserId(),"draft");
         templateDAO.add(template);
         refreshCategories();
         showInfo("Template \"" + templateName + "\" created in category \"" + targetCategory.getName() + "\".");
