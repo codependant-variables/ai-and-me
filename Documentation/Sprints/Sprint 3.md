@@ -42,11 +42,10 @@ Epic 3 and 4 will focus on new stuff if necessary.
 | 56      | [Setting rollback](https://github.com/codependant-variables/ai-and-me/issues/56)               | Reset to default settings                                                                                           | 🏎️    | Yes       |
 | 71      | [Insight Cards](https://github.com/codependant-variables/ai-and-me/issues/71)                  | news/useful info about subject matter.                                                                              | 🏎️    | Yes       |
 | 107     | [QuizAttempts](https://github.com/codependant-variables/ai-and-me/issues/107)                  | Uplifted with [View past quiz attempts](https://github.com/codependant-variables/ai-and-me/issues/107)              | 🏎️    | Yes       |
-| 186     | Blank Puzzle page?                                                                             | Uplifted with [Daily Quizzes](https://github.com/codependant-variables/ai-and-me/issues/58)                         | 🏎️    |           |
 | 187     | Blank Profile page?                                                                            | Profile settings (Very BASIC) Uplifted with [Profile](https://github.com/codependant-variables/ai-and-me/issues/45) | 🏎️    |           |
 | 148     | Blank Settings page?                                                                           | App settings [Settings](https://github.com/codependant-variables/ai-and-me/issues/60)                               | 🏎️    |           |
-|         |                                                                                                | Tests                                                                                                               |        |           |
-|         |                                                                                                | Service                                                                                                             |        |           |
+|         | Tests                                                                                          |                                                                                                                     |        |           |
+|         | Services                                                                                       |                                                                                                                     |        |           |
 
 #### Epic 2: ==User Experience, and General Functionality==
 *Reason*
@@ -56,6 +55,7 @@ Focus on User
 | ------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ | ------ | --------- |
 | 38      | [**First Time Visitor**](https://github.com/codependant-variables/ai-and-me/issues/38)           | non-registered user flow the very first thing a new user sees                                          | 🏎️    | Yes       |
 | 59      | [Daily Puzzles](https://github.com/codependant-variables/ai-and-me/issues/59)                    | Implement a puzzle related functionality                                                               | 🏎️    | Yes       |
+| 186     | - Blank Puzzle page?                                                                             | ^^ Uplifted with ^^                                                                                    |        |           |
 | 68      | [Notify Over-Reliance on AI](https://github.com/codependant-variables/ai-and-me/issues/68)       | Implement a feature to check over reliance on AI                                                       | 🏎️    | Yes       |
 | 60      | [Settings Menu](https://github.com/codependant-variables/ai-and-me/issues/60)                    |                                                                                                        | 🏎️    | Yes       |
 | 64      | [Fast App](https://github.com/codependant-variables/ai-and-me/issues/64)                         | Make the app faster???                                                                                 | 🏎️    | Yes       |
@@ -70,16 +70,6 @@ Focus on User
 | 95      | [One time Auth Code](https://github.com/codependant-variables/ai-and-me/issues/95)               | Assist with security...                                                                                | 🏎️    | Yes       |
 | 107     | [QuizAttempts](https://github.com/codependant-variables/ai-and-me/issues/107)                    | Uplifted with [View past quiz attempts](https://github.com/codependant-variables/ai-and-me/issues/107) | 🏎️    | Yes       |
 
-#### Epic 3: ==Account Lifecycle Management==
-*Reason*
-- Focus on data retention related activities
-
-| Issue # | User Story                                                                                 | Reason | Status | Carryover |
-| ------- | ------------------------------------------------------------------------------------------ | ------ | ------ | --------- |
-| 178     | [Check-in Summary](https://github.com/codependant-variables/ai-and-me/issues/178)          |        | 🏎️    | No        |
-| 177     | [Skill Trends over time](https://github.com/codependant-variables/ai-and-me/issues/177)    |        | 🏎️    | No        |
-| 176     | [Track Offloaded Tasks](https://github.com/codependant-variables/ai-and-me/issues/176)     |        | 🏎️    | No        |
-| 179     | [Inactive account deletion](https://github.com/codependant-variables/ai-and-me/issues/179) |        | 🏎️    | No        |
 
 ## ==What I NEED from the team Today/Sunday:==
 
