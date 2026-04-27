@@ -10,7 +10,7 @@ public class SqliteQuizAttemptAnswerDAO extends BaseSqliteDAO implements IQuizAt
     private static final String schemaQuery = """
             CREATE TABLE IF NOT EXISTS quiz_attempt_answers (
                 id INTEGER PRIMARY KEY,
-                quiz_attempt_question_id INTEGER NOT NULL REFERENCES quiz_attempt_questions(id),
+                quiz_attempt_question_id INTEGER NOT NULL REFERENCES quiz_attempt_questions(id) ON DELETE CASCADE,
                 text VARCHAR NOT NULL,
                 image BYTE[],
                 is_correct BIT NOT NULL

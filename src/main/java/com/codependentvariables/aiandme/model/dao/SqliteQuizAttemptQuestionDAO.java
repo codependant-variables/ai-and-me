@@ -19,7 +19,7 @@ public class SqliteQuizAttemptQuestionDAO extends BaseSqliteDAO implements IQuiz
             id INTEGER PRIMARY KEY,
             text VARCHAR NOT NULL,
             image BYTE[],
-            FOREIGN KEY (quiz_attempt_id) REFERENCES quiz_attempts(id)
+            FOREIGN KEY (quiz_attempt_id) REFERENCES quiz_attempts(id) ON DELETE CASCADE
             );
     """;
 

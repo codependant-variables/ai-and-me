@@ -10,7 +10,7 @@ public class SqliteCheckinDAO extends BaseSqliteDAO implements ICheckinDAO, IDat
     private static final String schemaQuery = """
             CREATE TABLE IF NOT EXISTS checkins (
                 id integer PRIMARY KEY,
-                user_id integer NOT NULL REFERENCES users(id),
+                user_id integer NOT NULL REFERENCES users(id) ON DELETE CASCADE,
                 ai_use decimal NOT NULL,
                 ai_happiness decimal NOT NULL,
                 ai_dependency decimal NOT NULL,
