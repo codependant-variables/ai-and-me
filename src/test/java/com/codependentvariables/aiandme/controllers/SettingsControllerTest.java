@@ -1,33 +1,27 @@
 package com.codependentvariables.aiandme.controllers;
 
+import com.codependentvariables.aiandme.controller.SettingsController;
 import com.codependentvariables.aiandme.state.AppState;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SettingsControllerTest {
 
+    SettingsController testController = new SettingsController();
+
     @Test
-    public void dark_mode_test() {
-        assertTrue(AppState.getInstance().getIsDarkMode());
+    public void switch_theme_on_click() {
+        boolean isDarkMode = AppState.getInstance().getIsDarkMode();
+        testController.switchTheme();
+        assertNotEquals(isDarkMode, AppState.getInstance().getIsDarkMode());
     }
 
     @Test
-    public void light_mode_test() {
-        assertFalse(AppState.getInstance().getIsDarkMode());
-    }
-
-    @Test
-    public void orientation_vertical_test() {
-        assertTrue(AppState.getInstance().getIsVertical());
-
-    }
-
-    @Test
-    public void orientation_horizontal_test() {
-        assertFalse(AppState.getInstance().getIsVertical());
-
+    public void switch_orientation_on_click() {
+        boolean isVertical = AppState.getInstance().getIsVertical();
+        testController.switchOrientation();
+        assertNotEquals(isVertical, AppState.getInstance().getIsVertical());
     }
 
 }
