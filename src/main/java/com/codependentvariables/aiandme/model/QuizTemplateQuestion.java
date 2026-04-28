@@ -14,11 +14,13 @@ public class QuizTemplateQuestion {
     private final List<QuizTemplateAnswer> answers = new ArrayList<>();
 
     public QuizTemplateQuestion(int quizTemplateId, String text) {
+        if (text == null || text.isBlank()) throw new IllegalArgumentException("text must not be blank");
         this.quizTemplateId = quizTemplateId;
         this.text = text;
     }
 
     public QuizTemplateQuestion(int quizTemplateId, String text, byte[] image) {
+        if (text == null || text.isBlank()) throw new IllegalArgumentException("text must not be blank");
         this.quizTemplateId = quizTemplateId;
         this.text = text;
         this.image = image;

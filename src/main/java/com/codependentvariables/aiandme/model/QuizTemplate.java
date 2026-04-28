@@ -15,6 +15,8 @@ public class QuizTemplate {
     private final List<QuizTemplateQuestion> questions = new ArrayList<>();
 
     public QuizTemplate(String name, int categoryId, int userId, String status) {
+        if (name == null || name.isBlank()) throw new IllegalArgumentException("name must not be blank");
+        if (status == null) throw new IllegalArgumentException("status must not be null");
         this.name = name;
         this.categoryId = categoryId;
         this.userId = userId;
