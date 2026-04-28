@@ -2,11 +2,9 @@ package com.codependentvariables.aiandme.controller;
 
 import com.codependentvariables.aiandme.Svg;
 import com.codependentvariables.aiandme.navigation.Router;
-import com.codependentvariables.aiandme.navigation.View;
 import com.codependentvariables.aiandme.services.UserService;
 import com.codependentvariables.aiandme.state.AppState;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 
@@ -14,19 +12,13 @@ public class SettingsController {
     private final AppState appState = AppState.getInstance();
     private final UserService userService = UserService.getInstance();
 
-    private boolean accountDeletionConfirmed = false;
-
     @FXML
     private void initialize() {
-        accountDeletionConfirmed = false;
         setThemeContent(appState.getIsDarkMode());
     }
 
     @FXML
     public SVGPath themeToggleIcon;
-
-    @FXML
-    public Button deleteAccountButton;
 
     @FXML
     public void switchTheme() {

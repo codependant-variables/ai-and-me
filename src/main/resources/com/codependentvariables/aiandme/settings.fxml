@@ -18,4 +18,5 @@
    </Button>
    <Button maxWidth="Infinity" text="Change Orientation" onAction="#switchOrientation" GridPane.rowIndex="1" />
    <Button maxWidth="Infinity" text="Back" onAction="#navigateBack" GridPane.rowIndex="2" />
+
 </GridPane>
