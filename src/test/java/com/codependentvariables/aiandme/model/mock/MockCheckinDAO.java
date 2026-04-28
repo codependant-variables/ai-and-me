@@ -7,6 +7,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Mock in-memory implementation of ICheckinDAO for testing
+ */
 public class MockCheckinDAO implements ICheckinDAO {
     private final List<Checkin> checkins = new ArrayList<>();
 

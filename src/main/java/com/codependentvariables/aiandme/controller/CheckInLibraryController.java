@@ -17,9 +17,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class CheckInLibraryController {
+    // Table displaying checkin records
     @FXML
     private TableView<Checkin> checkInsTable;
 
+    // Table columns mapped to Checkin fields
     @FXML
     private TableColumn<Checkin, Integer> colId;
 
@@ -38,11 +40,12 @@ public class CheckInLibraryController {
     @FXML
     private TableColumn<Checkin, LocalDateTime> colCompletedAt;
 
+    // DAO for retrieving checkin data from database
     private final ICheckinDAO checkinDAO = new SqliteCheckinDAO();
 
     @FXML
     public void initialize() {
-        // Binding columns to check in model fields
+        // Binding columns to checkin model fields
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colAiUse.setCellValueFactory(new PropertyValueFactory<>("aiUse"));
         colAiHappiness.setCellValueFactory(new PropertyValueFactory<>("aiHappiness"));
@@ -50,19 +53,26 @@ public class CheckInLibraryController {
         colComment.setCellValueFactory(new PropertyValueFactory<>("comment"));
         colCompletedAt.setCellValueFactory(new PropertyValueFactory<>("completedAt"));
 
+        // loads initial data
         loadCheckIns();
     }
 
+    /**
+     * Loads checkins for current user into the table
+     */
     private void loadCheckIns() {
         User currentUser = AppState.getInstance().getCurrentUser();
 
+        // Clears table if no user is logged in
         if (currentUser == null) {
             checkInsTable.setItems(FXCollections.observableArrayList());
             return;
         }
 
+        // Retrieves checkins for current user
         List<Checkin> myCheckins = checkinDAO.getAllByUserId(currentUser.getId());
 
+        // Clears table if no data found
         if (myCheckins == null) {
             checkInsTable.setItems(FXCollections.observableArrayList());
             return;
@@ -71,13 +81,9 @@ public class CheckInLibraryController {
         checkInsTable.setItems(FXCollections.observableArrayList(myCheckins));
     }
 
+    // Handler for refresh button
     @FXML
     private void handleRefresh() {
         loadCheckIns();
-    }
-
-    @FXML
-    private void navigateProfile() {
-        Router.navigateLayout(View.PROFILE);
     }
 }
