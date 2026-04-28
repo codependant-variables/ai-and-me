@@ -88,6 +88,12 @@ Button {
     -fx-font-weight: bold;
 }
 
+/*------ Style Class - Empty Button ------*/
+.emptyButton {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
 /*------------------------ Nav Header ------------------------*/
 /*------ Style Class - Nav header Buttons ------*/
 .navButton {
