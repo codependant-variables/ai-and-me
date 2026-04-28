@@ -40,6 +40,7 @@ public class AppState {
         this.isDarkMode = isDarkMode;
         if (currentUser != null) {
             currentUser.setIsDarkMode(isDarkMode);
+            //instance.isDarkMode = true;
         }
         setUserAgentStylesheet(isDarkMode ? AiAndMe.darkModeStylesheet : AiAndMe.lightModeStylesheet);
     }
