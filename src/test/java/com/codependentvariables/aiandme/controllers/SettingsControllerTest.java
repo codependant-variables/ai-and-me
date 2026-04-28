@@ -8,20 +8,25 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class SettingsControllerTest {
 
-    SettingsController testController = new SettingsController();
+    private SettingsController testController;
+    private AppState testState;
 
     @Test
     public void switch_theme_on_click() {
-        boolean isDarkMode = AppState.getInstance().getIsDarkMode();
+        testController = new SettingsController();
+        testState = new AppState();
+        boolean isDarkMode = testState.getIsDarkMode();
         testController.switchTheme();
-        assertNotEquals(isDarkMode, AppState.getInstance().getIsDarkMode());
+        assertNotEquals(isDarkMode, testState.getIsDarkMode());
     }
 
     @Test
     public void switch_orientation_on_click() {
-        boolean isVertical = AppState.getInstance().getIsVertical();
+        testController = new SettingsController();
+        testState = new AppState();
+        boolean isVertical = testState.getIsVertical();
         testController.switchOrientation();
-        assertNotEquals(isVertical, AppState.getInstance().getIsVertical());
+        assertNotEquals(isVertical, testState.getIsVertical());
     }
 
 }
