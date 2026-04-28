@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.codependentvariables.aiandme.controller.CheckInHistoryController"
+            prefHeight="400.0"
+            prefWidth="600.0">
+
+    <!-- Header -->
+    <top>
+        <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 10;">
+            <Label text="My Check Ins" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+        </HBox>
+    </top>
+
+    <!-- Table displaying all checkins for current user -->
+    <center>
+        <TableView fx:id="checkInsTable">
+            <columns>
+                <!-- Columns mapped to checkin model fields -->
+                <TableColumn fx:id="colId" text="ID" prefWidth="60"/>
+                <TableColumn fx:id="colAiUse" text="AI Use" prefWidth="100"/>
+                <TableColumn fx:id="colAiHappiness" text="AI Happiness" prefWidth="120"/>
+                <TableColumn fx:id="colAiDependence" text="AI Dependence" prefWidth="130"/>
+                <TableColumn fx:id="colComment" text="Thoughts" prefWidth="130"/>
+                <TableColumn fx:id="colCompletedAt" text="Completed At" prefWidth="180"/>
+
+            </columns>
+        </TableView>
+    </center>
+
+</BorderPane>

@@ -39,6 +39,7 @@
     </GridPane>
     <VBox alignment="CENTER" spacing="10">
         <Label text="Actions" styleClass="title" />
+        <Button maxWidth="Infinity" onAction="#viewCheckIns" text="View My Check Ins" />
         <Button maxWidth="Infinity" onAction="#exportData" text="Export my data" />
         <Button maxWidth="Infinity" onAction="#clearData" text="Clear my data" />
         <Button maxWidth="Infinity" onAction="#deleteUser" text="Delete Account" styleClass="alert" />
