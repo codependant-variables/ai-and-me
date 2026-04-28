@@ -1,25 +1,25 @@
 package com.codependentvariables.aiandme.services;
 
-import com.codependentvariables.aiandme.model.Checkin;
+import com.codependentvariables.aiandme.model.CheckIn;
 import com.codependentvariables.aiandme.model.User;
-import com.codependentvariables.aiandme.model.dao.ICheckinDAO;
-import com.codependentvariables.aiandme.model.dao.SqliteCheckinDAO;
+import com.codependentvariables.aiandme.model.dao.ICheckInDAO;
+import com.codependentvariables.aiandme.model.dao.SqliteCheckInDAO;
 import com.codependentvariables.aiandme.navigation.Toast;
 import com.codependentvariables.aiandme.navigation.ToastMessageType;
 import com.codependentvariables.aiandme.state.AppState;
 
 public class CheckInService {
     private static CheckInService instance;
-    private final ICheckinDAO checkInDAO;
+    private final ICheckInDAO checkInDAO;
 
     private static final AppState appState = AppState.getInstance();
 
     private CheckInService() {
-        this(new SqliteCheckinDAO());
+        this(new SqliteCheckInDAO());
     }
 
     // Package-private constructor for unit tests
-    CheckInService(ICheckinDAO checkInDAO) {
+    CheckInService(ICheckInDAO checkInDAO) {
         this.checkInDAO = checkInDAO;
     }
 
@@ -30,7 +30,7 @@ public class CheckInService {
         return instance;
     }
 
-    public void submitCheckIn(Checkin checkin) {
+    public void submitCheckIn(CheckIn checkIn) {
         User currentUser = appState.getCurrentUser();
 
         if (currentUser == null) {
@@ -38,7 +38,7 @@ public class CheckInService {
             throw new IllegalStateException("User must be logged in to submit a check-in.");
         }
 
-        if (!isValid(checkin)) {
+        if (!isValid(checkIn)) {
             safeToast(
                     "Check-in Incomplete",
                     "Please fill out all fields before submitting check in",
@@ -47,9 +47,9 @@ public class CheckInService {
             throw new IllegalArgumentException("Check-in is incomplete.");
         }
 
-        checkin.setUserId(currentUser.getId());
+        checkIn.setUserId(currentUser.getId());
 
-        checkInDAO.add(checkin);
+        checkInDAO.add(checkIn);
 
         safeToast(
                 "Check-in submitted",
@@ -58,14 +58,14 @@ public class CheckInService {
         );
     }
 
-    private boolean isValid(Checkin checkin) {
-        return checkin != null
-                && checkin.getAiDependence() >= 0
-                && checkin.getAiDependence() <= 100
-                && checkin.getAiHappiness() >= 0
-                && checkin.getAiHappiness() <= 100
-                && checkin.getAiUse() >= 0
-                && checkin.getAiUse() <= 100;
+    private boolean isValid(CheckIn checkIn) {
+        return checkIn != null
+                && checkIn.getAiDependence() >= 0
+                && checkIn.getAiDependence() <= 100
+                && checkIn.getAiHappiness() >= 0
+                && checkIn.getAiHappiness() <= 100
+                && checkIn.getAiUse() >= 0
+                && checkIn.getAiUse() <= 100;
     }
 
     private void safeToast(String title, String msg, ToastMessageType type) {
