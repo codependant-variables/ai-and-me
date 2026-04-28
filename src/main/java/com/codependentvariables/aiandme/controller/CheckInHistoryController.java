@@ -4,6 +4,8 @@ import com.codependentvariables.aiandme.model.CheckIn;
 import com.codependentvariables.aiandme.model.User;
 import com.codependentvariables.aiandme.model.dao.ICheckInDAO;
 import com.codependentvariables.aiandme.model.dao.SqliteCheckInDAO;
+import com.codependentvariables.aiandme.navigation.Router;
+import com.codependentvariables.aiandme.navigation.View;
 import com.codependentvariables.aiandme.state.AppState;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -63,8 +65,8 @@ public class CheckInHistoryController {
 
         // Clears table if no user is logged in
         if (currentUser == null) {
-            checkInsTable.setItems(FXCollections.observableArrayList());
-            return;
+            Router.navigateLayout(View.HOME);
+
         }
 
         // Retrieves CheckIns for current user
