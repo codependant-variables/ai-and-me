@@ -172,6 +172,8 @@ public class ProfileController {
     }
 
     @FXML
+    private void viewCheckIns() { Router.navigateLayout(View.CHECKIN_LIBRARY); }
+    @FXML
     private void exportData() {
         throw new RuntimeException("Export user data not implemented.");
     }

@@ -36,7 +36,7 @@ public class MockCheckinDAO implements ICheckinDAO {
     }
 
     @Override
-    public List<Checkin> getByUserId(int userId) {
+    public List<Checkin> getAllByUserId(int userId) {
         return checkins.stream()
                 .filter(c -> c.getUserId() == userId)
                 .toList();

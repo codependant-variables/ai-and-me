@@ -18,7 +18,7 @@ public class CheckInController {
     @FXML private Slider satisfactionSlider;
     @FXML private Slider dependenceSlider;
     @FXML private Slider usageSlider;
-    @FXML private TextArea thoughtsTextArea;
+    @FXML private TextArea commentTextArea;
     @FXML public SVGPath homeSvg;
 
     private final CheckInService checkInService = CheckInService.getInstance();
@@ -36,6 +36,7 @@ public class CheckInController {
                 (float) usageSlider.getValue(),
                 (float) satisfactionSlider.getValue(),
                 (float) dependenceSlider.getValue(),
+                (String) commentTextArea.getText(),
                 LocalDateTime.now()
         );
 

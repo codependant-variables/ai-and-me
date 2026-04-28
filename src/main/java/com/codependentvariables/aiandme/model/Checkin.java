@@ -8,12 +8,14 @@ public class Checkin {
     private float aiUse;
     private float aiHappiness;
     private float aiDependence;
+    private String comment;
     private LocalDateTime completedAt;
 
-    public Checkin(float aiUse, float aiHappiness, float aiDependence, LocalDateTime completedAt) {
+    public Checkin(float aiUse, float aiHappiness, float aiDependence, String comment, LocalDateTime completedAt) {
         this.aiUse = aiUse;
         this.aiHappiness = aiHappiness;
         this.aiDependence = aiDependence;
+        this.comment = comment;
         this.completedAt = completedAt;
     }
 
@@ -44,6 +46,8 @@ public class Checkin {
     public float getAiDependence() {
         return aiDependence;
     }
+
+    public String getComment() { return comment; }
 
     public LocalDateTime getCompletedAt() {
         return completedAt;

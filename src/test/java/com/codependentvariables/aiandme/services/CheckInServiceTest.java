@@ -34,6 +34,7 @@ public class CheckInServiceTest {
                 5.0f,
                 5.0f,
                 5.0f,
+                "Ai usage looking ok",
                 LocalDateTime.now()
         );
     }

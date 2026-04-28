@@ -38,5 +38,5 @@ public interface ICheckinDAO {
      * Retrieves all check-ins by a user from the DB.
      * @return A list of all check-ins by a specific user from the DB, or null if none found.
      */
-    List<Checkin> getByUserId(int userId);
+    List<Checkin> getAllByUserId(int userId);
 }
