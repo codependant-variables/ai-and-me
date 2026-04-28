@@ -7,6 +7,8 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -32,7 +34,7 @@ public class QuizLibraryController {
     private QuizTemplate selectedTemplate;
 
     /** The VBox card node that is currently highlighted. */
-    private VBox selectedCard;
+    private HBox selectedCard;
 
     @FXML
     public void initialize() {
@@ -71,7 +73,7 @@ public class QuizLibraryController {
      * Builds a styled VBox card for a single quiz template.
      * Shows the template name and which category it belongs to.
      */
-    private VBox buildTemplateCard(QuizTemplate template, String categoryName) {
+    private HBox buildTemplateCard(QuizTemplate template, String categoryName) {
         Label nameLabel = new Label(template.getName());
         nameLabel.setFont(Font.font("System", FontWeight.BOLD, 16));
         nameLabel.setTextFill(Color.web("#333333"));
@@ -94,18 +96,35 @@ public class QuizLibraryController {
         creatorLabel.setTextFill(Color.web("#777777"));
         creatorLabel.setWrapText(true);
 
-        VBox card = new VBox(10, nameLabel, categoryLabel, creatorLabel);
+        Image catagorieIcon = new Image(getClass().getResourceAsStream("/com/codependentvariables/aiandme/Images/streakIcon.png"));
+        ImageView catagorieIconView = new ImageView(catagorieIcon);
+        catagorieIconView.setFitWidth(80);
+        catagorieIconView.setPreserveRatio(true);
+
+        VBox quizInfoVBox = new VBox(10, nameLabel, categoryLabel, creatorLabel);
+        quizInfoVBox.setPrefSize(180, 190);
+        quizInfoVBox.setAlignment(Pos.CENTER);
+        quizInfoVBox.setPadding(new Insets(20));
+        quizInfoVBox.setStyle(cardStyle(false));
+
+        VBox catagorieIconVBox = new VBox(catagorieIconView);
+        catagorieIconVBox.setPrefSize(180, 190);
+        catagorieIconVBox.setAlignment(Pos.CENTER);
+        catagorieIconVBox.setPadding(new Insets(20));
+        catagorieIconVBox.setStyle(cardStyle(false));
+
+        HBox card = new HBox(quizInfoVBox, catagorieIconVBox);
         card.setPrefSize(360, 190);
         card.setAlignment(Pos.CENTER);
-        card.setPadding(new Insets(20));
         card.setStyle(cardStyle(false));
+
 
         card.setOnMouseClicked(e -> selectCard(card, template));
 
         return card;
     }
 
-    private void selectCard(VBox card, QuizTemplate template) {
+    private void selectCard(HBox card, QuizTemplate template) {
         // Deselect previous card
         if (selectedCard != null) {
             selectedCard.setStyle(cardStyle(false));
