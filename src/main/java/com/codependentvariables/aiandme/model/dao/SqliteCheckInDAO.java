@@ -6,7 +6,7 @@ import com.codependentvariables.aiandme.model.*;
 import java.util.List;
 import java.time.LocalDateTime;
 
-public class SqliteCheckinDAO extends BaseSqliteDAO implements ICheckinDAO, IDatabaseEntity {
+public class SqliteCheckInDAO extends BaseSqliteDAO implements ICheckInDAO, IDatabaseEntity {
     private static final String schemaQuery = """
             CREATE TABLE IF NOT EXISTS checkins (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -33,8 +33,8 @@ public class SqliteCheckinDAO extends BaseSqliteDAO implements ICheckinDAO, IDat
         return seedDataQuery;
     }
 
-    private static final IRowMapper<Checkin> CHECKIN_MAPPER = (resultSet) -> {
-        Checkin checkin = new Checkin(
+    private static final IRowMapper<CheckIn> CHECKIN_MAPPER = (resultSet) -> {
+        CheckIn checkin = new CheckIn(
                 resultSet.getFloat("ai_use"),
                 resultSet.getFloat("ai_happiness"),
                 resultSet.getFloat("ai_dependence"),
@@ -48,7 +48,7 @@ public class SqliteCheckinDAO extends BaseSqliteDAO implements ICheckinDAO, IDat
         return checkin;
     };
 
-    public void add(Checkin checkin) {
+    public void add(CheckIn checkIn) {
         final String query = """
                 INSERT INTO checkins (
                     user_id,
@@ -61,38 +61,38 @@ public class SqliteCheckinDAO extends BaseSqliteDAO implements ICheckinDAO, IDat
                 """;
 
         int id = executeSqlWithGeneratedKeys(query, statement -> {
-            statement.setInt(1, checkin.getUserId());
-            statement.setFloat(2, checkin.getAiUse());
-            statement.setFloat(3, checkin.getAiHappiness());
-            statement.setFloat(4, checkin.getAiDependence());
-            statement.setString(5, checkin.getComment());
-            statement.setString(6, checkin.getCompletedAt().toString());
+            statement.setInt(1, checkIn.getUserId());
+            statement.setFloat(2, checkIn.getAiUse());
+            statement.setFloat(3, checkIn.getAiHappiness());
+            statement.setFloat(4, checkIn.getAiDependence());
+            statement.setString(5, checkIn.getComment());
+            statement.setString(6, checkIn.getCompletedAt().toString());
         });
 
-        checkin.setId(id);
+        checkIn.setId(id);
     }
 
-    public void delete(Checkin checkin) {
-        final String query = "DELETE FROM checkins WHERE id = ?";
+    public void delete(CheckIn checkIn) {
+        final String query = "DELETE FROM checkIns WHERE id = ?";
 
-        executeSql(query, statement -> statement.setInt(1, checkin.getId()));
+        executeSql(query, statement -> statement.setInt(1, checkIn.getId()));
     }
 
-    public List<Checkin> getAll() {
-        final String query = "SELECT * FROM checkins ORDER BY completed_at DESC";
+    public List<CheckIn> getAll() {
+        final String query = "SELECT * FROM checkIns ORDER BY completed_at DESC";
         return executeQuery(query, CHECKIN_MAPPER);
     }
 
-    public Checkin get(int id) {
-        final String query = "SELECT * FROM checkins WHERE id = ? LIMIT 1";
+    public CheckIn get(int id) {
+        final String query = "SELECT * FROM checkIns WHERE id = ? LIMIT 1";
 
-        List<Checkin> checkins = executeQuery(query, statement -> statement.setInt(1, id), CHECKIN_MAPPER);
-        return firstOrNull(checkins);
+        List<CheckIn> checkIns = executeQuery(query, statement -> statement.setInt(1, id), CHECKIN_MAPPER);
+        return firstOrNull(checkIns);
     }
 
     @Override
-    public List<Checkin> getAllByUserId(int userId) {
-        final String query = "SELECT * FROM checkins WHERE user_id = ? ORDER BY completed_at DESC";
+    public List<CheckIn> getAllByUserId(int userId) {
+        final String query = "SELECT * FROM checkIns WHERE user_id = ? ORDER BY completed_at DESC";
 
         return executeQuery(query, statement -> statement.setInt(1, userId), CHECKIN_MAPPER);
     }

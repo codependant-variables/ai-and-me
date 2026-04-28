@@ -1,11 +1,9 @@
 package com.codependentvariables.aiandme.controller;
 
-import com.codependentvariables.aiandme.model.Checkin;
+import com.codependentvariables.aiandme.model.CheckIn;
 import com.codependentvariables.aiandme.model.User;
-import com.codependentvariables.aiandme.model.dao.ICheckinDAO;
-import com.codependentvariables.aiandme.model.dao.SqliteCheckinDAO;
-import com.codependentvariables.aiandme.navigation.Router;
-import com.codependentvariables.aiandme.navigation.View;
+import com.codependentvariables.aiandme.model.dao.ICheckInDAO;
+import com.codependentvariables.aiandme.model.dao.SqliteCheckInDAO;
 import com.codependentvariables.aiandme.state.AppState;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -16,36 +14,36 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class CheckInLibraryController {
-    // Table displaying checkin records
+public class CheckInHistoryController {
+    // Table displaying CheckIn records
     @FXML
-    private TableView<Checkin> checkInsTable;
+    private TableView<CheckIn> checkInsTable;
 
-    // Table columns mapped to Checkin fields
+    // Table columns mapped to CheckIn fields
     @FXML
-    private TableColumn<Checkin, Integer> colId;
-
-    @FXML
-    private TableColumn<Checkin, Float> colAiUse;
+    private TableColumn<CheckIn, Integer> colId;
 
     @FXML
-    private TableColumn<Checkin, Float> colAiHappiness;
+    private TableColumn<CheckIn, Float> colAiUse;
 
     @FXML
-    private TableColumn<Checkin, Float> colAiDependence;
+    private TableColumn<CheckIn, Float> colAiHappiness;
 
     @FXML
-    private TableColumn<Checkin, String> colComment;
+    private TableColumn<CheckIn, Float> colAiDependence;
 
     @FXML
-    private TableColumn<Checkin, LocalDateTime> colCompletedAt;
+    private TableColumn<CheckIn, String> colComment;
 
-    // DAO for retrieving checkin data from database
-    private final ICheckinDAO checkinDAO = new SqliteCheckinDAO();
+    @FXML
+    private TableColumn<CheckIn, LocalDateTime> colCompletedAt;
+
+    // DAO for retrieving CheckIn data from database
+    private final ICheckInDAO checkInDAO = new SqliteCheckInDAO();
 
     @FXML
     public void initialize() {
-        // Binding columns to checkin model fields
+        // Binding columns to CheckIn model fields
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colAiUse.setCellValueFactory(new PropertyValueFactory<>("aiUse"));
         colAiHappiness.setCellValueFactory(new PropertyValueFactory<>("aiHappiness"));
@@ -58,7 +56,7 @@ public class CheckInLibraryController {
     }
 
     /**
-     * Loads checkins for current user into the table
+     * Loads CheckIns for current user into the table
      */
     private void loadCheckIns() {
         User currentUser = AppState.getInstance().getCurrentUser();
@@ -69,21 +67,15 @@ public class CheckInLibraryController {
             return;
         }
 
-        // Retrieves checkins for current user
-        List<Checkin> myCheckins = checkinDAO.getAllByUserId(currentUser.getId());
+        // Retrieves CheckIns for current user
+        List<CheckIn> myCheckIns = checkInDAO.getAllByUserId(currentUser.getId());
 
         // Clears table if no data found
-        if (myCheckins == null) {
+        if (myCheckIns == null) {
             checkInsTable.setItems(FXCollections.observableArrayList());
             return;
         }
 
-        checkInsTable.setItems(FXCollections.observableArrayList(myCheckins));
-    }
-
-    // Handler for refresh button
-    @FXML
-    private void handleRefresh() {
-        loadCheckIns();
+        checkInsTable.setItems(FXCollections.observableArrayList(myCheckIns));
     }
 }

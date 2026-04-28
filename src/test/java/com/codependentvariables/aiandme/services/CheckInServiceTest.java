@@ -1,8 +1,8 @@
 package com.codependentvariables.aiandme.services;
 
-import com.codependentvariables.aiandme.model.Checkin;
+import com.codependentvariables.aiandme.model.CheckIn;
 import com.codependentvariables.aiandme.model.User;
-import com.codependentvariables.aiandme.model.mock.MockCheckinDAO;
+import com.codependentvariables.aiandme.model.mock.MockCheckInDAO;
 import com.codependentvariables.aiandme.state.AppState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,13 +12,13 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CheckInServiceTest {
-    private MockCheckinDAO mockCheckinDAO;
+    private MockCheckInDAO mockCheckinDAO;
     private CheckInService checkInService;
-    private Checkin checkin;
+    private CheckIn checkin;
 
     @BeforeEach
     public void setUp() {
-        mockCheckinDAO = new MockCheckinDAO();
+        mockCheckinDAO = new MockCheckInDAO();
         checkInService = new CheckInService(mockCheckinDAO);
 
         // reset AppState
@@ -30,7 +30,7 @@ public class CheckInServiceTest {
         AppState.getInstance().setCurrentUser(user);
 
         // create checkin
-        checkin = new Checkin(
+        checkin = new CheckIn(
                 5.0f,
                 5.0f,
                 5.0f,

@@ -1,7 +1,7 @@
 package com.codependentvariables.aiandme.controller;
 
 import com.codependentvariables.aiandme.Svg;
-import com.codependentvariables.aiandme.model.Checkin;
+import com.codependentvariables.aiandme.model.CheckIn;
 import com.codependentvariables.aiandme.navigation.Router;
 import com.codependentvariables.aiandme.navigation.View;
 import com.codependentvariables.aiandme.services.CheckInService;
@@ -32,7 +32,7 @@ public class CheckInController {
 
     @FXML
     public void submitCheckIn() {
-        Checkin checkin = new Checkin(
+        CheckIn checkIn = new CheckIn(
                 (float) usageSlider.getValue(),
                 (float) satisfactionSlider.getValue(),
                 (float) dependenceSlider.getValue(),
@@ -40,7 +40,7 @@ public class CheckInController {
                 LocalDateTime.now()
         );
 
-        checkInService.submitCheckIn(checkin);
+        checkInService.submitCheckIn(checkIn);
         Router.navigateLayout(View.HOME);
     }
 

@@ -3,7 +3,7 @@ package com.codependentvariables.aiandme.navigation;
 public enum View {
     APP,
     CHECKIN,
-    CHECKIN_LIBRARY,
+    CHECKIN_HISTORY,
     HOME,
     LAYOUT,
     LOADING,
