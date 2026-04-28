@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 public class SqliteCheckInDAO extends BaseSqliteDAO implements ICheckInDAO, IDatabaseEntity {
     private static final String schemaQuery = """
-            CREATE TABLE IF NOT EXISTS checkins (
+            CREATE TABLE IF NOT EXISTS check_ins (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 user_id INTEGER NOT NULL,
                 ai_use REAL NOT NULL,
@@ -21,8 +21,8 @@ public class SqliteCheckInDAO extends BaseSqliteDAO implements ICheckInDAO, IDat
         """;
 
     private static final String seedDataQuery = """
-            INSERT INTO checkins (user_id, ai_use, ai_happiness, ai_dependence, comment, completed_at) VALUES (1, 5.0, 5.0, 5.0, "Feel good about AI usage", '2026-04-14T17:28:00');
-            INSERT INTO checkins (user_id, ai_use, ai_happiness, ai_dependence, comment, completed_at) VALUES (2, 7.5, 2.5, 7.5, "Could rely on ai less", '2026-04-16T14:16:00');
+            INSERT INTO check_ins (user_id, ai_use, ai_happiness, ai_dependence, comment, completed_at) VALUES (1, 5.0, 5.0, 5.0, "Feel good about AI usage", '2026-04-14T17:28:00');
+            INSERT INTO check_ins (user_id, ai_use, ai_happiness, ai_dependence, comment, completed_at) VALUES (2, 7.5, 2.5, 7.5, "Could rely on ai less", '2026-04-16T14:16:00');
         """;
 
     public String getSchemaQuery() {
@@ -50,7 +50,7 @@ public class SqliteCheckInDAO extends BaseSqliteDAO implements ICheckInDAO, IDat
 
     public void add(CheckIn checkIn) {
         final String query = """
-                INSERT INTO checkins (
+                INSERT INTO check_ins (
                     user_id,
                     ai_use,
                     ai_happiness,
@@ -73,18 +73,18 @@ public class SqliteCheckInDAO extends BaseSqliteDAO implements ICheckInDAO, IDat
     }
 
     public void delete(CheckIn checkIn) {
-        final String query = "DELETE FROM checkIns WHERE id = ?";
+        final String query = "DELETE FROM check_ins WHERE id = ?";
 
         executeSql(query, statement -> statement.setInt(1, checkIn.getId()));
     }
 
     public List<CheckIn> getAll() {
-        final String query = "SELECT * FROM checkIns ORDER BY completed_at DESC";
+        final String query = "SELECT * FROM check_ins ORDER BY completed_at DESC";
         return executeQuery(query, CHECKIN_MAPPER);
     }
 
     public CheckIn get(int id) {
-        final String query = "SELECT * FROM checkIns WHERE id = ? LIMIT 1";
+        final String query = "SELECT * FROM check_ins WHERE id = ? LIMIT 1";
 
         List<CheckIn> checkIns = executeQuery(query, statement -> statement.setInt(1, id), CHECKIN_MAPPER);
         return firstOrNull(checkIns);
@@ -92,7 +92,7 @@ public class SqliteCheckInDAO extends BaseSqliteDAO implements ICheckInDAO, IDat
 
     @Override
     public List<CheckIn> getAllByUserId(int userId) {
-        final String query = "SELECT * FROM checkIns WHERE user_id = ? ORDER BY completed_at DESC";
+        final String query = "SELECT * FROM check_ins WHERE user_id = ? ORDER BY completed_at DESC";
 
         return executeQuery(query, statement -> statement.setInt(1, userId), CHECKIN_MAPPER);
     }
