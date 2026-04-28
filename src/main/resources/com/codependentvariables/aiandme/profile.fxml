@@ -41,6 +41,6 @@
         <Label text="Actions" styleClass="title" />
         <Button maxWidth="Infinity" onAction="#exportData" text="Export my data" />
         <Button maxWidth="Infinity" onAction="#clearData" text="Clear my data" />
-        <Button fx:id="deleteAccButton" maxWidth="Infinity" onAction="#deleteUser" text="Delete Account" styleClass="alert" />
+        <Button maxWidth="Infinity" onAction="#deleteUser" text="Delete Account" styleClass="alert" />
     </VBox>
 </HBox>
