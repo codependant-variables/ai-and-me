@@ -91,6 +91,9 @@ public class QuizLibraryController {
             User creator = userDAO.get(template.getUserId());
             creatorName = (creator != null) ? creator.getName() : "Unknown";
         }
+
+        String cardColour = getCategory(categoryName);
+
         Label creatorLabel = new Label("Created by: " + creatorName);
         creatorLabel.setFont(Font.font("System", 13));
         creatorLabel.setTextFill(Color.web("#777777"));
@@ -105,34 +108,55 @@ public class QuizLibraryController {
         quizInfoVBox.setPrefSize(180, 190);
         quizInfoVBox.setAlignment(Pos.CENTER);
         quizInfoVBox.setPadding(new Insets(20));
-        quizInfoVBox.setStyle(cardStyle(false));
+        quizInfoVBox.setStyle("-fx-border-color: transparent;");
 
         VBox catagorieIconVBox = new VBox(catagorieIconView);
         catagorieIconVBox.setPrefSize(180, 190);
         catagorieIconVBox.setAlignment(Pos.CENTER);
         catagorieIconVBox.setPadding(new Insets(20));
-        catagorieIconVBox.setStyle(cardStyle(false));
+        catagorieIconVBox.setStyle("-fx-border-color: transparent;");
 
         HBox card = new HBox(quizInfoVBox, catagorieIconVBox);
         card.setPrefSize(360, 190);
         card.setAlignment(Pos.CENTER);
-        card.setStyle(cardStyle(false));
+        // card.setStyle(cardStyle(false, cardColour));
+        card.setStyle("-fx-border-color: " + cardColour + "; -fx-border-width: 5; -fx-border-radius: 15px; ");
 
 
-        card.setOnMouseClicked(e -> selectCard(card, template));
+        card.setOnMouseClicked(e -> selectCard(card, template, cardColour));
 
         return card;
     }
 
-    private void selectCard(HBox card, QuizTemplate template) {
+    private static String getCategory(String categoryName) {
+        String cardColour;
+        if ("Pattern Recognition".equalsIgnoreCase(categoryName)) {
+            cardColour = "#8cc978"; //primary light Green
+        } else if ("Critical Thinking".equalsIgnoreCase(categoryName)) {
+            cardColour = "#ebae83"; // pastal orange
+        } else if ("Comprehension".equalsIgnoreCase(categoryName)) {
+            cardColour = "#79d1ed"; //primary Light blue
+        } else if ("Arithmetic".equalsIgnoreCase(categoryName)) {
+            cardColour = "#f09aa0"; // pastal red
+        } else {
+            cardColour = "#ce78b1"; //secondary pink
+        }
+        return cardColour;
+    }
+
+    private void selectCard(HBox card, QuizTemplate template, String colour) {
         // Deselect previous card
         if (selectedCard != null) {
-            selectedCard.setStyle(cardStyle(false));
+            String prevColour = (String) selectedCard.getUserData();
+            selectedCard.setStyle(cardStyle(false, prevColour));
         }
 
         selectedTemplate = template;
         selectedCard = card;
-        card.setStyle(cardStyle(true));
+
+        card.setUserData(colour);
+
+        card.setStyle(cardStyle(true, colour));
         updateActionButtons();
     }
 
@@ -144,12 +168,14 @@ public class QuizLibraryController {
         btnEditQuestions.setDisable(!hasSelection);
     }
 
-    private String cardStyle(boolean selected) {
+    private String cardStyle(boolean selected, String colour) {
         String border = selected
-                ? "-fx-border-color: #1976d2; -fx-border-width: 2;"
-                : "-fx-border-color: #cccccc; -fx-border-width: 1;";
-        String bg = selected ? "-fx-background-color: #e3f2fd;" : "-fx-background-color: #ffffff;";
-        return bg + border + "-fx-background-radius: 8; -fx-border-radius: 8; -fx-cursor: hand;";
+                ? "-fx-border-color: " + colour + "; -fx-border-width: 8;"
+                : "-fx-border-color: " + colour + "; -fx-border-width: 4;";
+        String bg = selected
+                ? "-fx-background-color: #e3f2fd;"
+                : "-fx-background-color: #ffffff;";
+        return bg + border + "-fx-background-radius: 15; -fx-border-radius: 15; -fx-cursor: hand;";
     }
 
     // Action Handlers
