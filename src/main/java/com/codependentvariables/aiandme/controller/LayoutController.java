@@ -35,13 +35,18 @@ public class LayoutController {
         Image newImage = new Image(AiAndMe.getLogoUrlString());
         logoRef.setImage(newImage);
 
+        boolean isLoggedIn = appState.getCurrentUser() != null;
+
+        loginButton.visibleProperty().bind(appState.getObservableCurrentUser().isNull());
+        signupButton.visibleProperty().bind(appState.getObservableCurrentUser().isNull());
+        profileButton.visibleProperty().bind(appState.getObservableCurrentUser().isNotNull());
+        logoutButton.visibleProperty().bind(appState.getObservableCurrentUser().isNotNull());
+
         // Bind managed to visible so they always match
         loginButton.managedProperty().bind(loginButton.visibleProperty());
         signupButton.managedProperty().bind(signupButton.visibleProperty());
         profileButton.managedProperty().bind(profileButton.visibleProperty());
         logoutButton.managedProperty().bind(logoutButton.visibleProperty());
-
-        setButtonVisibility();
     }
 
     @FXML
@@ -68,7 +73,6 @@ public class LayoutController {
     public void handleLogout() {
         // TODO: implement modal dialogue as "Are you sure?"
         userService.logout();
-        setButtonVisibility();
         Router.navigateLayout(View.HOME); // In case of seeing sensitive data
     }
 
@@ -85,14 +89,5 @@ public class LayoutController {
     @FXML
     public void navigateCheckin() {
         Router.navigateApp(View.CHECKIN);
-    }
-
-    private void setButtonVisibility() {
-        boolean isLoggedIn = appState.getCurrentUser() != null;
-
-        loginButton.setVisible(!isLoggedIn);
-        signupButton.setVisible(!isLoggedIn);
-        profileButton.setVisible(isLoggedIn);
-        logoutButton.setVisible(isLoggedIn);
     }
 }

@@ -192,7 +192,6 @@ public class ProfileController {
             accDeletionConfirmed = true;
         }
         else {
-            // FIXME: Navbar shows user as still logged in after account deletion.
             // Need to find good way to run LayoutController.SetButtonVisibility()
             Router.navigateLayout(View.HOME);
             userService.deleteUser(currentUser);
