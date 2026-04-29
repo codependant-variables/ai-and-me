@@ -14,7 +14,13 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="768.0" styleClass="background-AnchorPane" stylesheets="@stylesheet.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codependentvariables.aiandme.controller.CheckInController">
+<AnchorPane maxHeight="768.0" styleClass="background-AnchorPane" stylesheets="@stylesheet.css"
+            AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+            AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.codependentvariables.aiandme.controller.CheckInController">
+
    <StackPane maxHeight="768.0" prefHeight="150.0" prefWidth="200.0" styleClass="background-StackPane">
       <children>
                  <VBox maxHeight="768.0" maxWidth="550.0" prefWidth="550.0" styleClass="Quiz-Backing-VBox">
@@ -56,7 +62,7 @@
                               <Insets bottom="5.0" top="5.0" />
                            </VBox.margin>
                         </HBox>
-                           <Slider minWidth="400.0" prefWidth="400.0">
+                           <Slider fx:id="satisfactionSlider" minWidth="400.0" prefWidth="400.0">
                               <VBox.margin>
                                  <Insets />
                               </VBox.margin>
@@ -76,19 +82,23 @@
                            </Text>
                         <HBox prefHeight="10.0" prefWidth="200.0">
                            <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="supportingText" text="Dependant" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="supportingText" text="Dependent" />
                               <Pane maxHeight="10.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                                  <HBox.margin>
                                     <Insets />
                                  </HBox.margin>
                               </Pane>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="supportingText" text="Independant" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="supportingText" text="Independent" />
                            </children>
                            <VBox.margin>
                               <Insets bottom="5.0" top="5.0" />
                            </VBox.margin>
                         </HBox>
-                           <Slider prefWidth="400.0" />
+                           <Slider fx:id="dependenceSlider" minWidth="400.0" prefWidth="400.0">
+                              <VBox.margin>
+                                 <Insets />
+                              </VBox.margin>
+                           </Slider>
                         </children>
                      </VBox>
                   </children>
@@ -116,7 +126,7 @@
                               <Insets bottom="5.0" top="5.0" />
                            </VBox.margin>
                         </HBox>
-                           <Slider minWidth="400.0" prefWidth="400.0">
+                           <Slider fx:id="usageSlider" minWidth="400.0" prefWidth="400.0">
                               <VBox.margin>
                                  <Insets />
                               </VBox.margin>
@@ -136,14 +146,14 @@
                         </opaqueInsets>
                         <children>
                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Add any additional thoughts below:" />
-                           <TextArea minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="400.0">
+                           <TextArea fx:id="commentTextArea" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="400.0">
                               <VBox.margin>
                                  <Insets top="10.0" />
                               </VBox.margin>
                            </TextArea>
                            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                               <children>
-                                 <Button mnemonicParsing="false" styleClass="submissionButton" text="Submit Check-in" />
+                                 <Button mnemonicParsing="false" onAction="#submitCheckIn" styleClass="submissionButton" text="Submit Check-in" />
                                  <Button mnemonicParsing="false" onAction="#navigateHome" style="-fx-background-color: #8CC978;" styleClass="submissionButton">
                                     <graphic>
                                        <SVGPath fx:id="homeSvg" styleClass="submissionButton" />
@@ -164,4 +174,4 @@
                  </VBox>
       </children>
    </StackPane>
-   </AnchorPane>
+</AnchorPane>
