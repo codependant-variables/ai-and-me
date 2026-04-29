@@ -73,6 +73,7 @@ public class LoginController {
 
         Image image = new Image(AiAndMe.getLogoUrlString());
         logoRef.setImage(image);
+
         setPasswordVisible(false);
         viewPasswordIcon.setFill(isDarkMode ? Color.WHITE : Color.BLACK);
 
