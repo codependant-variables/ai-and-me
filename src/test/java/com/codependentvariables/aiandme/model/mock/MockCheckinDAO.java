@@ -3,6 +3,7 @@ package com.codependentvariables.aiandme.model.mock;
 import com.codependentvariables.aiandme.model.*;
 import com.codependentvariables.aiandme.model.dao.ICheckinDAO;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +13,9 @@ public class MockCheckinDAO implements ICheckinDAO {
     private static int autoIncrementId = 1;
 
     public MockCheckinDAO() {
-        add(new Checkin(1, 6.4f, 3.2f, 5.0f, LocalDateTime.now().minusDays(3)));
-        add(new Checkin(1, 3.0f, 7.5f, 1.0f, LocalDateTime.now().minusDays(2)));
-        add(new Checkin(2, 9.6f, 5.0f, 7.5f, LocalDateTime.now().minusDays(1)));
+        add(new Checkin(1, 6.4f, 3.2f, 5.0f, Timestamp.valueOf(LocalDateTime.now().minusDays(3))));
+        add(new Checkin(1, 3.0f, 7.5f, 1.0f, Timestamp.valueOf(LocalDateTime.now().minusDays(2))));
+        add(new Checkin(2, 9.6f, 5.0f, 7.5f, Timestamp.valueOf(LocalDateTime.now().minusDays(1))));
     }
 
     @Override
