@@ -19,10 +19,9 @@ public class SqliteQuizAttemptDAO extends BaseSqliteDAO implements IQuizAttemptD
     private static final String schemaQuery = """
         CREATE TABLE IF NOT EXISTS quiz_attempts (
             id INTEGER PRIMARY KEY,
-            user_id INTEGER NOT NULL,
+            user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
             name VARCHAR NOT NULL,
-            completed_at TIMESTAMP NOT NULL,
-            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+            completed_at TIMESTAMP NOT NULL
         );
     """;
 
