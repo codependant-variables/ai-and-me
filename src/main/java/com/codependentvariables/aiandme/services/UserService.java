@@ -101,12 +101,5 @@ public class UserService {
     public void deleteCurrentUser() {
         userDAO.delete(appState.getCurrentUser());
         appState.setCurrentUser(null);
-        // Trying to run a toast without the UI running kills the entire program.
-        // This is a lazy fix and could probably be moved to the actual Toast class.
-        try {
-            Toast.addMessage("Account Deleted", "We'll miss you!", ToastMessageType.INFORMATION);
-        } catch (IllegalStateException e) {
-            System.err.println("Toast failed to run, JavaFX probably isn't running.");
-        }
     }
 }

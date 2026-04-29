@@ -184,6 +184,7 @@ public class ProfileController {
     @FXML
     private void deleteUser() {
         Router.navigateLayout(View.HOME);
+        Toast.addMessage("Account Deleted", "We'll miss you!", ToastMessageType.INFORMATION);
         userService.deleteCurrentUser();
     }
 }
