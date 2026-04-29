@@ -60,5 +60,16 @@ public class MockQuizTemplateDAO implements IQuizTemplateDAO {
         }
         return result;
     }
+
+    @Override
+    public List<QuizTemplate> getByUserId(int userId) {
+        List<QuizTemplate> result = new ArrayList<>();
+        for (QuizTemplate template : templates) {
+            if (template.getUserId() == userId) {
+                result.add(template);
+            }
+        }
+        return result;
+    }
 }
 

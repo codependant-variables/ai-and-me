@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="600" prefWidth="800" style="-fx-background-color: AEAEAE;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codependentvariables.aiandme.controller.QuizLibraryController">
+<BorderPane prefHeight="600" prefWidth="800" style="-fx-background-color: AEAEAE;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codependentvariables.aiandme.controller.QuizLibraryController">
 
     <!-- TOP: Title Bar -->
     <top>
@@ -25,9 +25,9 @@
             <HBox alignment="CENTER" prefHeight="20.0" prefWidth="760.0">
                 <children>
                <Label layoutX="400.0" layoutY="20.0" prefHeight="20.0" prefWidth="78.0" style="-fx-font-weight: bold; -fx-font-size: 14px;" text="Participate" />
-               <Button fx:id="btnCreate1" maxWidth="Infinity" onAction="#handleCreate" prefHeight="39.0" prefWidth="85.0" style="-fx-background-color: #4caf50; -fx-text-fill: Black; -fx-font-size: 13px; -fx-padding: 10;" text="Start Quiz" />
+               <Button fx:id="btnAttemptQuiz" maxWidth="Infinity" onAction="#handleAttemptQuiz" prefHeight="39.0" prefWidth="85.0" style="-fx-background-color: #4caf50; -fx-text-fill: Black; -fx-font-size: 13px; -fx-padding: 10;" text="Start Quiz" />
                <Pane layoutX="632.0" layoutY="10.0" prefHeight="39.0" prefWidth="5.0" />
-               <Button fx:id="btnModify1" maxWidth="Infinity" onAction="#handleModify" prefHeight="39.0" prefWidth="120.0" style="-fx-background-color: #ff9800; -fx-text-fill: Black; -fx-font-size: 13px; -fx-padding: 10;" text="Reset Attempt" />
+               <Button fx:id="btnModify1" maxWidth="Infinity" prefHeight="39.0" prefWidth="120.0" style="-fx-background-color: #ff9800; -fx-text-fill: Black; -fx-font-size: 13px; -fx-padding: 10;" text="Reset Attempt" />
                <Pane prefHeight="39.0" prefWidth="122.0" />
                     <Label prefHeight="20.0" prefWidth="60.0" style="-fx-font-weight: bold; -fx-font-size: 14px;" text="Options" />
                     <Button fx:id="btnCreate" maxWidth="Infinity" onAction="#handleCreate" prefHeight="39.0" prefWidth="65.0" style="-fx-background-color: #4caf50; -fx-text-fill: Black; -fx-font-size: 13px; -fx-padding: 10;" text="Create" />

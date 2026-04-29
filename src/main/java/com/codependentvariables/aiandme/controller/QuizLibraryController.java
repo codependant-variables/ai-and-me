@@ -2,6 +2,9 @@ package com.codependentvariables.aiandme.controller;
 
 import com.codependentvariables.aiandme.model.*;
 import com.codependentvariables.aiandme.model.dao.*;
+import com.codependentvariables.aiandme.services.QuizAttemptService;
+import com.codependentvariables.aiandme.services.QuizTemplateService;
+import com.codependentvariables.aiandme.state.AppState;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -10,23 +13,25 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class QuizLibraryController {
 
     private final ICategoryDAO categoryDAO = new SqliteCategoryDAO();
-    private final IQuizTemplateDAO templateDAO = new SqliteQuizTemplateDAO();
-    private final IQuizTemplateQuestionDAO questionDAO = new SqliteQuizTemplateQuestionDAO();
-    private final IQuizTemplateAnswerDAO answerDAO = new SqliteQuizTemplateAnswerDAO();
+    private final IUserDAO userDAO = new SqliteUserDAO();
+    private final QuizTemplateService templateService = QuizTemplateService.getInstance();
+    private final QuizAttemptService attemptService = QuizAttemptService.getInstance();
 
     @FXML private FlowPane categoryContainer;
     @FXML private Button btnCreate;
     @FXML private Button btnModify;
     @FXML private Button btnDelete;
     @FXML private Button btnEditQuestions;
+    @FXML private Button btnAttemptQuiz;
 
     /** Currently selected template card, null when nothing is selected. */
     private QuizTemplate selectedTemplate;
@@ -40,6 +45,7 @@ public class QuizLibraryController {
         btnModify.setDisable(true);
         btnDelete.setDisable(true);
         btnEditQuestions.setDisable(true);
+        btnAttemptQuiz.setDisable(true);
         refreshCategories();
     }
 
@@ -60,7 +66,7 @@ public class QuizLibraryController {
             categoryNames.put(c.getId(), c.getName());
         }
 
-        List<QuizTemplate> templates = templateDAO.getAll();
+        List<QuizTemplate> templates = templateService.getAllTemplates();
         for (QuizTemplate template : templates) {
             String categoryName = categoryNames.getOrDefault(template.getCategoryId(), "Unknown");
             categoryContainer.getChildren().add(buildTemplateCard(template, categoryName));
@@ -82,7 +88,19 @@ public class QuizLibraryController {
         categoryLabel.setTextFill(Color.web("#777777"));
         categoryLabel.setWrapText(true);
 
-        VBox card = new VBox(10, nameLabel, categoryLabel);
+        String creatorName;
+        if (template.getUserId() == 0) {
+            creatorName = "Guest";
+        } else {
+            User creator = userDAO.get(template.getUserId());
+            creatorName = (creator != null) ? creator.getName() : "Unknown";
+        }
+        Label creatorLabel = new Label("Created by: " + creatorName);
+        creatorLabel.setFont(Font.font("System", 13));
+        creatorLabel.setTextFill(Color.web("#777777"));
+        creatorLabel.setWrapText(true);
+
+        VBox card = new VBox(10, nameLabel, categoryLabel, creatorLabel);
         card.setPrefSize(360, 190);
         card.setAlignment(Pos.CENTER);
         card.setPadding(new Insets(20));
@@ -111,6 +129,7 @@ public class QuizLibraryController {
         btnModify.setDisable(!hasSelection);
         btnDelete.setDisable(!hasSelection);
         btnEditQuestions.setDisable(!hasSelection);
+        btnAttemptQuiz.setDisable(!hasSelection);
     }
 
     private String cardStyle(boolean selected) {
@@ -233,10 +252,15 @@ public class QuizLibraryController {
             targetCategory = categoryCombo.getValue();
         }
 
-        QuizTemplate template = new QuizTemplate(templateName, targetCategory.getId(), "draft");
-        templateDAO.add(template);
-        refreshCategories();
-        showInfo("Template \"" + templateName + "\" created in category \"" + targetCategory.getName() + "\".");
+        try {
+            User currentUser = AppState.getInstance().getCurrentUser();
+            int userId = (currentUser != null) ? currentUser.getId() : 0;
+            templateService.createTemplate(templateName, targetCategory.getId(), userId);
+            refreshCategories();
+            showInfo("Template \"" + templateName + "\" created in category \"" + targetCategory.getName() + "\".");
+        } catch (IllegalArgumentException e) {
+            showWarning(e.getMessage());
+        }
     }
 
     /**
@@ -253,10 +277,13 @@ public class QuizLibraryController {
 
         Optional<String> nameResult = nameDialog.showAndWait();
         nameResult.map(String::trim).filter(s -> !s.isEmpty()).ifPresent(newName -> {
-            selectedTemplate.setName(newName);
-            templateDAO.update(selectedTemplate);
-            refreshCategories();
-            showInfo("Template renamed to \"" + newName + "\".");
+            try {
+                templateService.renameTemplate(selectedTemplate, newName);
+                refreshCategories();
+                showInfo("Template renamed to \"" + newName + "\".");
+            } catch (IllegalArgumentException e) {
+                showWarning(e.getMessage());
+            }
         });
     }
 
@@ -275,13 +302,147 @@ public class QuizLibraryController {
 
         confirm.showAndWait().filter(b -> b == ButtonType.YES).ifPresent(b -> {
             String name = selectedTemplate.getName();
-            templateDAO.delete(selectedTemplate);
+            templateService.deleteTemplate(selectedTemplate);
             refreshCategories();
             showInfo("Template \"" + name + "\" deleted.");
         });
     }
 
     // Helper methods
+
+    /**
+     * Steps the user through each question in the selected template,
+     * records their selected answer, then persists the attempt and shows a score.
+     */
+    @FXML
+    private void handleAttemptQuiz() {
+        if (selectedTemplate == null) return;
+
+        QuizTemplate template = selectedTemplate;
+        templateService.loadQuestionsIntoTemplate(template);
+
+        List<QuizTemplateQuestion> questions = template.getQuestions();
+        if (questions.isEmpty()) {
+            showWarning("This quiz has no questions yet. Add some questions before attempting it.");
+            return;
+        }
+
+        // selections: templateQuestionId → chosen answer
+        Map<Integer, QuizTemplateAnswer> selections = new HashMap<>();
+
+        int[] currentIndex = {0};
+
+        // Dialog shell
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Attempt Quiz – " + template.getName());
+        dialog.setHeaderText(null);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.NEXT, ButtonType.CANCEL);
+        dialog.getDialogPane().setPrefWidth(500);
+
+        // Relabel the "Next" button
+        Button nextBtn = (Button) dialog.getDialogPane().lookupButton(ButtonType.NEXT);
+        nextBtn.setText("Next >");
+
+        Label progressLabel = new Label();
+        progressLabel.setFont(Font.font("System", 12));
+        progressLabel.setTextFill(Color.web("#777777"));
+
+        Label questionLabel = new Label();
+        questionLabel.setFont(Font.font("System", FontWeight.BOLD, 16));
+        questionLabel.setWrapText(true);
+
+        VBox answersBox = new VBox(10);
+
+        VBox content = new VBox(14, progressLabel, questionLabel, answersBox);
+        content.setPadding(new Insets(16));
+        dialog.getDialogPane().setContent(content);
+
+        // Loads the current question into the dialog
+        Runnable loadQuestion = () -> {
+            QuizTemplateQuestion q = questions.get(currentIndex[0]);
+            int total = questions.size();
+            int idx   = currentIndex[0];
+
+            progressLabel.setText("Question " + (idx + 1) + " of " + total);
+            questionLabel.setText(q.getText());
+
+            answersBox.getChildren().clear();
+            ToggleGroup group = new ToggleGroup();
+
+            for (QuizTemplateAnswer answer : q.getAnswers()) {
+                RadioButton rb = new RadioButton(answer.getText());
+                rb.setToggleGroup(group);
+                rb.setWrapText(true);
+                rb.setUserData(answer);
+                // Re-select previously chosen answer if navigating back (future-proofing)
+                QuizTemplateAnswer prev = selections.get(q.getId());
+                if (prev != null && prev.getId() == answer.getId()) {
+                    rb.setSelected(true);
+                }
+                answersBox.getChildren().add(rb);
+            }
+
+            // Enable Next/Finish only when an answer is selected
+            nextBtn.setDisable(group.getSelectedToggle() == null);
+            group.selectedToggleProperty().addListener((obs, ov, nv) ->
+                    nextBtn.setDisable(nv == null));
+
+            boolean isLast = (idx == total - 1);
+            nextBtn.setText(isLast ? "Finish" : "Next >");
+        };
+
+        loadQuestion.run();
+
+        // Each click of "Next" saves the selection and advances (or finishes)
+        nextBtn.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
+            event.consume(); // prevent dialog from closing automatically
+
+            QuizTemplateQuestion q = questions.get(currentIndex[0]);
+            ToggleGroup group = null;
+            for (javafx.scene.Node node : answersBox.getChildren()) {
+                if (node instanceof RadioButton rb) {
+                    group = rb.getToggleGroup();
+                    break;
+                }
+            }
+
+            if (group != null && group.getSelectedToggle() != null) {
+                QuizTemplateAnswer chosen = (QuizTemplateAnswer) group.getSelectedToggle().getUserData();
+                selections.put(q.getId(), chosen);
+            }
+
+            if (currentIndex[0] < questions.size() - 1) {
+                currentIndex[0]++;
+                loadQuestion.run();
+            } else {
+                // All questions answered — close the dialog
+                dialog.setResult(ButtonType.OK);
+                dialog.close();
+            }
+        });
+
+        Optional<ButtonType> result = dialog.showAndWait();
+
+        // Only save if the user completed all questions (didn't hit Cancel mid-way)
+        if (result.isEmpty() || result.get() == ButtonType.CANCEL) return;
+        if (selections.size() < questions.size()) return; // incomplete
+
+        // Persist & score
+        User currentUser = AppState.getInstance().getCurrentUser();
+        int userId = (currentUser != null) ? currentUser.getId() : 0;
+
+        try {
+            int correct = attemptService.saveAttempt(template, userId, selections);
+            int total   = questions.size();
+            int pct     = (int) Math.round((double) correct / total * 100);
+
+            showInfo(String.format(
+                    "Quiz complete!%n%nScore: %d / %d  (%d%%)%n%nYour attempt has been saved.",
+                    correct, total, pct));
+        } catch (Exception e) {
+            showWarning("Failed to save attempt: " + e.getMessage());
+        }
+    }
 
     /**
      * Opens a popup to build/edit questions and answers for a template in the
@@ -296,11 +457,7 @@ public class QuizLibraryController {
         QuizTemplate template = selectedTemplate;
 
         // Load existing questions + answers into the aggregate
-        List<QuizTemplateQuestion> existingQuestions = questionDAO.getQuestionsByTemplate(template.getId());
-        for (QuizTemplateQuestion q : existingQuestions) {
-            q.setAnswers(answerDAO.getAnswersByQuestion(q.getId()));
-        }
-        template.setQuestions(existingQuestions);
+        templateService.loadQuestionsIntoTemplate(template);
 
         // Track questions removed during this session so we can delete them on Save
         List<QuizTemplateQuestion> removedQuestions = new ArrayList<>();
@@ -434,50 +591,12 @@ public class QuizLibraryController {
         if (result.isEmpty() || result.get() != ButtonType.OK) return;
         saveCurrentToModel.run();
 
-        // Validate every question before touching the DB
-        boolean allValid = workingQuestions.stream().allMatch(q -> {
-            if (q.getText().isBlank()) return false;
-            long nonBlank = q.getAnswers().stream().filter(a -> !a.getText().isBlank()).count();
-            boolean hasCorrect = q.getAnswers().stream().anyMatch(QuizTemplateAnswer::isCorrect);
-            return nonBlank >= 2 && hasCorrect;
-        });
-        if (!allValid) {
-            showWarning("Each question needs text, at least 2 answers, and one answer marked correct.");
-            return;
+        try {
+            templateService.saveQuestions(template, workingQuestions, removedQuestions);
+            showInfo("Questions saved for \"" + template.getName() + "\".");
+        } catch (IllegalArgumentException e) {
+            showWarning(e.getMessage());
         }
-
-        // Delete removed questions (and their answers)
-        for (QuizTemplateQuestion rq : removedQuestions) {
-            for (QuizTemplateAnswer ra : answerDAO.getAnswersByQuestion(rq.getId())) {
-                answerDAO.deleteAnswer(ra);
-            }
-            questionDAO.deleteQuestion(rq);
-        }
-
-        // Persist working questions
-        for (QuizTemplateQuestion q : workingQuestions) {
-            if (q.getId() == 0) {
-                // Brand-new question
-                questionDAO.addQuestion(q);
-                for (QuizTemplateAnswer a : q.getAnswers()) {
-                    a.setQuizTemplateQuestionId(q.getId());
-                    answerDAO.addAnswer(a);
-                }
-            } else {
-                // Existing question – update text, then replace all answers
-                questionDAO.updateQuestion(q);
-                for (QuizTemplateAnswer old : answerDAO.getAnswersByQuestion(q.getId())) {
-                    answerDAO.deleteAnswer(old);
-                }
-                for (QuizTemplateAnswer a : q.getAnswers()) {
-                    a.setId(0);
-                    a.setQuizTemplateQuestionId(q.getId());
-                    answerDAO.addAnswer(a);
-                }
-            }
-        }
-
-        showInfo("Questions saved for \"" + template.getName() + "\".");
     }
 
     private void showInfo(String message) {

@@ -38,6 +38,7 @@ public final class ViewUtils {
         return switch (view) {
             case View.APP -> "app.fxml";
             case View.CHECKIN -> "checkin.fxml";
+            case View.CHECKIN_HISTORY -> "checkin-history.fxml";
             case View.HOME -> "home.fxml";
             case View.LAYOUT -> "layout.fxml";
             case View.LOADING -> "loading.fxml";
