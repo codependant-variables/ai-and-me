@@ -12,6 +12,7 @@ public class SettingsController {
     private final AppState appState = AppState.getInstance();
     private final UserService userService = UserService.getInstance();
 
+
     @FXML
     private void initialize() {
         setThemeContent(appState.getIsDarkMode());
@@ -30,7 +31,7 @@ public class SettingsController {
 
     private void setThemeContent(boolean isDarkMode) {
         themeToggleIcon.setContent(isDarkMode ? Svg.SUN : Svg.MOON);
-        themeToggleIcon.setFill(isDarkMode ? Color.LIGHTGOLDENRODYELLOW : Color.MEDIUMSLATEBLUE);
+        themeToggleIcon.setFill(isDarkMode ? Color.YELLOW : Color.MEDIUMSLATEBLUE);
     }
 
     @FXML

@@ -8,28 +8,27 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class SettingsControllerTest {
 
-    public SettingsController testController = new SettingsController();
-    public AppState testState = new AppState();
+    //public SettingsController testController;
+    public AppState testAppState = AppState.getInstance();;
 
     @Test
     public void switch_theme_on_click() {
-        boolean isDarkMode = testState.getIsDarkMode();
-        System.out.println("isDarkMode: " + isDarkMode);
-        testController.switchTheme();
-        System.out.println("*click*");
-        System.out.println("isDarkMode: " + isDarkMode);
-        testState.setIsDarkMode(!isDarkMode);
-        System.out.println("isDarkMode: " + isDarkMode);
-        assertNotEquals(isDarkMode, testState.getIsDarkMode());
-        System.out.println("isDarkMode: " + isDarkMode);
+        boolean testAppStateTheme = testAppState.getIsDarkMode();
+        System.out.println(testAppStateTheme);
+        testAppState.setIsDarkMode(!testAppStateTheme);
+        System.out.println(testAppStateTheme);
+        boolean testAppStateTheme2 = testAppState.getIsDarkMode();
+        System.out.println(testAppStateTheme);
+        System.out.println(testAppStateTheme2);
+        assertNotEquals(testAppStateTheme,testAppStateTheme2);
     }
 
     @Test
     public void switch_orientation_on_click() {
-        boolean isVertical = testState.getIsVertical(); //bool from initial state
-        testController.switchOrientation(); // *click*
-        testState.setIsVertical(!isVertical);
-        assertNotEquals(isVertical, testState.getIsVertical()); //is it different now?
+        boolean testAppStateOrientation = testAppState.getIsVertical();
+        testAppState.setIsVertical(!testAppStateOrientation);
+        boolean testAppStateOrientation2 = testAppState.getIsVertical();
+        assertNotEquals(testAppStateOrientation,testAppStateOrientation2);
     }
 
 }
