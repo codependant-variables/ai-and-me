@@ -7,7 +7,6 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -32,7 +31,6 @@
                   <HBox.margin>
                      <Insets bottom="10.0" top="10.0" />
                   </HBox.margin></Button>
-               <Pane />
                <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
                     <Label minWidth="60.0" prefHeight="20.0" prefWidth="60.0" style="-fx-font-weight: bold; -fx-font-size: 14px;" text="Options">
                   <HBox.margin>

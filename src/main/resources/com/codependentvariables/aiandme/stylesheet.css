@@ -60,7 +60,6 @@ Button {
 
 
 
-
 .title {
     -fx-font-size: 18pt;
     -fx-font-weight: bold;
@@ -114,7 +113,6 @@ Button {
 
 /*------ Style Class - Nav header Bar ------*/
 .navBar {
-    -fx-background-color: #ffffff;
     -fx-effect: dropshadow(three-pass-box, #00000033, 15, 0.1, 5, 5);
 }
 

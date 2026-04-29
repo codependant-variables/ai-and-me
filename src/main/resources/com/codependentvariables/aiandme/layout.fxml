@@ -5,14 +5,17 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 
-<BorderPane stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codependentvariables.aiandme.controller.LayoutController">
+<BorderPane stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codependentvariables.aiandme.controller.LayoutController">
     <top>
-        <HBox alignment="CENTER" prefHeight="100.0" spacing="10.0">
+        <HBox alignment="CENTER" prefHeight="100.0" spacing="10.0" styleClass="navBar">
+         <Region maxWidth="30.0" HBox.hgrow="ALWAYS" />
             <ImageView fx:id="logoRef" fitHeight="72.0" fitWidth="223.0" layoutY="10.0">
-                <Image url="@dark-logo.png"/>
+                <Image url="@dark-logo.png" />
             </ImageView>
+         <Region HBox.hgrow="ALWAYS" />
             <Button onAction="#navigateHome" styleClass="navButton">Home</Button>
             <Button onAction="#navigateQuizLibrary" styleClass="navButton">Quiz Library</Button>
             <Button onAction="#navigateCheckin" styleClass="navButton">Daily Check-in</Button>
@@ -21,6 +24,7 @@
             <Button fx:id="profileButton" onAction="#navigateProfile" styleClass="navButton">Profile</Button>
             <Button onAction="#navigateSettings" styleClass="navButton">Settings</Button>
             <Button fx:id="logoutButton" onAction="#handleLogout" styleClass="navButton">Logout</Button>
+         <Region maxWidth="30.0" HBox.hgrow="ALWAYS" />
         </HBox>
     </top>
     <center>

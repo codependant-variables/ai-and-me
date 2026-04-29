@@ -115,12 +115,15 @@ public class QuizLibraryController {
 
         Image catagorieIcon = new Image(Objects.requireNonNull(getClass().getResourceAsStream(getCatagorieIcon)));
         ImageView catagorieIconView = new ImageView(catagorieIcon);
-        catagorieIconView.setFitWidth(80);
+        catagorieIconView.setFitWidth(120);
         catagorieIconView.setPreserveRatio(true);
 
-        VBox quizInfoVBox = new VBox(10, nameLabel, categoryLabel, creatorLabel);
+        Separator seperator = new Separator();
+        seperator.prefWidth(100);
+
+        VBox quizInfoVBox = new VBox( nameLabel, seperator, categoryLabel, creatorLabel);
         quizInfoVBox.setPrefSize(180, 190);
-        quizInfoVBox.setAlignment(Pos.CENTER);
+        quizInfoVBox.setAlignment(Pos.CENTER_LEFT);
         quizInfoVBox.setPadding(new Insets(20));
         quizInfoVBox.setStyle("-fx-border-color: transparent;");
 
@@ -133,7 +136,6 @@ public class QuizLibraryController {
         HBox card = new HBox(quizInfoVBox, catagorieIconVBox);
         card.setPrefSize(360, 190);
         card.setAlignment(Pos.CENTER);
-        // card.setStyle(cardStyle(false, cardColour));
         card.setStyle("-fx-border-color: " + cardColour + "; -fx-background-radius: 20px; -fx-border-width: 5; -fx-border-radius: 15px; -fx-background-color: #ffffff; -fx-effect: dropshadow(three-pass-box, #00000033, 15, 0.1, 5, 5); ");
 
 
@@ -183,14 +185,22 @@ public class QuizLibraryController {
     }
 
     private String cardStyle(boolean selected, String colour) {
-        String border = selected
-                ? "-fx-border-color: " + colour + "; -fx-border-width: 8;"
-                : "-fx-border-color: " + colour + "; -fx-border-width: 4;";
         String bg = selected
                 ? "-fx-background-color: #e3f2fd;"
                 : "-fx-background-color: #ffffff;";
-        return bg + border + "-fx-background-radius: 20px; -fx-border-radius: 15px; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, #00000033, 15, 0.1, 5, 5);";
+        return bg + "-fx-border-color: " + colour + "; -fx-border-width: 4; -fx-background-radius: 20px; -fx-border-radius: 15px; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, #00000033, 15, 0.1, 5, 5);";
     }
+
+//    private String cardStyle(boolean selected, String colour) {
+//        String border = selected
+//                //? "-fx-border-color: " + colour + "; -fx-border-width: 8;"
+//                ? "-fx-border-color: #000000; -fx-border-width: 4;"
+//                : "-fx-border-color: " + colour + "; -fx-border-width: 4;";
+//        String bg = selected
+//                ? "-fx-background-color: #e3f2fd;"
+//                : "-fx-background-color: #ffffff;";
+//        return bg + border + "-fx-background-radius: 20px; -fx-border-radius: 15px; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, #00000033, 15, 0.1, 5, 5);";
+//    }
 
     // Action Handlers
 

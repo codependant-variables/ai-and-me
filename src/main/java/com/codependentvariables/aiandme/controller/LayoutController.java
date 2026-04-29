@@ -78,13 +78,11 @@ public class LayoutController {
     }
 
     @FXML
-    public void navigateSettings() {
-        Router.navigateApp(View.SETTINGS);
-    }
+    public void navigateSettings() { Router.navigateLayout(View.SETTINGS); }
 
     @FXML
     public void navigateCheckin() {
-        Router.navigateApp(View.CHECKIN);
+        Router.navigateLayout(View.CHECKIN);
     }
 
     private void setButtonVisibility() {
