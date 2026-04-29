@@ -16,6 +16,7 @@ import javafx.scene.text.FontWeight;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public class QuizLibraryController {
@@ -92,6 +93,19 @@ public class QuizLibraryController {
             creatorName = (creator != null) ? creator.getName() : "Unknown";
         }
 
+        String getCatagorieIcon;
+        if ("Pattern Recognition".equalsIgnoreCase(categoryName)) {
+            getCatagorieIcon = "/com/codependentvariables/aiandme/Images/CatagoryPatternRecognition.png"; // pastal green
+        } else if ("Critical Thinking".equalsIgnoreCase(categoryName)) {
+            getCatagorieIcon = "/com/codependentvariables/aiandme/Images/CatagoryCriticalThinking.png"; // pastal green
+        } else if ("Comprehension".equalsIgnoreCase(categoryName)) {
+            getCatagorieIcon = "/com/codependentvariables/aiandme/Images/CatagoryComprehension.png"; //red
+        } else if ("Arithmetic".equalsIgnoreCase(categoryName)) {
+            getCatagorieIcon = "/com/codependentvariables/aiandme/Images/CatagoryArithmetic.png"; // primary purple
+        } else {
+            getCatagorieIcon = "/com/codependentvariables/aiandme/Images/CatagoryOther.png"; //secondary pink
+        }
+
         String cardColour = getCategory(categoryName);
 
         Label creatorLabel = new Label("Created by: " + creatorName);
@@ -99,7 +113,7 @@ public class QuizLibraryController {
         creatorLabel.setTextFill(Color.web("#777777"));
         creatorLabel.setWrapText(true);
 
-        Image catagorieIcon = new Image(getClass().getResourceAsStream("/com/codependentvariables/aiandme/Images/streakIcon.png"));
+        Image catagorieIcon = new Image(Objects.requireNonNull(getClass().getResourceAsStream(getCatagorieIcon)));
         ImageView catagorieIconView = new ImageView(catagorieIcon);
         catagorieIconView.setFitWidth(80);
         catagorieIconView.setPreserveRatio(true);
@@ -120,7 +134,7 @@ public class QuizLibraryController {
         card.setPrefSize(360, 190);
         card.setAlignment(Pos.CENTER);
         // card.setStyle(cardStyle(false, cardColour));
-        card.setStyle("-fx-border-color: " + cardColour + "; -fx-border-width: 5; -fx-border-radius: 15px; ");
+        card.setStyle("-fx-border-color: " + cardColour + "; -fx-background-radius: 20px; -fx-border-width: 5; -fx-border-radius: 15px; -fx-background-color: #ffffff; -fx-effect: dropshadow(three-pass-box, #00000033, 15, 0.1, 5, 5); ");
 
 
         card.setOnMouseClicked(e -> selectCard(card, template, cardColour));
@@ -131,13 +145,13 @@ public class QuizLibraryController {
     private static String getCategory(String categoryName) {
         String cardColour;
         if ("Pattern Recognition".equalsIgnoreCase(categoryName)) {
-            cardColour = "#8cc978"; //primary light Green
+            cardColour = "#7ad1ec"; //primary blue
         } else if ("Critical Thinking".equalsIgnoreCase(categoryName)) {
-            cardColour = "#ebae83"; // pastal orange
+            cardColour = "#8cc978"; // pastal green
         } else if ("Comprehension".equalsIgnoreCase(categoryName)) {
-            cardColour = "#79d1ed"; //primary Light blue
+            cardColour = "#ef4136"; //red
         } else if ("Arithmetic".equalsIgnoreCase(categoryName)) {
-            cardColour = "#f09aa0"; // pastal red
+            cardColour = "#9c72b2"; // primary purple
         } else {
             cardColour = "#ce78b1"; //secondary pink
         }
@@ -175,7 +189,7 @@ public class QuizLibraryController {
         String bg = selected
                 ? "-fx-background-color: #e3f2fd;"
                 : "-fx-background-color: #ffffff;";
-        return bg + border + "-fx-background-radius: 15; -fx-border-radius: 15; -fx-cursor: hand;";
+        return bg + border + "-fx-background-radius: 20px; -fx-border-radius: 15px; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, #00000033, 15, 0.1, 5, 5);";
     }
 
     // Action Handlers

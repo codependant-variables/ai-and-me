@@ -52,6 +52,15 @@ Button {
     -fx-fill: #787878;
 }
 
+/*------ Style Class - Inverse Dropshadow ------*/
+.innerDropshadow {
+    -fx-effect: innershadow(three-pass-box, #00000033, 16, 0.1, 5, 5);
+}
+
+
+
+
+
 .title {
     -fx-font-size: 18pt;
     -fx-font-weight: bold;
