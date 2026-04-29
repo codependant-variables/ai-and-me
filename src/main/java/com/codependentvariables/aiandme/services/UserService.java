@@ -97,4 +97,10 @@ public class UserService {
             userDAO.update(currentUser);
         }
     }
+
+    public void deleteCurrentUser() {
+        userDAO.delete(appState.getCurrentUser());
+        appState.setCurrentUser(null);
+        Toast.addMessage("Account Deleted", "We'll miss you!", ToastMessageType.INFORMATION);
+    }
 }

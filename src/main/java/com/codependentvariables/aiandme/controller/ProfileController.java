@@ -185,6 +185,7 @@ public class ProfileController {
 
     @FXML
     private void deleteUser() {
-        throw new RuntimeException("Delete user not implemented.");
+        Router.navigateLayout(View.HOME);
+        userService.deleteCurrentUser();
     }
 }

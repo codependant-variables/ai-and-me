@@ -8,7 +8,7 @@ import java.util.List;
 public class SqlitePreferredCategoryDAO extends BaseSqliteDAO implements IPreferredCategoryDAO, IDatabaseEntity {
     private static final String schemaQuery = """
             CREATE TABLE IF NOT EXISTS user_preferred_categories (
-                user_id INTEGER NOT NULL REFERENCES users(id),
+                user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
                 category_id INTEGER NOT NULL REFERENCES categories(id),
                 PRIMARY KEY (user_id, category_id)
             );
