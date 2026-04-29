@@ -88,7 +88,6 @@ public class UserService {
 
     public void logout() {
         appState.setCurrentUser(null);
-        Toast.addMessage("Logged Out", "Goodbye!", ToastMessageType.INFORMATION);
     }
 
     public void updateCurrentUser() {
