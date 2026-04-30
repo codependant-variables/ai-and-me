@@ -34,7 +34,7 @@ public class QuizAttemptResultsController {
     }
 
     private HBox buildRowNode(ResultRow row) {
-        Label indicator = new Label(row.correct() ? "✓" : "✗");
+        Label indicator = new Label(row.correct() ? "Correct" : "Incorrect");
         indicator.setFont(Font.font("System", FontWeight.BOLD, 14));
         indicator.setTextFill(row.correct() ? Color.web("#388e3c") : Color.web("#d32f2f"));
         indicator.setMinWidth(24);

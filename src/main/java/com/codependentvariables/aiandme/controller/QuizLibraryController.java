@@ -515,7 +515,7 @@ public class QuizLibraryController {
 
         List<QuizTemplateQuestion> workingQuestions = new ArrayList<>(template.getQuestions());
         if (workingQuestions.isEmpty()) {
-            workingQuestions.add(new QuizTemplateQuestion(template.getId(), ""));
+            workingQuestions.add(new QuizTemplateQuestion(template.getId(), "New Question"));
         }
 
         Dialog<ButtonType> dialog = new Dialog<>();
@@ -609,7 +609,8 @@ public class QuizLibraryController {
                 }
             }
             btnPrev.setDisable(currentIndex[0] == 0);
-            btnNext.setDisable(currentIndex[0] >= workingQuestions.size() - 1);
+            btnNext.setDisable(currentIndex[0] >= workingQuestions.size() - 1 || workingQuestions.size() >= 10);
+            btnAddQ.setDisable(workingQuestions.size() >= 10);
             btnRemoveQ.setDisable(workingQuestions.size() <= 1);
         };
 
@@ -620,7 +621,7 @@ public class QuizLibraryController {
 
         btnAddQ.setOnAction(e -> {
             saveCurrentToModel.run();
-            workingQuestions.add(new QuizTemplateQuestion(template.getId(), ""));
+            workingQuestions.add(new QuizTemplateQuestion(template.getId(), "New Question"));
             currentIndex[0] = workingQuestions.size() - 1;
             loadFromModel.run();
         });

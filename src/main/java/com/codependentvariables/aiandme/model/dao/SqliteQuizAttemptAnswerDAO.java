@@ -17,9 +17,7 @@ public class SqliteQuizAttemptAnswerDAO extends BaseSqliteDAO implements IQuizAt
             );
             """;
 
-    private static final String seedDataQuery = """
-            INSERT INTO quiz_attempt_answers (quiz_attempt_question_id, text, is_correct) VALUES (1, 'What is the product of 2+2?', 'true');
-            """;
+    private static final String seedDataQuery = "";
 
     public String getSchemaQuery() {
         return schemaQuery;
