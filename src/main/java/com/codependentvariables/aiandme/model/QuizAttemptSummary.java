@@ -16,6 +16,12 @@ public class QuizAttemptSummary {
 
     public QuizAttemptSummary(String quizName, int correct, int total,
                                Timestamp completedAt, List<ResultRow> rows) {
+        if (quizName == null || quizName.isBlank())
+            throw new IllegalArgumentException("quizName must not be blank");
+        if (correct < 0)
+            throw new IllegalArgumentException("correct must not be negative");
+        if (correct > total)
+            throw new IllegalArgumentException("correct (" + correct + ") must not exceed total (" + total + ")");
         this.quizName    = quizName;
         this.correct     = correct;
         this.total       = total;
