@@ -10,7 +10,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class QuizAttemptServiceTest {
-    
+
 
     private StubAttemptDAO attemptDAO;
     private StubAttemptQuestionDAO questionDAO;
@@ -91,8 +91,8 @@ public class QuizAttemptServiceTest {
 
         assertFalse(found.isEmpty(), "There should be at least one attempt for userId " + userId);
         assertTrue(
-            found.stream().allMatch(a -> a.getUserId() == userId),
-            "All returned attempts must belong to the requested user"
+                found.stream().allMatch(a -> a.getUserId() == userId),
+                "All returned attempts must belong to the requested user"
         );
     }
 
@@ -104,8 +104,8 @@ public class QuizAttemptServiceTest {
         List<QuizAttempt> user1Attempts = service.getAttemptsByUser(1);
 
         assertTrue(
-            user1Attempts.stream().noneMatch(a -> a.getUserId() == 2),
-            "Attempts for user 2 must not appear in user 1's results"
+                user1Attempts.stream().noneMatch(a -> a.getUserId() == 2),
+                "Attempts for user 2 must not appear in user 1's results"
         );
     }
 

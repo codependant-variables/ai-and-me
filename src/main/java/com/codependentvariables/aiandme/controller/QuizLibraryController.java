@@ -1,11 +1,13 @@
 package com.codependentvariables.aiandme.controller;
 
+import com.codependentvariables.aiandme.AiAndMe;
 import com.codependentvariables.aiandme.model.*;
 import com.codependentvariables.aiandme.model.dao.*;
 import com.codependentvariables.aiandme.services.QuizAttemptService;
 import com.codependentvariables.aiandme.services.QuizTemplateService;
 import com.codependentvariables.aiandme.state.AppState;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -433,12 +435,26 @@ public class QuizLibraryController {
 
         try {
             int correct = attemptService.saveAttempt(template, userId, selections);
-            int total   = questions.size();
-            int pct     = (int) Math.round((double) correct / total * 100);
 
-            showInfo(String.format(
-                    "Quiz complete!%n%nScore: %d / %d  (%d%%)%n%nYour attempt has been saved.",
-                    correct, total, pct));
+            FXMLLoader loader = new FXMLLoader(
+                    AiAndMe.class.getResource("quiz-attempt-results.fxml")
+            );
+            javafx.scene.Node resultsView = loader.load();
+            QuizAttemptResultsController resultsCtrl = loader.getController();
+            resultsCtrl.initResults(
+                    template.getName(),
+                    correct,
+                    questions.size(),
+                    QuizAttemptResultsController.buildResultRows(questions, selections)
+            );
+
+            Dialog<ButtonType> resultsDialog = new Dialog<>();
+            resultsDialog.setTitle("Quiz Results – " + template.getName());
+            resultsDialog.setHeaderText(null);
+            resultsDialog.getDialogPane().setContent(resultsView);
+            resultsDialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
+            resultsDialog.showAndWait();
+
         } catch (Exception e) {
             showWarning("Failed to save attempt: " + e.getMessage());
         }
