@@ -316,6 +316,10 @@ public class QuizLibraryController {
      * Steps the user through each question in the selected template,
      * records their selected answer, then persists the attempt and shows a score.
      */
+    public static boolean isAttemptable(List<QuizTemplateQuestion> questions) {
+        return questions != null && questions.size() >= 2;
+    }
+
     @FXML
     private void handleAttemptQuiz() {
         if (selectedTemplate == null) return;
@@ -324,8 +328,8 @@ public class QuizLibraryController {
         templateService.loadQuestionsIntoTemplate(template);
 
         List<QuizTemplateQuestion> questions = template.getQuestions();
-        if (questions.isEmpty()) {
-            showWarning("This quiz has no questions yet. Add some questions before attempting it.");
+        if (!isAttemptable(questions)) {
+            showWarning("This quiz needs at least 2 questions before it can be attempted.");
             return;
         }
 
@@ -359,7 +363,6 @@ public class QuizLibraryController {
         content.setPadding(new Insets(16));
         dialog.getDialogPane().setContent(content);
 
-        // Loads the current question into the dialog
         Runnable loadQuestion = () -> {
             QuizTemplateQuestion q = questions.get(currentIndex[0]);
             int total = questions.size();
@@ -376,7 +379,7 @@ public class QuizLibraryController {
                 rb.setToggleGroup(group);
                 rb.setWrapText(true);
                 rb.setUserData(answer);
-                // Re-select previously chosen answer if navigating back (future-proofing)
+
                 QuizTemplateAnswer prev = selections.get(q.getId());
                 if (prev != null && prev.getId() == answer.getId()) {
                     rb.setSelected(true);
@@ -384,7 +387,6 @@ public class QuizLibraryController {
                 answersBox.getChildren().add(rb);
             }
 
-            // Enable Next/Finish only when an answer is selected
             nextBtn.setDisable(group.getSelectedToggle() == null);
             group.selectedToggleProperty().addListener((obs, ov, nv) ->
                     nextBtn.setDisable(nv == null));
@@ -395,9 +397,8 @@ public class QuizLibraryController {
 
         loadQuestion.run();
 
-        // Each click of "Next" saves the selection and advances (or finishes)
         nextBtn.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
-            event.consume(); // prevent dialog from closing automatically
+            event.consume();
 
             QuizTemplateQuestion q = questions.get(currentIndex[0]);
             ToggleGroup group = null;
@@ -417,7 +418,6 @@ public class QuizLibraryController {
                 currentIndex[0]++;
                 loadQuestion.run();
             } else {
-                // All questions answered — close the dialog
                 dialog.setResult(ButtonType.OK);
                 dialog.close();
             }
@@ -425,9 +425,8 @@ public class QuizLibraryController {
 
         Optional<ButtonType> result = dialog.showAndWait();
 
-        // Only save if the user completed all questions (didn't hit Cancel mid-way)
         if (result.isEmpty() || result.get() == ButtonType.CANCEL) return;
-        if (selections.size() < questions.size()) return; // incomplete
+        if (selections.size() < questions.size()) return;
 
         // Persist & score
         User currentUser = AppState.getInstance().getCurrentUser();
@@ -445,6 +444,7 @@ public class QuizLibraryController {
                     template.getName(),
                     correct,
                     questions.size(),
+                    java.sql.Timestamp.from(java.time.Instant.now()),
                     QuizAttemptResultsController.buildResultRows(questions, selections)
             );
 
@@ -460,25 +460,16 @@ public class QuizLibraryController {
         }
     }
 
-    /**
-     * Opens a popup to build/edit questions and answers for a template in the
-     * selected category. The popup mirrors quiz.fxml's Q&A layout but is fully
-     * interactive, backed by the QuizTemplate aggregate and persisted via the
-     * existing Question and Answer DAOs.
-     */
     @FXML
     private void handleEditQuestions() {
         if (selectedTemplate == null) return;
 
         QuizTemplate template = selectedTemplate;
 
-        // Load existing questions + answers into the aggregate
         templateService.loadQuestionsIntoTemplate(template);
 
-        // Track questions removed during this session so we can delete them on Save
         List<QuizTemplateQuestion> removedQuestions = new ArrayList<>();
 
-        // Working mutable copy (template.getQuestions() is unmodifiable)
         List<QuizTemplateQuestion> workingQuestions = new ArrayList<>(template.getQuestions());
         if (workingQuestions.isEmpty()) {
             workingQuestions.add(new QuizTemplateQuestion(template.getId(), ""));
@@ -602,7 +593,6 @@ public class QuizLibraryController {
             loadFromModel.run();
         });
 
-        // Commit on OK
         Optional<ButtonType> result = dialog.showAndWait();
         if (result.isEmpty() || result.get() != ButtonType.OK) return;
         saveCurrentToModel.run();

@@ -7,6 +7,7 @@ import com.codependentvariables.aiandme.model.QuizTemplateQuestion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -165,5 +166,21 @@ public class QuizAttemptResultsControllerTest {
         assertNotNull(rows);
         assertTrue(rows.isEmpty(), "Empty question list must produce empty result list");
     }
-}
 
+    @Test
+    void formatCompletedAt_returnsFormattedString_forValidTimestamp() {
+        Timestamp ts = Timestamp.valueOf("2026-04-30 14:35:00");
+
+        String result = QuizAttemptResultsController.formatCompletedAt(ts);
+
+        assertEquals("30 Apr 2026, 14:35", result);
+    }
+
+    @Test
+    void formatCompletedAt_returnsFallback_forNullTimestamp() {
+        String result = QuizAttemptResultsController.formatCompletedAt(null);
+
+        assertNotNull(result);
+        assertFalse(result.isBlank(), "Null timestamp must produce a non-blank fallback string");
+    }
+}

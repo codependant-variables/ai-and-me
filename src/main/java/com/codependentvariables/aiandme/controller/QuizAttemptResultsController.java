@@ -13,6 +13,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -22,12 +24,14 @@ public class QuizAttemptResultsController {
     @FXML private Label lblQuizName;
     @FXML private Label lblScore;
     @FXML private Label lblPercentage;
+    @FXML private Label lblCompletedAt;
     @FXML private VBox  resultsContainer;
 
-    public void initResults(String quizName, int correct, int total, List<ResultRow> rows) {
+    public void initResults(String quizName, int correct, int total, Timestamp completedAt, List<ResultRow> rows) {
         lblQuizName.setText(quizName);
         lblScore.setText("Score:  " + correct + " / " + total);
         lblPercentage.setText(calculatePercentage(correct, total) + "%");
+        lblCompletedAt.setText("Completed: " + formatCompletedAt(completedAt));
 
         resultsContainer.getChildren().clear();
         for (ResultRow row : rows) {
@@ -66,6 +70,11 @@ public class QuizAttemptResultsController {
             throw new IllegalArgumentException("total must be greater than 0, got: " + total);
         }
         return (int) Math.round((double) correct / total * 100);
+    }
+
+    public static String formatCompletedAt(Timestamp ts) {
+        if (ts == null) return "Unknown";
+        return new SimpleDateFormat("d MMM yyyy, HH:mm").format(ts);
     }
 
     public static List<ResultRow> buildResultRows(
