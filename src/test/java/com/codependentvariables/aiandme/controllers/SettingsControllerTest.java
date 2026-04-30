@@ -8,18 +8,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class SettingsControllerTest {
 
-    //public SettingsController testController;
     public AppState testAppState = AppState.getInstance();;
 
     @Test
     public void switch_theme_on_click() {
         boolean testAppStateTheme = testAppState.getIsDarkMode();
-        System.out.println(testAppStateTheme);
         testAppState.setIsDarkMode(!testAppStateTheme);
-        System.out.println(testAppStateTheme);
         boolean testAppStateTheme2 = testAppState.getIsDarkMode();
-        System.out.println(testAppStateTheme);
-        System.out.println(testAppStateTheme2);
         assertNotEquals(testAppStateTheme,testAppStateTheme2);
     }
 
