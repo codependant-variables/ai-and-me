@@ -35,10 +35,8 @@ public class QuizLibraryController {
     @FXML private Button btnEditQuestions;
     @FXML private Button btnAttemptQuiz;
 
-    /** Currently selected template card, null when nothing is selected. */
     private QuizTemplate selectedTemplate;
 
-    /** The VBox card node that is currently highlighted. */
     private VBox selectedCard;
 
     @FXML
@@ -51,18 +49,12 @@ public class QuizLibraryController {
         refreshCategories();
     }
 
-    // Generate views
-
-    /**
-     * Clears and regens every template card inside the FlowPane.
-     */
     private void refreshCategories() {
         categoryContainer.getChildren().clear();
         selectedTemplate = null;
         selectedCard = null;
         updateActionButtons();
 
-        // Build a lookup map so we can resolve category names efficiently
         java.util.Map<Integer, String> categoryNames = new java.util.HashMap<>();
         for (Category c : categoryDAO.getAll()) {
             categoryNames.put(c.getId(), c.getName());
@@ -75,10 +67,6 @@ public class QuizLibraryController {
         }
     }
 
-    /**
-     * Builds a styled VBox card for a single quiz template.
-     * Shows the template name and which category it belongs to.
-     */
     private VBox buildTemplateCard(QuizTemplate template, String categoryName) {
         Label nameLabel = new Label(template.getName());
         nameLabel.setFont(Font.font("System", FontWeight.BOLD, 16));
@@ -114,7 +102,7 @@ public class QuizLibraryController {
     }
 
     private void selectCard(VBox card, QuizTemplate template) {
-        // Deselect previous card
+
         if (selectedCard != null) {
             selectedCard.setStyle(cardStyle(false));
         }
@@ -142,30 +130,19 @@ public class QuizLibraryController {
         return bg + border + "-fx-background-radius: 8; -fx-border-radius: 8; -fx-cursor: hand;";
     }
 
-    // Action Handlers
-
-    /**
-     * Opens a pop-up dialog to create a new template.
-     * The user can select an existing category from a drop-down or tick
-     * "New Category?" to type a new category name which is persisted
-     * and immediately reflected in the library.
-     */
     @FXML
     private void handleCreate() {
         List<Category> categories = categoryDAO.getAll();
 
-        // Build dialog box
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Create Template");
         dialog.setHeaderText("Create a new quiz template");
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
-        // Template name
         Label nameLabel = new Label("Template name:");
         TextField nameField = new TextField();
         nameField.setPromptText("Enter template name");
 
-        // Category drop-down
         Label categoryLabel = new Label("Category:");
         ComboBox<Category> categoryCombo = new ComboBox<>();
         categoryCombo.getItems().setAll(categories);
@@ -182,10 +159,8 @@ public class QuizLibraryController {
                 setText(empty || c == null ? null : c.getName());
             }
         });
-        // Pre-select the currently highlighted category if any
         categoryCombo.setMaxWidth(Double.MAX_VALUE);
 
-        // New Category checkbox + text field
         CheckBox newCategoryCheck = new CheckBox("New Category?");
         TextField newCategoryField = new TextField();
         newCategoryField.setPromptText("Enter new category name");
@@ -201,7 +176,6 @@ public class QuizLibraryController {
             }
         });
 
-        // Validate OK button
         Button okButton = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
         okButton.setDisable(true);
         Runnable validate = () -> {
@@ -216,7 +190,6 @@ public class QuizLibraryController {
         newCategoryField.textProperty().addListener((o, ov, nv) -> validate.run());
         newCategoryCheck.selectedProperty().addListener((o, ov, nv) -> validate.run());
 
-        // Layout
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
@@ -235,7 +208,6 @@ public class QuizLibraryController {
         dialog.getDialogPane().setContent(grid);
         nameField.requestFocus();
 
-        // Handle result
         Optional<ButtonType> result = dialog.showAndWait();
         if (result.isEmpty() || result.get() != ButtonType.OK) return;
 
@@ -246,7 +218,7 @@ public class QuizLibraryController {
             String newCatName = newCategoryField.getText().trim();
             Category newCat = new Category(newCatName);
             categoryDAO.add(newCat);
-            // Fetch the just-added category so we have its DB-assigned id
+
             targetCategory = categoryDAO.getAll().stream()
                     .filter(c -> c.getName().equalsIgnoreCase(newCatName))
                     .findFirst().orElse(newCat);
@@ -265,9 +237,6 @@ public class QuizLibraryController {
         }
     }
 
-    /**
-     * Renames the selected template.
-     */
     @FXML
     private void handleModify() {
         if (selectedTemplate == null) return;
@@ -289,9 +258,6 @@ public class QuizLibraryController {
         });
     }
 
-    /**
-     * Deletes the selected template.
-     */
     @FXML
     private void handleDelete() {
         if (selectedTemplate == null) return;
@@ -312,10 +278,6 @@ public class QuizLibraryController {
 
     // Helper methods
 
-    /**
-     * Steps the user through each question in the selected template,
-     * records their selected answer, then persists the attempt and shows a score.
-     */
     public static boolean isAttemptable(List<QuizTemplateQuestion> questions) {
         return questions != null && questions.size() >= 2;
     }
@@ -333,19 +295,16 @@ public class QuizLibraryController {
             return;
         }
 
-        // selections: templateQuestionId → chosen answer
         Map<Integer, QuizTemplateAnswer> selections = new HashMap<>();
 
         int[] currentIndex = {0};
 
-        // Dialog shell
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Attempt Quiz – " + template.getName());
         dialog.setHeaderText(null);
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.NEXT, ButtonType.CANCEL);
         dialog.getDialogPane().setPrefWidth(500);
 
-        // Relabel the "Next" button
         Button nextBtn = (Button) dialog.getDialogPane().lookupButton(ButtonType.NEXT);
         nextBtn.setText("Next >");
 
@@ -428,7 +387,6 @@ public class QuizLibraryController {
         if (result.isEmpty() || result.get() == ButtonType.CANCEL) return;
         if (selections.size() < questions.size()) return;
 
-        // Persist & score
         User currentUser = AppState.getInstance().getCurrentUser();
         int userId = (currentUser != null) ? currentUser.getId() : 0;
 
@@ -441,11 +399,14 @@ public class QuizLibraryController {
             javafx.scene.Node resultsView = loader.load();
             QuizAttemptResultsController resultsCtrl = loader.getController();
             resultsCtrl.initResults(
-                    template.getName(),
-                    correct,
-                    questions.size(),
-                    java.sql.Timestamp.from(java.time.Instant.now()),
-                    QuizAttemptResultsController.buildResultRows(questions, selections)
+                    com.codependentvariables.aiandme.model.QuizAttemptSummary.of(
+                            template.getName(),
+                            correct,
+                            questions.size(),
+                            java.sql.Timestamp.from(java.time.Instant.now()),
+                            questions,
+                            selections
+                    )
             );
 
             Dialog<ButtonType> resultsDialog = new Dialog<>();
@@ -475,7 +436,6 @@ public class QuizLibraryController {
             workingQuestions.add(new QuizTemplateQuestion(template.getId(), ""));
         }
 
-        // Dialog shell
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Edit Questions – " + template.getName());
         dialog.setHeaderText(null);
@@ -485,7 +445,6 @@ public class QuizLibraryController {
         int[] currentIndex = {0};
         final int MAX_ANSWERS = 4;
 
-        // Widgets
         Label quizNameLabel = new Label(template.getName());
         quizNameLabel.setFont(Font.font("System", FontWeight.BOLD, 20));
 
@@ -530,8 +489,7 @@ public class QuizLibraryController {
         );
         content.setPadding(new Insets(16));
         dialog.getDialogPane().setContent(content);
-
-        // Load and save helpers
+        
         Runnable saveCurrentToModel = () -> {
             if (workingQuestions.isEmpty()) return;
             QuizTemplateQuestion q = workingQuestions.get(currentIndex[0]);

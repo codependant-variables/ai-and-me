@@ -1,7 +1,7 @@
 package com.codependentvariables.aiandme.controller;
 
-import com.codependentvariables.aiandme.model.QuizTemplateAnswer;
-import com.codependentvariables.aiandme.model.QuizTemplateQuestion;
+import com.codependentvariables.aiandme.model.QuizAttemptSummary;
+import com.codependentvariables.aiandme.model.QuizAttemptSummary.ResultRow;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -13,12 +13,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 public class QuizAttemptResultsController {
 
     @FXML private Label lblQuizName;
@@ -27,14 +21,14 @@ public class QuizAttemptResultsController {
     @FXML private Label lblCompletedAt;
     @FXML private VBox  resultsContainer;
 
-    public void initResults(String quizName, int correct, int total, Timestamp completedAt, List<ResultRow> rows) {
-        lblQuizName.setText(quizName);
-        lblScore.setText("Score:  " + correct + " / " + total);
-        lblPercentage.setText(calculatePercentage(correct, total) + "%");
-        lblCompletedAt.setText("Completed: " + formatCompletedAt(completedAt));
+    public void initResults(QuizAttemptSummary summary) {
+        lblQuizName.setText(summary.getQuizName());
+        lblScore.setText("Score:  " + summary.getCorrect() + " / " + summary.getTotal());
+        lblPercentage.setText(summary.getPercentage() + "%");
+        lblCompletedAt.setText("Completed: " + summary.getFormattedDate());
 
         resultsContainer.getChildren().clear();
-        for (ResultRow row : rows) {
+        for (ResultRow row : summary.getRows()) {
             resultsContainer.getChildren().add(buildRowNode(row));
         }
     }
@@ -63,35 +57,5 @@ public class QuizAttemptResultsController {
         return hbox;
     }
 
-    // todo: @FXML private void handleBackToLibrary() method
-
-    public static int calculatePercentage(int correct, int total) {
-        if (total <= 0) {
-            throw new IllegalArgumentException("total must be greater than 0, got: " + total);
-        }
-        return (int) Math.round((double) correct / total * 100);
-    }
-
-    public static String formatCompletedAt(Timestamp ts) {
-        if (ts == null) return "Unknown";
-        return new SimpleDateFormat("d MMM yyyy, HH:mm").format(ts);
-    }
-
-    public static List<ResultRow> buildResultRows(
-            List<QuizTemplateQuestion> questions,
-            Map<Integer, QuizTemplateAnswer> selections) {
-
-        List<ResultRow> rows = new ArrayList<>();
-        for (QuizTemplateQuestion q : questions) {
-            QuizTemplateAnswer selected = selections.get(q.getId());
-            if (selected != null) {
-                rows.add(new ResultRow(q.getText(), selected.getText(), selected.isCorrect()));
-            } else {
-                rows.add(new ResultRow(q.getText(), "–", false));
-            }
-        }
-        return List.copyOf(rows);
-    }
-
-    public record ResultRow(String questionText, String selectedAnswer, boolean correct) {}
+    // TODO: @FXML private void handleBackToLibrary() { ... }
 }
