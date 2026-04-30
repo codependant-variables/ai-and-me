@@ -11,6 +11,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -19,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 public class QuizLibraryController {
@@ -37,7 +40,8 @@ public class QuizLibraryController {
 
     private QuizTemplate selectedTemplate;
 
-    private VBox selectedCard;
+    /** The VBox card node that is currently highlighted. */
+    private HBox selectedCard;
 
     @FXML
     public void initialize() {
@@ -67,7 +71,11 @@ public class QuizLibraryController {
         }
     }
 
-    private VBox buildTemplateCard(QuizTemplate template, String categoryName) {
+    /**
+     * Builds a styled VBox card for a single quiz template.
+     * Shows the template name and which category it belongs to.
+     */
+    private HBox buildTemplateCard(QuizTemplate template, String categoryName) {
         Label nameLabel = new Label(template.getName());
         nameLabel.setFont(Font.font("System", FontWeight.BOLD, 16));
         nameLabel.setTextFill(Color.web("#333333"));
@@ -85,31 +93,87 @@ public class QuizLibraryController {
             User creator = userDAO.get(template.getUserId());
             creatorName = (creator != null) ? creator.getName() : "Unknown";
         }
+
+        String getCatagorieIcon;
+        if ("Pattern Recognition".equalsIgnoreCase(categoryName)) {
+            getCatagorieIcon = "/com/codependentvariables/aiandme/Images/CatagoryPatternRecognition.png"; // pastal green
+        } else if ("Critical Thinking".equalsIgnoreCase(categoryName)) {
+            getCatagorieIcon = "/com/codependentvariables/aiandme/Images/CatagoryCriticalThinking.png"; // pastal green
+        } else if ("Comprehension".equalsIgnoreCase(categoryName)) {
+            getCatagorieIcon = "/com/codependentvariables/aiandme/Images/CatagoryComprehension.png"; //red
+        } else if ("Arithmetic".equalsIgnoreCase(categoryName)) {
+            getCatagorieIcon = "/com/codependentvariables/aiandme/Images/CatagoryArithmetic.png"; // primary purple
+        } else {
+            getCatagorieIcon = "/com/codependentvariables/aiandme/Images/CatagoryOther.png"; //secondary pink
+        }
+
+        String cardColour = getCategory(categoryName);
+
         Label creatorLabel = new Label("Created by: " + creatorName);
         creatorLabel.setFont(Font.font("System", 13));
         creatorLabel.setTextFill(Color.web("#777777"));
         creatorLabel.setWrapText(true);
 
-        VBox card = new VBox(10, nameLabel, categoryLabel, creatorLabel);
+        Image catagorieIcon = new Image(Objects.requireNonNull(getClass().getResourceAsStream(getCatagorieIcon)));
+        ImageView catagorieIconView = new ImageView(catagorieIcon);
+        catagorieIconView.setFitWidth(120);
+        catagorieIconView.setPreserveRatio(true);
+
+        Separator seperator = new Separator();
+        seperator.prefWidth(100);
+
+        VBox quizInfoVBox = new VBox( nameLabel, seperator, categoryLabel, creatorLabel);
+        quizInfoVBox.setPrefSize(180, 190);
+        quizInfoVBox.setAlignment(Pos.CENTER_LEFT);
+        quizInfoVBox.setPadding(new Insets(20));
+        quizInfoVBox.setStyle("-fx-border-color: transparent;");
+
+        VBox catagorieIconVBox = new VBox(catagorieIconView);
+        catagorieIconVBox.setPrefSize(180, 190);
+        catagorieIconVBox.setAlignment(Pos.CENTER);
+        catagorieIconVBox.setPadding(new Insets(20));
+        catagorieIconVBox.setStyle("-fx-border-color: transparent;");
+
+        HBox card = new HBox(quizInfoVBox, catagorieIconVBox);
         card.setPrefSize(360, 190);
         card.setAlignment(Pos.CENTER);
-        card.setPadding(new Insets(20));
-        card.setStyle(cardStyle(false));
+        card.setStyle("-fx-border-color: " + cardColour + "; -fx-background-radius: 20px; -fx-border-width: 5; -fx-border-radius: 15px; -fx-background-color: #ffffff; -fx-effect: dropshadow(three-pass-box, #00000033, 15, 0.1, 5, 5); ");
 
-        card.setOnMouseClicked(e -> selectCard(card, template));
+
+        card.setOnMouseClicked(e -> selectCard(card, template, cardColour));
 
         return card;
     }
 
-    private void selectCard(VBox card, QuizTemplate template) {
+    private static String getCategory(String categoryName) {
+        String cardColour;
+        if ("Pattern Recognition".equalsIgnoreCase(categoryName)) {
+            cardColour = "#7ad1ec"; //primary blue
+        } else if ("Critical Thinking".equalsIgnoreCase(categoryName)) {
+            cardColour = "#8cc978"; // pastal green
+        } else if ("Comprehension".equalsIgnoreCase(categoryName)) {
+            cardColour = "#ef4136"; //red
+        } else if ("Arithmetic".equalsIgnoreCase(categoryName)) {
+            cardColour = "#9c72b2"; // primary purple
+        } else {
+            cardColour = "#ce78b1"; //secondary pink
+        }
+        return cardColour;
+    }
 
+    private void selectCard(HBox card, QuizTemplate template, String colour) {
+        // Deselect previous card
         if (selectedCard != null) {
-            selectedCard.setStyle(cardStyle(false));
+            String prevColour = (String) selectedCard.getUserData();
+            selectedCard.setStyle(cardStyle(false, prevColour));
         }
 
         selectedTemplate = template;
         selectedCard = card;
-        card.setStyle(cardStyle(true));
+
+        card.setUserData(colour);
+
+        card.setStyle(cardStyle(true, colour));
         updateActionButtons();
     }
 
@@ -122,14 +186,32 @@ public class QuizLibraryController {
         btnAttemptQuiz.setDisable(!hasSelection);
     }
 
-    private String cardStyle(boolean selected) {
-        String border = selected
-                ? "-fx-border-color: #1976d2; -fx-border-width: 2;"
-                : "-fx-border-color: #cccccc; -fx-border-width: 1;";
-        String bg = selected ? "-fx-background-color: #e3f2fd;" : "-fx-background-color: #ffffff;";
-        return bg + border + "-fx-background-radius: 8; -fx-border-radius: 8; -fx-cursor: hand;";
+    private String cardStyle(boolean selected, String colour) {
+        String bg = selected
+                ? "-fx-background-color: #e3f2fd;"
+                : "-fx-background-color: #ffffff;";
+        return bg + "-fx-border-color: " + colour + "; -fx-border-width: 4; -fx-background-radius: 20px; -fx-border-radius: 15px; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, #00000033, 15, 0.1, 5, 5);";
     }
 
+//    private String cardStyle(boolean selected, String colour) {
+//        String border = selected
+//                //? "-fx-border-color: " + colour + "; -fx-border-width: 8;"
+//                ? "-fx-border-color: #000000; -fx-border-width: 4;"
+//                : "-fx-border-color: " + colour + "; -fx-border-width: 4;";
+//        String bg = selected
+//                ? "-fx-background-color: #e3f2fd;"
+//                : "-fx-background-color: #ffffff;";
+//        return bg + border + "-fx-background-radius: 20px; -fx-border-radius: 15px; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, #00000033, 15, 0.1, 5, 5);";
+//    }
+
+    // Action Handlers
+
+    /**
+     * Opens a pop-up dialog to create a new template.
+     * The user can select an existing category from a drop-down or tick
+     * "New Category?" to type a new category name which is persisted
+     * and immediately reflected in the library.
+     */
     @FXML
     private void handleCreate() {
         List<Category> categories = categoryDAO.getAll();

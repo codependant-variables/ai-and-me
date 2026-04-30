@@ -3,13 +3,15 @@ package com.codependentvariables.aiandme.state;
 import com.codependentvariables.aiandme.AiAndMe;
 import com.codependentvariables.aiandme.model.User;
 import com.codependentvariables.aiandme.navigation.Router;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 import static javafx.application.Application.setUserAgentStylesheet;
 
 public class AppState {
     private static AppState instance;
 
-    private User currentUser;
+    private final ObjectProperty<User> currentUser = new SimpleObjectProperty<>(null);;
 
     private boolean isDarkMode = false;
     private boolean isVertical = false;
@@ -21,14 +23,18 @@ public class AppState {
         return instance;
     }
 
-    public User getCurrentUser() {
+    public ObjectProperty<User> getObservableCurrentUser() {
         return currentUser;
     }
 
+    public User getCurrentUser() {
+        return currentUser.getValue();
+    }
+
     public void setCurrentUser(User user) {
-        currentUser = user;
+        currentUser.setValue(user);
         if (user != null && Router.hasApp()) {
-            setIsDarkMode(currentUser.getIsDarkMode());
+            setIsDarkMode(currentUser.get().getIsDarkMode());
         }
     }
 
@@ -38,8 +44,8 @@ public class AppState {
 
     public void setIsDarkMode(boolean isDarkMode) {
         this.isDarkMode = isDarkMode;
-        if (currentUser != null) {
-            currentUser.setIsDarkMode(isDarkMode);
+        if (currentUser.get() != null) {
+            currentUser.get().setIsDarkMode(isDarkMode);
         }
         setUserAgentStylesheet(isDarkMode ? AiAndMe.darkModeStylesheet : AiAndMe.lightModeStylesheet);
     }
@@ -50,8 +56,8 @@ public class AppState {
 
     public void setIsVertical(boolean isVertical) {
         this.isVertical = isVertical;
-        if (currentUser != null) {
-            currentUser.setIsVertical(isVertical);
+        if (currentUser.get() != null) {
+            currentUser.get().setIsVertical(isVertical);
         }
     }
 }
