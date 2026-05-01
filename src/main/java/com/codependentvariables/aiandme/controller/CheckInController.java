@@ -33,6 +33,7 @@ public class CheckInController {
     @FXML
     public void submitCheckIn() {
         CheckIn checkIn = new CheckIn(
+                appState.getCurrentUser().getId(),
                 (float) usageSlider.getValue(),
                 (float) satisfactionSlider.getValue(),
                 (float) dependenceSlider.getValue(),

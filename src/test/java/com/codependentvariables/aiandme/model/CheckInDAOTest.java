@@ -14,7 +14,7 @@ public class CheckInDAOTest {
 
     @Test
     public void get() {
-        CheckIn checkIn = new CheckIn(6.4f, 5.0f, 5.0f, "test", LocalDateTime.now());
+        CheckIn checkIn = new CheckIn(1,6.4f, 5.0f, 5.0f, "test", LocalDateTime.now());
         checkIn.setId(1);
         checkIn.setUserId(1);
 
