@@ -31,6 +31,7 @@ public class CheckInServiceTest {
 
         // create checkin
         checkin = new CheckIn(
+                user.getId(),
                 5.0f,
                 5.0f,
                 5.0f,

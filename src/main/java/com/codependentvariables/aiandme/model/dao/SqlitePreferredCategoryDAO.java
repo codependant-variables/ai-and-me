@@ -13,15 +13,9 @@ public class SqlitePreferredCategoryDAO extends BaseSqliteDAO implements IPrefer
                 PRIMARY KEY (user_id, category_id)
             );
             """;
-    /*
-    * Attempting to create a compound key using col1 PRIMARY KEY, col2 PRIMARY KEY will fail.
-    * Must use PRIMARY KEY (col1, col2).
-    * Source: https://stackoverflow.com/questions/734689/sqlite-primary-key-on-multiple-columns
-    */
 
     private static final String seedDataQuery = """
             INSERT INTO user_preferred_categories (user_id, category_id) VALUES (1, 1);
-            INSERT INTO user_preferred_categories (user_id, category_id) VALUES (1, 2);
             INSERT INTO user_preferred_categories (user_id, category_id) VALUES (2, 1);
             """;
 
@@ -34,8 +28,8 @@ public class SqlitePreferredCategoryDAO extends BaseSqliteDAO implements IPrefer
     }
 
     private static final IRowMapper<Category> PREFERRED_CATEGORY_MAPPER = (resultSet) -> {
-        Category category = new Category(resultSet.getString("categories.name"));
-        category.setId(resultSet.getInt("user_preferred_categories.category_id"));
+        Category category = new Category(resultSet.getString("name"));
+        category.setId(resultSet.getInt("category_id"));
         return category;
     };
 

@@ -34,6 +34,7 @@ public class SqliteCheckInDAO extends BaseSqliteDAO implements ICheckInDAO, IDat
 
     private static final IRowMapper<CheckIn> CHECKIN_MAPPER = (resultSet) -> {
         CheckIn checkin = new CheckIn(
+                resultSet.getInt("user_id"),
                 resultSet.getFloat("ai_use"),
                 resultSet.getFloat("ai_happiness"),
                 resultSet.getFloat("ai_dependence"),

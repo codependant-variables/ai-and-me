@@ -17,10 +17,9 @@ public class SqliteQuizAttemptQuestionDAO extends BaseSqliteDAO implements IQuiz
     private static final String schemaQuery = """
             CREATE TABLE IF NOT EXISTS quiz_attempt_questions (
             id INTEGER PRIMARY KEY,
-            quiz_attempt_id INTEGER NOT NULL,
+            quiz_attempt_id INTEGER REFERENCES quiz_attempts(id) ON DELETE CASCADE,
             text VARCHAR NOT NULL,
-            image BYTE[],
-            FOREIGN KEY (quiz_attempt_id) REFERENCES quiz_attempts(id) ON DELETE CASCADE
+            image BYTE[]
             );
     """;
 
@@ -90,6 +89,11 @@ public class SqliteQuizAttemptQuestionDAO extends BaseSqliteDAO implements IQuiz
         final String query = "DELETE FROM quiz_attempt_questions WHERE id = ?";
 
         executeSql(query, statement -> statement.setInt(1, quizAttemptQuestion.getId()));
+    }
+
+    public List<QuizAttemptQuestion> get(int id) {
+        final String query = "SELECT * FROM quiz_attempt_questions WHERE id = ?";
+        return executeQuery(query, statement -> statement.setInt(1, id), QUIZ_ATTEMPT_QUESTION_MAPPER);
     }
 
     /**

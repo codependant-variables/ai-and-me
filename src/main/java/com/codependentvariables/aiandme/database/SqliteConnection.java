@@ -1,6 +1,8 @@
 package com.codependentvariables.aiandme.database;
 
 import com.codependentvariables.aiandme.model.dao.*;
+import org.sqlite.SQLiteConfig;
+
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -18,8 +20,13 @@ public class SqliteConnection {
             boolean isNewDatabase = !dbFile.exists();
 
             String url = "jdbc:sqlite:" + DB_PATH;
-            connection = DriverManager.getConnection(url);
-
+            // Foreign key support not enabled by default in SQLite.
+            // Need to enable via SQLiteConfig.
+            // https://stackoverflow.com/questions/5890250/on-delete-cascade-in-sqlite3
+            // https://stackoverflow.com/questions/9774923/how-do-you-enforce-foreign-key-constraints-in-sqlite-through-java
+            SQLiteConfig config = new SQLiteConfig();
+            config.enforceForeignKeys(true);
+            connection = DriverManager.getConnection(url, config.toProperties());
             if (isNewDatabase)
                 setupSchema();
         } catch (SQLException e) {
@@ -48,6 +55,8 @@ public class SqliteConnection {
                 new SqliteQuizTemplateAnswerDAO(),
                 new SqliteQuizAttemptDAO(),
                 new SqliteQuizAttemptQuestionDAO(),
+                new SqliteQuizAttemptAnswerDAO(),
+                new SqlitePreferredCategoryDAO(),
                 new SqliteQuizAttemptAnswerDAO()
         };
 
