@@ -8,21 +8,21 @@ import java.time.LocalDateTime;
 
 public class SqliteCheckInDAO extends BaseSqliteDAO implements ICheckInDAO, IDatabaseEntity {
     private static final String schemaQuery = """
-            CREATE TABLE IF NOT EXISTS check_ins (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-                ai_use REAL NOT NULL,
-                ai_happiness REAL NOT NULL,
-                ai_dependence REAL NOT NULL,
-                comment VARCHAR(255),
-                completed_at TEXT NOT NULL
-            );
-        """;
+                CREATE TABLE IF NOT EXISTS check_ins (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                    ai_use REAL NOT NULL,
+                    ai_happiness REAL NOT NULL,
+                    ai_dependence REAL NOT NULL,
+                    comment VARCHAR(255),
+                    completed_at TEXT NOT NULL
+                );
+            """;
 
     private static final String seedDataQuery = """
-            INSERT INTO check_ins (user_id, ai_use, ai_happiness, ai_dependence, comment, completed_at) VALUES (1, 5.0, 5.0, 5.0, "Feel good about AI usage", '2026-04-14T17:28:00');
-            INSERT INTO check_ins (user_id, ai_use, ai_happiness, ai_dependence, comment, completed_at) VALUES (2, 7.5, 2.5, 7.5, "Could rely on ai less", '2026-04-16T14:16:00');
-        """;
+                INSERT INTO check_ins (user_id, ai_use, ai_happiness, ai_dependence, comment, completed_at) VALUES (1, 5.0, 5.0, 5.0, "Feel good about AI usage", '2026-04-14T17:28:00');
+                INSERT INTO check_ins (user_id, ai_use, ai_happiness, ai_dependence, comment, completed_at) VALUES (2, 7.5, 2.5, 7.5, "Could rely on ai less", '2026-04-16T14:16:00');
+            """;
 
     public String getSchemaQuery() {
         return schemaQuery;

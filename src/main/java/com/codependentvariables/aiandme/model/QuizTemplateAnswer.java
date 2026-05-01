@@ -8,14 +8,12 @@ public class QuizTemplateAnswer {
     private boolean isCorrect;
 
     public QuizTemplateAnswer(int quizTemplateQuestionId, String text, boolean isCorrect) {
-        if (text == null || text.isBlank()) throw new IllegalArgumentException("text must not be blank");
         this.quizTemplateQuestionId = quizTemplateQuestionId;
         this.text = text;
         this.isCorrect = isCorrect;
     }
 
     public QuizTemplateAnswer(int quizTemplateQuestionId, String text, byte[] image, boolean isCorrect) {
-        if (text == null || text.isBlank()) throw new IllegalArgumentException("text must not be blank");
         this.quizTemplateQuestionId = quizTemplateQuestionId;
         this.text = text;
         this.image = image;

@@ -7,16 +7,17 @@ import java.util.List;
 
 public class SqlitePreferredCategoryDAO extends BaseSqliteDAO implements IPreferredCategoryDAO, IDatabaseEntity {
     private static final String schemaQuery = """
-            CREATE TABLE IF NOT EXISTS user_preferred_categories (
-                user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-                category_id INTEGER NOT NULL REFERENCES categories(id),
-                PRIMARY KEY (user_id, category_id)
-            );
+                CREATE TABLE IF NOT EXISTS user_preferred_categories (
+                    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                    category_id INTEGER NOT NULL REFERENCES categories(id),
+                    PRIMARY KEY (user_id, category_id)
+                );
             """;
 
     private static final String seedDataQuery = """
-            INSERT INTO user_preferred_categories (user_id, category_id) VALUES (1, 1);
-            INSERT INTO user_preferred_categories (user_id, category_id) VALUES (2, 1);
+                INSERT INTO user_preferred_categories (user_id, category_id) VALUES (1, 1);
+                INSERT INTO user_preferred_categories (user_id, category_id) VALUES (1, 2);
+                INSERT INTO user_preferred_categories (user_id, category_id) VALUES (2, 1);
             """;
 
     public String getSchemaQuery() {

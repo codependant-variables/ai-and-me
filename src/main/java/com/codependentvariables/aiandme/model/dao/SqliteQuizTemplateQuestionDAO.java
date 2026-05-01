@@ -8,20 +8,23 @@ import java.util.List;
 
 public class SqliteQuizTemplateQuestionDAO extends BaseSqliteDAO implements IQuizTemplateQuestionDAO, IDatabaseEntity {
     private static final String schemaQuery = """
-        CREATE TABLE IF NOT EXISTS quiz_template_questions (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            quiz_template_id INTEGER NOT NULL,
-            text VARCHAR NOT NULL,
-            image BLOB,
-            FOREIGN KEY (quiz_template_id) REFERENCES quiz_templates(id)
-        );
-    """;
+                CREATE TABLE IF NOT EXISTS quiz_template_questions (
+                    id INTEGER PRIMARY KEY,
+                    quiz_template_id INTEGER NOT NULL REFERENCES quiz_templates(id),
+                    text VARCHAR NOT NULL,
+                    image BLOB
+                );
+            """;
+
+    private static final String seedDataQuery = """
+                INSERT INTO quiz_template_questions (quiz_template_id, text) VALUES (1, '13 + 29');
+            """;
 
     @Override
     public String getSchemaQuery() { return schemaQuery; }
 
     @Override
-    public String getSeedDataQuery() { return ""; }
+    public String getSeedDataQuery() { return seedDataQuery; }
 
     private static final IRowMapper<QuizTemplateQuestion> MAPPER = (rs) -> {
         QuizTemplateQuestion question = new QuizTemplateQuestion(

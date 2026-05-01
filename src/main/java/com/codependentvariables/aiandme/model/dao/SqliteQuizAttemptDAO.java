@@ -17,18 +17,20 @@ public class SqliteQuizAttemptDAO extends BaseSqliteDAO implements IQuizAttemptD
      * Includes a foreign key reference to the users table.
      */
     private static final String schemaQuery = """
-        CREATE TABLE IF NOT EXISTS quiz_attempts (
-            id INTEGER PRIMARY KEY,
-            user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-            name VARCHAR NOT NULL,
-            completed_at TIMESTAMP NOT NULL
-        );
-    """;
+                CREATE TABLE IF NOT EXISTS quiz_attempts (
+                    id INTEGER PRIMARY KEY,
+                    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                    name VARCHAR NOT NULL,
+                    completed_at TIMESTAMP NOT NULL
+                );
+            """;
 
     /**
      * Seed data inserted when the database is initialised.
      */
-    private static final String seedDataQuery = "";
+    private static final String seedDataQuery = """
+                INSERT INTO quiz_attempts (user_id, name, completed_at) VALUES ('Basic Addition', 1, '2026-04-27 00:00:00');
+            """;
 
     @Override
     public String getSchemaQuery() {

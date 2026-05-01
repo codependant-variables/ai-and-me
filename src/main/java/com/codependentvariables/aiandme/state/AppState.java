@@ -13,8 +13,8 @@ public class AppState {
 
     private final ObjectProperty<User> currentUser = new SimpleObjectProperty<>(null);;
 
-    public boolean isDarkMode = false;
-    public boolean isVertical = false;
+    private boolean isDarkMode = false;
+    private boolean isVertical = false;
 
     public static AppState getInstance() {
         if (instance == null) {
@@ -48,8 +48,7 @@ public class AppState {
             currentUser.get().setIsDarkMode(isDarkMode);
         }
 
-        // Removed the code below because it's code that requires java fx but app state doesnt run java fx
-        // setUserAgentStylesheet(isDarkMode ? AiAndMe.darkModeStylesheet : AiAndMe.lightModeStylesheet);
+        setUserAgentStylesheet(isDarkMode ? AiAndMe.darkModeStylesheet : AiAndMe.lightModeStylesheet);
     }
 
     public boolean getIsVertical() {

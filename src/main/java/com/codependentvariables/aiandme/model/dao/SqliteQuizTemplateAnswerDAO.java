@@ -3,26 +3,31 @@ package com.codependentvariables.aiandme.model.dao;
 import com.codependentvariables.aiandme.database.IDatabaseEntity;
 import com.codependentvariables.aiandme.database.IRowMapper;
 import com.codependentvariables.aiandme.model.QuizTemplateAnswer;
-
 import java.util.List;
 
 public class SqliteQuizTemplateAnswerDAO extends BaseSqliteDAO implements IQuizTemplateAnswerDAO, IDatabaseEntity {
     private static final String schemaQuery = """
-        CREATE TABLE IF NOT EXISTS quiz_template_answers (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            quiz_template_question_id INTEGER NOT NULL,
-            text VARCHAR NOT NULL,
-            image BLOB,
-            is_correct INTEGER NOT NULL DEFAULT 0,
-            FOREIGN KEY (quiz_template_question_id) REFERENCES quiz_template_questions(id)
-        );
-    """;
+                CREATE TABLE IF NOT EXISTS quiz_template_answers (
+                    id INTEGER PRIMARY KEY,
+                    quiz_template_question_id INTEGER NOT NULL REFERENCES quiz_template_questions(id),
+                    text VARCHAR NOT NULL,
+                    image BLOB,
+                    is_correct BIT NOT NULL DEFAULT FALSE
+                );
+            """;
+
+    private static final String seedDataQuery = """
+                INSERT INTO quiz_template_answers (quiz_template_question_id, text) VALUES (1, '45');
+                INSERT INTO quiz_template_answers (quiz_template_question_id, text) VALUES (1, '41');
+                INSERT INTO quiz_template_answers (quiz_template_question_id, text) VALUES (1, '38');
+                INSERT INTO quiz_template_answers (quiz_template_question_id, text, is_correct) VALUES (1, '42', TRUE);
+            """;
 
     @Override
     public String getSchemaQuery() { return schemaQuery; }
 
     @Override
-    public String getSeedDataQuery() { return ""; }
+    public String getSeedDataQuery() { return seedDataQuery; }
 
     private static final IRowMapper<QuizTemplateAnswer> MAPPER = (rs) -> {
         QuizTemplateAnswer answer = new QuizTemplateAnswer(
