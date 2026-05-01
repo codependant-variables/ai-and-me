@@ -19,7 +19,11 @@ public class SqliteQuizTemplateDAO extends BaseSqliteDAO implements IQuizTemplat
         );
     """;
 
-    private static final String seedDataQuery = "";
+    private static final String seedDataQuery = """
+        INSERT INTO quiz_templates (name, category_id, user_id, status) VALUES ('Mental Maths', 1, 1, 'published');
+        INSERT INTO quiz_templates (name, category_id, user_id, status) VALUES ('Find The Pattern', 2, 1, 'published');
+        INSERT INTO quiz_templates (name, category_id, user_id, status) VALUES ('Groupings', 2, 1, 'published');
+    """;
 
     @Override
     public String getSchemaQuery() {
