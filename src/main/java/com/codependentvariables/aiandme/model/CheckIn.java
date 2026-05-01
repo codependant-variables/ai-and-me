@@ -1,6 +1,7 @@
 package com.codependentvariables.aiandme.model;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class CheckIn {
     private int id;
@@ -9,9 +10,10 @@ public class CheckIn {
     private float aiHappiness;
     private float aiDependence;
     private String comment;
-    private Timestamp completedAt;
+    private LocalDateTime completedAt;
 
-    public CheckIn(float aiUse, float aiHappiness, float aiDependence, String comment, LocalDateTime completedAt) {
+    public CheckIn(int userId, float aiUse, float aiHappiness, float aiDependence, String comment, LocalDateTime completedAt) {
+        this.userId = userId;
         this.aiUse = aiUse;
         this.aiHappiness = aiHappiness;
         this.aiDependence = aiDependence;
@@ -47,7 +49,7 @@ public class CheckIn {
         return aiDependence;
     }
 
-    public Timestamp getCompletedAt() {
+    public LocalDateTime getCompletedAt() {
         return completedAt;
     }
     

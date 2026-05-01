@@ -39,16 +39,16 @@ public class ProfileDeletionTest {
 
     @Test
     public void is_checkin_deleted() {
-        final SqliteCheckinDAO testCheckinDAO = new SqliteCheckinDAO();
+        final ICheckInDAO testCheckinDAO = new SqliteCheckInDAO();
 
-        Checkin testCheckin = new Checkin(userId, 5.0f, 5.0f, 5.0f, Timestamp.valueOf(LocalDateTime.now()));
+        CheckIn testCheckin = new CheckIn(userId, 5.0f, 5.0f, 5.0f, "Test Comment", LocalDateTime.now());
         testCheckinDAO.add(testCheckin);
 
         assertNotNull(testCheckinDAO.get(testCheckin.getId()));
 
         testService.deleteCurrentUser();
 
-        assertTrue(testCheckinDAO.getByUserId(userId).isEmpty());
+        assertTrue(testCheckinDAO.getAllByUserId(userId).isEmpty());
     }
 
     @Test
