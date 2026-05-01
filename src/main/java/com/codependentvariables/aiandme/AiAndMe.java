@@ -2,6 +2,8 @@ package com.codependentvariables.aiandme;
 
 import atlantafx.base.theme.NordDark;
 import atlantafx.base.theme.NordLight;
+import atlantafx.base.theme.PrimerDark;
+import atlantafx.base.theme.PrimerLight;
 import com.codependentvariables.aiandme.database.SqliteConnection;
 import com.codependentvariables.aiandme.navigation.Toast;
 import com.codependentvariables.aiandme.navigation.ToastMessageType;
@@ -28,8 +30,8 @@ public class  AiAndMe extends Application {
     public static final Double WIDTH = 800.0;
     public static final Double HEIGHT = 600.0;
 
-    public static final String lightModeStylesheet = new NordLight().getUserAgentStylesheet();
-    public static final String darkModeStylesheet = new NordDark().getUserAgentStylesheet();
+    public static final String lightModeStylesheet = new PrimerLight().getUserAgentStylesheet();
+    public static final String darkModeStylesheet = new PrimerDark().getUserAgentStylesheet();
     private static final String lightLogoUrlString = Objects.requireNonNull(AiAndMe.class.getResource("dark-logo.png")).toString();
     private static final String darkLogoUrlString = Objects.requireNonNull(AiAndMe.class.getResource("logo.png")).toString();
 
@@ -61,7 +63,7 @@ public class  AiAndMe extends Application {
         // TODO: decide if we want to disable resizing or enforce max height and width on startup
 
         URL stylesheetResource = AiAndMe.class.getResource("stylesheet.css");
-        Application.setUserAgentStylesheet((new NordLight()).getUserAgentStylesheet());
+        Application.setUserAgentStylesheet((new PrimerLight()).getUserAgentStylesheet());
 
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(AiAndMe.class.getResource(ViewUtils.getResourceName(View.APP)));
