@@ -11,7 +11,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-// Goal: ensure the controller can be instantiated with a mock DAO
+// Unit Test - Ensure the controller can be instantiated with a mock DAO
 public class CheckInHistoryControllerTest {
 
     @BeforeEach
