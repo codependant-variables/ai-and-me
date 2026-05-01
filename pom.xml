@@ -12,24 +12,48 @@
     <profiles>
         <profile>
             <id>windows</id>
+            <activation>
+                <os><family>windows</family></os>
+            </activation>
             <properties>
                 <javafx.platform>win</javafx.platform>
             </properties>
         </profile>
         <profile>
             <id>linux</id>
+            <activation>
+                <os><family>unix</family></os>
+            </activation>
             <properties>
                 <javafx.platform>linux</javafx.platform>
             </properties>
         </profile>
         <profile>
-            <id>mac</id>
+            <id>mac-intel</id>
+            <activation>
+                <os><family>mac</family><arch>x86_64</arch></os>
+            </activation>
             <properties>
                 <javafx.platform>mac</javafx.platform>
             </properties>
         </profile>
+        <profile>
+            <id>mac-arm</id>
+            <activation>
+                <os><family>mac</family><arch>aarch64</arch></os>
+            </activation>
+            <properties>
+                <javafx.platform>mac-aarch64</javafx.platform>
+            </properties>
+        </profile>
     </profiles>
     <dependencies>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-base</artifactId>
+            <version>21</version>
+            <classifier>${javafx.platform}</classifier>
+        </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
@@ -54,7 +78,6 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
-        <!--  https://mvnrepository.com/artifact/org.slf4j/slf4j-simple  -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
@@ -113,7 +136,7 @@
                         <!--  Default configuration for running with: mvn clean javafx:run  -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>com.codependentvariables.aiandme/com.codependentvariables.aiandme.AiAndMe</mainClass>
+                            <mainClass>com.codependentvariables.aiandme/com.codependentvariables.aiandme.Launcher</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
