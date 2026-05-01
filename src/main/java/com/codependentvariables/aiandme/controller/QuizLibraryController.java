@@ -99,7 +99,7 @@ public class QuizLibraryController {
             getCatagorieIcon = "/com/codependentvariables/aiandme/Images/CatagoryPatternRecognition.png"; // pastal green
         } else if ("Critical Thinking".equalsIgnoreCase(categoryName)) {
             getCatagorieIcon = "/com/codependentvariables/aiandme/Images/CatagoryCriticalThinking.png"; // pastal green
-        } else if ("Comprehension".equalsIgnoreCase(categoryName)) {
+        } else if ("Mental Maths".equalsIgnoreCase(categoryName)) {
             getCatagorieIcon = "/com/codependentvariables/aiandme/Images/CatagoryComprehension.png"; //red
         } else if ("Arithmetic".equalsIgnoreCase(categoryName)) {
             getCatagorieIcon = "/com/codependentvariables/aiandme/Images/CatagoryArithmetic.png"; // primary purple
@@ -151,7 +151,7 @@ public class QuizLibraryController {
             cardColour = "#7ad1ec"; //primary blue
         } else if ("Critical Thinking".equalsIgnoreCase(categoryName)) {
             cardColour = "#8cc978"; // pastal green
-        } else if ("Comprehension".equalsIgnoreCase(categoryName)) {
+        } else if ("Mental Maths".equalsIgnoreCase(categoryName)) {
             cardColour = "#ef4136"; //red
         } else if ("Arithmetic".equalsIgnoreCase(categoryName)) {
             cardColour = "#9c72b2"; // primary purple
