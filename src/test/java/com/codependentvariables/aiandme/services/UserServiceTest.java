@@ -6,9 +6,6 @@ import com.codependentvariables.aiandme.state.AppState;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
 
 public class UserServiceTest {
     public final UserService userService = new UserService(new MockUserDAO());
