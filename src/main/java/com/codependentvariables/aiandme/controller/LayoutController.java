@@ -34,6 +34,7 @@ public class LayoutController {
     @FXML
     public void initialize() {
         Router.setLayout(contentRef);
+
         Image newImage = new Image(AiAndMe.getLogoUrlString());
         logoRef.setImage(newImage);
 

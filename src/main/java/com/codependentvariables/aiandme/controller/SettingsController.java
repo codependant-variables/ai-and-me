@@ -6,8 +6,6 @@ import com.codependentvariables.aiandme.navigation.Router;
 import com.codependentvariables.aiandme.services.UserService;
 import com.codependentvariables.aiandme.state.AppState;
 import javafx.fxml.FXML;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 
@@ -51,6 +49,9 @@ public class SettingsController {
                 !isDarkMode ? AiAndMe.darkModeStylesheet : AiAndMe.lightModeStylesheet
         );
         setThemeContent(!isDarkMode);
+
+
+        initialize();
         userService.updateCurrentUser();
     }
 

@@ -136,7 +136,7 @@
                               <Font size="31.0" />
                            </font>
                         </Text>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Reporting" textAlignment="CENTER" wrappingWidth="149.79205322265625">
+                        <Text  strokeType="OUTSIDE" strokeWidth="0.0" text="Reporting" textAlignment="CENTER" wrappingWidth="149.79205322265625">
                            <font>
                               <Font size="31.0" />
                            </font>
@@ -182,7 +182,7 @@
                <children>
                   <VBox alignment="TOP_CENTER" prefWidth="288.0" styleClass="recomendedPuzzle">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Puzzle for you!" textAlignment="CENTER" wrappingWidth="231.13000106811523">
+                        <Text  strokeType="OUTSIDE" strokeWidth="0.0" text="Puzzle for you!" textAlignment="CENTER" wrappingWidth="231.13000106811523">
                            <font>
                               <Font size="26.0" />
                            </font>
