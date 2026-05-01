@@ -11,27 +11,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 
-// Added imports
-import com.codependentvariables.aiandme.AiAndMe;
-import static javafx.application.Application.setUserAgentStylesheet;
-
 public class SettingsController {
-    // Removed initialization of variables because initialization can be done for testing or mock, not for the controller
-    private final AppState appState;
-    private final UserService userService;
-
-    // Added constructors
-    // Constructor for real app
-    public SettingsController() {
-        this(AppState.getInstance(), UserService.getInstance());
-    }
-
-    // Constructor for tests to use
-    SettingsController(AppState appState, UserService userService) {
-        this.appState = appState;
-        this.userService = userService;
-    }
-
+    private final AppState appState = AppState.getInstance();
+    private final UserService userService = UserService.getInstance();
 
     @FXML
     private void initialize() {
@@ -45,21 +27,11 @@ public class SettingsController {
     public void switchTheme() {
         boolean isDarkMode = appState.getIsDarkMode();
         appState.setIsDarkMode(!isDarkMode);
-
-        // Added this to run when switch theme button clicked
-        setUserAgentStylesheet(
-                !isDarkMode ? AiAndMe.darkModeStylesheet : AiAndMe.lightModeStylesheet
-        );
         setThemeContent(!isDarkMode);
         userService.updateCurrentUser();
     }
 
     private void setThemeContent(boolean isDarkMode) {
-        // Added null check but this might not be needed, just to prevent tests from crashing
-        if (themeToggleIcon == null) {
-            return;
-        }
-
         themeToggleIcon.setContent(isDarkMode ? Svg.SUN : Svg.MOON);
         themeToggleIcon.setFill(isDarkMode ? Color.YELLOW : Color.MEDIUMSLATEBLUE);
     }

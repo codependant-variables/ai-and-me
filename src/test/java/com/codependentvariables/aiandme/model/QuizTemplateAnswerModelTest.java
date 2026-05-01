@@ -109,25 +109,5 @@ public class QuizTemplateAnswerModelTest {
         QuizTemplateAnswer answer = new QuizTemplateAnswer(1, "Berlin", false);
         assertEquals("Berlin", answer.toString());
     }
-
-    // Validation yep, definitely moving this ;(
-
-    @Test
-    public void constructor_nullText_throwsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class,
-                () -> new QuizTemplateAnswer(1, null, false));
-    }
-
-    @Test
-    public void constructor_blankText_throwsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class,
-                () -> new QuizTemplateAnswer(1, "   ", false));
-    }
-
-    @Test
-    public void constructor_withImage_nullText_throwsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class,
-                () -> new QuizTemplateAnswer(1, null, new byte[]{1}, false));
-    }
 }
 

@@ -98,13 +98,11 @@ public class UserService {
     }
 
     public void deleteCurrentUser() {
-        // Updates for profile deletion unit test
         User currentUser = appState.getCurrentUser();
-
-        if(currentUser == null)
-        {
+        if(currentUser == null) {
             return;
         }
+
         userDAO.delete(currentUser);
         appState.setCurrentUser(null);
     }

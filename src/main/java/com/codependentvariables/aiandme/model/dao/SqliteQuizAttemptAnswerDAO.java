@@ -8,16 +8,21 @@ import java.util.List;
 
 public class SqliteQuizAttemptAnswerDAO extends BaseSqliteDAO implements IQuizAttemptAnswerDAO, IDatabaseEntity {
     private static final String schemaQuery = """
-            CREATE TABLE IF NOT EXISTS quiz_attempt_answers (
-                id INTEGER PRIMARY KEY,
-                quiz_attempt_question_id INTEGER NOT NULL REFERENCES quiz_attempt_questions(id) ON DELETE CASCADE,
-                text VARCHAR NOT NULL,
-                image BYTE[],
-                is_correct BIT NOT NULL
-            );
+                CREATE TABLE IF NOT EXISTS quiz_attempt_answers (
+                    id INTEGER PRIMARY KEY,
+                    quiz_attempt_question_id INTEGER NOT NULL REFERENCES quiz_attempt_questions(id) ON DELETE CASCADE,
+                    text VARCHAR NOT NULL,
+                    image BYTE[],
+                    is_correct BIT NOT NULL DEFAULT FALSE
+                );
             """;
 
-    private static final String seedDataQuery = "";
+    private static final String seedDataQuery = """
+                INSERT INTO quiz_attempt_answers (quiz_attempt_question_id, text) VALUES (1, '45');
+                INSERT INTO quiz_attempt_answers (quiz_attempt_question_id, text) VALUES (1, '41');
+                INSERT INTO quiz_attempt_answers (quiz_attempt_question_id, text) VALUES (1, '38');
+                INSERT INTO quiz_attempt_answers (quiz_attempt_question_id, text, is_correct) VALUES (1, '42', TRUE);
+            """;
 
     public String getSchemaQuery() {
         return schemaQuery;

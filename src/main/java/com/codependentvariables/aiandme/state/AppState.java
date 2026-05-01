@@ -3,7 +3,9 @@ package com.codependentvariables.aiandme.state;
 import com.codependentvariables.aiandme.AiAndMe;
 import com.codependentvariables.aiandme.model.User;
 import com.codependentvariables.aiandme.navigation.Router;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 import static javafx.application.Application.setUserAgentStylesheet;
@@ -12,9 +14,8 @@ public class AppState {
     private static AppState instance;
 
     private final ObjectProperty<User> currentUser = new SimpleObjectProperty<>(null);;
-
-    public boolean isDarkMode = false;
-    public boolean isVertical = false;
+    private final BooleanProperty isDarkMode = new SimpleBooleanProperty(false);
+    private final BooleanProperty isVertical = new SimpleBooleanProperty(false);
 
     public static AppState getInstance() {
         if (instance == null) {
@@ -38,26 +39,33 @@ public class AppState {
         }
     }
 
+    public BooleanProperty getObservableIsDarkMode() {
+        return isDarkMode;
+    }
+
     public boolean getIsDarkMode() {
-        return this.isDarkMode;
+        return this.isDarkMode.get();
     }
 
     public void setIsDarkMode(boolean isDarkMode) {
-        this.isDarkMode = isDarkMode;
+        this.isDarkMode.set(isDarkMode);
         if (currentUser.get() != null) {
             currentUser.get().setIsDarkMode(isDarkMode);
         }
 
-        // Removed the code below because it's code that requires java fx but app state doesnt run java fx
-        // setUserAgentStylesheet(isDarkMode ? AiAndMe.darkModeStylesheet : AiAndMe.lightModeStylesheet);
+        setUserAgentStylesheet(isDarkMode ? AiAndMe.darkModeStylesheet : AiAndMe.lightModeStylesheet);
+    }
+
+    public BooleanProperty getObservableIsVertical() {
+        return isVertical;
     }
 
     public boolean getIsVertical() {
-        return this.isVertical;
+        return this.isVertical.get();
     }
 
     public void setIsVertical(boolean isVertical) {
-        this.isVertical = isVertical;
+        this.isVertical.set(isVertical);
         if (currentUser.get() != null) {
             currentUser.get().setIsVertical(isVertical);
         }

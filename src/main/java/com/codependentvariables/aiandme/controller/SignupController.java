@@ -33,30 +33,28 @@ public class SignupController {
     @FXML
     public SVGPath viewPasswordIcon;
 
+    private final UserService userService = UserService.getInstance();
+    private final AppState appState = AppState.getInstance();
+
     @FXML
     private void initialize() {
-        boolean isDarkMode = AppState.getInstance().getIsDarkMode();
+        var darkModeObservable = appState.getObservableIsDarkMode();
+        logoRef.imageProperty().bind(darkModeObservable.map(isDark -> new Image(isDark ? AiAndMe.darkLogoUrlString : AiAndMe.lightLogoUrlString)));
+        viewPasswordIcon.fillProperty().bind(darkModeObservable.map(isDark -> isDark ? Color.WHITE : Color.BLACK));
 
-        Image image = new Image(AiAndMe.getLogoUrlString());
-        logoRef.setImage(image);
-        viewPasswordIcon.setFill(isDarkMode ? Color.WHITE : Color.BLACK);
+        passwordTextField.visibleProperty().bind(passwordField.visibleProperty().not());
+        viewPasswordIcon.contentProperty().bind(passwordField.visibleProperty().map(visible -> visible ? Svg.OPEN_EYE : Svg.CLOSED_EYE));
 
         passwordField.textProperty().bindBidirectional(passwordTextField.textProperty());
         passwordField.managedProperty().bind(passwordField.visibleProperty());
         passwordTextField.setOnAction(onMousePressed -> toggleViewPassword());
         passwordTextField.managedProperty().bind(passwordTextField.visibleProperty());
-
-        toggleViewPassword();
     }
+
     @FXML
     private void toggleViewPassword() {
-        boolean isVisible = passwordField.isVisible();
-        viewPasswordIcon.setContent(isVisible ? Svg.CLOSED_EYE : Svg.OPEN_EYE);
-        passwordField.setVisible(!isVisible);
-        passwordTextField.setVisible(isVisible);
+        passwordField.setVisible(!passwordField.isVisible());
     }
-
-    private final UserService userService = UserService.getInstance();
 
     private final FormValidator signupValidator = new FormValidator(
             new ValidationEntry<>(
