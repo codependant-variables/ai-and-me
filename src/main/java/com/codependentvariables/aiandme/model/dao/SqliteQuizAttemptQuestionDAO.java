@@ -26,10 +26,7 @@ public class SqliteQuizAttemptQuestionDAO extends BaseSqliteDAO implements IQuiz
     /**
      * Seed data inserted when database is initialised.
      */
-    private static final String seedDataQuery = """
-            INSERT INTO quiz_attempt_questions (text, quiz_attempt_id)
-            VALUES ('What is the product of 2+2?', NULL);
-    """;
+    private static final String seedDataQuery = "";
 
     @Override
     public String getSchemaQuery() {

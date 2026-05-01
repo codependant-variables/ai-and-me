@@ -28,10 +28,7 @@ public class SqliteQuizAttemptDAO extends BaseSqliteDAO implements IQuizAttemptD
     /**
      * Seed data inserted when the database is initialised.
      */
-    private static final String seedDataQuery = """
-        INSERT INTO quiz_attempts (user_id, name, completed_at)
-        VALUES (1, 'Emma''s Quiz Attempt', '2026-04-17 00:00:00');
-    """;
+    private static final String seedDataQuery = "";
 
     @Override
     public String getSchemaQuery() {

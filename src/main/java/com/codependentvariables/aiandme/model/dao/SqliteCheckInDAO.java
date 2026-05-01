@@ -15,7 +15,7 @@ public class SqliteCheckInDAO extends BaseSqliteDAO implements ICheckInDAO, IDat
                 ai_happiness REAL NOT NULL,
                 ai_dependence REAL NOT NULL,
                 comment VARCHAR(255),
-                completed_at TEXT NOT NULL,
+                completed_at TEXT NOT NULL
             );
         """;
 
