@@ -29,7 +29,7 @@ public class SqliteQuizAttemptDAO extends BaseSqliteDAO implements IQuizAttemptD
      * Seed data inserted when the database is initialised.
      */
     private static final String seedDataQuery = """
-                INSERT INTO quiz_attempts (user_id, name, completed_at) VALUES ('Basic Addition', 1, '2026-04-27 00:00:00');
+                INSERT INTO quiz_attempts (user_id, name, completed_at) VALUES (1, 'Basic Addition', '2026-04-27 00:00:00');
             """;
 
     @Override
