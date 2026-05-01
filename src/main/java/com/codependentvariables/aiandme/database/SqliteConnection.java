@@ -45,7 +45,10 @@ public class SqliteConnection {
                 new SqliteCheckInDAO(),
                 new SqliteQuizTemplateDAO(),
                 new SqliteQuizTemplateQuestionDAO(),
-                new SqliteQuizTemplateAnswerDAO()
+                new SqliteQuizTemplateAnswerDAO(),
+                new SqliteQuizAttemptDAO(),
+                new SqliteQuizAttemptQuestionDAO(),
+                new SqliteQuizAttemptAnswerDAO()
         };
 
         try {

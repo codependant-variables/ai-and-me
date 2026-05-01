@@ -1,14 +1,18 @@
 package com.codependentvariables.aiandme.controller;
 
+import com.codependentvariables.aiandme.AiAndMe;
 import com.codependentvariables.aiandme.model.*;
 import com.codependentvariables.aiandme.model.dao.*;
 import com.codependentvariables.aiandme.services.QuizAttemptService;
 import com.codependentvariables.aiandme.services.QuizTemplateService;
 import com.codependentvariables.aiandme.state.AppState;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -17,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 public class QuizLibraryController {
@@ -33,11 +38,10 @@ public class QuizLibraryController {
     @FXML private Button btnEditQuestions;
     @FXML private Button btnAttemptQuiz;
 
-    /** Currently selected template card, null when nothing is selected. */
     private QuizTemplate selectedTemplate;
 
     /** The VBox card node that is currently highlighted. */
-    private VBox selectedCard;
+    private HBox selectedCard;
 
     @FXML
     public void initialize() {
@@ -49,18 +53,12 @@ public class QuizLibraryController {
         refreshCategories();
     }
 
-    // Generate views
-
-    /**
-     * Clears and regens every template card inside the FlowPane.
-     */
     private void refreshCategories() {
         categoryContainer.getChildren().clear();
         selectedTemplate = null;
         selectedCard = null;
         updateActionButtons();
 
-        // Build a lookup map so we can resolve category names efficiently
         java.util.Map<Integer, String> categoryNames = new java.util.HashMap<>();
         for (Category c : categoryDAO.getAll()) {
             categoryNames.put(c.getId(), c.getName());
@@ -77,7 +75,7 @@ public class QuizLibraryController {
      * Builds a styled VBox card for a single quiz template.
      * Shows the template name and which category it belongs to.
      */
-    private VBox buildTemplateCard(QuizTemplate template, String categoryName) {
+    private HBox buildTemplateCard(QuizTemplate template, String categoryName) {
         Label nameLabel = new Label(template.getName());
         nameLabel.setFont(Font.font("System", FontWeight.BOLD, 16));
         nameLabel.setTextFill(Color.web("#333333"));
@@ -95,31 +93,87 @@ public class QuizLibraryController {
             User creator = userDAO.get(template.getUserId());
             creatorName = (creator != null) ? creator.getName() : "Unknown";
         }
+
+        String getCatagorieIcon;
+        if ("Pattern Recognition".equalsIgnoreCase(categoryName)) {
+            getCatagorieIcon = "/com/codependentvariables/aiandme/Images/CatagoryPatternRecognition.png"; // pastal green
+        } else if ("Critical Thinking".equalsIgnoreCase(categoryName)) {
+            getCatagorieIcon = "/com/codependentvariables/aiandme/Images/CatagoryCriticalThinking.png"; // pastal green
+        } else if ("Comprehension".equalsIgnoreCase(categoryName)) {
+            getCatagorieIcon = "/com/codependentvariables/aiandme/Images/CatagoryComprehension.png"; //red
+        } else if ("Arithmetic".equalsIgnoreCase(categoryName)) {
+            getCatagorieIcon = "/com/codependentvariables/aiandme/Images/CatagoryArithmetic.png"; // primary purple
+        } else {
+            getCatagorieIcon = "/com/codependentvariables/aiandme/Images/CatagoryOther.png"; //secondary pink
+        }
+
+        String cardColour = getCategory(categoryName);
+
         Label creatorLabel = new Label("Created by: " + creatorName);
         creatorLabel.setFont(Font.font("System", 13));
         creatorLabel.setTextFill(Color.web("#777777"));
         creatorLabel.setWrapText(true);
 
-        VBox card = new VBox(10, nameLabel, categoryLabel, creatorLabel);
+        Image catagorieIcon = new Image(Objects.requireNonNull(getClass().getResourceAsStream(getCatagorieIcon)));
+        ImageView catagorieIconView = new ImageView(catagorieIcon);
+        catagorieIconView.setFitWidth(120);
+        catagorieIconView.setPreserveRatio(true);
+
+        Separator seperator = new Separator();
+        seperator.prefWidth(100);
+
+        VBox quizInfoVBox = new VBox( nameLabel, seperator, categoryLabel, creatorLabel);
+        quizInfoVBox.setPrefSize(180, 190);
+        quizInfoVBox.setAlignment(Pos.CENTER_LEFT);
+        quizInfoVBox.setPadding(new Insets(20));
+        quizInfoVBox.setStyle("-fx-border-color: transparent;");
+
+        VBox catagorieIconVBox = new VBox(catagorieIconView);
+        catagorieIconVBox.setPrefSize(180, 190);
+        catagorieIconVBox.setAlignment(Pos.CENTER);
+        catagorieIconVBox.setPadding(new Insets(20));
+        catagorieIconVBox.setStyle("-fx-border-color: transparent;");
+
+        HBox card = new HBox(quizInfoVBox, catagorieIconVBox);
         card.setPrefSize(360, 190);
         card.setAlignment(Pos.CENTER);
-        card.setPadding(new Insets(20));
-        card.setStyle(cardStyle(false));
+        card.setStyle("-fx-border-color: " + cardColour + "; -fx-background-radius: 20px; -fx-border-width: 5; -fx-border-radius: 15px; -fx-background-color: #ffffff; -fx-effect: dropshadow(three-pass-box, #00000033, 15, 0.1, 5, 5); ");
 
-        card.setOnMouseClicked(e -> selectCard(card, template));
+
+        card.setOnMouseClicked(e -> selectCard(card, template, cardColour));
 
         return card;
     }
 
-    private void selectCard(VBox card, QuizTemplate template) {
+    private static String getCategory(String categoryName) {
+        String cardColour;
+        if ("Pattern Recognition".equalsIgnoreCase(categoryName)) {
+            cardColour = "#7ad1ec"; //primary blue
+        } else if ("Critical Thinking".equalsIgnoreCase(categoryName)) {
+            cardColour = "#8cc978"; // pastal green
+        } else if ("Comprehension".equalsIgnoreCase(categoryName)) {
+            cardColour = "#ef4136"; //red
+        } else if ("Arithmetic".equalsIgnoreCase(categoryName)) {
+            cardColour = "#9c72b2"; // primary purple
+        } else {
+            cardColour = "#ce78b1"; //secondary pink
+        }
+        return cardColour;
+    }
+
+    private void selectCard(HBox card, QuizTemplate template, String colour) {
         // Deselect previous card
         if (selectedCard != null) {
-            selectedCard.setStyle(cardStyle(false));
+            String prevColour = (String) selectedCard.getUserData();
+            selectedCard.setStyle(cardStyle(false, prevColour));
         }
 
         selectedTemplate = template;
         selectedCard = card;
-        card.setStyle(cardStyle(true));
+
+        card.setUserData(colour);
+
+        card.setStyle(cardStyle(true, colour));
         updateActionButtons();
     }
 
@@ -132,13 +186,23 @@ public class QuizLibraryController {
         btnAttemptQuiz.setDisable(!hasSelection);
     }
 
-    private String cardStyle(boolean selected) {
-        String border = selected
-                ? "-fx-border-color: #1976d2; -fx-border-width: 2;"
-                : "-fx-border-color: #cccccc; -fx-border-width: 1;";
-        String bg = selected ? "-fx-background-color: #e3f2fd;" : "-fx-background-color: #ffffff;";
-        return bg + border + "-fx-background-radius: 8; -fx-border-radius: 8; -fx-cursor: hand;";
+    private String cardStyle(boolean selected, String colour) {
+        String bg = selected
+                ? "-fx-background-color: #e3f2fd;"
+                : "-fx-background-color: #ffffff;";
+        return bg + "-fx-border-color: " + colour + "; -fx-border-width: 4; -fx-background-radius: 20px; -fx-border-radius: 15px; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, #00000033, 15, 0.1, 5, 5);";
     }
+
+//    private String cardStyle(boolean selected, String colour) {
+//        String border = selected
+//                //? "-fx-border-color: " + colour + "; -fx-border-width: 8;"
+//                ? "-fx-border-color: #000000; -fx-border-width: 4;"
+//                : "-fx-border-color: " + colour + "; -fx-border-width: 4;";
+//        String bg = selected
+//                ? "-fx-background-color: #e3f2fd;"
+//                : "-fx-background-color: #ffffff;";
+//        return bg + border + "-fx-background-radius: 20px; -fx-border-radius: 15px; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, #00000033, 15, 0.1, 5, 5);";
+//    }
 
     // Action Handlers
 
@@ -152,18 +216,15 @@ public class QuizLibraryController {
     private void handleCreate() {
         List<Category> categories = categoryDAO.getAll();
 
-        // Build dialog box
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Create Template");
         dialog.setHeaderText("Create a new quiz template");
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
-        // Template name
         Label nameLabel = new Label("Template name:");
         TextField nameField = new TextField();
         nameField.setPromptText("Enter template name");
 
-        // Category drop-down
         Label categoryLabel = new Label("Category:");
         ComboBox<Category> categoryCombo = new ComboBox<>();
         categoryCombo.getItems().setAll(categories);
@@ -180,10 +241,8 @@ public class QuizLibraryController {
                 setText(empty || c == null ? null : c.getName());
             }
         });
-        // Pre-select the currently highlighted category if any
         categoryCombo.setMaxWidth(Double.MAX_VALUE);
 
-        // New Category checkbox + text field
         CheckBox newCategoryCheck = new CheckBox("New Category?");
         TextField newCategoryField = new TextField();
         newCategoryField.setPromptText("Enter new category name");
@@ -199,7 +258,6 @@ public class QuizLibraryController {
             }
         });
 
-        // Validate OK button
         Button okButton = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
         okButton.setDisable(true);
         Runnable validate = () -> {
@@ -214,7 +272,6 @@ public class QuizLibraryController {
         newCategoryField.textProperty().addListener((o, ov, nv) -> validate.run());
         newCategoryCheck.selectedProperty().addListener((o, ov, nv) -> validate.run());
 
-        // Layout
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
@@ -233,7 +290,6 @@ public class QuizLibraryController {
         dialog.getDialogPane().setContent(grid);
         nameField.requestFocus();
 
-        // Handle result
         Optional<ButtonType> result = dialog.showAndWait();
         if (result.isEmpty() || result.get() != ButtonType.OK) return;
 
@@ -244,7 +300,7 @@ public class QuizLibraryController {
             String newCatName = newCategoryField.getText().trim();
             Category newCat = new Category(newCatName);
             categoryDAO.add(newCat);
-            // Fetch the just-added category so we have its DB-assigned id
+
             targetCategory = categoryDAO.getAll().stream()
                     .filter(c -> c.getName().equalsIgnoreCase(newCatName))
                     .findFirst().orElse(newCat);
@@ -263,9 +319,6 @@ public class QuizLibraryController {
         }
     }
 
-    /**
-     * Renames the selected template.
-     */
     @FXML
     private void handleModify() {
         if (selectedTemplate == null) return;
@@ -287,9 +340,6 @@ public class QuizLibraryController {
         });
     }
 
-    /**
-     * Deletes the selected template.
-     */
     @FXML
     private void handleDelete() {
         if (selectedTemplate == null) return;
@@ -310,10 +360,10 @@ public class QuizLibraryController {
 
     // Helper methods
 
-    /**
-     * Steps the user through each question in the selected template,
-     * records their selected answer, then persists the attempt and shows a score.
-     */
+    public static boolean isAttemptable(List<QuizTemplateQuestion> questions) {
+        return questions != null && questions.size() >= 2;
+    }
+
     @FXML
     private void handleAttemptQuiz() {
         if (selectedTemplate == null) return;
@@ -322,24 +372,21 @@ public class QuizLibraryController {
         templateService.loadQuestionsIntoTemplate(template);
 
         List<QuizTemplateQuestion> questions = template.getQuestions();
-        if (questions.isEmpty()) {
-            showWarning("This quiz has no questions yet. Add some questions before attempting it.");
+        if (!isAttemptable(questions)) {
+            showWarning("This quiz needs at least 2 questions before it can be attempted.");
             return;
         }
 
-        // selections: templateQuestionId → chosen answer
         Map<Integer, QuizTemplateAnswer> selections = new HashMap<>();
 
         int[] currentIndex = {0};
 
-        // Dialog shell
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Attempt Quiz – " + template.getName());
         dialog.setHeaderText(null);
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.NEXT, ButtonType.CANCEL);
         dialog.getDialogPane().setPrefWidth(500);
 
-        // Relabel the "Next" button
         Button nextBtn = (Button) dialog.getDialogPane().lookupButton(ButtonType.NEXT);
         nextBtn.setText("Next >");
 
@@ -357,7 +404,6 @@ public class QuizLibraryController {
         content.setPadding(new Insets(16));
         dialog.getDialogPane().setContent(content);
 
-        // Loads the current question into the dialog
         Runnable loadQuestion = () -> {
             QuizTemplateQuestion q = questions.get(currentIndex[0]);
             int total = questions.size();
@@ -374,7 +420,7 @@ public class QuizLibraryController {
                 rb.setToggleGroup(group);
                 rb.setWrapText(true);
                 rb.setUserData(answer);
-                // Re-select previously chosen answer if navigating back (future-proofing)
+
                 QuizTemplateAnswer prev = selections.get(q.getId());
                 if (prev != null && prev.getId() == answer.getId()) {
                     rb.setSelected(true);
@@ -382,7 +428,6 @@ public class QuizLibraryController {
                 answersBox.getChildren().add(rb);
             }
 
-            // Enable Next/Finish only when an answer is selected
             nextBtn.setDisable(group.getSelectedToggle() == null);
             group.selectedToggleProperty().addListener((obs, ov, nv) ->
                     nextBtn.setDisable(nv == null));
@@ -393,9 +438,8 @@ public class QuizLibraryController {
 
         loadQuestion.run();
 
-        // Each click of "Next" saves the selection and advances (or finishes)
         nextBtn.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
-            event.consume(); // prevent dialog from closing automatically
+            event.consume();
 
             QuizTemplateQuestion q = questions.get(currentIndex[0]);
             ToggleGroup group = null;
@@ -415,7 +459,6 @@ public class QuizLibraryController {
                 currentIndex[0]++;
                 loadQuestion.run();
             } else {
-                // All questions answered — close the dialog
                 dialog.setResult(ButtonType.OK);
                 dialog.close();
             }
@@ -423,52 +466,58 @@ public class QuizLibraryController {
 
         Optional<ButtonType> result = dialog.showAndWait();
 
-        // Only save if the user completed all questions (didn't hit Cancel mid-way)
         if (result.isEmpty() || result.get() == ButtonType.CANCEL) return;
-        if (selections.size() < questions.size()) return; // incomplete
+        if (selections.size() < questions.size()) return;
 
-        // Persist & score
         User currentUser = AppState.getInstance().getCurrentUser();
         int userId = (currentUser != null) ? currentUser.getId() : 0;
 
         try {
             int correct = attemptService.saveAttempt(template, userId, selections);
-            int total   = questions.size();
-            int pct     = (int) Math.round((double) correct / total * 100);
 
-            showInfo(String.format(
-                    "Quiz complete!%n%nScore: %d / %d  (%d%%)%n%nYour attempt has been saved.",
-                    correct, total, pct));
+            FXMLLoader loader = new FXMLLoader(
+                    AiAndMe.class.getResource("quiz-attempt-results.fxml")
+            );
+            javafx.scene.Node resultsView = loader.load();
+            QuizAttemptResultsController resultsCtrl = loader.getController();
+            resultsCtrl.initResults(
+                    com.codependentvariables.aiandme.model.QuizAttemptSummary.of(
+                            template.getName(),
+                            correct,
+                            questions.size(),
+                            java.sql.Timestamp.from(java.time.Instant.now()),
+                            questions,
+                            selections
+                    )
+            );
+
+            Dialog<ButtonType> resultsDialog = new Dialog<>();
+            resultsDialog.setTitle("Quiz Results – " + template.getName());
+            resultsDialog.setHeaderText(null);
+            resultsDialog.getDialogPane().setContent(resultsView);
+            resultsDialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
+            resultsDialog.showAndWait();
+
         } catch (Exception e) {
             showWarning("Failed to save attempt: " + e.getMessage());
         }
     }
 
-    /**
-     * Opens a popup to build/edit questions and answers for a template in the
-     * selected category. The popup mirrors quiz.fxml's Q&A layout but is fully
-     * interactive, backed by the QuizTemplate aggregate and persisted via the
-     * existing Question and Answer DAOs.
-     */
     @FXML
     private void handleEditQuestions() {
         if (selectedTemplate == null) return;
 
         QuizTemplate template = selectedTemplate;
 
-        // Load existing questions + answers into the aggregate
         templateService.loadQuestionsIntoTemplate(template);
 
-        // Track questions removed during this session so we can delete them on Save
         List<QuizTemplateQuestion> removedQuestions = new ArrayList<>();
 
-        // Working mutable copy (template.getQuestions() is unmodifiable)
         List<QuizTemplateQuestion> workingQuestions = new ArrayList<>(template.getQuestions());
         if (workingQuestions.isEmpty()) {
-            workingQuestions.add(new QuizTemplateQuestion(template.getId(), ""));
+            workingQuestions.add(new QuizTemplateQuestion(template.getId(), "New Question"));
         }
 
-        // Dialog shell
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Edit Questions – " + template.getName());
         dialog.setHeaderText(null);
@@ -478,7 +527,6 @@ public class QuizLibraryController {
         int[] currentIndex = {0};
         final int MAX_ANSWERS = 4;
 
-        // Widgets
         Label quizNameLabel = new Label(template.getName());
         quizNameLabel.setFont(Font.font("System", FontWeight.BOLD, 20));
 
@@ -523,8 +571,7 @@ public class QuizLibraryController {
         );
         content.setPadding(new Insets(16));
         dialog.getDialogPane().setContent(content);
-
-        // Load and save helpers
+        
         Runnable saveCurrentToModel = () -> {
             if (workingQuestions.isEmpty()) return;
             QuizTemplateQuestion q = workingQuestions.get(currentIndex[0]);
@@ -562,7 +609,8 @@ public class QuizLibraryController {
                 }
             }
             btnPrev.setDisable(currentIndex[0] == 0);
-            btnNext.setDisable(currentIndex[0] >= workingQuestions.size() - 1);
+            btnNext.setDisable(currentIndex[0] >= workingQuestions.size() - 1 || workingQuestions.size() >= 10);
+            btnAddQ.setDisable(workingQuestions.size() >= 10);
             btnRemoveQ.setDisable(workingQuestions.size() <= 1);
         };
 
@@ -573,7 +621,7 @@ public class QuizLibraryController {
 
         btnAddQ.setOnAction(e -> {
             saveCurrentToModel.run();
-            workingQuestions.add(new QuizTemplateQuestion(template.getId(), ""));
+            workingQuestions.add(new QuizTemplateQuestion(template.getId(), "New Question"));
             currentIndex[0] = workingQuestions.size() - 1;
             loadFromModel.run();
         });
@@ -586,7 +634,6 @@ public class QuizLibraryController {
             loadFromModel.run();
         });
 
-        // Commit on OK
         Optional<ButtonType> result = dialog.showAndWait();
         if (result.isEmpty() || result.get() != ButtonType.OK) return;
         saveCurrentToModel.run();
