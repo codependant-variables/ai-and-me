@@ -41,8 +41,15 @@ public class CheckInHistoryController {
     private TableColumn<CheckIn, LocalDateTime> colCompletedAt;
 
     // DAO for retrieving CheckIn data from database
-    private final ICheckInDAO checkInDAO = new SqliteCheckInDAO();
+    private final ICheckInDAO checkInDAO;
 
+    public CheckInHistoryController() {
+        this(new SqliteCheckInDAO());
+    }
+
+    public CheckInHistoryController(ICheckInDAO checkInDAO) {
+        this.checkInDAO = checkInDAO;
+    }
     @FXML
     public void initialize() {
         // Binding columns to CheckIn model fields
@@ -66,7 +73,7 @@ public class CheckInHistoryController {
         // Clears table if no user is logged in
         if (currentUser == null) {
             Router.navigateLayout(View.HOME);
-
+            return;
         }
 
         // Retrieves CheckIns for current user
