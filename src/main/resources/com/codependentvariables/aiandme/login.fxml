@@ -43,8 +43,8 @@
 
         <Label text="Password:" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
         <StackPane GridPane.columnIndex="1" GridPane.rowIndex="3">
-            <PasswordField fx:id="passwordField" onAction="#onLogin" maxWidth="Infinity" visible="false" />
-            <TextField fx:id="passwordTextField" onAction="#onLogin" maxWidth="Infinity" />
+            <PasswordField fx:id="passwordField" onAction="#onLogin" maxWidth="Infinity" />
+            <TextField fx:id="passwordTextField" onAction="#onLogin" maxWidth="Infinity" visible="true" />
         </StackPane>
         <Button fx:id="togglePasswordVisibleButton" minWidth="-Infinity" onAction="#toggleViewPassword" style="-fx-background-color: transparent;" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
             <graphic>

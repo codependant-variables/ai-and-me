@@ -3,7 +3,9 @@ package com.codependentvariables.aiandme.state;
 import com.codependentvariables.aiandme.AiAndMe;
 import com.codependentvariables.aiandme.model.User;
 import com.codependentvariables.aiandme.navigation.Router;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 import static javafx.application.Application.setUserAgentStylesheet;
@@ -12,9 +14,8 @@ public class AppState {
     private static AppState instance;
 
     private final ObjectProperty<User> currentUser = new SimpleObjectProperty<>(null);;
-
-    private boolean isDarkMode = false;
-    private boolean isVertical = false;
+    private final BooleanProperty isDarkMode = new SimpleBooleanProperty(false);
+    private final BooleanProperty isVertical = new SimpleBooleanProperty(false);
 
     public static AppState getInstance() {
         if (instance == null) {
@@ -38,12 +39,16 @@ public class AppState {
         }
     }
 
+    public BooleanProperty getObservableIsDarkMode() {
+        return isDarkMode;
+    }
+
     public boolean getIsDarkMode() {
-        return this.isDarkMode;
+        return this.isDarkMode.get();
     }
 
     public void setIsDarkMode(boolean isDarkMode) {
-        this.isDarkMode = isDarkMode;
+        this.isDarkMode.set(isDarkMode);
         if (currentUser.get() != null) {
             currentUser.get().setIsDarkMode(isDarkMode);
         }
@@ -51,12 +56,16 @@ public class AppState {
         setUserAgentStylesheet(isDarkMode ? AiAndMe.darkModeStylesheet : AiAndMe.lightModeStylesheet);
     }
 
+    public BooleanProperty getObservableIsVertical() {
+        return isVertical;
+    }
+
     public boolean getIsVertical() {
-        return this.isVertical;
+        return this.isVertical.get();
     }
 
     public void setIsVertical(boolean isVertical) {
-        this.isVertical = isVertical;
+        this.isVertical.set(isVertical);
         if (currentUser.get() != null) {
             currentUser.get().setIsVertical(isVertical);
         }

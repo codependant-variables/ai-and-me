@@ -44,8 +44,8 @@ public class LoginController {
     @FXML
     public SVGPath viewPasswordIcon;
 
-    @FXML
     private final UserService userService = UserService.getInstance();
+    private final AppState appState = AppState.getInstance();
 
     private final BooleanProperty loggingIn = new SimpleBooleanProperty(false);
     private final BooleanProperty requireOtp = new SimpleBooleanProperty(false);
@@ -69,13 +69,12 @@ public class LoginController {
 
     @FXML
     private void initialize() {
-        boolean isDarkMode = AppState.getInstance().getIsDarkMode();
+        var darkModeObservable = appState.getObservableIsDarkMode();
+        logoRef.imageProperty().bind(darkModeObservable.map(isDark -> new Image(isDark ? AiAndMe.darkLogoUrlString : AiAndMe.lightLogoUrlString)));
+        viewPasswordIcon.fillProperty().bind(darkModeObservable.map(isDark -> isDark ? Color.WHITE : Color.BLACK));
 
-        Image image = new Image(AiAndMe.getLogoUrlString());
-        logoRef.setImage(image);
-
-        setPasswordVisible(false);
-        viewPasswordIcon.setFill(isDarkMode ? Color.WHITE : Color.BLACK);
+        passwordTextField.visibleProperty().bind(passwordField.visibleProperty().not());
+        viewPasswordIcon.contentProperty().bind(passwordField.visibleProperty().map(visible -> visible ? Svg.OPEN_EYE : Svg.CLOSED_EYE));
 
         emailField.disableProperty().bind(this.loggingIn.or(this.requireOtp));
 
@@ -97,14 +96,7 @@ public class LoginController {
 
     @FXML
     private void toggleViewPassword() {
-        boolean isPasswordVisible = passwordTextField.isVisible();
-        setPasswordVisible(!isPasswordVisible);
-    }
-
-    private void setPasswordVisible(boolean value) {
-        viewPasswordIcon.setContent(value ? Svg.CLOSED_EYE : Svg.OPEN_EYE);
-        passwordField.setVisible(!value);
-        passwordTextField.setVisible(value);
+        passwordField.setVisible(!passwordField.isVisible());
     }
 
     private final FormValidator loginValidator = new FormValidator(
@@ -127,7 +119,7 @@ public class LoginController {
 
     @FXML
     private void onLogin() {
-        setPasswordVisible(false);
+        passwordField.setVisible(true);
         this.loggingIn.setValue(true);
 
         if (!loginValidator.validate()) {
