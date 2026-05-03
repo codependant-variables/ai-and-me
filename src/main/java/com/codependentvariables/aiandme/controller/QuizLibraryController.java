@@ -78,12 +78,12 @@ public class QuizLibraryController {
     private HBox buildTemplateCard(QuizTemplate template, String categoryName) {
         Label nameLabel = new Label(template.getName());
         nameLabel.setFont(Font.font("System", FontWeight.BOLD, 16));
-        nameLabel.setTextFill(Color.web("#333333"));
+        nameLabel.setTextFill(Color.web("#333333"));  /* need to change for dark mode to work */
         nameLabel.setWrapText(true);
 
         Label categoryLabel = new Label("Category: " + categoryName);
         categoryLabel.setFont(Font.font("System", 13));
-        categoryLabel.setTextFill(Color.web("#777777"));
+        categoryLabel.setTextFill(Color.web("#777777")); /* need to change for dark mode to work */
         categoryLabel.setWrapText(true);
 
         String creatorName;
@@ -111,7 +111,7 @@ public class QuizLibraryController {
 
         Label creatorLabel = new Label("Created by: " + creatorName);
         creatorLabel.setFont(Font.font("System", 13));
-        creatorLabel.setTextFill(Color.web("#777777"));
+        creatorLabel.setTextFill(Color.web("#777777")); /* need to change for dark mode to work */
         creatorLabel.setWrapText(true);
 
         Image catagorieIcon = new Image(Objects.requireNonNull(getClass().getResourceAsStream(getCatagorieIcon)));
@@ -137,7 +137,8 @@ public class QuizLibraryController {
         HBox card = new HBox(quizInfoVBox, catagorieIconVBox);
         card.setPrefSize(360, 190);
         card.setAlignment(Pos.CENTER);
-        card.setStyle("-fx-border-color: " + cardColour + "; -fx-background-radius: 20px; -fx-border-width: 5; -fx-border-radius: 15px; -fx-background-color: #ffffff; -fx-effect: dropshadow(three-pass-box, #00000033, 15, 0.1, 5, 5); ");
+
+        card.setStyle("-fx-border-color: " + cardColour + "; -fx-background-radius: 20px; -fx-border-width: 5; -fx-border-radius: 15px; -fx-background-color: #ffffff; -fx-effect: dropshadow(three-pass-box, #00000033, 15, 0.1, 5, 5); "); /* need to change -fx-background-color: #ffffff for dark mode to work */
 
 
         card.setOnMouseClicked(e -> selectCard(card, template, cardColour));
@@ -188,8 +189,8 @@ public class QuizLibraryController {
 
     private String cardStyle(boolean selected, String colour) {
         String bg = selected
-                ? "-fx-background-color: #e3f2fd;"
-                : "-fx-background-color: #ffffff;";
+                ? "-fx-background-color: #e3f2fd;" /* probably need to change for dark mode to work */
+                : "-fx-background-color: #ffffff;"; /* need to change -fx-background-color: #ffffff for dark mode to work */
         return bg + "-fx-border-color: " + colour + "; -fx-border-width: 4; -fx-background-radius: 20px; -fx-border-radius: 15px; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, #00000033, 15, 0.1, 5, 5);";
     }
 
@@ -392,7 +393,7 @@ public class QuizLibraryController {
 
         Label progressLabel = new Label();
         progressLabel.setFont(Font.font("System", 12));
-        progressLabel.setTextFill(Color.web("#777777"));
+        progressLabel.setTextFill(Color.web("#777777")); /* need to change for dark mode to work */
 
         Label questionLabel = new Label();
         questionLabel.setFont(Font.font("System", FontWeight.BOLD, 16));
@@ -534,7 +535,7 @@ public class QuizLibraryController {
 
         Label questionCounter = new Label();
         questionCounter.setFont(Font.font("System", 12));
-        questionCounter.setTextFill(Color.web("#777777"));
+        questionCounter.setTextFill(Color.web("#777777")); /* need to change for dark mode to work */
 
         TextField questionField = new TextField();
         questionField.setPromptText("Question text…");
