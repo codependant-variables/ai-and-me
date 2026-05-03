@@ -183,7 +183,7 @@ public class ProfileController {
     @FXML
     private void clearData() {
         dataDeletionService.deleteCurrentUserData();
-        Toast.addMessage("Data Deleted", "", ToastMessageType.INFORMATION);
+        Toast.addMessage("Data Cleared", "All data associated with this account has been deleted.", ToastMessageType.INFORMATION);
     }
 
     @FXML
