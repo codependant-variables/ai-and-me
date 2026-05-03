@@ -2,12 +2,9 @@ package com.codependentvariables.aiandme.model.dao;
 
 import com.codependentvariables.aiandme.database.*;
 import com.codependentvariables.aiandme.model.*;
-
 import java.util.List;
 
 /**
- * /**
- *  * Implementation of the IQuizAttemptQuestionDAO interface.
  *  Handles all database operations related to QuizAttemptQuestion entities.
  */
 public class SqliteQuizAttemptQuestionDAO extends BaseSqliteDAO implements IQuizAttemptQuestionDAO, IDatabaseEntity {
@@ -15,18 +12,20 @@ public class SqliteQuizAttemptQuestionDAO extends BaseSqliteDAO implements IQuiz
      * Creates the QuizAttemptQuestion table if it does not exist.
      */
     private static final String schemaQuery = """
-            CREATE TABLE IF NOT EXISTS quiz_attempt_questions (
-            id INTEGER PRIMARY KEY,
-            quiz_attempt_id INTEGER REFERENCES quiz_attempts(id) ON DELETE CASCADE,
-            text VARCHAR NOT NULL,
-            image BYTE[]
-            );
-    """;
+                CREATE TABLE IF NOT EXISTS quiz_attempt_questions (
+                    id INTEGER PRIMARY KEY,
+                    quiz_attempt_id INTEGER NOT NULL REFERENCES quiz_attempts(id) ON DELETE CASCADE,
+                    text VARCHAR NOT NULL,
+                    image BYTE[]
+                );
+            """;
 
     /**
      * Seed data inserted when database is initialised.
      */
-    private static final String seedDataQuery = "";
+    private static final String seedDataQuery = """
+                INSERT INTO quiz_attempt_questions (quiz_attempt_id, text) VALUES (1, '13 + 29');
+            """;
 
     @Override
     public String getSchemaQuery() {

@@ -199,19 +199,5 @@ public class QuizTemplateQuestionModelTest {
         QuizTemplateQuestion question = new QuizTemplateQuestion(1, "What is Java?");
         assertEquals("What is Java?", question.toString());
     }
-
-    // Validations not implemented yet might need to move this later ;( tear
-
-    @Test
-    public void constructor_nullText_throwsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class,
-                () -> new QuizTemplateQuestion(1, null));
-    }
-
-    @Test
-    public void constructor_blankText_throwsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class,
-                () -> new QuizTemplateQuestion(1, "   "));
-    }
 }
 

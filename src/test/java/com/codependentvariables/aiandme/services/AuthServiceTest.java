@@ -20,13 +20,13 @@ public class AuthServiceTest {
     }
 
     @Test
-    public void compare_correct_password() {
+    public void compare_incorrect_password() {
         boolean isEqual = authService.comparePassword(user, "not the password");
         assertFalse(isEqual);
     }
 
     @Test
-    public void compare_incorrect_password() {
+    public void compare_correct_password() {
         boolean isEqual = authService.comparePassword(user, password);
         assertTrue(isEqual);
     }

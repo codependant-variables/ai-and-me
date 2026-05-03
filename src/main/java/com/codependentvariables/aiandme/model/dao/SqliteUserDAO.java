@@ -110,15 +110,4 @@ public class SqliteUserDAO extends BaseSqliteDAO implements IUserDAO, IDatabaseE
         List<User> users = executeQuery(query, statement -> statement.setString(1, email), USER_MAPPER);
         return firstOrNull(users);
     }
-
-    // Added for DB testing. Should be moved elsewhere.
-    public void beginTransaction() {
-        final String query = "BEGIN TRANSACTION";
-        executeSql(query, statement -> {});
-    }
-
-    public void rollback() {
-        final String query = "ROLLBACK";
-        executeSql(query, statement -> {});
-    }
 }

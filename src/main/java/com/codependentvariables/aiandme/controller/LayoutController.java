@@ -35,10 +35,7 @@ public class LayoutController {
     public void initialize() {
         Router.setLayout(contentRef);
 
-        Image newImage = new Image(AiAndMe.getLogoUrlString());
-        logoRef.setImage(newImage);
-
-        boolean isLoggedIn = appState.getCurrentUser() != null;
+        logoRef.imageProperty().bind(appState.getObservableIsDarkMode().map(isDark -> new Image(isDark ? AiAndMe.darkLogoUrlString : AiAndMe.lightLogoUrlString)));
 
         loginButton.visibleProperty().bind(appState.getObservableCurrentUser().isNull());
         signupButton.visibleProperty().bind(appState.getObservableCurrentUser().isNull());
