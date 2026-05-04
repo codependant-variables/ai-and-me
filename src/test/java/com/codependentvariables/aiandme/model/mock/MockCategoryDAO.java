@@ -11,8 +11,6 @@ public class MockCategoryDAO implements ICategoryDAO {
     private int autoIncrementId = 1;
 
     public MockCategoryDAO() {
-        add(new Category("Arithmetic"));
-        add(new Category("Comprehension"));
     }
 
     @Override

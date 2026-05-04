@@ -6,6 +6,7 @@ import com.codependentvariables.aiandme.navigation.Router;
 import com.codependentvariables.aiandme.navigation.Toast;
 import com.codependentvariables.aiandme.navigation.ToastMessageType;
 import com.codependentvariables.aiandme.navigation.View;
+import com.codependentvariables.aiandme.services.UserDataDeletionService;
 import com.codependentvariables.aiandme.services.UserService;
 import com.codependentvariables.aiandme.state.AppState;
 import com.codependentvariables.aiandme.validation.ValidationEntry;
@@ -24,6 +25,7 @@ import java.util.Objects;
 public class ProfileController {
     private final AppState appState = AppState.getInstance();
     private final UserService userService = UserService.getInstance();
+    private final UserDataDeletionService dataDeletionService = UserDataDeletionService.getInstance();
 
     private User currentUser;
 
@@ -196,7 +198,8 @@ public class ProfileController {
 
     @FXML
     private void clearData() {
-        throw new RuntimeException("Clear user data not implemented.");
+        dataDeletionService.deleteCurrentUserData();
+        Toast.addMessage("Data Cleared", "All data associated with this account has been deleted.", ToastMessageType.INFORMATION);
     }
 
     @FXML
