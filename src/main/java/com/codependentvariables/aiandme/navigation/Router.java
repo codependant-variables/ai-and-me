@@ -28,10 +28,6 @@ public class Router {
         layout = stackPane;
     }
 
-    public static boolean hasApp() {
-        return app != null;
-    }
-
     public static void navigateApp(View view) {
         if (app == null) {
             throw new RuntimeException("Router.app BorderPane not initialised.");
