@@ -2,12 +2,9 @@ package com.codependentvariables.aiandme.model.dao;
 
 import com.codependentvariables.aiandme.database.*;
 import com.codependentvariables.aiandme.model.*;
-
 import java.util.List;
 
 /**
- * /**
- *  * Implementation of the IQuizAttemptQuestionDAO interface.
  *  Handles all database operations related to QuizAttemptQuestion entities.
  */
 public class SqliteQuizAttemptQuestionDAO extends BaseSqliteDAO implements IQuizAttemptQuestionDAO, IDatabaseEntity {
@@ -15,22 +12,20 @@ public class SqliteQuizAttemptQuestionDAO extends BaseSqliteDAO implements IQuiz
      * Creates the QuizAttemptQuestion table if it does not exist.
      */
     private static final String schemaQuery = """
-            CREATE TABLE IF NOT EXISTS quiz_attempt_questions (
-            id INTEGER PRIMARY KEY,
-            text VARCHAR NOT NULL,
-            image BYTE[],
-            FOREIGN KEY (quiz_attempt_id) REFERENCES quiz_attempts(id)
-            ON DELETE CASCADE
-            );
-    """;
+                CREATE TABLE IF NOT EXISTS quiz_attempt_questions (
+                    id INTEGER PRIMARY KEY,
+                    quiz_attempt_id INTEGER NOT NULL REFERENCES quiz_attempts(id) ON DELETE CASCADE,
+                    text VARCHAR NOT NULL,
+                    image BYTE[]
+                );
+            """;
 
     /**
      * Seed data inserted when database is initialised.
      */
     private static final String seedDataQuery = """
-            INSERT INTO quiz_attempt_questions (text, quiz_attempt_id)
-            VALUES ('What is the product of 2+2?', NULL);
-    """;
+                INSERT INTO quiz_attempt_questions (quiz_attempt_id, text) VALUES (1, '13 + 29');
+            """;
 
     @Override
     public String getSchemaQuery() {
@@ -61,7 +56,7 @@ public class SqliteQuizAttemptQuestionDAO extends BaseSqliteDAO implements IQuiz
      */
     @Override
     public void add(QuizAttemptQuestion quizAttemptQuestion) {
-        final String query = "INSERT INTO quiz_attempt_questions (text, image) VALUES (?, ?, ?)";
+        final String query = "INSERT INTO quiz_attempt_questions (quiz_attempt_id, text, image) VALUES (?, ?, ?)";
 
         int id = executeSqlWithGeneratedKeys(query, statement -> {
             statement.setInt(1, quizAttemptQuestion.getQuizAttemptId());
@@ -93,6 +88,11 @@ public class SqliteQuizAttemptQuestionDAO extends BaseSqliteDAO implements IQuiz
         final String query = "DELETE FROM quiz_attempt_questions WHERE id = ?";
 
         executeSql(query, statement -> statement.setInt(1, quizAttemptQuestion.getId()));
+    }
+
+    public List<QuizAttemptQuestion> get(int id) {
+        final String query = "SELECT * FROM quiz_attempt_questions WHERE id = ?";
+        return executeQuery(query, statement -> statement.setInt(1, id), QUIZ_ATTEMPT_QUESTION_MAPPER);
     }
 
     /**

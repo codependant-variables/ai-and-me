@@ -8,14 +8,18 @@ public class QuizTemplate {
     private int id;
     private String name;
     private int categoryId;
+    private int userId;
     private String status;
 
     /* Storage in memory temporatily here */
     private final List<QuizTemplateQuestion> questions = new ArrayList<>();
 
-    public QuizTemplate(String name, int categoryId, String status) {
+    public QuizTemplate(String name, int categoryId, int userId, String status) {
+        if (name == null || name.isBlank()) throw new IllegalArgumentException("name must not be blank");
+        if (status == null) throw new IllegalArgumentException("status must not be null");
         this.name = name;
         this.categoryId = categoryId;
+        this.userId = userId;
         this.status = status;
     }
 
@@ -41,6 +45,14 @@ public class QuizTemplate {
 
     public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getStatus() {

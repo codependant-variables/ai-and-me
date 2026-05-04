@@ -2,12 +2,15 @@ package com.codependentvariables.aiandme.navigation;
 
 public enum View {
     APP,
+    CHECKIN,
+    CHECKIN_HISTORY,
     HOME,
     LAYOUT,
     LOADING,
     LOGIN,
+    PROFILE,
     QUIZ_LIBRARY,
-    SIGNUP,
     SETTINGS,
-    CHECKIN
+    SETUP_MFA,
+    SIGNUP
 }

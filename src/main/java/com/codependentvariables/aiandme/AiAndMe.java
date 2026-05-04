@@ -30,9 +30,8 @@ public class  AiAndMe extends Application {
 
     public static final String lightModeStylesheet = new NordLight().getUserAgentStylesheet();
     public static final String darkModeStylesheet = new NordDark().getUserAgentStylesheet();
-    private static final String lightLogoUrlString = Objects.requireNonNull(AiAndMe.class.getResource("dark-logo.png")).toString();
-    private static final String darkLogoUrlString = Objects.requireNonNull(AiAndMe.class.getResource("logo.png")).toString();
-
+    public static final String lightLogoUrlString = Objects.requireNonNull(AiAndMe.class.getResource("dark-logo.png")).toString();
+    public static final String darkLogoUrlString = Objects.requireNonNull(AiAndMe.class.getResource("logo.png")).toString();
 
     public static void main(String[] args) {
         launch(args);
@@ -75,9 +74,5 @@ public class  AiAndMe extends Application {
         } catch (IOException ex) {
             throw new RuntimeException("Could not load AppController.", ex);
         }
-    }
-
-    public static String getLogoUrlString() {
-        return appState.getIsDarkMode() ? darkLogoUrlString : lightLogoUrlString;
     }
 }

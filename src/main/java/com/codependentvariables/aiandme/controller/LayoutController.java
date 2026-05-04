@@ -2,6 +2,8 @@ package com.codependentvariables.aiandme.controller;
 
 import com.codependentvariables.aiandme.AiAndMe;
 import com.codependentvariables.aiandme.navigation.Router;
+import com.codependentvariables.aiandme.navigation.Toast;
+import com.codependentvariables.aiandme.navigation.ToastMessageType;
 import com.codependentvariables.aiandme.navigation.View;
 import com.codependentvariables.aiandme.services.UserService;
 import com.codependentvariables.aiandme.state.AppState;
@@ -32,16 +34,19 @@ public class LayoutController {
     @FXML
     public void initialize() {
         Router.setLayout(contentRef);
-        Image newImage = new Image(AiAndMe.getLogoUrlString());
-        logoRef.setImage(newImage);
+
+        logoRef.imageProperty().bind(appState.getObservableIsDarkMode().map(isDark -> new Image(isDark ? AiAndMe.darkLogoUrlString : AiAndMe.lightLogoUrlString)));
+
+        loginButton.visibleProperty().bind(appState.getObservableCurrentUser().isNull());
+        signupButton.visibleProperty().bind(appState.getObservableCurrentUser().isNull());
+        profileButton.visibleProperty().bind(appState.getObservableCurrentUser().isNotNull());
+        logoutButton.visibleProperty().bind(appState.getObservableCurrentUser().isNotNull());
 
         // Bind managed to visible so they always match
         loginButton.managedProperty().bind(loginButton.visibleProperty());
         signupButton.managedProperty().bind(signupButton.visibleProperty());
         profileButton.managedProperty().bind(profileButton.visibleProperty());
         logoutButton.managedProperty().bind(logoutButton.visibleProperty());
-
-        setButtonVisibility();
     }
 
     @FXML
@@ -61,14 +66,15 @@ public class LayoutController {
 
     @FXML
     public void navigateProfile() {
-        throw new RuntimeException("Not implemented.");
+        Router.navigateLayout(View.PROFILE);
     }
 
     @FXML
     public void handleLogout() {
         // TODO: implement modal dialogue as "Are you sure?"
         userService.logout();
-        setButtonVisibility();
+        Router.navigateLayout(View.HOME); // In case of seeing sensitive data
+        Toast.addMessage("Logged Out", "Goodbye!", ToastMessageType.INFORMATION);
     }
 
     @FXML
@@ -77,21 +83,10 @@ public class LayoutController {
     }
 
     @FXML
-    public void navigateSettings() {
-        Router.navigateApp(View.SETTINGS);
-    }
+    public void navigateSettings() { Router.navigateLayout(View.SETTINGS); }
 
     @FXML
     public void navigateCheckin() {
-        Router.navigateApp(View.CHECKIN);
-    }
-
-    private void setButtonVisibility() {
-        boolean isLoggedIn = appState.getCurrentUser() != null;
-
-        loginButton.setVisible(!isLoggedIn);
-        signupButton.setVisible(!isLoggedIn);
-        profileButton.setVisible(isLoggedIn);
-        logoutButton.setVisible(isLoggedIn);
+        Router.navigateLayout(View.CHECKIN);
     }
 }
