@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MockCategoryDAO implements ICategoryDAO {
-    private static final ArrayList<Category> categories = new ArrayList<>();
-    private static int autoIncrementId = 1;
+    private final ArrayList<Category> categories = new ArrayList<>();
+    private int autoIncrementId = 1;
 
     public MockCategoryDAO() {
         add(new Category("Arithmetic"));
