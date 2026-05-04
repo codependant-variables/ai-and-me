@@ -1,5 +1,6 @@
 package com.codependentvariables.aiandme.controller;
 
+import com.codependentvariables.aiandme.Icon;
 import com.codependentvariables.aiandme.model.User;
 import com.codependentvariables.aiandme.navigation.Router;
 import com.codependentvariables.aiandme.navigation.Toast;
@@ -17,6 +18,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
+import javafx.scene.shape.SVGPath;
 
 import java.util.Objects;
 
@@ -34,9 +36,17 @@ public class ProfileController {
     @FXML
     public Button cancelNameButton;
     @FXML
+    public SVGPath editNameSvg;
+    @FXML
+    public SVGPath cancelNameSvg;
+    @FXML
     public TextField emailField;
     @FXML
     public Button emailButton;
+    @FXML
+    public SVGPath editEmailSvg;
+    @FXML
+    public SVGPath cancelEmailSvg;
     @FXML
     public Button cancelEmailButton;
     @FXML
@@ -67,18 +77,21 @@ public class ProfileController {
         }
 
         nameField.setText(currentUser.getName());
-        nameButton.textProperty().bind(
+        editNameSvg.contentProperty().bind(
                 Bindings.when(nameField.disableProperty())
-                        .then("E")
-                        .otherwise("S")
+                        .then(Icon.PENCIL)
+                        .otherwise(Icon.PENCIL) // TODO: change to save when icon is added
         );
+        cancelNameSvg.setContent(Icon.CANCEL);
         cancelNameButton.visibleProperty().bind(nameField.disableProperty().not());
+
         emailField.setText(currentUser.getEmail());
-        emailButton.textProperty().bind(
+        editEmailSvg.contentProperty().bind(
                 Bindings.when(emailField.disableProperty())
-                        .then("E")
-                        .otherwise("S")
+                        .then(Icon.PENCIL)
+                        .otherwise(Icon.PENCIL) // TODO: change to save when icon is added
         );
+        cancelEmailSvg .setContent(Icon.CANCEL);
         cancelEmailButton.visibleProperty().bind(emailField.disableProperty().not());
 
         boolean hasMfa = currentUser.getTotpSecret() != null;
@@ -174,7 +187,10 @@ public class ProfileController {
     }
 
     @FXML
-    private void viewCheckIns() { Router.navigateLayout(View.CHECKIN_HISTORY); }
+    private void navigateCheckInHistory() {
+        Router.navigateLayout(View.CHECK_IN_HISTORY);
+    }
+
     @FXML
     private void exportData() {
         throw new RuntimeException("Export user data not implemented.");

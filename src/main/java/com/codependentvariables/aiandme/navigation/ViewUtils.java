@@ -37,8 +37,8 @@ public final class ViewUtils {
     public static String getResourceName(View view) {
         return switch (view) {
             case View.APP -> "app.fxml";
-            case View.CHECKIN -> "checkin.fxml";
-            case View.CHECKIN_HISTORY -> "checkin-history.fxml";
+            case View.CHECK_IN -> "checkin.fxml";
+            case View.CHECK_IN_HISTORY -> "checkin-history.fxml";
             case View.HOME -> "home.fxml";
             case View.LAYOUT -> "layout.fxml";
             case View.LOADING -> "loading.fxml";

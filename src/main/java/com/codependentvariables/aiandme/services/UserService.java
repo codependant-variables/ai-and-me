@@ -13,19 +13,19 @@ public class UserService {
     private static final AppState appState = AppState.getInstance();
     private static final AuthService authService = AuthService.getInstance();
 
-    private UserService() {
-        this(new SqliteUserDAO());
-    }
-
-    // Package-private constructor for unit tests
-    UserService(IUserDAO userDAO) {
+    private UserService(IUserDAO userDAO) {
         this.userDAO = userDAO;
     }
 
     public static UserService getInstance() {
         if (instance == null) {
-            instance = new UserService();
+            instance = new UserService(new SqliteUserDAO());
         }
+        return instance;
+    }
+
+    public static UserService createForTest(IUserDAO dao) {
+        instance = new UserService(dao);
         return instance;
     }
 
@@ -73,6 +73,13 @@ public class UserService {
         return userDAO.getByEmail(email) == null;
     }
 
+    /**
+     * Adds user to DAO. Intended for user in unit tests only.
+     */
+    public void addUser(User user) {
+        userDAO.add(user);
+    }
+
     public void signup(String name, String email, String password) {
         HashResult hashResult = authService.hash(password);
         User user = new User(name, email, hashResult.hash(), hashResult.salt());
@@ -104,4 +111,6 @@ public class UserService {
         userDAO.delete(currentUser);
         appState.setCurrentUser(null);
     }
+
+
 }

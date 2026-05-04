@@ -13,7 +13,7 @@ import static javafx.application.Application.setUserAgentStylesheet;
 public class AppState {
     private static AppState instance;
 
-    private final ObjectProperty<User> currentUser = new SimpleObjectProperty<>(null);;
+    private final ObjectProperty<User> currentUser = new SimpleObjectProperty<>(null);
     private final BooleanProperty isDarkMode = new SimpleBooleanProperty(false);
     private final BooleanProperty isVertical = new SimpleBooleanProperty(false);
 
@@ -34,7 +34,7 @@ public class AppState {
 
     public void setCurrentUser(User user) {
         currentUser.setValue(user);
-        if (user != null && Router.hasApp()) {
+        if (user != null) {
             setIsDarkMode(currentUser.get().getIsDarkMode());
         }
     }

@@ -27,6 +27,8 @@ public interface IQuizAttemptQuestionDAO {
      */
     void delete(QuizAttemptQuestion quizAttemptQuestion);
 
+    QuizAttemptQuestion get(int id);
+
     /**
      * Retrieves al questions for a given quiz attempt.
      * @param quizAttemptId the quiz attempt id

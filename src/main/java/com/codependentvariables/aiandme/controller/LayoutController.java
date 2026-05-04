@@ -87,6 +87,6 @@ public class LayoutController {
 
     @FXML
     public void navigateCheckin() {
-        Router.navigateLayout(View.CHECKIN);
+        Router.navigateLayout(View.CHECK_IN);
     }
 }

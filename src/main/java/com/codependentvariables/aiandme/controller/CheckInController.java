@@ -1,6 +1,6 @@
 package com.codependentvariables.aiandme.controller;
 
-import com.codependentvariables.aiandme.Svg;
+import com.codependentvariables.aiandme.Icon;
 import com.codependentvariables.aiandme.model.CheckIn;
 import com.codependentvariables.aiandme.navigation.Router;
 import com.codependentvariables.aiandme.navigation.View;
@@ -26,7 +26,7 @@ public class CheckInController {
 
     @FXML
     public void initialize() {
-        homeSvg.setContent(Svg.HOME);
+        homeSvg.setContent(Icon.HOME);
         homeSvg.setFill(appState.getIsDarkMode() ? Color.WHITE : Color.BLACK);
     }
 

@@ -27,4 +27,6 @@ public interface IPreferredCategoryDAO {
      * @param userId The user ID to retrieve.
      */
     List<Category> getByUserId(int userId);
+
+    void deleteByUserId(int userId);
 }

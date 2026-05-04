@@ -15,7 +15,12 @@ jobs:
           distribution: 'corretto'
           cache: maven
 
-      - name: Test run: mvn test --batch-mode
+      - name: Install xvfb (Virtual Display)
+        run: sudo apt-get update && sudo apt-get install -y libgl1 xvfb libgtk-3-0
+        shell: bash
+
+      - name: Run tests
+        run: xvfb-run mvn test --batch-mode
 
   build:
     needs: test

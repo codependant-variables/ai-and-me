@@ -7,17 +7,11 @@ public class UserDataDeletionService {
     private static UserDataDeletionService instance;
 
     private static final AppState appState = AppState.getInstance();
-    private final SqlitePreferredCategoryDAO prefCatDAO;
-    private final SqliteCheckInDAO checkInDAO;
-    private final SqliteQuizAttemptDAO quizAttDAO;
+    private final IPreferredCategoryDAO prefCatDAO;
+    private final ICheckInDAO checkInDAO;
+    private final IQuizAttemptDAO quizAttDAO;
 
-    private UserDataDeletionService() {
-        prefCatDAO = new SqlitePreferredCategoryDAO();
-        checkInDAO = new SqliteCheckInDAO();
-        quizAttDAO = new SqliteQuizAttemptDAO();
-    }
-
-    UserDataDeletionService(SqlitePreferredCategoryDAO prefCatDAO, SqliteCheckInDAO checkInDAO, SqliteQuizAttemptDAO quizAttDAO) {
+    private UserDataDeletionService(IPreferredCategoryDAO prefCatDAO, ICheckInDAO checkInDAO, IQuizAttemptDAO quizAttDAO) {
         this.prefCatDAO = prefCatDAO;
         this.checkInDAO = checkInDAO;
         this.quizAttDAO = quizAttDAO;
@@ -25,14 +19,19 @@ public class UserDataDeletionService {
 
     public static UserDataDeletionService getInstance() {
         if (instance == null) {
-            instance = new UserDataDeletionService();
+            instance = new UserDataDeletionService(new SqlitePreferredCategoryDAO(), new SqliteCheckInDAO(), new SqliteQuizAttemptDAO());
         }
         return instance;
     }
 
+    public static UserDataDeletionService createForTest(IPreferredCategoryDAO prefCatDAO, ICheckInDAO checkInDAO, IQuizAttemptDAO quizAttDAO) {
+        instance = new UserDataDeletionService(prefCatDAO, checkInDAO, quizAttDAO);
+        return instance;
+    }
+
     public void deleteCurrentUserData() {
-        prefCatDAO.deleteAllByUserId(appState.getCurrentUser().getId());
-        checkInDAO.deleteAllByUserId(appState.getCurrentUser().getId());
-        quizAttDAO.deleteAllByUserId(appState.getCurrentUser().getId());
+        prefCatDAO.deleteByUserId(appState.getCurrentUser().getId());
+        checkInDAO.deleteByUserId(appState.getCurrentUser().getId());
+        quizAttDAO.deleteByUserId(appState.getCurrentUser().getId());
     }
 }

@@ -1,7 +1,7 @@
 package com.codependentvariables.aiandme.controller;
 
 import com.codependentvariables.aiandme.AiAndMe;
-import com.codependentvariables.aiandme.Svg;
+import com.codependentvariables.aiandme.Icon;
 import com.codependentvariables.aiandme.navigation.Router;
 import com.codependentvariables.aiandme.navigation.Toast;
 import com.codependentvariables.aiandme.navigation.ToastMessageType;
@@ -74,7 +74,7 @@ public class LoginController {
         viewPasswordIcon.fillProperty().bind(darkModeObservable.map(isDark -> isDark ? Color.WHITE : Color.BLACK));
 
         passwordTextField.visibleProperty().bind(passwordField.visibleProperty().not());
-        viewPasswordIcon.contentProperty().bind(passwordField.visibleProperty().map(visible -> visible ? Svg.OPEN_EYE : Svg.CLOSED_EYE));
+        viewPasswordIcon.contentProperty().bind(passwordField.visibleProperty().map(visible -> visible ? Icon.OPEN_EYE : Icon.CLOSED_EYE));
 
         emailField.disableProperty().bind(this.loggingIn.or(this.requireOtp));
 

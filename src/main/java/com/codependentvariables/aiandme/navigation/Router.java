@@ -28,20 +28,17 @@ public class Router {
         layout = stackPane;
     }
 
-    public static boolean hasApp() {
-        return app != null;
-    }
-
     public static void navigateApp(View view) {
-        if (app == null) {
-            throw new RuntimeException("Router.app BorderPane not initialised.");
-        }
-
         if (currentAppView == view) {
             return;
         }
 
-        loadView(app, view);
+        if (app != null) {
+            loadView(app, view);
+        }
+
+        lastView = currentAppView;
+        currentAppView = view;
 
         if (currentAppView != View.LAYOUT) {
             currentLayoutView = null;
@@ -53,15 +50,24 @@ public class Router {
             navigateApp(View.LAYOUT);
         }
 
-        if (layout == null) {
-            throw new RuntimeException("Router.layout BorderPane not initialised.");
-        }
-
         if (currentLayoutView == view) {
             return;
         }
 
-        loadView(layout, view);
+        if (layout != null) {
+            loadView(layout, view);
+        }
+
+        lastView = currentLayoutView;
+        currentLayoutView = view;
+    }
+
+    public static View getAppView() {
+        return currentAppView;
+    }
+
+    public static View getLayoutView() {
+        return currentLayoutView;
     }
 
     public static void navigateBack() {
@@ -75,19 +81,6 @@ public class Router {
     private static void loadView(StackPane stackPane, View view) {
         setLoading(stackPane);
         ViewUtils.loadView(stackPane, view);
-
-        isLastViewLayout = isCurrentViewLayout;
-        if (isLastViewLayout) {
-            lastView = currentLayoutView;
-        } else {
-            lastView = currentAppView;
-        }
-        isCurrentViewLayout = stackPane == layout;
-        if (isCurrentViewLayout) {
-            currentLayoutView = view;
-        } else {
-            currentAppView = view;
-        }
     }
 
     // TODO: decide if this is needed as it loads fast enough to never see Loading..

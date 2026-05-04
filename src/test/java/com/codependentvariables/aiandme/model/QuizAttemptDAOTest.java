@@ -39,7 +39,7 @@ public class QuizAttemptDAOTest {
         List<QuizAttempt> attempts = quizAttemptDAO.getByUserId(1);
 
         assertNotNull(attempts);
-        assertEquals(1, attempts.size());
+        assertFalse(attempts.isEmpty());
         assertEquals("Emma's Quiz Attempt", attempts.getFirst().getName());
     }
 

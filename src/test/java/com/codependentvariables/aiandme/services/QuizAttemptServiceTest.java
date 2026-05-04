@@ -119,6 +119,7 @@ public class QuizAttemptServiceTest {
         @Override public void add(QuizAttempt a) { a.setId(nextId++); store.add(a); }
         @Override public void update(QuizAttempt a) {}
         @Override public void delete(QuizAttempt a) { store.remove(a); }
+        @Override public void deleteByUserId(int userId) { store.removeIf(x -> x.getUserId() == userId); }
         @Override public List<QuizAttempt> getAll() { return new ArrayList<>(store); }
         @Override public QuizAttempt get(int id) {
             return store.stream().filter(a -> a.getId() == id).findFirst().orElse(null);
@@ -141,6 +142,7 @@ public class QuizAttemptServiceTest {
         @Override public void add(QuizAttemptQuestion q) { q.setId(nextId++); store.add(q); }
         @Override public void update(QuizAttemptQuestion q) {}
         @Override public void delete(QuizAttemptQuestion q) { store.remove(q); }
+        @Override public QuizAttemptQuestion get(int id) { return store.stream().filter(x -> x.getId() == id).findFirst().orElse(null); }
         @Override public List<QuizAttemptQuestion> getByQuizAttemptId(int attemptId) {
             return store.stream().filter(q -> q.getQuizAttemptId() == attemptId).toList();
         }
@@ -152,6 +154,7 @@ public class QuizAttemptServiceTest {
 
         @Override public void add(QuizAttemptAnswer a) { a.setId(nextId++); store.add(a); }
         @Override public void delete(QuizAttemptAnswer a) { store.remove(a); }
+        @Override public QuizAttemptAnswer get(int id) { return store.stream().filter(x -> x.getId() == id).findFirst().orElse(null); }
         @Override public List<QuizAttemptAnswer> getByQuizAttemptQuestionId(int questionId) {
             return store.stream().filter(a -> a.getQuizAttemptQuestionId() == questionId).toList();
         }

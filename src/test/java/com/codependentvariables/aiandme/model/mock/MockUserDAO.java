@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Objects;
 
 public class MockUserDAO implements IUserDAO {
-    public static final ArrayList<User> users = new ArrayList<>();
-    private static int autoIncrementedId = 1;
+    private final ArrayList<User> users = new ArrayList<>();
+    private int autoIncrementedId = 1;
 
     public MockUserDAO() {
         add(new User("Amy Adams", "amy.adams@mydomain.gov", "Zl3QG3XY5/Gsus8Ec4WTi6jMcM7EkrCGCqBMgwwYUzg=", "sKH9XkLaT2i1XR687zjlHQ=="));
