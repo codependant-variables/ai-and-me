@@ -43,6 +43,7 @@ public class SettingsController {
 
     @FXML
     public void revertToDefaultSettings() {
+        // TODO: implement modal dialogue
         appState.setIsDarkMode(false);
         appState.setIsVertical(false);
         userService.updateCurrentUser();
