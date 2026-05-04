@@ -15,8 +15,7 @@ jobs:
           distribution: 'corretto'
           cache: maven
 
-      - name: Test
-        run: xvfb-run -a mvn test --batch-mode
+      - name: Test run: mvn test --batch-mode
 
   build:
     needs: test
