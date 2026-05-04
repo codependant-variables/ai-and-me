@@ -15,8 +15,12 @@ jobs:
           distribution: 'corretto'
           cache: maven
 
-      - name: Test
-        run: mvn test --batch-mode
+      - name: Run JavaFX tests
+        uses: erwanclx/javafx-test@v1
+        with:
+          java-version: '21'
+          project-dir: '.'
+          maven-args: 'test --batch-mode'
 
   build:
     needs: test
