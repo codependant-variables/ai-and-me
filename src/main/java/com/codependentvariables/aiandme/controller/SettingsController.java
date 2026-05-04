@@ -14,23 +14,18 @@ public class SettingsController {
 
     @FXML
     private void initialize() {
-        setThemeContent(appState.getIsDarkMode());
+        themeIcon.contentProperty().bind(appState.getObservableIsDarkMode().map(isDarkMode -> isDarkMode ? Icon.SUN : Icon.MOON));
+        themeIcon.fillProperty().bind(appState.getObservableIsDarkMode().map(isDarkMode -> isDarkMode ? Color.YELLOW : Color.MEDIUMSLATEBLUE));
     }
 
     @FXML
-    public SVGPath themeToggleIcon;
+    public SVGPath themeIcon;
 
     @FXML
     public void switchTheme() {
         boolean isDarkMode = appState.getIsDarkMode();
         appState.setIsDarkMode(!isDarkMode);
-        setThemeContent(!isDarkMode);
         userService.updateCurrentUser();
-    }
-
-    private void setThemeContent(boolean isDarkMode) {
-        themeToggleIcon.setContent(isDarkMode ? Icon.SUN : Icon.MOON);
-        themeToggleIcon.setFill(isDarkMode ? Color.YELLOW : Color.MEDIUMSLATEBLUE);
     }
 
     @FXML
@@ -44,5 +39,12 @@ public class SettingsController {
     @FXML
     public void navigateBack() {
         Router.navigateBack();
+    }
+
+    @FXML
+    public void revertToDefaultSettings() {
+        appState.setIsDarkMode(false);
+        appState.setIsVertical(false);
+        userService.updateCurrentUser();
     }
 }
