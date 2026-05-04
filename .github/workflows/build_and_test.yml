@@ -16,7 +16,7 @@ jobs:
           cache: maven
 
       - name: Test
-        run: mvn test --batch-mode
+        run: xvfb-run -a mvn test --batch-mode
 
   build:
     needs: test
