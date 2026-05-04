@@ -12,8 +12,11 @@ public class CategoryDAOTest {
 
     @Test
     public void get() {
-        Category category = categoryDAO.get(1);
-        assertNotNull(category);
-        assertEquals("Arithmetic", category.getName());
+        Category category = new Category("Arithmetic");
+        categoryDAO.add(category);
+
+        Category result = categoryDAO.get(1);
+        assertNotNull(result);
+        assertEquals("Arithmetic", result.getName());
     }
 }

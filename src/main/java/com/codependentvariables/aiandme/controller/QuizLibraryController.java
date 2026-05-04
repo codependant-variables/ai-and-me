@@ -3,6 +3,7 @@ package com.codependentvariables.aiandme.controller;
 import com.codependentvariables.aiandme.AiAndMe;
 import com.codependentvariables.aiandme.model.*;
 import com.codependentvariables.aiandme.model.dao.*;
+import com.codependentvariables.aiandme.services.CategoryService;
 import com.codependentvariables.aiandme.services.QuizAttemptService;
 import com.codependentvariables.aiandme.services.QuizTemplateService;
 import com.codependentvariables.aiandme.state.AppState;
@@ -26,7 +27,7 @@ import java.util.Optional;
 
 public class QuizLibraryController {
 
-    private final ICategoryDAO categoryDAO = new SqliteCategoryDAO();
+    private final CategoryService categoryService = CategoryService.getInstance();
     private final IUserDAO userDAO = new SqliteUserDAO();
     private final QuizTemplateService templateService = QuizTemplateService.getInstance();
     private final QuizAttemptService attemptService = QuizAttemptService.getInstance();
@@ -60,7 +61,7 @@ public class QuizLibraryController {
         updateActionButtons();
 
         java.util.Map<Integer, String> categoryNames = new java.util.HashMap<>();
-        for (Category c : categoryDAO.getAll()) {
+        for (Category c : categoryService.getVisibleCategories()) {
             categoryNames.put(c.getId(), c.getName());
         }
 
@@ -215,7 +216,7 @@ public class QuizLibraryController {
      */
     @FXML
     private void handleCreate() {
-        List<Category> categories = categoryDAO.getAll();
+        List<Category> categories = categoryService.getVisibleCategories();
 
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Create Template");
@@ -300,9 +301,9 @@ public class QuizLibraryController {
         if (newCategoryCheck.isSelected()) {
             String newCatName = newCategoryField.getText().trim();
             Category newCat = new Category(newCatName);
-            categoryDAO.add(newCat);
+            categoryService.submitCategory(newCat);
 
-            targetCategory = categoryDAO.getAll().stream()
+            targetCategory = categoryService.getVisibleCategories().stream()
                     .filter(c -> c.getName().equalsIgnoreCase(newCatName))
                     .findFirst().orElse(newCat);
         } else {
