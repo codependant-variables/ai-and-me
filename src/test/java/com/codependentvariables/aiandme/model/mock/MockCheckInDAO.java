@@ -11,17 +11,24 @@ import java.util.List;
  */
 public class MockCheckInDAO implements ICheckInDAO {
     private final List<CheckIn> checkIns = new ArrayList<>();
+    private static int autoIncrementedId = 1;
 
-    public MockCheckInDAO() {
-    }
+    public MockCheckInDAO() {}
+
     @Override
     public void add(CheckIn checkin) {
+        checkin.setId(autoIncrementedId++);
         checkIns.add(checkin);
     }
 
     @Override
+    public void delete(CheckIn checkin) {
+        checkIns.remove(checkin);
+    }
+
+    @Override
     public List<CheckIn> getAll() {
-        return checkIns;
+        return new ArrayList<>(checkIns);
     }
 
     @Override
@@ -30,11 +37,6 @@ public class MockCheckInDAO implements ICheckInDAO {
                 .filter(c -> c.getId() == id)
                 .findFirst()
                 .orElse(null);
-    }
-
-    @Override
-    public void delete(CheckIn checkin) {
-        checkIns.remove(checkin);
     }
 
     @Override

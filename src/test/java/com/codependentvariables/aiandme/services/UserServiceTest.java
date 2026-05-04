@@ -1,20 +1,28 @@
 package com.codependentvariables.aiandme.services;
 
+import com.codependentvariables.aiandme.JavaFXTest;
 import com.codependentvariables.aiandme.model.mock.MockUserDAO;
 import com.codependentvariables.aiandme.model.User;
 import com.codependentvariables.aiandme.state.AppState;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class UserServiceTest {
-    public final UserService userService = new UserService(new MockUserDAO());
-    public final AppState appState = AppState.getInstance();
+public class UserServiceTest extends JavaFXTest {
+    public static UserService userService;
+    public static AppState appState;
 
     public final String password = "password1";
     public final String hash = "Zl3QG3XY5/Gsus8Ec4WTi6jMcM7EkrCGCqBMgwwYUzg=";
     public final String salt = "sKH9XkLaT2i1XR687zjlHQ==";
     public final User user = new User("", "amy.adams@mydomain.gov", hash, salt);
+
+    @BeforeAll
+    public static void setup() {
+        userService = UserService.createForTest(new MockUserDAO());
+        appState = AppState.getInstance();
+    }
 
     @Test
     public void invalid_login_attempt() {

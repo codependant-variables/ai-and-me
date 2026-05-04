@@ -3,8 +3,6 @@ package com.codependentvariables.aiandme.services;
 import com.codependentvariables.aiandme.model.dao.IUserDAO;
 import com.codependentvariables.aiandme.model.dao.SqliteUserDAO;
 import com.codependentvariables.aiandme.model.User;
-import com.codependentvariables.aiandme.navigation.Toast;
-import com.codependentvariables.aiandme.navigation.ToastMessageType;
 import com.codependentvariables.aiandme.state.AppState;
 import com.codependentvariables.aiandme.services.AuthService.HashResult;
 
@@ -15,19 +13,19 @@ public class UserService {
     private static final AppState appState = AppState.getInstance();
     private static final AuthService authService = AuthService.getInstance();
 
-    private UserService() {
-        this(new SqliteUserDAO());
-    }
-
-    // Package-private constructor for unit tests
-    UserService(IUserDAO userDAO) {
+    private UserService(IUserDAO userDAO) {
         this.userDAO = userDAO;
     }
 
     public static UserService getInstance() {
         if (instance == null) {
-            instance = new UserService();
+            instance = new UserService(new SqliteUserDAO());
         }
+        return instance;
+    }
+
+    public static UserService createForTest(IUserDAO dao) {
+        instance = new UserService(dao);
         return instance;
     }
 
@@ -73,6 +71,13 @@ public class UserService {
 
     public boolean isUniqueEmail(String email) {
         return userDAO.getByEmail(email) == null;
+    }
+
+    /**
+     * Adds user to DAO. Intended for user in unit tests only.
+     */
+    public void addUser(User user) {
+        userDAO.add(user);
     }
 
     public void signup(String name, String email, String password) {

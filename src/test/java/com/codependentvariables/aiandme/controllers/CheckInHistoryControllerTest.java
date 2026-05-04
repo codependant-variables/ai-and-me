@@ -1,39 +1,61 @@
 package com.codependentvariables.aiandme.controllers;
 
+import com.codependentvariables.aiandme.JavaFXControllerLoader;
+import com.codependentvariables.aiandme.JavaFXTest;
 import com.codependentvariables.aiandme.controller.CheckInHistoryController;
 import com.codependentvariables.aiandme.model.CheckIn;
-import com.codependentvariables.aiandme.model.dao.ICheckInDAO;
+import com.codependentvariables.aiandme.model.User;
+import com.codependentvariables.aiandme.model.mock.MockCheckInDAO;
+import com.codependentvariables.aiandme.model.mock.MockUserDAO;
+import com.codependentvariables.aiandme.navigation.Router;
+import com.codependentvariables.aiandme.navigation.View;
+import com.codependentvariables.aiandme.services.CheckInService;
+import com.codependentvariables.aiandme.services.UserService;
 import com.codependentvariables.aiandme.state.AppState;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-// Unit Test - Ensure the controller can be instantiated with a mock DAO
-public class CheckInHistoryControllerTest {
+public class CheckInHistoryControllerTest extends JavaFXTest {
+    private static AppState appState;
+    private static UserService userService;
+    private static CheckInService checkInService;
+    private static CheckInHistoryController controller;
+
+    @BeforeAll
+    public static void setup() {
+        appState = AppState.getInstance();
+        userService = UserService.createForTest(new MockUserDAO());
+        checkInService = CheckInService.createForTest(new MockCheckInDAO());
+    }
 
     @BeforeEach
-    public void resetAppState() {
-        AppState.getInstance().setCurrentUser(null);
+    public void setupEach() {
+        appState.setCurrentUser(null);
+        controller = JavaFXControllerLoader.load(View.CHECK_IN_HISTORY, type -> new CheckInHistoryController(checkInService));
     }
 
-    private ICheckInDAO createMockDao() {
-        return new ICheckInDAO() {
-            @Override public void add(CheckIn checkIn) {}
-            @Override public void delete(CheckIn checkIn) {}
-            @Override public List<CheckIn> getAll() { return List.of(); }
-            @Override public CheckIn get(int id) { return null; }
-            @Override public List<CheckIn> getAllByUserId(int userId) { return List.of(); }
-        };
-    }
-
-    // Checks that the controller can be created with the mock DAO
     @Test
-    public void controllerCreationTest() {
-        CheckInHistoryController controller = new CheckInHistoryController(createMockDao());
+    public void load_check_in_history_as_guest() {
+        controller.loadCheckIns();
+        assertEquals(0, controller.checkInsTable.getItems().size());
+        assertEquals(View.HOME, Router.getLayoutView());
+    }
 
-        assertNotNull(controller);
+    @Test
+    public void load_check_in_history_as_user() {
+        User user = new User("Test", "test@test.test", "mypassword", "mysalt");
+        userService.addUser(user);
+        appState.setCurrentUser(user);
+
+        CheckIn checkin = new CheckIn(user.getId(), 1.0f, 2.0f, 3.0f, "my comment", LocalDateTime.now());
+        checkInService.submitCheckIn(checkin);
+
+        controller.loadCheckIns();
+        assertEquals(1, controller.checkInsTable.getItems().size());
     }
 }
