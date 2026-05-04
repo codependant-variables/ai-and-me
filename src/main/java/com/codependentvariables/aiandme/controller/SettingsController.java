@@ -1,6 +1,6 @@
 package com.codependentvariables.aiandme.controller;
 
-import com.codependentvariables.aiandme.Svg;
+import com.codependentvariables.aiandme.Icon;
 import com.codependentvariables.aiandme.navigation.Router;
 import com.codependentvariables.aiandme.services.UserService;
 import com.codependentvariables.aiandme.state.AppState;
@@ -29,7 +29,7 @@ public class SettingsController {
     }
 
     private void setThemeContent(boolean isDarkMode) {
-        themeToggleIcon.setContent(isDarkMode ? Svg.SUN : Svg.MOON);
+        themeToggleIcon.setContent(isDarkMode ? Icon.SUN : Icon.MOON);
         themeToggleIcon.setFill(isDarkMode ? Color.YELLOW : Color.MEDIUMSLATEBLUE);
     }
 

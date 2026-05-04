@@ -1,6 +1,6 @@
 package com.codependentvariables.aiandme.controller;
 
-import com.codependentvariables.aiandme.Svg;
+import com.codependentvariables.aiandme.Icon;
 import com.codependentvariables.aiandme.model.User;
 import com.codependentvariables.aiandme.navigation.Router;
 import com.codependentvariables.aiandme.navigation.Toast;
@@ -77,19 +77,19 @@ public class ProfileController {
         nameField.setText(currentUser.getName());
         editNameSvg.contentProperty().bind(
                 Bindings.when(nameField.disableProperty())
-                        .then(Svg.PENCIL)
-                        .otherwise(Svg.PENCIL) // TODO: change to save when icon is added
+                        .then(Icon.PENCIL)
+                        .otherwise(Icon.PENCIL) // TODO: change to save when icon is added
         );
-        cancelNameSvg.setContent(Svg.CANCEL);
+        cancelNameSvg.setContent(Icon.CANCEL);
         cancelNameButton.visibleProperty().bind(nameField.disableProperty().not());
 
         emailField.setText(currentUser.getEmail());
         editEmailSvg.contentProperty().bind(
                 Bindings.when(emailField.disableProperty())
-                        .then(Svg.PENCIL)
-                        .otherwise(Svg.PENCIL) // TODO: change to save when icon is added
+                        .then(Icon.PENCIL)
+                        .otherwise(Icon.PENCIL) // TODO: change to save when icon is added
         );
-        cancelEmailSvg .setContent(Svg.CANCEL);
+        cancelEmailSvg .setContent(Icon.CANCEL);
         cancelEmailButton.visibleProperty().bind(emailField.disableProperty().not());
 
         boolean hasMfa = currentUser.getTotpSecret() != null;
