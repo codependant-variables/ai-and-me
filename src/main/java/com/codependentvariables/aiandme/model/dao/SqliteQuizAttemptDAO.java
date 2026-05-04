@@ -97,6 +97,12 @@ public class SqliteQuizAttemptDAO extends BaseSqliteDAO implements IQuizAttemptD
         executeSql(query, statement -> statement.setInt(1, quizAttempt.getId()));
     }
 
+    public void deleteAllByUserId(int userId) {
+        final String query = "DELETE FROM quiz_attempts WHERE user_id = ?";
+
+        executeSql(query, statement -> statement.setInt(1, userId));
+    }
+
     /**
      * Retrieves all QuizAttempts from the database.
      *
