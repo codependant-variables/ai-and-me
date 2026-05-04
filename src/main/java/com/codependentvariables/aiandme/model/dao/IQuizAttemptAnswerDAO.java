@@ -20,6 +20,8 @@ public interface IQuizAttemptAnswerDAO {
      */
     void delete(QuizAttemptAnswer quizAttemptAnswer);
 
+    QuizAttemptAnswer get(int id);
+
     /**
      * Retrieves all answers for a given quiz attempt question.
      * @param quizAttemptQuestionId the quiz attempt question id

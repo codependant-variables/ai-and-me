@@ -54,6 +54,11 @@ public class MockQuizAttemptDAO implements IQuizAttemptDAO {
         quizAttempts.remove(quizAttempt);
     }
 
+    @Override
+    public void deleteByUserId(int userId) {
+        quizAttempts.removeIf(x -> x.getUserId() == userId);
+    }
+
     /**
      * Retrieves a QuizAttempt by ID.
      */

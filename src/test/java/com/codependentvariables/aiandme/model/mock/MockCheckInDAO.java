@@ -27,6 +27,11 @@ public class MockCheckInDAO implements ICheckInDAO {
     }
 
     @Override
+    public void deleteByUserId(int userId) {
+        checkIns.removeIf(x -> x.getUserId() == userId);
+    }
+
+    @Override
     public List<CheckIn> getAll() {
         return new ArrayList<>(checkIns);
     }

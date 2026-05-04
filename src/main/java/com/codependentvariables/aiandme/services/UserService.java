@@ -111,4 +111,6 @@ public class UserService {
         userDAO.delete(currentUser);
         appState.setCurrentUser(null);
     }
+
+
 }

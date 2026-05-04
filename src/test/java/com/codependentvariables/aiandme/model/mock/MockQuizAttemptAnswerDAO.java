@@ -43,6 +43,14 @@ public class MockQuizAttemptAnswerDAO implements IQuizAttemptAnswerDAO {
         answers.removeIf(answer -> answer.getId() == quizAttemptAnswer.getId());
     }
 
+    @Override
+    public QuizAttemptAnswer get(int id) {
+        return answers.stream()
+                .filter(c -> c.getId() == id)
+                .findFirst()
+                .orElse(null);
+    }
+
     /**
      * Retrieves all answers for a given quiz attempt question.
      */
