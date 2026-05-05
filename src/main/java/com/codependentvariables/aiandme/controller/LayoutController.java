@@ -1,6 +1,7 @@
 package com.codependentvariables.aiandme.controller;
 
 import com.codependentvariables.aiandme.AiAndMe;
+import com.codependentvariables.aiandme.navigation.Dialogue;
 import com.codependentvariables.aiandme.navigation.Router;
 import com.codependentvariables.aiandme.navigation.Toast;
 import com.codependentvariables.aiandme.navigation.ToastMessageType;
@@ -71,10 +72,15 @@ public class LayoutController {
 
     @FXML
     public void handleLogout() {
-        // TODO: implement modal dialogue as "Are you sure?"
-        userService.logout();
-        Router.navigateLayout(View.HOME); // In case of seeing sensitive data
-        Toast.addMessage("Logged Out", "Goodbye!", ToastMessageType.INFORMATION);
+        Dialogue.confirmation(result -> {
+            if (result == null || !result) {
+                return;
+            }
+
+            userService.logout();
+            Router.navigateLayout(View.HOME); // In case of seeing sensitive data
+            Toast.addMessage("Logged Out", "Goodbye!", ToastMessageType.INFORMATION);
+        });
     }
 
     @FXML

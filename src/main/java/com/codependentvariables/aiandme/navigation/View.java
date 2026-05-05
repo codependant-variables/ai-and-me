@@ -4,6 +4,7 @@ public enum View {
     APP,
     CHECK_IN,
     CHECK_IN_HISTORY,
+    DIALOGUE,
     HOME,
     LAYOUT,
     LOADING,
