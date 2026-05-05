@@ -59,5 +59,6 @@ public class QuizAttemptSummaryTest {
                 time,
                 new ArrayList<>()
         );
+        assertEquals("Math Quiz", summary.getQuizName());
     }
 }

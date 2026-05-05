@@ -23,12 +23,18 @@ public class QuizAttemptResultsControllerTest {
         Timestamp ts = Timestamp.valueOf("2026-04-30 14:35:00");
 
         QuizAttemptSummary summary = QuizAttemptSummary.of(
-            "Maths Quiz", 1, 1, ts, List.of(q), Map.of(q.getId(), correct));
+                "Maths Quiz",
+                1,
+                1,
+                ts,
+                List.of(q),
+                List.of(correct)
+        );
 
         assertEquals("Maths Quiz", summary.getQuizName());
-        assertEquals(100,          summary.getPercentage());
+        assertEquals(100, summary.getPercentage());
         assertEquals("30 Apr 2026, 14:35", summary.getFormattedDate());
-        assertEquals(1,            summary.getRows().size());
+        assertEquals(1, summary.getRows().size());
         assertTrue(summary.getRows().get(0).correct());
     }
 }

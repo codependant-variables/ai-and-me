@@ -1,6 +1,7 @@
 package com.codependentvariables.aiandme.navigation;
 
 import javafx.scene.layout.StackPane;
+import javafx.scene.Parent;
 
 /**
  * Router for application root.
@@ -46,22 +47,26 @@ public class Router {
         }
     }
 
-    public static void navigateLayout(View view) {
+    public static Object navigateLayout(View view) {
         if (currentAppView != View.LAYOUT) {
             navigateApp(View.LAYOUT);
         }
 
         if (currentLayoutView == view) {
-            return;
+            return null;
         }
 
+        Object controller = null; // can hold any obj
+
         if (layout != null) {
-            loadView(layout, view);
+            controller = ViewUtils.loadView(layout, view);
         }
 
         lastView = currentLayoutView;
         currentLayoutView = view;
         isLastViewLayout = true;
+
+        return controller;
     }
 
     public static View getAppView() {
