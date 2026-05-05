@@ -13,10 +13,11 @@
 
    <Button onAction="#switchTheme" GridPane.rowIndex="0" GridPane.halignment="CENTER">
       <graphic>
-         <SVGPath fx:id="themeToggleIcon" nodeOrientation="LEFT_TO_RIGHT"/>
+         <SVGPath fx:id="themeIcon" nodeOrientation="LEFT_TO_RIGHT"/>
       </graphic>
    </Button>
    <Button maxWidth="Infinity" text="Change Orientation" onAction="#switchOrientation" GridPane.rowIndex="1" />
-   <Button maxWidth="Infinity" text="Back" onAction="#navigateBack" GridPane.rowIndex="2" />
+   <Button maxWidth="Infinity" text="Revert to Default Settings" onAction="#revertToDefaultSettings" GridPane.rowIndex="2" />
+   <Button maxWidth="Infinity" text="Back" onAction="#navigateBack" GridPane.rowIndex="3" />
 
 </GridPane>

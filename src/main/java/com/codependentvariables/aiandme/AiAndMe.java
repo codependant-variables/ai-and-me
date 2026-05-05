@@ -20,7 +20,7 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class  AiAndMe extends Application {
+public class AiAndMe extends Application {
     private static final Logger logger = Logger.getLogger(AiAndMe.class.getName());
     private static final AppState appState = AppState.getInstance();
 

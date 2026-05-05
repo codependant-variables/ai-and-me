@@ -40,6 +40,7 @@ public class Router {
 
         lastView = currentAppView;
         currentAppView = view;
+        isLastViewLayout = false;
 
         if (currentAppView != View.LAYOUT) {
             currentLayoutView = null;
@@ -61,6 +62,7 @@ public class Router {
 
         lastView = currentLayoutView;
         currentLayoutView = view;
+        isLastViewLayout = true;
     }
 
     public static void setLayoutContent(Parent view, View routeView) {

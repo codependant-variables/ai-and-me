@@ -4,110 +4,59 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * QuizTemplateAnswer Model
- */
 public class QuizTemplateAnswerModelTest {
-
-    // Construction & field access
-
     @Test
-    public void constructor_fieldsAreAccessible() {
+    public void createAnswer() {
+        // Checks for creation of answer that doesn't have image
         QuizTemplateAnswer answer = new QuizTemplateAnswer(2, "Paris", true);
 
-        assertEquals(2,       answer.getQuizTemplateQuestionId());
+        assertEquals(2, answer.getQuizTemplateQuestionId());
         assertEquals("Paris", answer.getText());
         assertTrue(answer.isCorrect());
-    }
-
-    @Test
-    public void constructor_correctFlagFalse_isCorrectReturnsFalse() {
-        QuizTemplateAnswer answer = new QuizTemplateAnswer(1, "London", false);
-        assertFalse(answer.isCorrect());
-    }
-
-    @Test
-    public void constructor_correctFlagTrue_isCorrectReturnsTrue() {
-        QuizTemplateAnswer answer = new QuizTemplateAnswer(1, "Paris", true);
-        assertTrue(answer.isCorrect());
-    }
-
-    @Test
-    public void constructor_textIsNonNull() {
-        QuizTemplateAnswer answer = new QuizTemplateAnswer(1, "Some answer", false);
-        assertNotNull(answer.getText());
-    }
-
-    @Test
-    public void constructor_idIsZeroByDefault() {
-        QuizTemplateAnswer answer = new QuizTemplateAnswer(1, "Some answer", false);
         assertEquals(0, answer.getId());
-    }
-
-    @Test
-    public void constructor_withImage_imageIsStored() {
-        byte[] img = new byte[]{1, 2, 3};
-        QuizTemplateAnswer answer = new QuizTemplateAnswer(1, "Img answer", img, true);
-        assertArrayEquals(img, answer.getImage());
-    }
-
-    @Test
-    public void constructor_withoutImage_imageIsNull() {
-        QuizTemplateAnswer answer = new QuizTemplateAnswer(1, "No image", false);
         assertNull(answer.getImage());
     }
 
-    // Setters
-
+    // Research: https://junit.org/junit4/javadoc/4.12/org/junit/Assert.html#:~:text=Asserts%20that%20two%20boolean%20arrays%20are%20equal.,Asserts%20that%20two%20byte%20arrays%20are%20equal.
     @Test
-    public void setId_updatesId() {
-        QuizTemplateAnswer answer = new QuizTemplateAnswer(1, "A", false);
-        answer.setId(10);
-        assertEquals(10, answer.getId());
+    public void createAnswerImage() {
+        // Checks for creation of answer with an image
+        byte[] image = {1, 2, 3};
+
+        QuizTemplateAnswer answer = new QuizTemplateAnswer(1, "Image answer", image, true);
+
+        // Checks both image arrays contain the same data
+        assertArrayEquals(image, answer.getImage());
     }
 
     @Test
-    public void setText_updatesText() {
+    public void updateFields() {
         QuizTemplateAnswer answer = new QuizTemplateAnswer(1, "Old", false);
-        answer.setText("New");
-        assertEquals("New", answer.getText());
-    }
 
-    @Test
-    public void setCorrect_updatesFlag() {
-        QuizTemplateAnswer answer = new QuizTemplateAnswer(1, "A", false);
+        answer.setId(10);
+        answer.setQuizTemplateQuestionId(5);
+        answer.setText("New");
         answer.setCorrect(true);
+
+        assertEquals(10, answer.getId());
+        assertEquals(5, answer.getQuizTemplateQuestionId());
+        assertEquals("New", answer.getText());
         assertTrue(answer.isCorrect());
     }
 
     @Test
-    public void setQuizTemplateQuestionId_updatesId() {
-        QuizTemplateAnswer answer = new QuizTemplateAnswer(1, "A", false);
-        answer.setQuizTemplateQuestionId(5);
-        assertEquals(5, answer.getQuizTemplateQuestionId());
-    }
-
-    // isValid
-
-    @Test
-    public void isValid_returnsTrueForNonBlankText() {
-        QuizTemplateAnswer answer = new QuizTemplateAnswer(1, "Valid answer", true);
+    public void checkAnswerText() {
+        QuizTemplateAnswer answer = new QuizTemplateAnswer(1, "Good answer", true);
         assertTrue(answer.isValid());
-    }
 
-    @Test
-    public void isValid_returnsFalseForBlankText() {
-        QuizTemplateAnswer answer = new QuizTemplateAnswer(1, "placeholder", false);
-        answer.setText("   ");
+        answer.setText(" "); // Example of invalid text
         assertFalse(answer.isValid());
     }
 
-    // toString
-
     @Test
-    public void toString_returnsText() {
-        QuizTemplateAnswer answer = new QuizTemplateAnswer(1, "Berlin", false);
-        assertEquals("Berlin", answer.toString());
+    public void returnsAnswerText() {
+        // Checks that the text for an answer is returned as a string
+        QuizTemplateAnswer answer = new QuizTemplateAnswer(1, "Test", false);
+        assertEquals("Test", answer.toString());
     }
 }
-

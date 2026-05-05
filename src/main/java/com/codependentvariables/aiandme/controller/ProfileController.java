@@ -2,10 +2,7 @@ package com.codependentvariables.aiandme.controller;
 
 import com.codependentvariables.aiandme.Icon;
 import com.codependentvariables.aiandme.model.User;
-import com.codependentvariables.aiandme.navigation.Router;
-import com.codependentvariables.aiandme.navigation.Toast;
-import com.codependentvariables.aiandme.navigation.ToastMessageType;
-import com.codependentvariables.aiandme.navigation.View;
+import com.codependentvariables.aiandme.navigation.*;
 import com.codependentvariables.aiandme.services.UserDataDeletionService;
 import com.codependentvariables.aiandme.services.UserService;
 import com.codependentvariables.aiandme.state.AppState;
@@ -204,8 +201,14 @@ public class ProfileController {
 
     @FXML
     private void deleteUser() {
-        userService.deleteCurrentUser();
-        Router.navigateLayout(View.HOME);
-        Toast.addMessage("Account Deleted", "We'll miss you!", ToastMessageType.INFORMATION);
+        Dialogue.confirmationWithCancel(result -> {
+            if (result == null || !result) {
+                return;
+            }
+
+            userService.deleteCurrentUser();
+            Router.navigateLayout(View.HOME);
+            Toast.addMessage("Account Deleted", "We'll miss you!", ToastMessageType.INFORMATION);
+        });
     }
 }

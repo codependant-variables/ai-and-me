@@ -12,10 +12,12 @@ public final class ViewUtils {
 
     /**
      * Loads view onto the provided pane
+     *
      * @param stackPane StackPane to load view into
      * @param view View to load
+     * @return Loaded controller
      */
-    public static void loadView(StackPane stackPane, View view) {
+    public static Object loadView(StackPane stackPane, View view) {
         String resourceName = getResourceName(view);
         URL resourceUrl = AiAndMe.class.getResource(resourceName);
         if (resourceUrl == null) {
@@ -23,8 +25,10 @@ public final class ViewUtils {
         }
 
         try {
-            Node loadedNode = FXMLLoader.load(resourceUrl);
+            FXMLLoader fxmlLoader = new FXMLLoader(resourceUrl);
+            Node loadedNode = fxmlLoader.load();
             stackPane.getChildren().setAll(loadedNode);
+            return fxmlLoader.getController();
         } catch (IOException ex) {
             throw new RuntimeException(String.format("Could not load resource: %s", resourceName), ex);
         }
@@ -39,6 +43,7 @@ public final class ViewUtils {
             case View.APP -> "app.fxml";
             case View.CHECK_IN -> "checkin.fxml";
             case View.CHECK_IN_HISTORY -> "checkin-history.fxml";
+            case View.DIALOGUE -> "dialogue.fxml";
             case View.HOME -> "home.fxml";
             case View.LAYOUT -> "layout.fxml";
             case View.LOADING -> "loading.fxml";
