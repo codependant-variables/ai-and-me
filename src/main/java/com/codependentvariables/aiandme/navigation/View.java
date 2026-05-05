@@ -9,6 +9,8 @@ public enum View {
     LOADING,
     LOGIN,
     PROFILE,
+    QUIZ_ATTEMPT,
+    QUIZ_ATTEMPT_RESULTS,
     QUIZ_LIBRARY,
     SETTINGS,
     SETUP_MFA,

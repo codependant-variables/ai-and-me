@@ -3,6 +3,8 @@ package com.codependentvariables.aiandme.controller;
 import com.codependentvariables.aiandme.AiAndMe;
 import com.codependentvariables.aiandme.model.*;
 import com.codependentvariables.aiandme.model.dao.*;
+import com.codependentvariables.aiandme.navigation.Router;
+import com.codependentvariables.aiandme.navigation.View;
 import com.codependentvariables.aiandme.services.CategoryService;
 import com.codependentvariables.aiandme.services.QuizAttemptService;
 import com.codependentvariables.aiandme.services.QuizTemplateService;
@@ -11,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -25,8 +28,11 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * Controller for the Quiz Library screen.
+ * Handles displaying quiz templates and user interactions (CRUD + attempt).
+ */
 public class QuizLibraryController {
-
     private final CategoryService categoryService = CategoryService.getInstance();
     private final IUserDAO userDAO = new SqliteUserDAO();
     private final QuizTemplateService templateService = QuizTemplateService.getInstance();
@@ -39,11 +45,13 @@ public class QuizLibraryController {
     @FXML private Button btnEditQuestions;
     @FXML private Button btnAttemptQuiz;
 
+    // Currently selected template and its UI card
     private QuizTemplate selectedTemplate;
-
-    /** The VBox card node that is currently highlighted. */
     private HBox selectedCard;
 
+    /**
+     * Initializes UI state and loads templates.
+     */
     @FXML
     public void initialize() {
         btnCreate.setDisable(false);
@@ -54,6 +62,9 @@ public class QuizLibraryController {
         refreshCategories();
     }
 
+    /**
+     * Reloads all quiz templates and rebuilds UI cards.
+     */
     private void refreshCategories() {
         categoryContainer.getChildren().clear();
         selectedTemplate = null;
@@ -73,7 +84,7 @@ public class QuizLibraryController {
     }
 
     /**
-     * Builds a styled VBox card for a single quiz template.
+     * Builds a clickable UI card representing a quiz template.
      * Shows the template name and which category it belongs to.
      */
     private HBox buildTemplateCard(QuizTemplate template, String categoryName) {
@@ -370,138 +381,21 @@ public class QuizLibraryController {
     private void handleAttemptQuiz() {
         if (selectedTemplate == null) return;
 
-        QuizTemplate template = selectedTemplate;
-        templateService.loadQuestionsIntoTemplate(template);
-
-        List<QuizTemplateQuestion> questions = template.getQuestions();
-        if (!isAttemptable(questions)) {
-            showWarning("This quiz needs at least 2 questions before it can be attempted.");
-            return;
-        }
-
-        Map<Integer, QuizTemplateAnswer> selections = new HashMap<>();
-
-        int[] currentIndex = {0};
-
-        Dialog<ButtonType> dialog = new Dialog<>();
-        dialog.setTitle("Attempt Quiz – " + template.getName());
-        dialog.setHeaderText(null);
-        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.NEXT, ButtonType.CANCEL);
-        dialog.getDialogPane().setPrefWidth(500);
-
-        Button nextBtn = (Button) dialog.getDialogPane().lookupButton(ButtonType.NEXT);
-        nextBtn.setText("Next >");
-
-        Label progressLabel = new Label();
-        progressLabel.setFont(Font.font("System", 12));
-        progressLabel.setTextFill(Color.web("#777777")); /* need to change for dark mode to work */
-
-        Label questionLabel = new Label();
-        questionLabel.setFont(Font.font("System", FontWeight.BOLD, 16));
-        questionLabel.setWrapText(true);
-
-        VBox answersBox = new VBox(10);
-
-        VBox content = new VBox(14, progressLabel, questionLabel, answersBox);
-        content.setPadding(new Insets(16));
-        dialog.getDialogPane().setContent(content);
-
-        Runnable loadQuestion = () -> {
-            QuizTemplateQuestion q = questions.get(currentIndex[0]);
-            int total = questions.size();
-            int idx   = currentIndex[0];
-
-            progressLabel.setText("Question " + (idx + 1) + " of " + total);
-            questionLabel.setText(q.getText());
-
-            answersBox.getChildren().clear();
-            ToggleGroup group = new ToggleGroup();
-
-            for (QuizTemplateAnswer answer : q.getAnswers()) {
-                RadioButton rb = new RadioButton(answer.getText());
-                rb.setToggleGroup(group);
-                rb.setWrapText(true);
-                rb.setUserData(answer);
-
-                QuizTemplateAnswer prev = selections.get(q.getId());
-                if (prev != null && prev.getId() == answer.getId()) {
-                    rb.setSelected(true);
-                }
-                answersBox.getChildren().add(rb);
-            }
-
-            nextBtn.setDisable(group.getSelectedToggle() == null);
-            group.selectedToggleProperty().addListener((obs, ov, nv) ->
-                    nextBtn.setDisable(nv == null));
-
-            boolean isLast = (idx == total - 1);
-            nextBtn.setText(isLast ? "Finish" : "Next >");
-        };
-
-        loadQuestion.run();
-
-        nextBtn.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
-            event.consume();
-
-            QuizTemplateQuestion q = questions.get(currentIndex[0]);
-            ToggleGroup group = null;
-            for (javafx.scene.Node node : answersBox.getChildren()) {
-                if (node instanceof RadioButton rb) {
-                    group = rb.getToggleGroup();
-                    break;
-                }
-            }
-
-            if (group != null && group.getSelectedToggle() != null) {
-                QuizTemplateAnswer chosen = (QuizTemplateAnswer) group.getSelectedToggle().getUserData();
-                selections.put(q.getId(), chosen);
-            }
-
-            if (currentIndex[0] < questions.size() - 1) {
-                currentIndex[0]++;
-                loadQuestion.run();
-            } else {
-                dialog.setResult(ButtonType.OK);
-                dialog.close();
-            }
-        });
-
-        Optional<ButtonType> result = dialog.showAndWait();
-
-        if (result.isEmpty() || result.get() == ButtonType.CANCEL) return;
-        if (selections.size() < questions.size()) return;
-
-        User currentUser = AppState.getInstance().getCurrentUser();
-        int userId = (currentUser != null) ? currentUser.getId() : 0;
-
         try {
-            int correct = attemptService.saveAttempt(template, userId, selections);
-
             FXMLLoader loader = new FXMLLoader(
-                    AiAndMe.class.getResource("quiz-attempt-results.fxml")
-            );
-            javafx.scene.Node resultsView = loader.load();
-            QuizAttemptResultsController resultsCtrl = loader.getController();
-            resultsCtrl.initResults(
-                    com.codependentvariables.aiandme.model.QuizAttemptSummary.of(
-                            template.getName(),
-                            correct,
-                            questions.size(),
-                            java.sql.Timestamp.from(java.time.Instant.now()),
-                            questions,
-                            selections
-                    )
+                    AiAndMe.class.getResource("quiz-attempt.fxml")
             );
 
-            Dialog<ButtonType> resultsDialog = new Dialog<>();
-            resultsDialog.setTitle("Quiz Results – " + template.getName());
-            resultsDialog.setHeaderText(null);
-            resultsDialog.getDialogPane().setContent(resultsView);
-            resultsDialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
-            resultsDialog.showAndWait();
+            Parent view = loader.load();
+
+            QuizAttemptController controller = loader.getController();
+            controller.initQuiz(selectedTemplate);
+
+            Router.setLayoutContent(view, View.QUIZ_ATTEMPT);
 
         } catch (Exception e) {
-            showWarning("Failed to save attempt: " + e.getMessage());
+            e.printStackTrace();
+            showWarning("Failed to open quiz attempt page: " + e.getMessage());
         }
     }
 

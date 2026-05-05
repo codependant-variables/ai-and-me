@@ -31,4 +31,7 @@
         <VBox fx:id="resultsContainer" spacing="8" style="-fx-padding: 2;"/>
     </ScrollPane>
 
+    <HBox alignment="CENTER_RIGHT" spacing="10">
+        <Button text="Back to Library" onAction="#handleBack"/>
+    </HBox>
 </VBox>

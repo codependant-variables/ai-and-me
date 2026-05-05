@@ -44,6 +44,8 @@ public final class ViewUtils {
             case View.LOADING -> "loading.fxml";
             case View.LOGIN -> "login.fxml";
             case View.PROFILE -> "profile.fxml";
+            case View.QUIZ_ATTEMPT -> "quiz-attempt.fxml";
+            case View.QUIZ_ATTEMPT_RESULTS -> "quiz-attempt-results.fxml";
             case View.QUIZ_LIBRARY -> "quiz-library.fxml";
             case View.SETTINGS -> "settings.fxml";
             case View.SETUP_MFA -> "setup-mfa.fxml";

@@ -26,7 +26,7 @@ public class QuizAttemptService {
              new SqliteQuizAttemptAnswerDAO());
     }
 
-    // Package-private for unit tests
+    // Not public but tests in this package can use it
     QuizAttemptService(IQuizAttemptDAO attemptDAO,
                        IQuizAttemptQuestionDAO attemptQuestionDAO,
                        IQuizAttemptAnswerDAO attemptAnswerDAO) {
@@ -44,7 +44,7 @@ public class QuizAttemptService {
 
     public int saveAttempt(QuizTemplate template,
                            int userId,
-                           Map<Integer, QuizTemplateAnswer> selections) {
+                           List<QuizTemplateAnswer> selectedAnswers) {
 
         // 1 — Create the top-level attempt record
         QuizAttempt attempt = new QuizAttempt(
@@ -65,7 +65,14 @@ public class QuizAttemptService {
             );
             attemptQuestionDAO.add(aq); // sets aq.id
 
-            QuizTemplateAnswer selected = selections.get(tq.getId());
+            QuizTemplateAnswer selected = null;
+
+            for (QuizTemplateAnswer answer : selectedAnswers) {
+                if (answer.getQuizTemplateQuestionId() == tq.getId()) {
+                    selected = answer;
+                    break;
+                }
+            }
             if (selected != null) {
                 boolean isCorrect = selected.isCorrect();
                 QuizAttemptAnswer aa = new QuizAttemptAnswer(
