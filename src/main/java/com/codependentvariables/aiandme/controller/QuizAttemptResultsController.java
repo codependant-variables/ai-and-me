@@ -79,7 +79,7 @@ public class QuizAttemptResultsController {
 
     @FXML
     private void handleBack() {
-        Router.navigateLayout(View.QUIZ_LIBRARY);
+        Router.navigateBack();
     }
     // TODO: @FXML private void handleBackToLibrary() { ... }
 }

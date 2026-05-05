@@ -1,14 +1,14 @@
 package com.codependentvariables.aiandme.controller;
 
 import com.codependentvariables.aiandme.model.*;
+import com.codependentvariables.aiandme.navigation.Dialogue;
 import com.codependentvariables.aiandme.navigation.Router;
 import com.codependentvariables.aiandme.navigation.View;
 import com.codependentvariables.aiandme.services.QuizAttemptService;
 import com.codependentvariables.aiandme.services.QuizTemplateService;
 import com.codependentvariables.aiandme.state.AppState;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
+import java.util.logging.Logger;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 
@@ -22,6 +22,7 @@ public class QuizAttemptController {
     private int currentIndex = 0;
 
     private final List<QuizTemplateAnswer> selectedAnswers = new ArrayList<>();
+    private static final Logger logger = Logger.getLogger(QuizAttemptController.class.getName()); // Logger for class
 
     @FXML private Label progressLabel;
     @FXML private Label questionLabel;
@@ -38,7 +39,7 @@ public class QuizAttemptController {
 
     public void initQuiz(QuizTemplate template) {
         if (template == null) {
-            showWarning("No quiz template was selected.");
+            Dialogue.message("No quiz template was selected.");
             navigateBack();
             return;
         }
@@ -48,17 +49,26 @@ public class QuizAttemptController {
         QuizTemplateService.getInstance().loadQuestionsIntoTemplate(template);
         this.questions = template.getQuestions();
 
-        System.out.println("Quiz loaded: " + template.getName());
-        System.out.println("Question count: " + (questions == null ? 0 : questions.size()));
-
-        this.currentIndex = 0;
-        this.selectedAnswers.clear();
-
         if (questions == null || questions.size() < 2) {
-            showWarning("This quiz needs at least 2 questions before it can be attempted.");
+            Dialogue.message("This quiz needs at least 2 questions before it can be attempted.");
             navigateBack();
             return;
         }
+
+        // Validate quiz before user starts
+        for (QuizTemplateQuestion question : questions) {
+            if (question.getAnswers() == null || question.getAnswers().isEmpty()) {
+                Dialogue.message("Oops, this quiz is broken.");
+                navigateBack();
+                return;
+            }
+        }
+
+        logger.info("Quiz loaded: " + template.getName());
+        logger.info("Question count: " + (questions == null ? 0 : questions.size()));
+
+        this.currentIndex = 0;
+        this.selectedAnswers.clear();
 
         loadQuestion();
     }
@@ -97,6 +107,9 @@ public class QuizAttemptController {
             nextButton.setDisable(newToggle == null);
         });
 
+        // TODO: Future UX improvement:
+        // selecting an answer could automatically move to the next question,
+        // with a previous button for user for corrections and confirmation before finishing
         nextButton.setText(currentIndex == questions.size() - 1 ? "Finish" : "Next >");
     }
 
@@ -131,46 +144,31 @@ public class QuizAttemptController {
         int userId = currentUser != null ? currentUser.getId() : 0;
 
         try {
-            int correct = QuizAttemptService.getInstance()
-                    .saveAttempt(template, userId, selectedAnswers);
+            int correct = QuizAttemptService.getInstance().saveAttempt(template, userId, selectedAnswers);
 
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/com/codependentvariables/aiandme/quiz-attempt-results.fxml")
-            );
-
-            Parent view = loader.load();
-
-            QuizAttemptResultsController controller = loader.getController();
-
-            controller.initResults(
-                    QuizAttemptSummary.of(
+            QuizAttemptSummary summary = QuizAttemptSummary.of(
                             template.getName(),
                             correct,
                             questions.size(),
                             java.sql.Timestamp.from(java.time.Instant.now()),
                             questions,
                             selectedAnswers
-                    )
             );
 
-            Router.setLayoutContent(view, View.QUIZ_ATTEMPT_RESULTS);
+            QuizAttemptResultsController controller = (QuizAttemptResultsController) Router.navigateLayout(View.QUIZ_ATTEMPT_RESULTS);
+
+            if (controller != null) {
+                controller.initResults(summary);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
-            showWarning("Failed to save quiz attempt: " + e.getMessage());
+            Dialogue.message("Failed to save quiz attempt: " + e.getMessage());
         }
     }
 
     @FXML
     private void navigateBack() {
         Router.navigateLayout(View.QUIZ_LIBRARY);
-    }
-
-    private void showWarning(String message) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Quiz Attempt");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }

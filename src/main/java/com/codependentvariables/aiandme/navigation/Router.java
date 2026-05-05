@@ -47,35 +47,26 @@ public class Router {
         }
     }
 
-    public static void navigateLayout(View view) {
+    public static Object navigateLayout(View view) {
         if (currentAppView != View.LAYOUT) {
             navigateApp(View.LAYOUT);
         }
 
         if (currentLayoutView == view) {
-            return;
+            return null;
         }
 
+        Object controller = null; // can hold any obj
+
         if (layout != null) {
-            loadView(layout, view);
+            controller = ViewUtils.loadView(layout, view);
         }
 
         lastView = currentLayoutView;
         currentLayoutView = view;
         isLastViewLayout = true;
-    }
 
-    public static void setLayoutContent(Parent view, View routeView) {
-        if (currentAppView != View.LAYOUT) {
-            navigateApp(View.LAYOUT);
-        }
-
-        if (layout != null) {
-            layout.getChildren().setAll(view);
-        }
-
-        lastView = currentLayoutView;
-        currentLayoutView = routeView;
+        return controller;
     }
 
     public static View getAppView() {

@@ -382,16 +382,11 @@ public class QuizLibraryController {
         if (selectedTemplate == null) return;
 
         try {
-            FXMLLoader loader = new FXMLLoader(
-                    AiAndMe.class.getResource("quiz-attempt.fxml")
-            );
+            QuizAttemptController controller = (QuizAttemptController) Router.navigateLayout(View.QUIZ_ATTEMPT);
 
-            Parent view = loader.load();
-
-            QuizAttemptController controller = loader.getController();
-            controller.initQuiz(selectedTemplate);
-
-            Router.setLayoutContent(view, View.QUIZ_ATTEMPT);
+            if (controller != null) {
+                controller.initQuiz(selectedTemplate);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
