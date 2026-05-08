@@ -76,7 +76,7 @@
                               <Image url="@Images/streakIcon.png" />
                            </image>
                         </ImageView>
-                        <Label text="{#}" translateX="-10.0">
+                        <Label fx:id="checkInStreak" text="{#}" translateX="-10.0">
                            <font>
                               <Font size="39.0" />
                            </font>
