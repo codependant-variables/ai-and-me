@@ -76,7 +76,7 @@
                               <Image url="@Images/streakIcon.png" />
                            </image>
                         </ImageView>
-                        <Label text="{#}" translateX="-10.0">
+                        <Label fx:id="checkInStreak" text="{#}" translateX="-10.0" translateY="3.0">
                            <font>
                               <Font size="39.0" />
                            </font>
@@ -87,7 +87,7 @@
                      <children>
                         <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Complete your" textAlignment="CENTER">
                            <font>
-                              <Font size="11.0" />
+                              <Font size="14.0" />
                            </font>
                            <VBox.margin>
                               <Insets />
@@ -96,6 +96,22 @@
                         <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Daily Check-in" textAlignment="CENTER" translateY="-5.0">
                            <font>
                               <Font size="24.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </Text>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Last Check-in:" textAlignment="CENTER" translateY="-3.0">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </Text>
+                        <Text fx:id="lastCheckIn" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="dd/MM/yyyy HH:mm" textAlignment="CENTER" translateY="-3.0">
+                           <font>
+                              <Font size="14.0" />
                            </font>
                            <VBox.margin>
                               <Insets />
