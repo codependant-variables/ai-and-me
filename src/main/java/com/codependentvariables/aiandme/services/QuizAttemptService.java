@@ -6,7 +6,6 @@ import com.codependentvariables.aiandme.model.dao.*;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
-import java.util.Map;
 
 /****
  * Service layer for handling quiz attempts.
