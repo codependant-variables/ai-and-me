@@ -28,43 +28,41 @@ public class HomeService {
     }
 
     public String getLastCheckInDate() {
-        if (checkInDAO.getAllByUserId(appState.getCurrentUser().getId()).isEmpty()){
-            return "Complete your first check-in!";
+        if (appState.getCurrentUser() != null) {
+            if (checkInDAO.getAllByUserId(appState.getCurrentUser().getId()).isEmpty()) {
+                return "Complete your first check-in!";
+            }
+            LocalDateTime latestCheckInDateTime = checkInDAO.getAllByUserId(appState.getCurrentUser().getId()).getFirst().getCompletedAt();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+            return latestCheckInDateTime.format(formatter);
         }
-        LocalDateTime latestCheckInDateTime = checkInDAO.getAllByUserId(appState.getCurrentUser().getId()).getFirst().getCompletedAt();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-        return latestCheckInDateTime.format(formatter);
+        return "Sign in to complete a check-in!";
     }
 
     public String getCheckInStreak() {
-        List<CheckIn> userCheckIns = checkInDAO.getAllByUserId(appState.getCurrentUser().getId());
-
-        if (userCheckIns.size() >= 2 && Duration.between(userCheckIns.getFirst().getCompletedAt(), LocalDateTime.now()).toHours() < 24) {
-
-            int streakStart = -1;
-
-            for (int i = 0; i < userCheckIns.size() - 1; i++) {
-                Duration duration = Duration.between(userCheckIns.get(i + 1).getCompletedAt(), userCheckIns.get(i).getCompletedAt());
-                if (duration.toHours() >= 24) {
-                    streakStart = i;
-                    break;
+        if (appState.getCurrentUser() != null) {
+            List<CheckIn> userCheckIns = checkInDAO.getAllByUserId(appState.getCurrentUser().getId());
+            if (userCheckIns.size() >= 2 && Duration.between(userCheckIns.getFirst().getCompletedAt(), LocalDateTime.now()).toHours() < 24) {
+                int streakStart = -1;
+                for (int i = 0; i < userCheckIns.size() - 1; i++) {
+                    Duration duration = Duration.between(userCheckIns.get(i + 1).getCompletedAt(), userCheckIns.get(i).getCompletedAt());
+                    if (duration.toHours() >= 24) {
+                        streakStart = i;
+                        break;
+                    }
+                    if (i == userCheckIns.size() - 2) {
+                        streakStart = userCheckIns.size() - 1;
+                    }
                 }
-
-                if (i == userCheckIns.size() - 2) {
-                    streakStart = userCheckIns.size() - 1;
+                if (streakStart != -1) {
+                    return Integer.toString(streakStart + 1);
                 }
+                return "X";
             }
-
-            if (streakStart != -1) {
-                return Integer.toString(streakStart + 1);
+            if (userCheckIns.size() == 1 && Duration.between(userCheckIns.getFirst().getCompletedAt(), LocalDateTime.now()).toHours() < 24) {
+                return "1";
             }
-            return "X";
         }
-
-        if (userCheckIns.size() == 1 && Duration.between(userCheckIns.getFirst().getCompletedAt(), LocalDateTime.now()).toHours() < 24) {
-            return "1";
-        }
-
         return "0";
     }
 }
