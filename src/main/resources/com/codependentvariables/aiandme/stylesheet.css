@@ -45,6 +45,7 @@ Button {
     -fx-border-radius: 5px;
     -fx-background-radius: 5px;
     -fx-border-width: 2px;
+    -fx-cursor: hand;
 }
 
 /*------ Style Class - Supporting Text ------*/
@@ -105,6 +106,7 @@ Button {
 .emptyButton {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
+    -fx-cursor: hand;
 }
 
 /*------------------------ Nav Header ------------------------*/
@@ -164,7 +166,7 @@ Button {
 /*------------------------ Page - Quiz/Puzzle Library ------------------------*/
 /*------ Style Class - Library Buttons ------*/
 .libraryButton {
-    -fx-background-color: transparent;
+    -fx-cursor: hand;
 }
 
 /*------ Style Class - Library Widgets ------*/
