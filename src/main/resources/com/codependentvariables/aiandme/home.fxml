@@ -61,7 +61,7 @@
       </VBox>
       <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="578.0" prefWidth="267.0" spacing="10.0">
          <children>
-            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="232.0" styleClass="dailyCIWidget">
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="232.0" styleClass="dailyCIWidget" onMouseClicked="#navigateCheckIn">
                <children>
                   <StackPane prefHeight="150.0" prefWidth="200.0">
                      <opaqueInsets>

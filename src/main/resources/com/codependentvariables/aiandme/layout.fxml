@@ -18,7 +18,7 @@
          <Region HBox.hgrow="ALWAYS" />
             <Button onAction="#navigateHome" styleClass="navButton">Home</Button>
             <Button onAction="#navigateQuizLibrary" styleClass="navButton">Quiz Library</Button>
-            <Button onAction="#navigateCheckin" styleClass="navButton">Daily Check-in</Button>
+<!--            <Button onAction="#navigateCheckin" styleClass="navButton">Daily Check-in</Button>-->
             <Button fx:id="loginButton" onAction="#navigateLogin" styleClass="navButton">Login</Button>
             <Button fx:id="signupButton" onAction="#navigateSignup" styleClass="navButton">Signup</Button>
             <Button fx:id="profileButton" onAction="#navigateProfile" styleClass="navButton">Profile</Button>
