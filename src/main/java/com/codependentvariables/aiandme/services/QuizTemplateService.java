@@ -154,5 +154,13 @@ public class QuizTemplateService {
         }
         questionDAO.deleteQuestion(question);
     }
+
+    public QuizTemplate getRandomTemplate(){
+        QuizTemplate testQuiz = new QuizTemplate("Comphrehension",  1, 1, "TestSRrt");
+        return testQuiz;
+
+        // TODO Need to add Recomeed quiz Template
+
+    }
 }
 
