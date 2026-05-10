@@ -40,6 +40,7 @@ public class QuizLibraryController {
     @FXML private Button btnDelete;
     @FXML private Button btnEditQuestions;
     @FXML private Button btnAttemptQuiz;
+    @FXML private Button btnViewAttempts;
 
     // Currently selected template and its UI card
     private QuizTemplate selectedTemplate;
@@ -51,10 +52,11 @@ public class QuizLibraryController {
     @FXML
     public void initialize() {
         btnCreate.setDisable(false);
+        btnViewAttempts.setDisable(true);
         btnModify.setDisable(true);
         btnDelete.setDisable(true);
         btnEditQuestions.setDisable(true);
-        btnAttemptQuiz.setDisable(true);
+        btnAttemptQuiz.setDisable(false);
         refreshCategories();
     }
 
@@ -196,6 +198,7 @@ public class QuizLibraryController {
         btnDelete.setDisable(!hasSelection);
         btnEditQuestions.setDisable(!hasSelection);
         btnAttemptQuiz.setDisable(!hasSelection);
+        btnViewAttempts.setDisable(false); // always enabled
     }
 
     private String cardStyle(boolean selected, String colour) {
@@ -398,9 +401,7 @@ public class QuizLibraryController {
         if (selectedTemplate == null) return;
 
         QuizTemplate template = selectedTemplate;
-
-        templateService.loadQuestionsIntoTemplate(template);
-
+        //templateService.loadQuestionsIntoTemplate(template);
         List<QuizTemplateQuestion> removedQuestions = new ArrayList<>();
 
         List<QuizTemplateQuestion> workingQuestions = new ArrayList<>(template.getQuestions());
@@ -535,6 +536,27 @@ public class QuizLibraryController {
             showWarning(e.getMessage());
         }
     }
+
+    @FXML
+    private void handleShowAttempts() {
+        User currentUser = AppState.getInstance().getCurrentUser();
+        List<QuizAttempt> attempts = (currentUser != null)
+                ? attemptService.getAttemptsByUser(currentUser.getId())
+                : new ArrayList<>();
+
+        ListView<String> listView = new ListView<>();
+        for (QuizAttempt a : attempts) {
+            listView.getItems().add(a.getName() + " — " + a.getCompletedAt());
+        }
+        listView.setPrefHeight(300);
+        listView.setPlaceholder(new Label("No attempts recorded yet."));
+
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Your Quiz Attempts");
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
+        dialog.getDialogPane().setContent(listView);
+        dialog.showAndWait();
+        }
 
     private void showInfo(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION, message, ButtonType.OK);
