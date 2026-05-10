@@ -10,10 +10,8 @@ import com.codependentvariables.aiandme.services.QuizAttemptService;
 import com.codependentvariables.aiandme.services.QuizTemplateService;
 import com.codependentvariables.aiandme.state.AppState;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -22,9 +20,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -71,14 +67,17 @@ public class QuizLibraryController {
         selectedCard = null;
         updateActionButtons();
 
-        java.util.Map<Integer, String> categoryNames = new java.util.HashMap<>();
-        for (Category c : categoryService.getVisibleCategories()) {
-            categoryNames.put(c.getId(), c.getName());
-        }
+        List<Category> categories = categoryService.getVisibleCategories();
 
         List<QuizTemplate> templates = templateService.getAllTemplates();
         for (QuizTemplate template : templates) {
-            String categoryName = categoryNames.getOrDefault(template.getCategoryId(), "Unknown");
+            String categoryName = "Unknown";
+            for (Category c : categories) {
+                if (c.getId() == template.getCategoryId()) {
+                    categoryName = c.getName();
+                    break;
+                }
+            }
             categoryContainer.getChildren().add(buildTemplateCard(template, categoryName));
         }
     }

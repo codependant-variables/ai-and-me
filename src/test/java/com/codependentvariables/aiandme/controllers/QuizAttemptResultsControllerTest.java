@@ -7,14 +7,13 @@ import org.junit.jupiter.api.Test;
 
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class QuizAttemptResultsControllerTest {
 
     @Test
-    void of_producesUsableSummary_forControllerInitResults() {
+    void generalAttempt() {
         QuizTemplateQuestion q = new QuizTemplateQuestion(10, "What is 2 + 2?");
         q.setId(1);
         QuizTemplateAnswer correct = new QuizTemplateAnswer(1, "4", true);

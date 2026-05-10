@@ -141,10 +141,19 @@ public class QuizAttemptController {
 
     private void finishQuiz() {
         User currentUser = AppState.getInstance().getCurrentUser();
-        int userId = currentUser != null ? currentUser.getId() : 0;
+        boolean isGuest = currentUser == null;
 
         try {
-            int correct = QuizAttemptService.getInstance().saveAttempt(template, userId, selectedAnswers);
+            int correct;
+            if (isGuest) {
+                // Guest: count correct answers locally, do not save to the database
+                correct = 0;
+                for (QuizTemplateAnswer answer : selectedAnswers) {
+                    if (answer.isCorrect()) correct++;
+                }
+            } else {
+                correct = QuizAttemptService.getInstance().saveAttempt(template, currentUser.getId(), selectedAnswers);
+            }
 
             QuizAttemptSummary summary = QuizAttemptSummary.of(
                             template.getName(),
