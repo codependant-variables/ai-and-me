@@ -14,6 +14,7 @@ public class CheckInService {
     private final ICheckInDAO checkInDAO;
 
     private static final AppState appState = AppState.getInstance();
+    private static final UserService userService = UserService.getInstance();
 
     private CheckInService(ICheckInDAO checkInDAO) {
         this.checkInDAO = checkInDAO;
@@ -49,8 +50,8 @@ public class CheckInService {
         }
 
         checkIn.setUserId(currentUser.getId());
-
         checkInDAO.add(checkIn);
+        userService.updateCurrentUser();
 
         Toast.addMessage(
                 "Check-in submitted",
