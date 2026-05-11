@@ -8,11 +8,13 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Logger;
 
 public class SqliteConnection {
     private static SqliteConnection instance;
     private final Connection connection;
     private static final String DB_PATH = "app.db";
+    private static final Logger logger = Logger.getLogger(SqliteConnection.class.getName());
 
     private SqliteConnection() {
         try {
@@ -92,11 +94,11 @@ public class SqliteConnection {
         String deleteQuery = "DELETE FROM users WHERE last_login_at < (strftime('%s', 'now') * 1000 - 30 * 24 * 60 * 60 * 1000);";
         try {
             Statement statement = connection.createStatement();
-            int accountsNuked = statement.executeUpdate(deleteQuery);
-            System.out.println("Inactive accounts deleted: " + accountsNuked);
+            int accountsDeleted = statement.executeUpdate(deleteQuery);
+            logger.info("Inactive accounts deleted: " + accountsDeleted);
         } catch (SQLException e) {
             System.err.println(e);
-            System.err.println("Failed to delete inactive accounts.");
+            logger.severe("Failed to delete inactive accounts.");
         }
     }
 }
