@@ -204,5 +204,5 @@ Button {
     -fx-pref-height: 768px;
     -fx-pref-width: 500px;
     -fx-min-height: 768px;
-    -fx-effect: dropshadow(three-pass-box, #00000033, 15, 0.1, 5, 0);
+    -fx-effect: dropshadow(three-pass-box, transparent, 15, 0.1, 5, 0);
 }
