@@ -6,6 +6,8 @@ import com.codependentvariables.aiandme.model.User;
 import com.codependentvariables.aiandme.state.AppState;
 import com.codependentvariables.aiandme.services.AuthService.HashResult;
 
+import java.time.LocalDateTime;
+
 public class UserService {
     private static UserService instance;
 
@@ -89,9 +91,11 @@ public class UserService {
 
     private void login(User user) {
         appState.setCurrentUser(user);
+        updateCurrentUser(); // update activity
     }
 
     public void logout() {
+        updateCurrentUser(); // update activity
         appState.setCurrentUser(null);
     }
 
