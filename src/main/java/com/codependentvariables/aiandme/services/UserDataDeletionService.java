@@ -7,6 +7,7 @@ public class UserDataDeletionService {
     private static UserDataDeletionService instance;
 
     private static final AppState appState = AppState.getInstance();
+    private static final UserService userService = UserService.getInstance();
     private final IPreferredCategoryDAO prefCatDAO;
     private final ICheckInDAO checkInDAO;
     private final IQuizAttemptDAO quizAttDAO;
@@ -33,5 +34,6 @@ public class UserDataDeletionService {
         prefCatDAO.deleteByUserId(appState.getCurrentUser().getId());
         checkInDAO.deleteByUserId(appState.getCurrentUser().getId());
         quizAttDAO.deleteByUserId(appState.getCurrentUser().getId());
+        userService.updateCurrentUser();
     }
 }
