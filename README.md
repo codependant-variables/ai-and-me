@@ -63,43 +63,6 @@ Additional dependencies include ZXing, Commons Codec, and JUnit.
 
 ---
 
-## Installation
-
-### Clone Repository
-
-```
-git clone https://github.com/yourusername/aiandme.git
-cd aiandme
-```
-
-### Run Application
-
-```
-mvn clean javafx:run
-```
-
-### Build JAR
-
-```
-mvn clean package
-```
-
----
-
-## Overleaf
-
-```
-[INSERT OVERLEAF LINK]
-```
-
----
-
-## Credits
-
-See the Contributors page.
-
----
-
 ## License
 
-Educational and research purposes only.
+Educationalgit add purposes only.
