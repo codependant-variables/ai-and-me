@@ -55,14 +55,11 @@ public class HomeController {
 
             for (CheckIn checkIn : recentCheckins) {
                 dependenceSeries.getData().add(new XYChart.Data(checkIn.getCompletedAt(), checkIn.getAiDependence()));
-
                 useSeries.getData().add(new XYChart.Data(checkIn.getCompletedAt(), checkIn.getAiUse()));
-
                 happinessSeries.getData().add(new XYChart.Data(checkIn.getCompletedAt(), checkIn.getAiHappiness()));
-                System.out.println(checkIn);
             }
 
-            //checkInChart.getData().addAll(dependenceSeries, useSeries, happinessSeries);
+            checkInChart.getData().addAll(dependenceSeries, useSeries, happinessSeries);
         }
         this.quizTemplate = quizTemplateService.getRandomTemplate();
         checkInName.setText(quizTemplate.getName());
