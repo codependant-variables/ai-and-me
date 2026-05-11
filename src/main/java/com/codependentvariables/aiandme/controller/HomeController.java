@@ -57,7 +57,7 @@ public class HomeController {
                 dependenceSeries.getData().add(new XYChart.Data(checkIn.getCompletedAt(), checkIn.getAiDependence()));
                 useSeries.getData().add(new XYChart.Data(checkIn.getCompletedAt(), checkIn.getAiUse()));
                 happinessSeries.getData().add(new XYChart.Data(checkIn.getCompletedAt(), checkIn.getAiHappiness()));
-            }
+            }git
 
             checkInChart.getData().addAll(dependenceSeries, useSeries, happinessSeries);
         }
