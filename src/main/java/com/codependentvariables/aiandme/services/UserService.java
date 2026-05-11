@@ -89,11 +89,11 @@ public class UserService {
 
     private void login(User user) {
         appState.setCurrentUser(user);
-        updateCurrentUser(); // update activity
+        updateCurrentUser();
     }
 
     public void logout() {
-        updateCurrentUser(); // update activity
+        updateCurrentUser();
         appState.setCurrentUser(null);
     }
 
