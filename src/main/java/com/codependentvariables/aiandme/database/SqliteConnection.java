@@ -89,12 +89,13 @@ public class SqliteConnection {
     }
 
     private void deleteInactiveAccounts() {
-        String query = "DELETE FROM users WHERE last_activity < (strftime('%s', 'now') * 1000 - 30 * 24 * 60 * 60 * 1000);";
+        String deleteQuery = "DELETE FROM users WHERE last_login_at < (strftime('%s', 'now') * 1000 - 30 * 24 * 60 * 60 * 1000);";
         try {
-            Statement deleteStatement = connection.createStatement();
-            int accountsNuked = deleteStatement.executeUpdate(query);
+            Statement statement = connection.createStatement();
+            int accountsNuked = statement.executeUpdate(deleteQuery);
             System.out.println("Inactive accounts deleted: " + accountsNuked);
         } catch (SQLException e) {
+            System.err.println(e);
             System.err.println("Failed to delete inactive accounts.");
         }
     }
