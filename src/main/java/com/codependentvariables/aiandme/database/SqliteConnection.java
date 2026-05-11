@@ -29,6 +29,8 @@ public class SqliteConnection {
             connection = DriverManager.getConnection(url, config.toProperties());
             if (isNewDatabase)
                 setupSchema();
+            else
+                deleteInactiveAccounts();
         } catch (SQLException e) {
             throw new RuntimeException("Failed to connect to SQLite " + DB_PATH, e);
         }
@@ -84,5 +86,16 @@ public class SqliteConnection {
      */
     public static Connection getConnection() {
         return getInstance().connection;
+    }
+
+    private void deleteInactiveAccounts() {
+        String query = "DELETE FROM users WHERE last_activity < (strftime('%s', 'now') * 1000 - 30 * 24 * 60 * 60 * 1000);";
+        try {
+            Statement deleteStatement = connection.createStatement();
+            int accountsNuked = deleteStatement.executeUpdate(query);
+            System.out.println("Inactive accounts deleted: " + accountsNuked);
+        } catch (SQLException e) {
+            System.err.println("Failed to delete inactive accounts.");
+        }
     }
 }
