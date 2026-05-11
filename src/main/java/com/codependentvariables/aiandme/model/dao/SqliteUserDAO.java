@@ -23,8 +23,8 @@ public class SqliteUserDAO extends BaseSqliteDAO implements IUserDAO, IDatabaseE
         """;
 
     private static final String seedDataQuery = """ 
-            INSERT INTO users (name, email, password, salt, last_activity) VALUES ('Amy Adams', 'amy.adams@mydomain.gov', 'Zl3QG3XY5/Gsus8Ec4WTi6jMcM7EkrCGCqBMgwwYUzg=', 'sKH9XkLaT2i1XR687zjlHQ==', '2026-05-11 12:58:00');
-            INSERT INTO users (name, email, password, salt, last_activity) VALUES ('Bob Builder', 'bobthebulider23@swagmail.net', 'Qf15LlrXz/ghNuMGZG3heBeqH3xeuzITnsRhHTDxzR4=', '0akeeTvljQojvcWqb4cg/Q==', '2026-05-11 12:58:00');
+            INSERT INTO users (name, email, password, salt, last_activity) VALUES ('Amy Adams', 'amy.adams@mydomain.gov', 'Zl3QG3XY5/Gsus8Ec4WTi6jMcM7EkrCGCqBMgwwYUzg=', 'sKH9XkLaT2i1XR687zjlHQ==', '1778475998777');
+            INSERT INTO users (name, email, password, salt, last_activity) VALUES ('Bob Builder', 'bobthebulider23@swagmail.net', 'Qf15LlrXz/ghNuMGZG3heBeqH3xeuzITnsRhHTDxzR4=', '0akeeTvljQojvcWqb4cg/Q==', '1778475998777');
         """;
 
     public String getSchemaQuery() {
