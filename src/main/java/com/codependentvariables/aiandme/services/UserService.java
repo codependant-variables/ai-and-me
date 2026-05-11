@@ -89,11 +89,10 @@ public class UserService {
 
     private void login(User user) {
         appState.setCurrentUser(user);
-        updateCurrentUser();
+        userDAO.updateLastLoginAt(user);
     }
 
     public void logout() {
-        updateCurrentUser();
         appState.setCurrentUser(null);
     }
 
