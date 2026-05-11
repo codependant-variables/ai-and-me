@@ -2,6 +2,9 @@ package com.codependentvariables.aiandme.model;
 
 import com.codependentvariables.aiandme.services.AuthService;
 
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class User {
@@ -14,15 +17,17 @@ public class User {
     private boolean isDarkMode = false;
     private boolean isVertical = false;
     private ArrayList<Category> preferredCategories;
+    private Timestamp lastLoginAt;
 
     public User(String name, String email, String password, String salt) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.salt = salt;
+        lastLoginAt = Timestamp.valueOf(LocalDateTime.now());
     }
 
-    public User(String name, String email, String password, String salt, String totpSecret, boolean isDarkMode, boolean isVertical) {
+    public User(String name, String email, String password, String salt, String totpSecret, boolean isDarkMode, boolean isVertical, Timestamp lastLoginAt) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -31,6 +36,7 @@ public class User {
         this.isDarkMode = isDarkMode;
         this.isVertical = isVertical;
         this.preferredCategories = new ArrayList<>();
+        this.lastLoginAt = lastLoginAt;
     }
 
     public int getId() {
@@ -110,5 +116,13 @@ public class User {
 
     public void removePreferredCategory(Category category) {
         preferredCategories.remove(category);
+    }
+
+    public Timestamp getLastLoginAt() {
+        return lastLoginAt;
+    }
+
+    public void setLastLoginAt(Timestamp lastLoginAt){
+        this.lastLoginAt = lastLoginAt;
     }
 }
