@@ -8,7 +8,6 @@ import java.util.List;
 public class QuizTemplateService {
 
     private static QuizTemplateService instance;
-    private static final UserService userService = UserService.getInstance();
 
     private final IQuizTemplateDAO templateDAO;
     private final IQuizTemplateQuestionDAO questionDAO;
@@ -50,7 +49,6 @@ public class QuizTemplateService {
 
         QuizTemplate template = new QuizTemplate(name.trim(), categoryId, userId, "draft");
         templateDAO.add(template);
-        userService.updateCurrentUser();
         return template;
     }
 
@@ -64,7 +62,6 @@ public class QuizTemplateService {
         }
         template.setName(newName.trim());
         templateDAO.update(template);
-        userService.updateCurrentUser();
     }
 
     /**
@@ -76,7 +73,6 @@ public class QuizTemplateService {
             deleteQuestionAndAnswers(q);
         }
         templateDAO.delete(template);
-        userService.updateCurrentUser();
     }
 
     public List<QuizTemplate> getAllTemplates() {
@@ -150,7 +146,6 @@ public class QuizTemplateService {
                 }
             }
         }
-        userService.updateCurrentUser();
     }
 
     private void deleteQuestionAndAnswers(QuizTemplateQuestion question) {
