@@ -46,7 +46,6 @@ public final class ViewUtils {
             case View.DIALOGUE -> "dialogue.fxml";
             case View.HOME -> "home.fxml";
             case View.LAYOUT -> "layout.fxml";
-            case View.LOADING -> "loading.fxml";
             case View.LOGIN -> "login.fxml";
             case View.PROFILE -> "profile.fxml";
             case View.QUIZ_ATTEMPT -> "quiz-attempt.fxml";
