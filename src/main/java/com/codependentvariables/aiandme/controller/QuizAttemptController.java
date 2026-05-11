@@ -16,18 +16,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class QuizAttemptController {
+    private static final AppState appState = AppState.getInstance();
+    private static final QuizAttemptService quizAttemptService = QuizAttemptService.getInstance();
+    private static final Logger logger = Logger.getLogger(QuizAttemptController.class.getName()); // Logger for class
 
     private QuizTemplate template;
     private List<QuizTemplateQuestion> questions = new ArrayList<>();
     private int currentIndex = 0;
 
     private final List<QuizTemplateAnswer> selectedAnswers = new ArrayList<>();
-    private static final Logger logger = Logger.getLogger(QuizAttemptController.class.getName()); // Logger for class
 
-    @FXML private Label progressLabel;
-    @FXML private Label questionLabel;
-    @FXML private VBox answersBox;
-    @FXML private Button nextButton;
+    @FXML
+    private Label progressLabel;
+    @FXML
+    private Label questionLabel;
+    @FXML
+    private VBox answersBox;
+    @FXML
+    private Button nextButton;
 
     @FXML
     private void initialize() {
@@ -82,8 +88,8 @@ public class QuizAttemptController {
 
         List<QuizTemplateAnswer> answers = question.getAnswers();
 
-        System.out.println("Question: " + question.getText());
-        System.out.println("Answer count: " + (answers == null ? 0 : answers.size()));
+        logger.info("Question: " + question.getText());
+        logger.info("Answer count: " + (answers == null ? 0 : answers.size()));
 
         if (answers == null || answers.isEmpty()) {
             answersBox.getChildren().add(new Label("No answers found for this question."));
@@ -125,7 +131,7 @@ public class QuizAttemptController {
             currentIndex++;
             loadQuestion();
         } else {
-            finishQuiz();
+            submitQuiz();
         }
     }
 
@@ -139,41 +145,31 @@ public class QuizAttemptController {
         return null;
     }
 
-    private void finishQuiz() {
-        User currentUser = AppState.getInstance().getCurrentUser();
-        boolean isGuest = currentUser == null;
-
-        try {
-            int correct;
-            if (isGuest) {
-                // Guest: count correct answers locally, do not save to the database
-                correct = 0;
-                for (QuizTemplateAnswer answer : selectedAnswers) {
-                    if (answer.isCorrect()) correct++;
-                }
-            } else {
-                correct = QuizAttemptService.getInstance().saveAttempt(template, currentUser.getId(), selectedAnswers);
-            }
-
-            QuizAttemptSummary summary = QuizAttemptSummary.of(
-                            template.getName(),
-                            correct,
-                            questions.size(),
-                            java.sql.Timestamp.from(java.time.Instant.now()),
-                            questions,
-                            selectedAnswers
-            );
-
-            QuizAttemptResultsController controller = (QuizAttemptResultsController) Router.navigateLayout(View.QUIZ_ATTEMPT_RESULTS);
-
-            if (controller != null) {
-                controller.initResults(summary);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            Dialogue.message("Failed to save quiz attempt: " + e.getMessage());
+    private void submitQuiz() {
+        if (appState.getCurrentUser() == null) {
+            Dialogue.signupToSave(this::finishSubmitQuiz, this::finishSubmitQuiz);
+        } else {
+            this.finishSubmitQuiz();
         }
+    }
+
+    private void finishSubmitQuiz() {
+        int correct = appState.getCurrentUser() == null
+                ? (int)selectedAnswers.stream().filter(QuizTemplateAnswer::isCorrect).count()
+                : quizAttemptService.saveAttempt(template, appState.getCurrentUser().getId(), selectedAnswers);
+
+        QuizAttemptSummary summary = QuizAttemptSummary.of(
+                template.getName(),
+                correct,
+                questions.size(),
+                java.sql.Timestamp.from(java.time.Instant.now()),
+                questions,
+                selectedAnswers
+        );
+
+        QuizAttemptResultsController controller = (QuizAttemptResultsController) Router.navigateLayout(View.QUIZ_ATTEMPT_RESULTS);
+        assert controller != null;
+        controller.initialiseData(summary);
     }
 
     @FXML
