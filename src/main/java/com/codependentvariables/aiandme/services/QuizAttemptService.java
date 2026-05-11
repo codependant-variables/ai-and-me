@@ -18,6 +18,7 @@ public class QuizAttemptService {
     private final IQuizAttemptDAO attemptDAO;
     private final IQuizAttemptQuestionDAO attemptQuestionDAO;
     private final IQuizAttemptAnswerDAO attemptAnswerDAO;
+    private static final UserService userService = UserService.getInstance();
 
     private QuizAttemptService() {
         this(new SqliteQuizAttemptDAO(),
@@ -84,7 +85,7 @@ public class QuizAttemptService {
                 if (isCorrect) correct++;
             }
         }
-
+        userService.updateCurrentUser();
         return correct;
     }
 
