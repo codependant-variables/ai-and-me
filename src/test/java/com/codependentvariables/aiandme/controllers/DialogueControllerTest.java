@@ -3,6 +3,7 @@ package com.codependentvariables.aiandme.controllers;
 import com.codependentvariables.aiandme.JavaFXControllerLoader;
 import com.codependentvariables.aiandme.JavaFXTest;
 import com.codependentvariables.aiandme.controller.DialogueController;
+import com.codependentvariables.aiandme.navigation.DialogueMessage;
 import com.codependentvariables.aiandme.navigation.DialogueType;
 import com.codependentvariables.aiandme.navigation.View;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,9 +33,9 @@ public class DialogueControllerTest extends JavaFXTest {
 
     @Test
     public void background_click_returns_null() {
-        controller.initialiseData("My message", DialogueType.MESSAGE, x -> {
+        controller.initialiseData(new DialogueMessage("My message", DialogueType.MESSAGE, x -> {
             result.set(x);
-        });
+        }));
         controller.onBackgroundClick();
 
         assertTrue(result.hasValue);
@@ -43,9 +44,9 @@ public class DialogueControllerTest extends JavaFXTest {
 
     @Test
     public void yes_click_returns_true() {
-        controller.initialiseData("My message", DialogueType.YES_NO, x -> {
+        controller.initialiseData(new DialogueMessage("My message", DialogueType.YES_NO, x -> {
             result.set(x);
-        });
+        }));
         controller.yesRef.fire();
 
         assertTrue(result.hasValue);
@@ -54,9 +55,9 @@ public class DialogueControllerTest extends JavaFXTest {
 
     @Test
     public void no_click_returns_true() {
-        controller.initialiseData("My message", DialogueType.YES_NO, x -> {
+        controller.initialiseData(new DialogueMessage("My message", DialogueType.YES_NO, x -> {
             result.set(x);
-        });
+        }));
         controller.noRef.fire();
 
         assertTrue(result.hasValue);
@@ -65,9 +66,9 @@ public class DialogueControllerTest extends JavaFXTest {
 
     @Test
     public void cancel_click_returns_null() {
-        controller.initialiseData("My message", DialogueType.MESSAGE, x -> {
+        controller.initialiseData(new DialogueMessage("My message", DialogueType.MESSAGE, x -> {
             result.set(x);
-        });
+        }));
         controller.cancelRef.fire();
 
         assertTrue(result.hasValue);

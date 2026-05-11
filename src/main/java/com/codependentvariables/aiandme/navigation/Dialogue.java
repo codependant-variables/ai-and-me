@@ -1,11 +1,15 @@
 package com.codependentvariables.aiandme.navigation;
 
 import com.codependentvariables.aiandme.controller.DialogueController;
+import com.codependentvariables.aiandme.controller.LoginController;
+import com.codependentvariables.aiandme.controller.SignupController;
 import javafx.scene.layout.StackPane;
 import java.util.function.Consumer;
 
 public class Dialogue {
     private final static String ARE_YOU_SURE_MESSAGE = "Are you sure?";
+    private final static String SIGNUP_TO_SAVE_MESSAGE = "You are not logged in. Would you like to create an account or login to save?";
+    private static final String CANCEL_CALLBACK_MESSAGE = "Are you sure you want to use as a guest? Your data will be lost forever.";
 
     private static StackPane paneRef;
 
@@ -14,27 +18,43 @@ public class Dialogue {
     }
 
     public static void message(String message) {
-        loadDialogue(message, DialogueType.MESSAGE, x -> { return; });
+        loadDialogueMessage(new DialogueMessage(message, DialogueType.MESSAGE));
     }
 
     public static void confirmation(Consumer<Boolean> callback) {
-        loadDialogue(ARE_YOU_SURE_MESSAGE, DialogueType.YES_NO, callback);
+        loadDialogueMessage(new DialogueMessage(ARE_YOU_SURE_MESSAGE, DialogueType.YES_NO, callback));
     }
 
     public static void confirmationWithCancel(Consumer<Boolean> callback) {
-        loadDialogue(ARE_YOU_SURE_MESSAGE, DialogueType.YES_NO_CANCEL, callback);
+        loadDialogueMessage(new DialogueMessage(ARE_YOU_SURE_MESSAGE, DialogueType.YES_NO_CANCEL, callback));
     }
 
-    public static void show(String message, DialogueType dialogueType, Consumer<Boolean> callback) {
-        loadDialogue(message, dialogueType, callback);
+    public static void signupToSave(Runnable callback, Runnable cancelCallback) {
+        loadDialogueMessage(new DialogueMessage(SIGNUP_TO_SAVE_MESSAGE, DialogueType.YES_NO_CANCEL, result -> {
+            if (result == null) {
+                cancelCallback.run();
+            } else if (result) {
+                SignupController signupController = (SignupController) Router.navigateApp(View.SIGNUP);
+                assert signupController != null;
+                signupController.initialiseCallback(callback, CANCEL_CALLBACK_MESSAGE);
+            } else {
+                LoginController loginController = (LoginController) Router.navigateApp(View.LOGIN);
+                assert loginController != null;
+                loginController.initialiseCallback(callback, CANCEL_CALLBACK_MESSAGE);
+            }
+        }, "Signup", "Login", "Don't Save"));
     }
 
-    private static void loadDialogue(String message, DialogueType dialogueType, Consumer<Boolean> callback) {
+    public static void show(DialogueMessage dialogueMessage) {
+        loadDialogueMessage(dialogueMessage);
+    }
+
+    private static void loadDialogueMessage(DialogueMessage dialogueMessage) {
         DialogueController controller = (DialogueController)ViewUtils.loadView(paneRef, View.DIALOGUE);
-        controller.initialiseData(message, dialogueType, result -> {
+        controller.initialiseData(dialogueMessage.withCallback(result -> {
             paneRef.getChildren().clear();
-            callback.accept(result);
-        });
+            dialogueMessage.callback().accept(result);
+        }));
     }
 
     /**

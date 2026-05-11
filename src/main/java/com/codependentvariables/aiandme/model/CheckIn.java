@@ -12,6 +12,10 @@ public class CheckIn {
     private String comment;
     private LocalDateTime completedAt;
 
+    public CheckIn(int userId) {
+        this.userId = userId;
+    }
+
     public CheckIn(int userId, float aiUse, float aiHappiness, float aiDependence, String comment, LocalDateTime completedAt) {
         this.userId = userId;
         this.aiUse = aiUse;
