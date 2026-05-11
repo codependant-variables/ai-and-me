@@ -18,6 +18,7 @@ public class CategoryService {
 
     // Global app state - used to get current user
     private static final AppState appState = AppState.getInstance();
+    private static final UserService userService = UserService.getInstance();
 
     // Default constructor
     private CategoryService() { this(new SqliteCategoryDAO()); }
@@ -57,6 +58,7 @@ public class CategoryService {
         }
 
         categoryDAO.add(category);
+        userService.updateCurrentUser();
 
         safeToast(
                 "Category Created",
