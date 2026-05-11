@@ -89,12 +89,10 @@ public class QuizLibraryController {
     private HBox buildTemplateCard(QuizTemplate template, String categoryName) {
         Label nameLabel = new Label(template.getName());
         nameLabel.setFont(Font.font("System", FontWeight.BOLD, 16));
-        nameLabel.setTextFill(Color.web("#333333"));  /* need to change for dark mode to work */
         nameLabel.setWrapText(true);
 
         Label categoryLabel = new Label("Category: " + categoryName);
         categoryLabel.setFont(Font.font("System", 13));
-        categoryLabel.setTextFill(Color.web("#777777")); /* need to change for dark mode to work */
         categoryLabel.setWrapText(true);
 
         String creatorName;
@@ -122,7 +120,6 @@ public class QuizLibraryController {
 
         Label creatorLabel = new Label("Created by: " + creatorName);
         creatorLabel.setFont(Font.font("System", 13));
-        creatorLabel.setTextFill(Color.web("#777777")); /* need to change for dark mode to work */
         creatorLabel.setWrapText(true);
 
         Image catagorieIcon = new Image(Objects.requireNonNull(getClass().getResourceAsStream(getCatagorieIcon)));
@@ -137,20 +134,17 @@ public class QuizLibraryController {
         quizInfoVBox.setPrefSize(180, 190);
         quizInfoVBox.setAlignment(Pos.CENTER_LEFT);
         quizInfoVBox.setPadding(new Insets(20));
-        quizInfoVBox.setStyle("-fx-border-color: transparent;");
 
         VBox catagorieIconVBox = new VBox(catagorieIconView);
         catagorieIconVBox.setPrefSize(180, 190);
         catagorieIconVBox.setAlignment(Pos.CENTER);
         catagorieIconVBox.setPadding(new Insets(20));
-        catagorieIconVBox.setStyle("-fx-border-color: transparent;");
 
         HBox card = new HBox(quizInfoVBox, catagorieIconVBox);
         card.setPrefSize(360, 190);
         card.setAlignment(Pos.CENTER);
 
-        card.setStyle("-fx-border-color: " + cardColour + "; -fx-background-radius: 20px; -fx-border-width: 5; -fx-border-radius: 15px; -fx-background-color: #ffffff; -fx-effect: dropshadow(three-pass-box, #00000033, 15, 0.1, 5, 5); "); /* need to change -fx-background-color: #ffffff for dark mode to work */
-
+        card.setStyle("-fx-border-color: " + cardColour + "; -fx-background-radius: 20px; -fx-border-width: 5; -fx-border-radius: 20px; -fx-effect: dropshadow(three-pass-box, #00000033, 15, 0.1, 5, 5); ");
 
         card.setOnMouseClicked(e -> selectCard(card, template, cardColour));
 
