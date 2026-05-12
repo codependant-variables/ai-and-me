@@ -1,25 +1,21 @@
 package com.codependentvariables.aiandme.controller;
 
 import javafx.fxml.FXML;
-
 /**
- * Controller for the Quiz Library screen.
- * Uses quiz-library.fxml which is used also for PuzzleLibrary.
- * Handles displaying and showing functionality for quiz templates.
+ * Controller for the Puzzle Library screen.
+ * Reuses quiz-library.fxml which is the same layout as the Quiz Library.
+ * Puzzle is a type of quiz and will be added here, separating the logic.
  */
-
-public class QuizLibraryController extends QuizController {
+public class PuzzleLibraryController extends QuizController {
     @FXML
     @Override
     public void initialize() {
-        super.initialize();
     }
 
     @Override
     public void initialise() {
 
     }
-
 
     protected void refreshTemplates() {
 

@@ -7,8 +7,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codependentvariables.aiandme.controller.LayoutController">
+<BorderPane stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codependentvariables.aiandme.controller.LayoutController">
     <top>
         <HBox alignment="CENTER" prefHeight="100.0" spacing="10.0" styleClass="navBar">
          <Region maxWidth="30.0" HBox.hgrow="ALWAYS" />
@@ -16,14 +17,43 @@
                 <Image url="@dark-logo.png" />
             </ImageView>
          <Region HBox.hgrow="ALWAYS" />
-            <Button onAction="#navigateHome" styleClass="navButton">Home</Button>
-            <Button onAction="#navigateQuizLibrary" styleClass="navButton">Quiz Library</Button>
-            <Button onAction="#navigateCheckin" styleClass="navButton">Daily Check-in</Button>
-            <Button fx:id="loginButton" onAction="#navigateLogin" styleClass="navButton">Login</Button>
-            <Button fx:id="signupButton" onAction="#navigateSignup" styleClass="navButton">Signup</Button>
-            <Button fx:id="profileButton" onAction="#navigateProfile" styleClass="navButton">Profile</Button>
-            <Button onAction="#navigateSettings" styleClass="navButton">Settings</Button>
-            <Button fx:id="logoutButton" onAction="#handleLogout" styleClass="navButton">Logout</Button>
+            <Button onAction="#navigateHome" prefHeight="48.0" prefWidth="86.0" styleClass="navButton" text="Home">
+            <font>
+               <Font size="10.0" />
+            </font></Button>
+            <Button onAction="#navigateQuizLibrary" prefHeight="48.0" prefWidth="137.0" styleClass="navButton" text="Quiz Library">
+            <font>
+               <Font size="10.0" />
+            </font></Button>
+         <Button layoutX="357.0" layoutY="36.0" onAction="#navigateQuizLibrary" prefHeight="48.0" prefWidth="154.0" styleClass="navButton" text="Puzzle Library">
+            <font>
+               <Font size="10.0" />
+            </font>
+         </Button>
+            <Button onAction="#navigateCheckin" prefHeight="48.0" prefWidth="158.0" styleClass="navButton" text="Daily Check-in">
+            <font>
+               <Font size="10.0" />
+            </font></Button>
+            <Button fx:id="loginButton" onAction="#navigateLogin" styleClass="navButton" text="Login">
+            <font>
+               <Font size="10.0" />
+            </font></Button>
+            <Button fx:id="signupButton" onAction="#navigateSignup" styleClass="navButton" text="Signup">
+            <font>
+               <Font size="10.0" />
+            </font></Button>
+            <Button fx:id="profileButton" onAction="#navigateProfile" styleClass="navButton" text="Profile">
+            <font>
+               <Font size="10.0" />
+            </font></Button>
+            <Button onAction="#navigateSettings" styleClass="navButton" text="Settings">
+            <font>
+               <Font size="10.0" />
+            </font></Button>
+            <Button fx:id="logoutButton" onAction="#handleLogout" styleClass="navButton" text="Logout">
+            <font>
+               <Font size="10.0" />
+            </font></Button>
          <Region maxWidth="30.0" HBox.hgrow="ALWAYS" />
         </HBox>
     </top>
