@@ -32,6 +32,7 @@ public abstract class QuizController {
     private final QuizTemplateService templateService = QuizTemplateService.getInstance();
     private final QuizAttemptService attemptService = QuizAttemptService.getInstance();
 
+    @FXML private Label pageTitle;
     @FXML private FlowPane categoryContainer;
     @FXML private Button btnCreate;
     @FXML private Button btnModify;
@@ -48,6 +49,7 @@ public abstract class QuizController {
      */
     @FXML
     public void initialize() {
+        pageTitle.setText(getPageTitle());
         btnCreate.setDisable(false);
         btnModify.setDisable(true);
         btnDelete.setDisable(true);
@@ -55,6 +57,8 @@ public abstract class QuizController {
         btnAttemptQuiz.setDisable(true);
         refreshCategories();
     }
+
+    protected abstract String getPageTitle();
 
     /**
      * Reloads all quiz templates and rebuilds UI cards.

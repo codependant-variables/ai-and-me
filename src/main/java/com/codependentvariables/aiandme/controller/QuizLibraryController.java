@@ -14,7 +14,10 @@ public class QuizLibraryController extends QuizController {
     public void initialize() {
         super.initialize();
     }
-
+    @Override
+    protected String getPageTitle() {
+        return "Quiz Library";
+    }
     @Override
     public void initialise() {
 

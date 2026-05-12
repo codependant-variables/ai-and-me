@@ -15,7 +15,7 @@
         <Insets topRightBottomLeft="20" />
     </padding>
 
-    <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" style="-fx-font-size: 22px; -fx-font-weight: bold;" text="Quiz Library" textAlignment="RIGHT" />
+    <Label fx:id="pageTitle" alignment="CENTER_RIGHT" contentDisplay="RIGHT" style="-fx-font-size: 22px; -fx-font-weight: bold;" text="Quiz Library" textAlignment="RIGHT" />
     <HBox alignment="CENTER_LEFT" prefHeight="20.0" prefWidth="760.0">
         <Label layoutX="400.0" layoutY="20.0" minWidth="78.0" prefHeight="20.0" prefWidth="78.0"
                style="-fx-font-weight: bold; -fx-font-size: 14px;" text="Participate">
@@ -29,14 +29,6 @@
                 text="Start Quiz">
             <HBox.margin>
                 <Insets bottom="10.0" right="10.0" top="10.0"/>
-            </HBox.margin>
-        </Button>
-        <Button fx:id="btnModify1" maxWidth="Infinity" minWidth="120.0" onAction="#handleModify" prefHeight="39.0"
-                prefWidth="120.0"
-                style="-fx-background-color: #ff9800; -fx-text-fill: Black; -fx-font-size: 13px; -fx-padding: 10;"
-                text="Reset Attempt">
-            <HBox.margin>
-                <Insets bottom="10.0" top="10.0"/>
             </HBox.margin>
         </Button>
         <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS"/>

@@ -61,6 +61,11 @@ public class LayoutController {
     }
 
     @FXML
+    public void navigatePuzzleLibrary() {
+        Router.navigateLayout(View.PUZZLE_LIBRARY);
+    }
+
+    @FXML
     public void navigateLogin() {
         Router.navigateApp(View.LOGIN);
     }
