@@ -45,7 +45,7 @@
             </VBox>
             <VBox prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <LineChart prefHeight="201.0" prefWidth="231.0">
+                  <LineChart fx:id="attemptChart" prefHeight="201.0" prefWidth="231.0">
                      <xAxis>
                         <CategoryAxis side="BOTTOM" />
                      </xAxis>
@@ -55,7 +55,7 @@
                   </LineChart>
                </children>
             </VBox>
-            <PieChart prefHeight="213.0" prefWidth="266.0" />
+            <PieChart fx:id="ratioPie" prefHeight="213.0" prefWidth="266.0" />
          </children>
       </VBox>
       <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="578.0" prefWidth="267.0" spacing="10.0">

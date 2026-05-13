@@ -2,17 +2,19 @@ package com.codependentvariables.aiandme.controller;
 
 
 import com.codependentvariables.aiandme.model.CheckIn;
+import com.codependentvariables.aiandme.model.QuizAttempt;
+import com.codependentvariables.aiandme.model.QuizAttemptSummary;
 import com.codependentvariables.aiandme.model.QuizTemplate;
 import com.codependentvariables.aiandme.navigation.Router;
 import com.codependentvariables.aiandme.navigation.View;
 import com.codependentvariables.aiandme.services.CheckInService;
+import com.codependentvariables.aiandme.services.QuizAttemptService;
 import com.codependentvariables.aiandme.services.QuizTemplateService;
 import com.codependentvariables.aiandme.state.AppState;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
+import javafx.scene.chart.*;
 import javafx.scene.control.Label;
 import com.codependentvariables.aiandme.services.HomeService;
 import javafx.scene.input.MouseEvent;
@@ -32,51 +34,47 @@ public class HomeController {
 
 
     @FXML
-    public CategoryAxis xAxis = new CategoryAxis();
+    public CategoryAxis xAxisCheckin = new CategoryAxis();
     @FXML
-    public NumberAxis yAxis = new NumberAxis();
+    public NumberAxis yAxisCheckin = new NumberAxis();
     @FXML
-    public LineChart<String,Number> checkInChart = new LineChart<String,Number>(xAxis,yAxis);
+    public LineChart<String,Number> checkInChart = new LineChart<String,Number>(xAxisCheckin,yAxisCheckin);
 
     private CheckInService checkInService = CheckInService.getInstance();
+    private QuizAttemptService attemptsService = QuizAttemptService.getInstance();
+
+    @FXML
+    public CategoryAxis xAxisQuizAttempts = new CategoryAxis();
+    @FXML
+    public NumberAxis yAxisQuizAttempts = new NumberAxis();
+    @FXML
+    public LineChart<String,Number> attemptChart = new LineChart<String,Number>(xAxisQuizAttempts,yAxisQuizAttempts);
+
+    //  quiz vs puzzle pie chart idk
+    public PieChart ratioPie = new PieChart();
+
+
 
 
     private final HomeService homeService = HomeService.getInstance();
     private final QuizTemplateService quizTemplateService = QuizTemplateService.getInstance();
     private AppState appState = AppState.getInstance();
 
-
-
-
     public void initialize() {
         checkInStreak.setText(homeService.getCheckInStreak());
         lastCheckIn.setText(homeService.getLastCheckInDate());
-        yAxis.setLowerBound(0.0);
-        yAxis.setUpperBound(100.0);
-        yAxis.setTickUnit(10);
-
+        yAxisCheckin.setLowerBound(0.0);
+        yAxisCheckin.setUpperBound(100.0);
+        yAxisCheckin.setTickUnit(10);
 
         if (appState.getCurrentUser() != null) {
 
             XYChart.Series dependenceSeries = new XYChart.Series();
-            dependenceSeries.setName("Dependence");
             XYChart.Series useSeries = new XYChart.Series();
-            useSeries.setName("Frequency");
-
             XYChart.Series happinessSeries = new XYChart.Series();
-            happinessSeries.setName("Happiness");
-            //happinessSeries.getName();
-
 
             List<CheckIn> recentCheckins = checkInService.getAllByUserId(appState.getCurrentUser().getId());
             // using getAllByUserId for now - may want to create a separate method for getRecentCheckIns in CheckInService class which checks timeframe
-
-            List<CheckIn> dailyCheckins = checkInService.getAllByUserId(appState.getCurrentUser().getId());
-
-
-            //for (CheckIn checkIn : recentCheckins; ) {
-            //^^ Unused foreach loop
-
 
             // for loop to go backwards five times maximum
             for (int i = recentCheckins.size() - 1, count = 0; i >= 0 && count < 5; i--, count++) {
@@ -93,30 +91,32 @@ public class HomeController {
                 dependenceSeries.getData().add(new XYChart.Data<>(recentCheckins.get(i).getCompletedAt().toString().substring(0,10) ,recentCheckins.get(i).getAiDependence()));
                 useSeries.getData().add(new XYChart.Data<>(recentCheckins.get(i).getCompletedAt().toString().substring(0,10) ,recentCheckins.get(i).getAiUse()));
                 happinessSeries.getData().add(new XYChart.Data<>(recentCheckins.get(i).getCompletedAt().toString().substring(0,10),recentCheckins.get(i).getAiHappiness()));
-
             }
-
             checkInChart.getData().addAll(dependenceSeries, useSeries, happinessSeries);
-            /*
-            /////////////////////
-            XYChart.Series dependenceSeries = new XYChart.Series();
             dependenceSeries.setName("Dependence");
-            dependenceSeries.getData().add(new XYChart.Data<>("date1", 5));
-            dependenceSeries.getData().add(new XYChart.Data<>("date2", 7.3));
-            /////////////////////
-            XYChart.Series useSeries = new XYChart.Series();
-            useSeries.setName("Use");
-            useSeries.getData().add(new XYChart.Data<>("date1", 4));
-            useSeries.getData().add(new XYChart.Data<>("date2", 7.99));
-            /////////////////////
-            XYChart.Series happinessSeries = new XYChart.Series();
+            useSeries.setName("Frequency");
             happinessSeries.setName("Happiness");
-            happinessSeries.getData().add(new XYChart.Data<>("date1", 6));
-            happinessSeries.getData().add(new XYChart.Data<>("date2", 3.99));
-            /////////////////////
-            *\*/
-        }
+            ///////////////////////////
 
+            List<QuizAttempt> recentAttempts = attemptsService.getAttemptsByUser(appState.getCurrentUser().getId());
+
+            XYChart.Series attemptSeries = new XYChart.Series();
+
+            for (int i = recentAttempts.size() - 1, count = 0; i >= 0 && count < 5; i--, count++) {
+
+                //probably need to use the quizattemptsummary object with correlated id to get percentage correct or something like that
+
+                attemptSeries.getData().add(new XYChart.Data<>(recentAttempts.get(i).getCompletedAt().toString().substring(0,10) ,recentAttempts.get(i).getId()));
+            }
+            ///////////////////////////
+
+            //  dummy data
+            ObservableList<PieChart.Data> ratioData =  FXCollections.observableArrayList(
+                    new PieChart.Data("Quizzes", 75),
+                    new PieChart.Data("Puzzles", 25));
+            ratioPie.setTitle("Attempts by Category");
+            ratioPie.setData(ratioData);
+        }
         this.quizTemplate = quizTemplateService.getRandomTemplate();
         checkInName.setText(quizTemplate.getName());
     }
