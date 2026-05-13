@@ -23,7 +23,7 @@
          <children>
             <VBox alignment="CENTER" prefWidth="400" spacing="10.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Your activity:">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Check in data:">
                      <font>
                         <Font size="21.0" />
                      </font>
@@ -33,7 +33,7 @@
             </VBox>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <LineChart prefHeight="201.0" prefWidth="231.0">
+                  <LineChart fx:id="checkInChart" prefHeight="201.0" prefWidth="231.0">
                      <xAxis>
                         <CategoryAxis side="BOTTOM" />
                      </xAxis>
