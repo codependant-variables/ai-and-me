@@ -40,6 +40,9 @@ public class QuizTemplateService {
      * @throws IllegalArgumentException if the name is blank or categoryId is invalid.
      */
     public QuizTemplate createTemplate(String name, int categoryId, int userId) {
+        return createTemplate(name, categoryId, userId, false);
+    }
+    public QuizTemplate createTemplate(String name, int categoryId, int userId, boolean isPuzzle) {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Template name must not be blank.");
         }
@@ -47,7 +50,7 @@ public class QuizTemplateService {
             throw new IllegalArgumentException("A valid category must be selected.");
         }
 
-        QuizTemplate template = new QuizTemplate(name.trim(), categoryId, userId, "draft");
+        QuizTemplate template = new QuizTemplate(name.trim(), categoryId, userId, isPuzzle, "draft");
         templateDAO.add(template);
         return template;
     }

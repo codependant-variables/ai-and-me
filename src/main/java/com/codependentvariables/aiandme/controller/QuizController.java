@@ -221,7 +221,7 @@ public abstract class QuizController {
      * and immediately reflected in the library.
      */
     @FXML
-    private void handleCreate() {
+    protected void handleCreate() {
         List<Category> categories = categoryService.getVisibleCategories();
 
         Dialog<ButtonType> dialog = new Dialog<>();
@@ -321,7 +321,7 @@ public abstract class QuizController {
             int userId = (currentUser != null) ? currentUser.getId() : 0;
             templateService.createTemplate(templateName, targetCategory.getId(), userId);
             refreshCategories();
-            showInfo("Template \"" + templateName + "\" created in category \"" + targetCategory.getName() + "\".");
+            showInfo("Template \"" + templateName + "\" created in category \"" + targetCategory.getName() + "marked as quiz" + "\".");
         } catch (IllegalArgumentException e) {
             showWarning(e.getMessage());
         }
@@ -532,13 +532,13 @@ public abstract class QuizController {
         }
     }
 
-    private void showInfo(String message) {
+    protected void showInfo(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION, message, ButtonType.OK);
         alert.setHeaderText(null);
         alert.showAndWait();
     }
 
-    private void showWarning(String message) {
+    protected void showWarning(String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING, message, ButtonType.OK);
         alert.setHeaderText(null);
         alert.showAndWait();
