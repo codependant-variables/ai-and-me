@@ -76,16 +76,4 @@ public class CheckInService {
     public List<CheckIn> getAllByUserId(int userId) {
         return checkInDAO.getAllByUserId(userId);
     }
-
-    /*public List<CheckIn> lastFiveByUserId(int userId)
-    {
-        for (CheckIn checkIn : getAllByUserId(userId))
-        {
-
-        }
-        for (int i = getAllByUserId(userId).size(); i > 0; i--)
-        {
-
-        }
-        return checkInDAO.getAllByUserId(userId);*/
 }

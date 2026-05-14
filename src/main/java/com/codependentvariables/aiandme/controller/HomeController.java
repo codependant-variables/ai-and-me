@@ -44,11 +44,11 @@ public class HomeController {
     private QuizAttemptService attemptsService = QuizAttemptService.getInstance();
 
     @FXML
-    public CategoryAxis xAxisQuizAttempts = new CategoryAxis();
+    public NumberAxis xAxisQuizAttempts = new NumberAxis();
     @FXML
     public NumberAxis yAxisQuizAttempts = new NumberAxis();
     @FXML
-    public LineChart<String,Number> attemptChart = new LineChart<String,Number>(xAxisQuizAttempts,yAxisQuizAttempts);
+    public LineChart<Number,Number> attemptChart = new LineChart<Number,Number>(xAxisQuizAttempts,yAxisQuizAttempts);
 
     //  quiz vs puzzle pie chart idk
     public PieChart ratioPie = new PieChart();
