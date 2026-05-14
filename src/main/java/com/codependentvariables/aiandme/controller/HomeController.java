@@ -3,12 +3,12 @@ package com.codependentvariables.aiandme.controller;
 
 import com.codependentvariables.aiandme.model.CheckIn;
 import com.codependentvariables.aiandme.model.QuizAttempt;
-import com.codependentvariables.aiandme.model.QuizAttemptSummary;
+import com.codependentvariables.aiandme.services.QuizAttemptService;
+import com.codependentvariables.aiandme.model.AttemptStatistics;
 import com.codependentvariables.aiandme.model.QuizTemplate;
 import com.codependentvariables.aiandme.navigation.Router;
 import com.codependentvariables.aiandme.navigation.View;
 import com.codependentvariables.aiandme.services.CheckInService;
-import com.codependentvariables.aiandme.services.QuizAttemptService;
 import com.codependentvariables.aiandme.services.QuizTemplateService;
 import com.codependentvariables.aiandme.state.AppState;
 import javafx.collections.FXCollections;
@@ -68,6 +68,7 @@ public class HomeController {
         yAxisCheckin.setTickUnit(10);
 
         if (appState.getCurrentUser() != null) {
+            AttemptStatistics split = attemptsService.getAttemptCountByUser(appState.getCurrentUser().getId());
 
             XYChart.Series dependenceSeries = new XYChart.Series();
             XYChart.Series useSeries = new XYChart.Series();
@@ -112,8 +113,8 @@ public class HomeController {
 
             //  dummy data
             ObservableList<PieChart.Data> ratioData =  FXCollections.observableArrayList(
-                    new PieChart.Data("Quizzes", 75),
-                    new PieChart.Data("Puzzles", 25));
+                    new PieChart.Data("Quizzes", split.getQuizCount()),
+                    new PieChart.Data("Puzzles", split.getPuzzleCount()));
             ratioPie.setTitle("Attempts by Category");
             ratioPie.setData(ratioData);
         }

@@ -8,7 +8,7 @@ package com.codependentvariables.aiandme.model;
 public class AttemptStatistics {
 
     private final int quizCount;
-    private final int puzzleCount;
+    private int puzzleCount = 0;
     private final int quizPercent;
     private final int puzzlePercent;
 
