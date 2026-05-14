@@ -51,7 +51,6 @@ public class CheckInService {
         }
 
         checkIn.setUserId(currentUser.getId());
-
         checkInDAO.add(checkIn);
 
         Toast.addMessage(
