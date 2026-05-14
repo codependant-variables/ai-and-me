@@ -87,7 +87,7 @@ public class QuizTemplate {
         this.questions.addAll(questions);
     }
 
-     /**
+    /**
      * Returns {@code true} when properly structured
      * <ul>
      *    <li>has a non-empty name</li>
@@ -95,10 +95,13 @@ public class QuizTemplate {
      *    <li>has a valid status (e.g. "active" or "inactive")</li>
      *   </ul>
      */
-     public boolean isValid() {
+    public boolean isValid() {
         if (name == null || name.isBlank()) return false;
         if (questions.isEmpty()) return false;
-        return questions.stream().allMatch(QuizTemplateQuestion::isValid);
+        for (QuizTemplateQuestion q : questions) {
+            if (!q.isValid()) return false;
+        }
+        return true;
     }
 
     @Override
@@ -106,4 +109,3 @@ public class QuizTemplate {
         return name;
     }
 }
-

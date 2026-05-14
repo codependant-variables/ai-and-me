@@ -97,5 +97,16 @@ public class QuizAttemptService {
     public List<QuizAttempt> getAttemptsByUser(int userId) {
         return attemptDAO.getByUserId(userId);
     }
-}
 
+    /**
+     * Returns the split of quiz vs puzzle attempts for a user.
+     * Puzzle counting is not yet implemented, therefore all attempts are treated as quizzes.
+     *
+     * @param userId the user to query
+     * @return an {@link AttemptStatistics} with quiz count and percentages ready for charts in controller's
+     */
+    public AttemptStatistics getAttemptCountByUser(int userId) {
+        int quizCount = attemptDAO.getByUserId(userId).size();
+        return new AttemptStatistics(quizCount, 0);
+    }
+}
