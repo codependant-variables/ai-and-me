@@ -6,7 +6,6 @@
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.chart.PieChart?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.image.Image?>
@@ -24,7 +23,7 @@
          <children>
             <VBox alignment="CENTER" prefWidth="400" spacing="10.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Your activity:">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Check in data:">
                      <font>
                         <Font size="21.0" />
                      </font>
@@ -34,7 +33,7 @@
             </VBox>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <LineChart prefHeight="201.0" prefWidth="231.0">
+                  <LineChart fx:id="checkInChart" prefHeight="201.0" prefWidth="231.0">
                      <xAxis>
                         <CategoryAxis side="BOTTOM" />
                      </xAxis>
@@ -46,7 +45,7 @@
             </VBox>
             <VBox prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <LineChart prefHeight="201.0" prefWidth="231.0">
+                  <LineChart fx:id="attemptChart" prefHeight="201.0" prefWidth="231.0">
                      <xAxis>
                         <CategoryAxis side="BOTTOM" />
                      </xAxis>
@@ -56,12 +55,12 @@
                   </LineChart>
                </children>
             </VBox>
-            <PieChart prefHeight="213.0" prefWidth="266.0" />
+            <PieChart fx:id="ratioPie" prefHeight="213.0" prefWidth="266.0" />
          </children>
       </VBox>
       <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="578.0" prefWidth="267.0" spacing="10.0">
          <children>
-            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="232.0" styleClass="dailyCIWidget">
+            <HBox alignment="CENTER_LEFT" onMouseClicked="#navigateCheckIn" prefHeight="100.0" prefWidth="232.0" styleClass="dailyCIWidget">
                <children>
                   <StackPane prefHeight="150.0" prefWidth="200.0">
                      <opaqueInsets>
@@ -167,7 +166,7 @@
          <children>
             <HBox alignment="CENTER" prefHeight="318.0" prefWidth="288.0">
                <children>
-                  <VBox alignment="TOP_CENTER" prefWidth="285.0" styleClass="recomendedQuiz">
+                  <VBox alignment="TOP_CENTER" onMouseClicked="#handleAttemptQuiz" prefWidth="285.0" styleClass="recomendedQuiz">
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Quiz for you!" textAlignment="CENTER" wrappingWidth="231.13000106811523">
                            <font>
@@ -175,12 +174,11 @@
                            </font>
                         </Text>
                         <Separator minHeight="-Infinity" prefHeight="9.0" prefWidth="243.0" />
-                        <Label text="{recomendedQuiz}">
+                        <Label fx:id="checkInName">
                            <font>
                               <Font size="15.0" />
                            </font>
                         </Label>
-                        <Button mnemonicParsing="false" text="Start Quiz" />
                         <Region prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                         <ImageView fitWidth="285.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -209,7 +207,6 @@
                               <Font size="15.0" />
                            </font>
                         </Label>
-                        <Button mnemonicParsing="false" text="Start Puzzle" />
                         <Region prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                         <ImageView fitWidth="285.0" pickOnBounds="true" preserveRatio="true">
                            <image>

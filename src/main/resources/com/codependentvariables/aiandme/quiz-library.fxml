@@ -54,7 +54,7 @@
                   <HBox.margin>
                      <Insets bottom="10.0" right="10.0" top="10.0" />
                   </HBox.margin></Button>
-                    <Button fx:id="btnDelete" maxWidth="Infinity" minWidth="60.0" onAction="#handleDelete" prefHeight="39.0" prefWidth="60.0" style="-fx-background-color: #f44336; -fx-text-fill: Black; -fx-font-size: 13px; -fx-padding: 10;" text="Delete">
+                    <Button fx:id="btnDelete" maxWidth="Infinity" minWidth="60.0" onAction="#handleDelete" prefHeight="39.0" prefWidth="60.0" style="-fx-background-color: #f44336; -fx-text-fill: Black; -fx-font-size: 13px; -fx-padding: 10;" styleClass="libraryButton" text="Delete">
                   <HBox.margin>
                      <Insets bottom="10.0" right="10.0" top="10.0" />
                   </HBox.margin></Button>

@@ -61,7 +61,7 @@ public class QuizAttemptResultsController {
         // Selected answer label
         Label answerLbl = new Label(row.selectedAnswer());
         answerLbl.setFont(Font.font("System", FontWeight.BOLD, 13));
-        answerLbl.setTextFill(row.correct() ? Color.web("#388e3c") : Color.web("#d32f2f"));
+        //answerLbl.setTextFill(row.correct() ? Color.web("#388e3c") : Color.web("#d32f2f"));
         answerLbl.setMinWidth(80);
 
         // Row layout container
@@ -69,9 +69,9 @@ public class QuizAttemptResultsController {
         hbox.setAlignment(Pos.CENTER_LEFT);
         hbox.setPadding(new Insets(8, 10, 8, 10));
 
-        // Background color based on correctness
-        String bg = row.correct() ? "#f1f8e9" : "#ffebee";
-        hbox.setStyle("-fx-background-color: " + bg + "; -fx-background-radius: 6;");
+        // Border color based on correctness        //TODO: figure out how to make this work
+        //String border = row.correct() ? "#f1f8e9" : "#ffebee";
+        //hbox.setStyle("-fx-border-color{$border: " + "; -fx-border-radius: 6;");
 
         return hbox;
     }
