@@ -84,7 +84,6 @@ public class QuizAttemptService {
                 if (isCorrect) correct++;
             }
         }
-
         return correct;
     }
 
