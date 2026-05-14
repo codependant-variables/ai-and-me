@@ -7,7 +7,6 @@ import com.codependentvariables.aiandme.model.dao.SqliteCheckInDAO;
 import com.codependentvariables.aiandme.navigation.Toast;
 import com.codependentvariables.aiandme.navigation.ToastMessageType;
 import com.codependentvariables.aiandme.state.AppState;
-
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -38,7 +37,7 @@ public class CheckInService {
         User currentUser = appState.getCurrentUser();
 
         if (currentUser == null) {
-            Toast.addMessage("Check-in Unable to be Submitted", "User must be logged in to submit a check-in.", ToastMessageType.ERROR);
+            Toast.addMessage("Check-in Unable to be Submitted","User must be logged in to submit a check-in.", ToastMessageType.ERROR);
             throw new IllegalStateException("User must be logged in to submit a check-in.");
         }
 

@@ -6,6 +6,7 @@ import com.codependentvariables.aiandme.navigation.Router;
 import com.codependentvariables.aiandme.navigation.Toast;
 import com.codependentvariables.aiandme.navigation.ToastMessageType;
 import com.codependentvariables.aiandme.navigation.View;
+import com.codependentvariables.aiandme.services.CheckInService;
 import com.codependentvariables.aiandme.services.UserService;
 import com.codependentvariables.aiandme.state.AppState;
 import javafx.fxml.FXML;
@@ -16,6 +17,7 @@ import javafx.scene.layout.StackPane;
 
 public class LayoutController {
     private final UserService userService = UserService.getInstance();
+    private final CheckInService checkInService = CheckInService.getInstance();
     private final AppState appState = AppState.getInstance();
 
     @FXML
@@ -89,10 +91,17 @@ public class LayoutController {
     }
 
     @FXML
-    public void navigateSettings() { Router.navigateLayout(View.SETTINGS); }
+    public void navigateSettings() {
+        Router.navigateLayout(View.SETTINGS);
+    }
 
     @FXML
     public void navigateCheckin() {
-        Router.navigateLayout(View.CHECK_IN);
+        if (checkInService.isExistingCheckInToday()) {
+            Toast.addMessage("Check-in Completed", "You've already completed your daily check-in. Come back tomorrow!", ToastMessageType.INFORMATION);
+        }
+        else {
+            Router.navigateLayout(View.CHECK_IN);
+        }
     }
 }
