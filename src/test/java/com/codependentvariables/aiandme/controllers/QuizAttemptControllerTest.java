@@ -44,7 +44,11 @@ public class QuizAttemptControllerTest {
 
         try {
             // Starts JavaFX runtime and creates the JavaFX application thread
-            javafx.application.Platform.startup(() -> {});
+            Platform.startup(new Runnable() {
+                @Override
+                public void run() {
+                }
+            });
         } catch (IllegalStateException ignored) {
             // Toolkit already initialized, ignore
         }
