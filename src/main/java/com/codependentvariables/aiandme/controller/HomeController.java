@@ -54,8 +54,6 @@ public class HomeController {
     public PieChart ratioPie = new PieChart();
 
 
-
-
     private final HomeService homeService = HomeService.getInstance();
     private final QuizTemplateService quizTemplateService = QuizTemplateService.getInstance();
     private AppState appState = AppState.getInstance();
@@ -106,9 +104,12 @@ public class HomeController {
             for (int i = recentAttempts.size() - 1, count = 0; i >= 0 && count < 5; i--, count++) {
 
                 //probably need to use the quizattemptsummary object with correlated id to get percentage correct or something like that
-
-                attemptSeries.getData().add(new XYChart.Data<>(recentAttempts.get(i).getCompletedAt().toString().substring(0,10) ,recentAttempts.get(i).getId()));
+                attemptSeries.getData().add(new XYChart.Data<>(recentAttempts.get(i).getCompletedAt().toString().substring(0,10) ,split.getQuizCount()));
             }
+
+            attemptChart.getData().addAll(attemptSeries);
+            ratioPie.setTitle("Score");
+
             ///////////////////////////
 
             //  dummy data
