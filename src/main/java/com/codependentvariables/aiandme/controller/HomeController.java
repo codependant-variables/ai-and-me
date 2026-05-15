@@ -80,14 +80,6 @@ public class HomeController {
             for (int i = recentCheckins.size() - 1, count = 0; i >= 0 && count < 5; i--, count++) {
                 //while (recentCheckins.get(i).getCompletedAt() !=)
                 //for every check in, create a point on a line graph for each category (requires time/date string and score float)
-                System.out.println("Completed at: ");
-                System.out.println(recentCheckins.get(i).getCompletedAt().toString());
-                System.out.println("Dependence: ");
-                System.out.println(recentCheckins.get(i).getAiDependence());
-                System.out.println("Happiness: ");
-                System.out.println(recentCheckins.get(i).getAiHappiness());
-                System.out.println("Use (frequency): ");
-                System.out.println(recentCheckins.get(i).getAiUse());
                 dependenceSeries.getData().add(new XYChart.Data<>(recentCheckins.get(i).getCompletedAt().toString().substring(0,10) ,recentCheckins.get(i).getAiDependence()));
                 useSeries.getData().add(new XYChart.Data<>(recentCheckins.get(i).getCompletedAt().toString().substring(0,10) ,recentCheckins.get(i).getAiUse()));
                 happinessSeries.getData().add(new XYChart.Data<>(recentCheckins.get(i).getCompletedAt().toString().substring(0,10),recentCheckins.get(i).getAiHappiness()));
