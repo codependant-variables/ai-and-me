@@ -43,14 +43,18 @@ public class QuizAttemptControllerTest {
         // Starts JavaFX before running any unit tests as it needs its own UI thread which isn't started by default in JUnit tests
         CountDownLatch latch = new CountDownLatch(1);
 
-        // Starts JavaFX runtime and creates the JavaFX application thread
-        Platform.startup(new Runnable() {
-            @Override
-            public void run() {
-                latch.countDown(); // Signals that JavaFX has started
-            }
-        });
-        latch.await(); // Waits until JavaFX fully initialized before running tests
+        try {
+            // Starts JavaFX runtime and creates the JavaFX application thread
+            Platform.startup(new Runnable() {
+                @Override
+                public void run() {
+                    latch.countDown(); // Signals that JavaFX has started
+                }
+            });
+            latch.await(); // Waits until JavaFX fully initialized before running tests
+        } catch (IllegalStateException ignored) {
+            // Toolkit already initialized, ignore
+        }
         Dialogue.disable();
     }
 
