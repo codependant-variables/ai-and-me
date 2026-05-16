@@ -78,6 +78,15 @@ public class QuizTemplateService {
         templateDAO.delete(template);
     }
 
+    /**
+     * Returns the image bytes of the first question for the given template, null otherwise.
+     */
+    public byte[] getFirstQuestionImage(int templateId) {
+        List<QuizTemplateQuestion> questions = questionDAO.getQuestionsByTemplate(templateId);
+        if (questions == null || questions.isEmpty()) return null;
+        return questions.get(0).getImage();
+    }
+
     public List<QuizTemplate> getAllTemplates() {
         return templateDAO.getAll();
     }

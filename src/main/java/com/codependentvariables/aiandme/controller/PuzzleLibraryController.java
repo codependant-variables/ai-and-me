@@ -21,23 +21,12 @@ import java.util.Optional;
  */
 public class PuzzleLibraryController extends QuizController {
 
-    @FXML private Label pageTitle;
-    @FXML private Button btnCreate;
-    @FXML private Button btnModify;
-    @FXML private Button btnDelete;
-    @FXML private Button btnEditQuestions;
-    @FXML private Button btnAttemptQuiz;
-
     @FXML
     @Override
     public void initialize() {
-        pageTitle.setText(getPageTitle());
-        btnCreate.setDisable(false);
-        btnModify.setDisable(true);
-        btnDelete.setDisable(true);
-        btnEditQuestions.setDisable(true);
-        btnAttemptQuiz.setDisable(true);
+        super.initialize();
     }
+
     @Override
     protected String getPageTitle() {
         return "Puzzle Library";
@@ -48,17 +37,16 @@ public class PuzzleLibraryController extends QuizController {
         return true;
     }
 
+    /** Only show templates that ARE puzzles. */
+    @Override
+    protected Boolean isPuzzleFilter() {
+        return true;
+    }
+
     @Override
     public void initialise() {
     }
 
-    protected void refreshTemplates() {
-
-    }
-
-    protected void handleAttemptQuiz() {
-
-    }
 
     /**
      * Overrides the base create dialog to add an "Is Puzzle?" checkbox.

@@ -18,17 +18,15 @@ public class QuizLibraryController extends QuizController {
     protected String getPageTitle() {
         return "Quiz Library";
     }
+
+    /** Only show templates that are NOT puzzles. */
+    @Override
+    protected Boolean isPuzzleFilter() {
+        return false;
+    }
+
     @Override
     public void initialise() {
-
-    }
-
-
-    protected void refreshTemplates() {
-
-    }
-
-    protected void handleAttemptQuiz() {
 
     }
 }

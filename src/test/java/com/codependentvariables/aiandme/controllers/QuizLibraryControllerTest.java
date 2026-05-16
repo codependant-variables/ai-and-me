@@ -21,7 +21,7 @@ public class QuizLibraryControllerTest {
         QuizTemplateQuestion q1 = new QuizTemplateQuestion(10, "Q1");
         QuizTemplateQuestion q2 = new QuizTemplateQuestion(10, "Q2");
 
-        List<QuizTemplateQuestion> questions = Arrays.asList(q1, q2); // Creates a list which contains the strings
+        List<QuizTemplateQuestion> questions = Arrays.asList(q1, q2);
         assertTrue(QuizLibraryController.isAttemptable(questions));
     }
 
@@ -47,5 +47,19 @@ public class QuizLibraryControllerTest {
         // Checks that a quiz with null instead of questions is unable to be attempted.
         // Null shouldn't throw an error and should return false
         assertFalse(QuizLibraryController.isAttemptable(null));
+    }
+
+    @Test
+    void isPuzzleShown() {
+        // A template with isPuzzle=true should NOT be shown in the quiz library (isPuzzle must be false)
+        QuizTemplate puzzleTemplate = new QuizTemplate("Puzzle One", 1, 1, true, "draft");
+        assertFalse(!puzzleTemplate.isPuzzle()); // isPuzzle is true means this does not pass quiz library filter
+    }
+
+    @Test
+    void isPuzzleHidden() {
+        // A template with isPuzzle=false should be shown in the quiz library
+        QuizTemplate quizTemplate = new QuizTemplate("Quiz One", 1, 1, false, "draft");
+        assertFalse(quizTemplate.isPuzzle()); // isPuzzle is false means this passes quiz library filter
     }
 }

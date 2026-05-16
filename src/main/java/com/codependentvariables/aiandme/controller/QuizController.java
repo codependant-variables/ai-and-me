@@ -70,6 +70,13 @@ public abstract class QuizController {
     }
 
     /**
+     * Returns filtered quizzes with isPuzzle false value for this library.
+     */
+    protected Boolean isPuzzleFilter() {
+        return null;
+    }
+
+    /**
      * Reloads all quiz templates and rebuilds UI cards.
      */
     private void refreshCategories() {
@@ -80,7 +87,19 @@ public abstract class QuizController {
 
         List<Category> categories = categoryService.getVisibleCategories();
 
-        List<QuizTemplate> templates = templateService.getAllTemplates();
+        List<QuizTemplate> allTemplates = templateService.getAllTemplates();
+        Boolean puzzleFilter = isPuzzleFilter();
+        List<QuizTemplate> templates;
+        if (puzzleFilter == null) {
+            templates = allTemplates;
+        } else {
+            templates = new ArrayList<>();
+            for (QuizTemplate t : allTemplates) {
+                if (t.isPuzzle() == puzzleFilter) {
+                    templates.add(t);
+                }
+            }
+        }
         for (QuizTemplate template : templates) {
             String categoryName = "Unknown";
             for (Category c : categories) {
