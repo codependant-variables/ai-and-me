@@ -18,6 +18,9 @@ import javafx.scene.chart.*;
 import javafx.scene.control.Label;
 import com.codependentvariables.aiandme.services.HomeService;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import java.util.List;
@@ -50,6 +53,9 @@ public class HomeController {
     @FXML
     public LineChart<Number,Number> attemptChart = new LineChart<Number,Number>(xAxisQuizAttempts,yAxisQuizAttempts);
 
+    @FXML
+    private VBox background;
+
     //  quiz vs puzzle pie chart idk
     public PieChart ratioPie = new PieChart();
 
@@ -66,6 +72,9 @@ public class HomeController {
         yAxisCheckin.setLowerBound(0.0);
         yAxisCheckin.setUpperBound(100.0);
         yAxisCheckin.setTickUnit(10);
+        background.styleProperty().bind(appState.getObservableIsDarkMode().map(isDarkMode -> isDarkMode ? "-fx-background-color: #58595b;" : "-fx-background-color: #f0edef;"));
+
+
 
         if (appState.getCurrentUser() != null) {
 
