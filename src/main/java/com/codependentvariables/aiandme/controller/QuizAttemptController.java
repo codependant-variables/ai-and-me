@@ -24,16 +24,28 @@ public class QuizAttemptController {
     private List<QuizTemplateQuestion> questions = new ArrayList<>();
     private int currentIndex = 0;
 
-    private final List<QuizTemplateAnswer> selectedAnswers = new ArrayList<>();
+    public final List<QuizTemplateAnswer> selectedAnswers = new ArrayList<>();
+
+    private boolean testMode = false;
+    private int totalQuestions;
 
     @FXML
-    private Label progressLabel;
+    public Label progressLabel;
     @FXML
-    private Label questionLabel;
+    public Label questionLabel;
     @FXML
-    private VBox answersBox;
+    public VBox answersBox;
     @FXML
-    private Button nextButton;
+    public Button nextButton;
+
+    /**
+     * Enables or disables test mode.
+     * In test mode, UI actions and external calls are skipped.
+     * @param testMode testMode true to enable test mode, false otherwise
+     */
+    public void setTestMode(boolean testMode) {
+        this.testMode = testMode;
+    }
 
     @FXML
     private void initialize() {
@@ -52,7 +64,9 @@ public class QuizAttemptController {
 
         this.template = template;
 
-        QuizTemplateService.getInstance().loadQuestionsIntoTemplate(template);
+        if (!testMode) {
+            QuizTemplateService.getInstance().loadQuestionsIntoTemplate(template);
+        }
         this.questions = template.getQuestions();
 
         if (questions == null || questions.size() < 2) {
@@ -73,23 +87,34 @@ public class QuizAttemptController {
         logger.info("Quiz loaded: " + template.getName());
         logger.info("Question count: " + (questions == null ? 0 : questions.size()));
 
+        this.totalQuestions = questions.size();
         this.currentIndex = 0;
         this.selectedAnswers.clear();
 
         loadQuestion();
+        updateProgress();
+    }
+
+    /**
+     * Updates the progress label to show the current question number
+     * and the total number of questions in the quiz.
+     */
+    private void updateProgress() {
+        progressLabel.setText("Question " + (currentIndex + 1) + " of " + totalQuestions);
+    }
+
+    // Gets the current question number, used for unit test
+    public int getQuestionNumber() {
+        return currentIndex + 1;
     }
 
     private void loadQuestion() {
         QuizTemplateQuestion question = questions.get(currentIndex);
 
-        progressLabel.setText("Question " + (currentIndex + 1) + " of " + questions.size());
         questionLabel.setText(question.getText());
         answersBox.getChildren().clear();
 
         List<QuizTemplateAnswer> answers = question.getAnswers();
-
-        logger.info("Question: " + question.getText());
-        logger.info("Answer count: " + (answers == null ? 0 : answers.size()));
 
         if (answers == null || answers.isEmpty()) {
             answersBox.getChildren().add(new Label("No answers found for this question."));
@@ -109,20 +134,17 @@ public class QuizAttemptController {
 
         nextButton.setDisable(true);
 
-        group.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
-            nextButton.setDisable(newToggle == null);
-        });
+        group.selectedToggleProperty().addListener((obs, oldToggle, newToggle) ->
+                nextButton.setDisable(newToggle == null)
+        );
 
-        // TODO: Future UX improvement:
-        // selecting an answer could automatically move to the next question,
-        // with a previous button for user for corrections and confirmation before finishing
-        nextButton.setText(currentIndex == questions.size() - 1 ? "Finish" : "Next >");
+        boolean isLastQuestion = currentIndex == totalQuestions - 1;
+        nextButton.setText(isLastQuestion ? "Finish" : "Next >");
     }
 
     @FXML
-    private void handleNext() {
+    public void handleNext() {
         QuizTemplateAnswer selectedAnswer = getSelectedAnswer();
-
         if (selectedAnswer == null) return;
 
         selectedAnswers.add(selectedAnswer);
@@ -130,6 +152,7 @@ public class QuizAttemptController {
         if (currentIndex < questions.size() - 1) {
             currentIndex++;
             loadQuestion();
+            updateProgress();
         } else {
             submitQuiz();
         }
@@ -146,6 +169,7 @@ public class QuizAttemptController {
     }
 
     private void submitQuiz() {
+        if (testMode) return;
         if (appState.getCurrentUser() == null) {
             Dialogue.signupToSave(this::finishSubmitQuiz, this::finishSubmitQuiz);
         } else {

@@ -20,6 +20,11 @@ public interface IUserDAO {
      */
     void update(User user);
     /**
+     * Updates an existing user's last login time in the database.
+     * @param user the user to update.
+     */
+    void updateLastLoginAt(User user);
+    /**
      * Deletes a user from the database.
      * @param user The user to delete.
      */
