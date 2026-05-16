@@ -44,6 +44,11 @@ public class PuzzleLibraryController extends QuizController {
     }
 
     @Override
+    protected boolean showsTemplateImage() {
+        return true;
+    }
+
+    @Override
     public void initialise() {
     }
 
