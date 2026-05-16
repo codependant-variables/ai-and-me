@@ -20,6 +20,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -59,6 +60,14 @@ public abstract class QuizController {
     }
 
     protected abstract String getPageTitle();
+
+    /**
+     * Subclasses that want to display a question image on each card (e.g. PuzzleLibraryController)
+     * should override this to return true.
+     */
+    protected boolean showsTemplateImage() {
+        return false;
+    }
 
     /**
      * Reloads all quiz templates and rebuilds UI cards.
@@ -448,10 +457,23 @@ public abstract class QuizController {
         HBox navBox = new HBox(10, btnPrev, questionCounter, btnNext, new Separator(), btnAddQ, btnRemoveQ);
         navBox.setAlignment(Pos.CENTER_LEFT);
 
+        // Image panel only shows in PuzzleLibraryController (showsTemplateImage() == true)
+        ImageView questionImageView = new ImageView();
+        questionImageView.setFitWidth(200);
+        questionImageView.setFitHeight(150);
+        questionImageView.setPreserveRatio(true);
+        Label noImageLabel = new Label("No image for this question.");
+        noImageLabel.setTextFill(Color.web("#999999"));
+        VBox imagePanel = new VBox(6, questionImageView, noImageLabel);
+        imagePanel.setAlignment(Pos.CENTER);
+        imagePanel.setVisible(showsTemplateImage());
+        imagePanel.setManaged(showsTemplateImage());
+
         VBox content = new VBox(12,
                 quizNameLabel, titleSep,
                 navBox,
                 questionField,
+                imagePanel,
                 new Label("Answers (tick at least one as correct):"),
                 answersBox
         );
@@ -492,6 +514,19 @@ public abstract class QuizController {
                 } else {
                     answerFields[i].clear();
                     correctChecks[i].setSelected(false);
+                }
+            }
+            // Update image panel for puzzle questions
+            if (showsTemplateImage()) {
+                byte[] imgBytes = q.getImage();
+                if (imgBytes != null && imgBytes.length > 0) {
+                    questionImageView.setImage(new Image(new ByteArrayInputStream(imgBytes)));
+                    questionImageView.setVisible(true);
+                    noImageLabel.setVisible(false);
+                } else {
+                    questionImageView.setImage(null);
+                    questionImageView.setVisible(false);
+                    noImageLabel.setVisible(true);
                 }
             }
             btnPrev.setDisable(currentIndex[0] == 0);

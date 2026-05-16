@@ -4,6 +4,7 @@ import com.codependentvariables.aiandme.database.IDatabaseEntity;
 import com.codependentvariables.aiandme.database.IRowMapper;
 import com.codependentvariables.aiandme.model.QuizTemplateQuestion;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 
 public class SqliteQuizTemplateQuestionDAO extends BaseSqliteDAO implements IQuizTemplateQuestionDAO, IDatabaseEntity {
@@ -75,7 +76,12 @@ public class SqliteQuizTemplateQuestionDAO extends BaseSqliteDAO implements IQui
         var id = executeSqlWithGeneratedKeys(query, stmt -> {
             stmt.setInt(1, question.getQuizTemplateId());
             stmt.setString(2, question.getText());
-            stmt.setBytes(3, question.getImage());
+            byte[] imageBytes = question.getImage();
+            if (imageBytes != null) {
+                stmt.setBinaryStream(3, new ByteArrayInputStream(imageBytes), imageBytes.length);
+            } else {
+                stmt.setNull(3, java.sql.Types.BLOB);
+            }
         });
         question.setId(id);
     }
@@ -86,7 +92,12 @@ public class SqliteQuizTemplateQuestionDAO extends BaseSqliteDAO implements IQui
         executeSql(query, stmt -> {
             stmt.setInt(1, question.getQuizTemplateId());
             stmt.setString(2, question.getText());
-            stmt.setBytes(3, question.getImage());
+            byte[] imageBytes = question.getImage();
+            if (imageBytes != null) {
+                stmt.setBinaryStream(3, new ByteArrayInputStream(imageBytes), imageBytes.length);
+            } else {
+                stmt.setNull(3, java.sql.Types.BLOB);
+            }
             stmt.setInt(4, question.getId());
         });
     }

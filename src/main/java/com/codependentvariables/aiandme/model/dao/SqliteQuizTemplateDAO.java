@@ -3,6 +3,11 @@ package com.codependentvariables.aiandme.model.dao;
 import com.codependentvariables.aiandme.database.*;
 import com.codependentvariables.aiandme.model.*;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.*;
 import java.util.List;
 
@@ -32,6 +37,74 @@ public class SqliteQuizTemplateDAO extends BaseSqliteDAO implements IQuizTemplat
     @Override
     public String getSeedDataQuery() {
         return seedDataQuery;
+    }
+
+    /**
+     * Seeds the example "Pattern Puzzle" template with PQ1.png on each question.
+     * Kept here rather than in SqliteConnection because this data belongs to quiz templates.
+     */
+    @Override
+    public void seedBinaryData() {
+        try {
+            URL resource = getClass().getResource(
+                    "/com/codependentvariables/aiandme/Images/PQ1.png");
+            if (resource == null) {
+                System.err.println("SqliteQuizTemplateDAO.seedBinaryData: PQ1.png not found — skipping.");
+                return;
+            }
+            byte[] pq1 = Files.readAllBytes(Paths.get(resource.toURI()));
+
+            SqliteQuizTemplateQuestionDAO questionDAO = new SqliteQuizTemplateQuestionDAO();
+            SqliteQuizTemplateAnswerDAO   answerDAO   = new SqliteQuizTemplateAnswerDAO();
+
+            QuizTemplate template = new QuizTemplate("Pattern Puzzle", 2, 1, true, "published");
+            add(template);
+
+            addPuzzleQuestion(questionDAO, answerDAO, template.getId(),
+                    "What shape completes the pattern?", pq1,
+                    new String[]{"Circle", "Triangle", "Square", "Pentagon"}, "Circle");
+            addPuzzleQuestion(questionDAO, answerDAO, template.getId(),
+                    "Which colour follows the sequence?", pq1,
+                    new String[]{"Red", "Blue", "Green", "Yellow"}, "Blue");
+            addPuzzleQuestion(questionDAO, answerDAO, template.getId(),
+                    "How many shapes are in the next group?", pq1,
+                    new String[]{"3", "4", "5", "6"}, "4");
+            addPuzzleQuestion(questionDAO, answerDAO, template.getId(),
+                    "What is the missing symbol?", pq1,
+                    new String[]{"Star", "Arrow", "Cross", "Diamond"}, "Star");
+            addPuzzleQuestion(questionDAO, answerDAO, template.getId(),
+                    "Which row continues the pattern?", pq1,
+                    new String[]{"Row A", "Row B", "Row C", "Row D"}, "Row C");
+            addPuzzleQuestion(questionDAO, answerDAO, template.getId(),
+                    "What rotation comes next?", pq1,
+                    new String[]{"90°", "180°", "270°", "0°"}, "90°");
+            addPuzzleQuestion(questionDAO, answerDAO, template.getId(),
+                    "Which tile fits the grid?", pq1,
+                    new String[]{"Tile 1", "Tile 2", "Tile 3", "Tile 4"}, "Tile 2");
+            addPuzzleQuestion(questionDAO, answerDAO, template.getId(),
+                    "How does the pattern scale?", pq1,
+                    new String[]{"x2", "x3", "x4", "x5"}, "x2");
+            addPuzzleQuestion(questionDAO, answerDAO, template.getId(),
+                    "Which element is the odd one out?", pq1,
+                    new String[]{"Element A", "Element B", "Element C", "Element D"}, "Element C");
+            addPuzzleQuestion(questionDAO, answerDAO, template.getId(),
+                    "What comes at position 7 in the sequence?", pq1,
+                    new String[]{"13", "15", "17", "19"}, "13");
+
+        } catch (IOException | URISyntaxException e) {
+            System.err.println("SqliteQuizTemplateDAO.seedBinaryData: image load failed — " + e.getMessage());
+        }
+    }
+
+    private void addPuzzleQuestion(SqliteQuizTemplateQuestionDAO questionDAO,
+                                   SqliteQuizTemplateAnswerDAO answerDAO,
+                                   int templateId, String text, byte[] image,
+                                   String[] options, String correct) {
+        QuizTemplateQuestion question = new QuizTemplateQuestion(templateId, text, image);
+        questionDAO.addQuestion(question);
+        for (String option : options) {
+            answerDAO.addAnswer(new QuizTemplateAnswer(question.getId(), option, option.equals(correct)));
+        }
     }
 
     private static final IRowMapper<QuizTemplate> QUIZ_TEMPLATE_MAPPER = (resultSet) -> {
