@@ -141,21 +141,28 @@ public class QuizAttemptController {
 
     private void finishQuiz() {
         User currentUser = AppState.getInstance().getCurrentUser();
-        int userId = currentUser != null ? currentUser.getId() : 0;
+
+        if (currentUser == null || currentUser.getId() <= 0) {
+            Dialogue.message("You must be logged in to save a quiz attempt.");
+            return;
+        }
+
+        int userId = currentUser.getId();
 
         try {
             int correct = QuizAttemptService.getInstance().saveAttempt(template, userId, selectedAnswers);
 
             QuizAttemptSummary summary = QuizAttemptSummary.of(
-                            template.getName(),
-                            correct,
-                            questions.size(),
-                            java.sql.Timestamp.from(java.time.Instant.now()),
-                            questions,
-                            selectedAnswers
+                    template.getName(),
+                    correct,
+                    questions.size(),
+                    java.sql.Timestamp.from(java.time.Instant.now()),
+                    questions,
+                    selectedAnswers
             );
 
-            QuizAttemptResultsController controller = (QuizAttemptResultsController) Router.navigateLayout(View.QUIZ_ATTEMPT_RESULTS);
+            QuizAttemptResultsController controller =
+                    (QuizAttemptResultsController) Router.navigateLayout(View.QUIZ_ATTEMPT_RESULTS);
 
             if (controller != null) {
                 controller.initResults(summary);
