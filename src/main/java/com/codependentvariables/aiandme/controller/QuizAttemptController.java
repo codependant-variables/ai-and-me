@@ -10,8 +10,11 @@ import com.codependentvariables.aiandme.state.AppState;
 import javafx.fxml.FXML;
 import java.util.logging.Logger;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,12 +30,15 @@ public class QuizAttemptController {
     public final List<QuizTemplateAnswer> selectedAnswers = new ArrayList<>();
 
     private boolean testMode = false;
+    private boolean showImages = false;
     private int totalQuestions;
 
     @FXML
     public Label progressLabel;
     @FXML
     public Label questionLabel;
+    @FXML
+    public ImageView questionImageView;
     @FXML
     public VBox answersBox;
     @FXML
@@ -45,6 +51,14 @@ public class QuizAttemptController {
      */
     public void setTestMode(boolean testMode) {
         this.testMode = testMode;
+    }
+
+    /**
+     * When set to true, the question image is displayed during the attempt.
+     * Called by PuzzleLibraryController before initQuiz().
+     */
+    public void setShowImages(boolean showImages) {
+        this.showImages = showImages;
     }
 
     @FXML
@@ -113,6 +127,20 @@ public class QuizAttemptController {
 
         questionLabel.setText(question.getText());
         answersBox.getChildren().clear();
+
+        // Show image for puzzle attempts
+        if (showImages && questionImageView != null) {
+            byte[] imgBytes = question.getImage();
+            if (imgBytes != null && imgBytes.length > 0) {
+                questionImageView.setImage(new Image(new ByteArrayInputStream(imgBytes)));
+                questionImageView.setVisible(true);
+                questionImageView.setManaged(true);
+            } else {
+                questionImageView.setImage(null);
+                questionImageView.setVisible(false);
+                questionImageView.setManaged(false);
+            }
+        }
 
         List<QuizTemplateAnswer> answers = question.getAnswers();
 

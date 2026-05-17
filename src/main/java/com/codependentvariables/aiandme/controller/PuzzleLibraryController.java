@@ -2,6 +2,8 @@ package com.codependentvariables.aiandme.controller;
 
 import com.codependentvariables.aiandme.model.Category;
 import com.codependentvariables.aiandme.model.User;
+import com.codependentvariables.aiandme.navigation.Router;
+import com.codependentvariables.aiandme.navigation.View;
 import com.codependentvariables.aiandme.services.CategoryService;
 import com.codependentvariables.aiandme.services.QuizTemplateService;
 import com.codependentvariables.aiandme.state.AppState;
@@ -47,6 +49,22 @@ public class PuzzleLibraryController extends QuizController {
     public void initialise() {
     }
 
+    /**
+     * Overrides attempt handling to enable question image display for puzzle quizzes.
+     */
+    @FXML
+    @Override
+    protected void handleAttemptQuiz() {
+        try {
+            QuizAttemptController controller = (QuizAttemptController) Router.navigateLayout(View.QUIZ_ATTEMPT);
+            if (controller != null) {
+                controller.setShowImages(true);
+                controller.initQuiz(getSelectedTemplate());
+            }
+        } catch (Exception e) {
+            showWarning("Failed to open puzzle attempt page: " + e.getMessage());
+        }
+    }
 
     /**
      * Overrides the base create dialog to add an "Is Puzzle?" checkbox.
@@ -154,6 +172,7 @@ public class PuzzleLibraryController extends QuizController {
             User currentUser = AppState.getInstance().getCurrentUser();
             int userId = (currentUser != null) ? currentUser.getId() : 0;
             templateService.createTemplate(templateName, targetCategory.getId(), userId, isPuzzle);
+            refreshCategories();
             showInfo("Template \"" + templateName + "\" created in category \"" + targetCategory.getName() + "\"" +
                     (isPuzzle ? " (marked as Puzzle)." : "."));
         } catch (IllegalArgumentException e) {

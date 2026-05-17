@@ -21,10 +21,14 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import javafx.stage.FileChooser;
 
 public abstract class QuizController {
 
@@ -44,6 +48,11 @@ public abstract class QuizController {
     // Currently selected template and its UI card
     private QuizTemplate selectedTemplate;
     private HBox selectedCard;
+
+    /** Returns the currently selected template, or null if none is selected. */
+    protected QuizTemplate getSelectedTemplate() {
+        return selectedTemplate;
+    }
 
     /**
      * Initializes UI state and loads templates.
@@ -79,7 +88,7 @@ public abstract class QuizController {
     /**
      * Reloads all quiz templates and rebuilds UI cards.
      */
-    private void refreshCategories() {
+    protected void refreshCategories() {
         categoryContainer.getChildren().clear();
         selectedTemplate = null;
         selectedCard = null;
@@ -401,7 +410,7 @@ public abstract class QuizController {
     }
 
     @FXML
-    private void handleAttemptQuiz() {
+    protected void handleAttemptQuiz() {
         if (selectedTemplate == null) return;
 
         try {
@@ -481,12 +490,54 @@ public abstract class QuizController {
         questionImageView.setFitWidth(200);
         questionImageView.setFitHeight(150);
         questionImageView.setPreserveRatio(true);
+
         Label noImageLabel = new Label("No image for this question.");
         noImageLabel.setTextFill(Color.web("#999999"));
-        VBox imagePanel = new VBox(6, questionImageView, noImageLabel);
+
+        Button btnUploadImage = new Button("+ Upload Image");
+        Button btnDeleteImage = new Button("X Remove Image");
+        btnDeleteImage.setStyle("-fx-text-fill: red;");
+        btnDeleteImage.setVisible(false);
+        btnDeleteImage.setManaged(false);
+
+        HBox imageButtons = new HBox(8, btnUploadImage, btnDeleteImage);
+        imageButtons.setAlignment(Pos.CENTER);
+
+        VBox imagePanel = new VBox(6, questionImageView, noImageLabel, imageButtons);
         imagePanel.setAlignment(Pos.CENTER);
         imagePanel.setVisible(showsTemplateImage());
         imagePanel.setManaged(showsTemplateImage());
+
+        btnUploadImage.setOnAction(e -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Select Question Image");
+            fileChooser.getExtensionFilters().add(
+                    new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif")
+            );
+            File file = fileChooser.showOpenDialog(dialog.getDialogPane().getScene().getWindow());
+            if (file != null) {
+                try {
+                    byte[] imageBytes = Files.readAllBytes(file.toPath());
+                    workingQuestions.get(currentIndex[0]).setImage(imageBytes);
+                    questionImageView.setImage(new Image(new ByteArrayInputStream(imageBytes)));
+                    questionImageView.setVisible(true);
+                    noImageLabel.setVisible(false);
+                    btnDeleteImage.setVisible(true);
+                    btnDeleteImage.setManaged(true);
+                } catch (IOException ex) {
+                    showWarning("Failed to load image: " + ex.getMessage());
+                }
+            }
+        });
+
+        btnDeleteImage.setOnAction(e -> {
+            workingQuestions.get(currentIndex[0]).setImage(null);
+            questionImageView.setImage(null);
+            questionImageView.setVisible(false);
+            noImageLabel.setVisible(true);
+            btnDeleteImage.setVisible(false);
+            btnDeleteImage.setManaged(false);
+        });
 
         VBox content = new VBox(12,
                 quizNameLabel, titleSep,
@@ -538,7 +589,8 @@ public abstract class QuizController {
             // Update image panel for puzzle questions
             if (showsTemplateImage()) {
                 byte[] imgBytes = q.getImage();
-                if (imgBytes != null && imgBytes.length > 0) {
+                boolean hasImage = imgBytes != null && imgBytes.length > 0;
+                if (hasImage) {
                     questionImageView.setImage(new Image(new ByteArrayInputStream(imgBytes)));
                     questionImageView.setVisible(true);
                     noImageLabel.setVisible(false);
@@ -547,6 +599,8 @@ public abstract class QuizController {
                     questionImageView.setVisible(false);
                     noImageLabel.setVisible(true);
                 }
+                btnDeleteImage.setVisible(hasImage);
+                btnDeleteImage.setManaged(hasImage);
             }
             btnPrev.setDisable(currentIndex[0] == 0);
             btnNext.setDisable(currentIndex[0] >= workingQuestions.size() - 1 || workingQuestions.size() >= 10);
