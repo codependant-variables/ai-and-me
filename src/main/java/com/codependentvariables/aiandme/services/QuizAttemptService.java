@@ -96,5 +96,6 @@ public class QuizAttemptService {
     public List<QuizAttempt> getAttemptsByUser(int userId) {
         return attemptDAO.getByUserId(userId);
     }
+
 }
 
