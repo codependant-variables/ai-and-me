@@ -20,6 +20,7 @@ import com.codependentvariables.aiandme.services.HomeService;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
@@ -55,6 +56,16 @@ public class HomeController {
 
     @FXML
     private VBox background;
+    @FXML
+    private VBox dashboardWidgetData;
+    @FXML
+    private VBox dashboardWidgetQuiz;
+    @FXML
+    private VBox dashboardWidgetPuzzle;
+    @FXML
+    private VBox dashboardWidgetInsight;
+    @FXML
+    private VBox dashboardWidgetNews;
 
     //  quiz vs puzzle pie chart idk
     public PieChart ratioPie = new PieChart();
@@ -72,9 +83,12 @@ public class HomeController {
         yAxisCheckin.setLowerBound(0.0);
         yAxisCheckin.setUpperBound(100.0);
         yAxisCheckin.setTickUnit(10);
-        background.styleProperty().bind(appState.getObservableIsDarkMode().map(isDarkMode -> isDarkMode ? "-fx-background-color: #58595b;" : "-fx-background-color: #f0edef;"));
-
-
+        background.styleProperty().bind(appState.getObservableIsDarkMode().map(isDarkMode -> isDarkMode ? "-fx-background-color: #202430;" : "-fx-background-color: #f0edef;"));
+        dashboardWidgetData.styleProperty().bind(appState.getObservableIsDarkMode().map(isDarkMode -> isDarkMode ? "-fx-background-color: #2e3440;" : "-fx-background-color: #ffffff;"));
+        dashboardWidgetQuiz.styleProperty().bind(appState.getObservableIsDarkMode().map(isDarkMode -> isDarkMode ? "-fx-background-color: linear-gradient(to bottom, #2e3440, #ce78b1);" : "-fx-background-color: linear-gradient(to bottom, #ffffff, #ce78b1);"));
+        dashboardWidgetPuzzle.styleProperty().bind(appState.getObservableIsDarkMode().map(isDarkMode -> isDarkMode ? "-fx-background-color: linear-gradient(to bottom, #2e3440, #79d1ed);" : "-fx-background-color: linear-gradient(to bottom, #ffffff, #79d1ed);"));
+        dashboardWidgetInsight.styleProperty().bind(appState.getObservableIsDarkMode().map(isDarkMode -> isDarkMode ? "-fx-background-color: #2e3440;" : "-fx-background-color: #ffffff;"));
+        dashboardWidgetNews.styleProperty().bind(appState.getObservableIsDarkMode().map(isDarkMode -> isDarkMode ? "-fx-background-color: #2e3440;" : "-fx-background-color: #ffffff;"));
 
         if (appState.getCurrentUser() != null) {
 
