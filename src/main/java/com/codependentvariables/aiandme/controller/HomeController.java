@@ -11,6 +11,7 @@ import com.codependentvariables.aiandme.state.AppState;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Side;
 import javafx.scene.chart.*;
 import javafx.scene.control.Label;
 import com.codependentvariables.aiandme.services.HomeService;
@@ -31,11 +32,17 @@ public class HomeController {
 
 
     @FXML
-    public CategoryAxis xAxisCheckin = new CategoryAxis();
+    public NumberAxis xAxisCheckin;
     @FXML
-    public NumberAxis yAxisCheckin = new NumberAxis();
+    public NumberAxis yAxisCheckin;
     @FXML
-    public LineChart<String,Number> checkInChart = new LineChart<String,Number>(xAxisCheckin,yAxisCheckin);
+    public XYChart<Number,Number> checkInChart;
+    @FXML
+    public XYChart.Series<Number, Number> dependenceSeries = new XYChart.Series<Number, Number>();
+    @FXML
+    public XYChart.Series<Number, Number> useSeries = new XYChart.Series<Number, Number>();
+    @FXML
+    public XYChart.Series<Number, Number> happinessSeries = new XYChart.Series<Number, Number>();
 
     private CheckInService checkInService = CheckInService.getInstance();
     private QuizAttemptService attemptsService = QuizAttemptService.getInstance();
@@ -45,8 +52,7 @@ public class HomeController {
     @FXML
     public NumberAxis yAxisQuizAttempts;
     @FXML
-    public LineChart<Number, Number> attemptChart;
-
+    public XYChart<Number, Number> attemptChart;
     //  quiz vs puzzle pie chart idk
     public PieChart ratioPie = new PieChart();
 
@@ -58,41 +64,51 @@ public class HomeController {
     public void initialize() {
         checkInStreak.setText(homeService.getCheckInStreak());
         lastCheckIn.setText(homeService.getLastCheckInDate());
-        yAxisCheckin.setLowerBound(0.0);
-        yAxisCheckin.setUpperBound(100.0);
-        yAxisCheckin.setTickUnit(10);
+        checkInChart.setLegendVisible(true);
+        checkInChart.setLegendSide(Side.RIGHT);
+        dependenceSeries.setName("Dependence");
+        useSeries.setName("Frequency");
+        happinessSeries.setName("Happiness");
 
         if (appState.getCurrentUser() != null) {
             AttemptStatistics split = attemptsService.getAttemptCountByUser(appState.getCurrentUser().getId());
 
-            XYChart.Series dependenceSeries = new XYChart.Series();
-            XYChart.Series useSeries = new XYChart.Series();
-            XYChart.Series happinessSeries = new XYChart.Series();
-
             List<CheckIn> recentCheckins = checkInService.getAllByUserId(appState.getCurrentUser().getId());
             // using getAllByUserId for now - may want to create a separate method for getRecentCheckIns in CheckInService class which checks timeframe
 
-            // for loop to go backwards five times maximum
-            for (int i = recentCheckins.size() - 1, count = 0; i >= 0 && count < 5; i--, count++) {
-                //for every check in, create a point on a line graph for each category (requires time/date string and score float)
-                /*System.out.println("Completed at: ");
-                System.out.println(recentCheckins.get(i).getCompletedAt().toString());
-                System.out.println("Dependence: ");
-                System.out.println(recentCheckins.get(i).getAiDependence());
-                System.out.println("Happiness: ");
-                System.out.println(recentCheckins.get(i).getAiHappiness());
-                System.out.println("Use (frequency): ");
-                System.out.println(recentCheckins.get(i).getAiUse());*/
-                dependenceSeries.getData().add(new XYChart.Data<>(recentCheckins.get(i).getCompletedAt().toString().substring(0,10) ,recentCheckins.get(i).getAiDependence()));
-                useSeries.getData().add(new XYChart.Data<>(recentCheckins.get(i).getCompletedAt().toString().substring(0,10) ,recentCheckins.get(i).getAiUse()));
-                happinessSeries.getData().add(new XYChart.Data<>(recentCheckins.get(i).getCompletedAt().toString().substring(0,10),recentCheckins.get(i).getAiHappiness()));
-            }
-            checkInChart.getData().addAll(dependenceSeries, useSeries, happinessSeries);
+
             dependenceSeries.setName("Dependence");
             useSeries.setName("Frequency");
             happinessSeries.setName("Happiness");
-            ///////////////////////////
+        //for (int i = recentCheckins.size() - 1, count = 0; i >= 0 && count < 5; i--, count++) {
+            int checkInNumber = 1;
+            for (int i = 5; i != 0; i--, checkInNumber++) {
+                //for every check in, create a point on a line graph for each category (requires time/date string and score float)
+                dependenceSeries.getData().add(new XYChart.Data<>(checkInNumber, recentCheckins.get(i).getAiDependence()));
+                useSeries.getData().add(new XYChart.Data<>(checkInNumber, recentCheckins.get(i).getAiUse()));
+                happinessSeries.getData().add(new XYChart.Data<>(checkInNumber, recentCheckins.get(i).getAiHappiness()));
+            }
 
+            xAxisCheckin.setAutoRanging(false);
+            xAxisCheckin.setLowerBound(1);
+            xAxisCheckin.setUpperBound(5);
+            xAxisCheckin.setTickUnit(1);
+
+            xAxisQuizAttempts.setTickUnit(1);
+
+            yAxisQuizAttempts.setUpperBound(100.0);
+
+            yAxisCheckin.setLowerBound(0);
+            yAxisCheckin.setUpperBound(100.0);
+            yAxisCheckin.setTickUnit(10);
+
+            dependenceSeries.setName("Dependence");
+            useSeries.setName("Frequency");
+            happinessSeries.setName("Happiness");
+            checkInChart.setLegendVisible(true);
+            checkInChart.setLegendSide(Side.RIGHT);
+            checkInChart.getData().addAll(dependenceSeries, useSeries, happinessSeries);
+            ///////////////////////////
             List<QuizAttempt> recentAttempts = attemptsService.getAttemptsByUser(appState.getCurrentUser().getId());
 
             XYChart.Series<Number, Number> attemptSeries = new XYChart.Series<>();

@@ -2,7 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.geometry.Rectangle2D?>
-<?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.chart.PieChart?>
@@ -17,28 +16,18 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox alignment="CENTER" maxHeight="738.0" maxWidth="879.0" prefHeight="738.0" prefWidth="879.0" spacing="20.0" styleClass="background-VBox" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codependentvariables.aiandme.controller.HomeController">
+<VBox alignment="CENTER" maxHeight="738.0" maxWidth="879.0" prefHeight="738.0" prefWidth="879.0" spacing="20.0" styleClass="background-VBox" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codependentvariables.aiandme.controller.HomeController">
    <HBox alignment="CENTER" spacing="20.0" VBox.vgrow="ALWAYS">
       <VBox alignment="CENTER" prefHeight="538.0" prefWidth="375.0" styleClass="widget-VBox">
          <children>
-            <VBox alignment="CENTER" prefWidth="400" spacing="10.0">
-               <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Check in data:">
-                     <font>
-                        <Font size="21.0" />
-                     </font>
-                  </Text>
-                  <Separator minHeight="-Infinity" prefHeight="9.0" prefWidth="243.0" />
-               </children>
-            </VBox>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <LineChart fx:id="checkInChart" prefHeight="201.0" prefWidth="231.0">
+                  <LineChart legendVisible="true" legendSide="BOTTOM" fx:id="checkInChart" prefHeight="201.0" prefWidth="231.0">
                      <xAxis>
-                        <CategoryAxis side="BOTTOM" />
+                        <NumberAxis label="Your Check-ins" side="BOTTOM" tickUnit="1" fx:id="xAxisCheckin" />
                      </xAxis>
                      <yAxis>
-                        <NumberAxis side="LEFT" />
+                        <NumberAxis label="Ratings" fx:id="yAxisCheckin" side="LEFT" tickUnit="10" />
                      </yAxis>
                   </LineChart>
                </children>
@@ -47,10 +36,10 @@
                <children>
                   <LineChart fx:id="attemptChart" prefHeight="201.0" prefWidth="231.0">
                      <xAxis>
-                        <NumberAxis fx:id="xAxisQuizAttempts" side="BOTTOM" label="Attempt (5 -> Latest)" tickUnit="1" />
+                        <NumberAxis label="Attempt (5 -&gt; Latest)" side="BOTTOM" tickUnit="1" fx:id="xAxisQuizAttempts" />
                      </xAxis>
                      <yAxis>
-                        <NumberAxis fx:id="yAxisQuizAttempts" side="LEFT" label="Score" />
+                        <NumberAxis fx:id="yAxisQuizAttempts" label="Score" side="LEFT" />
                      </yAxis>
                   </LineChart>
                </children>
