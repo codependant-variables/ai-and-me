@@ -1,11 +1,10 @@
 package com.codependentvariables.aiandme.services;
 
+import com.codependentvariables.aiandme.JavaFXTest;
 import com.codependentvariables.aiandme.model.CheckIn;
 import com.codependentvariables.aiandme.model.User;
 import com.codependentvariables.aiandme.model.mock.MockCheckInDAO;
-import com.codependentvariables.aiandme.navigation.Dialogue;
 import com.codependentvariables.aiandme.state.AppState;
-import javafx.application.Platform;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -14,26 +13,9 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class CheckInServiceTest {
+public class CheckInServiceTest extends JavaFXTest {
     private static CheckInService checkInService;
     private static User user;
-
-    @BeforeAll
-    static void initUI() throws Exception {
-        // Starts JavaFX before running any unit tests as it needs its own UI thread which isn't started by default in JUnit tests
-
-        try {
-            // Starts JavaFX runtime and creates the JavaFX application thread
-            Platform.startup(new Runnable() {
-                @Override
-                public void run() {
-                }
-            });
-        } catch (IllegalStateException ignored) {
-            // Toolkit already initialized, ignore
-        }
-        Dialogue.disable();
-    }
 
     @BeforeAll
     public static void setup() {
