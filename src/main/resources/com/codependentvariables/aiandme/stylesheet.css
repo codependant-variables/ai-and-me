@@ -68,6 +68,10 @@ Button {
     -fx-font-weight: bold;
 }
 
+.center {
+    -fx-min-width: -Infinity;
+}
+
 .bold {
     -fx-font-weight: bold;
 }
