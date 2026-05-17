@@ -8,6 +8,7 @@ import com.codependentvariables.aiandme.navigation.ToastMessageType;
 import com.codependentvariables.aiandme.navigation.View;
 import com.codependentvariables.aiandme.services.UserService;
 import com.codependentvariables.aiandme.state.AppState;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -95,4 +96,7 @@ public class LayoutController {
 
     @FXML
     public void navigateSettings() { Router.navigateLayout(View.SETTINGS); }
+
+    public void navigateCheckin(ActionEvent actionEvent) {
+    }
 }

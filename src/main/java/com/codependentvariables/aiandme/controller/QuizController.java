@@ -44,6 +44,7 @@ public abstract class QuizController {
     @FXML private Button btnDelete;
     @FXML private Button btnEditQuestions;
     @FXML private Button btnAttemptQuiz;
+    @FXML private ComboBox<String> categoryFilter;
 
     // Currently selected template and its UI card
     private QuizTemplate selectedTemplate;
@@ -65,6 +66,7 @@ public abstract class QuizController {
         btnDelete.setDisable(true);
         btnEditQuestions.setDisable(true);
         btnAttemptQuiz.setDisable(true);
+        loadCategoryFilter();
         refreshCategories();
     }
 
@@ -84,6 +86,34 @@ public abstract class QuizController {
     protected Boolean isPuzzleFilter() {
         return null;
     }
+
+    /**
+     * Loads category names into the filter dropdown.
+     * Adds an "All" option to show every quiz.
+     */
+    private void loadCategoryFilter() {
+        categoryFilter.getItems().clear();
+
+        categoryFilter.getItems().add("All");
+
+        List<Category> categories = categoryService.getVisibleCategories();
+
+        for (Category category : categories) {
+            categoryFilter.getItems().add(category.getName());
+        }
+
+        categoryFilter.setValue("All");
+    }
+
+    /**
+     * Handles category filter selection changes.
+     * Refreshes the displayed quiz templates.
+     */
+    @FXML
+    protected void handleCategoryFilter() {
+        refreshCategories();
+    }
+
 
     /**
      * Reloads all quiz templates and rebuilds UI cards.
@@ -109,6 +139,9 @@ public abstract class QuizController {
                 }
             }
         }
+
+        String selectedCategory = categoryFilter.getValue();
+
         for (QuizTemplate template : templates) {
             String categoryName = "Unknown";
             for (Category c : categories) {
@@ -117,6 +150,12 @@ public abstract class QuizController {
                     break;
                 }
             }
+
+            if (selectedCategory != null && !selectedCategory.equals("All")
+                    && !selectedCategory.equalsIgnoreCase(categoryName)) {
+                continue;
+            }
+
             categoryContainer.getChildren().add(buildTemplateCard(template, categoryName));
         }
     }
