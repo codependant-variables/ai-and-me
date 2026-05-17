@@ -6,6 +6,7 @@ import com.codependentvariables.aiandme.model.QuizTemplateQuestion;
 import com.codependentvariables.aiandme.model.dao.IQuizTemplateAnswerDAO;
 import com.codependentvariables.aiandme.model.dao.IQuizTemplateQuestionDAO;
 import com.codependentvariables.aiandme.model.mock.MockQuizTemplateDAO;
+import javafx.application.Platform;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -25,6 +26,11 @@ class QuizTemplateServiceTest {
 
     @BeforeEach
     void setUp() {
+        try {
+            Platform.startup(() -> {});
+        } catch (IllegalStateException e) {
+            // Toolkit already initialised - ignore
+        }
         templateDAO = new MockQuizTemplateDAO();
         service = new QuizTemplateService(templateDAO, stubQuestionDAO(), stubAnswerDAO());
     }

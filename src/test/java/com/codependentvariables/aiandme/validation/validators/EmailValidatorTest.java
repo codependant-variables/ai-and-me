@@ -1,5 +1,7 @@
 package com.codependentvariables.aiandme.validation.validators;
 
+import javafx.application.Platform;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -7,6 +9,15 @@ import static org.junit.jupiter.api.Assertions.*;
 public class EmailValidatorTest {
     private final EmailValidator validator = new EmailValidator();
 
+    @BeforeEach
+    void setUp() {
+        try {
+            Platform.startup(() -> {});
+        } catch (IllegalStateException e) {
+            // Toolkit already initialised - ignore
+        }
+    }
+    
     @Test
     public void correct_error_message() {
         String error = validator.validate("invalid input", "My email");
