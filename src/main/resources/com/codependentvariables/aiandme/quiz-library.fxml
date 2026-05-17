@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.ComboBox?>
 <VBox alignment="CENTER" prefWidth="600.0" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codependentvariables.aiandme.controller.QuizLibraryController">
     <padding>
         <Insets topRightBottomLeft="20" />
@@ -81,6 +82,13 @@
                 <Insets bottom="10.0" top="10.0"/>
             </HBox.margin>
         </Button>
+    </HBox>
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Label text="Filter by Category:" style="-fx-font-weight: bold;" />
+
+        <ComboBox fx:id="categoryFilter"
+                  prefWidth="200.0"
+                  onAction="#handleCategoryFilter"/>
     </HBox>
     <!-- ScrollPane allows overflow when many categories are added -->
     <ScrollPane fitToWidth="true" prefHeight="288.0" prefWidth="568.0" styleClass="innerDropshadow" VBox.vgrow="ALWAYS">
