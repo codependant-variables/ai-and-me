@@ -1,21 +1,28 @@
 package com.codependentvariables.aiandme;
 
 import javafx.application.Platform;
+import org.junit.jupiter.api.BeforeAll;
+
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 public abstract class JavaFXTest {
-    static {
-        if (!Platform.isFxApplicationThread()) {
-            try {
-                CountDownLatch latch = new CountDownLatch(1);
-                Platform.startup(latch::countDown);
-                if (!latch.await(5, TimeUnit.SECONDS)) {
-                    throw new RuntimeException("JavaFX Toolkit failed to start.");
-                }
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
+
+    private static boolean initialized = false;
+
+    @BeforeAll
+    static void initJavaFX() {
+
+        if (initialized) {
+            return;
         }
+
+        try {
+            Platform.startup(() -> {});
+        } catch (IllegalStateException ignored) {
+            // JavaFX toolkit already initialized
+        }
+
+        initialized = true;
     }
 }
