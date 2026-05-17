@@ -46,4 +46,5 @@ public class QuizAttempt {
 
     public int getResults() { return results; }
     public void setResults(int results) { this.results = results; }
+
 }

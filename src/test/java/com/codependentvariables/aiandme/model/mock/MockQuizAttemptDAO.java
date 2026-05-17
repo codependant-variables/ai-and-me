@@ -5,6 +5,7 @@ import com.codependentvariables.aiandme.model.dao.IQuizAttemptDAO;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -111,5 +112,22 @@ public class MockQuizAttemptDAO implements IQuizAttemptDAO {
         }
 
         return latest;
+    }
+
+    /**
+     * Retrieves all QuizAttempts for a user, ordered chronologically (oldest first).
+     */
+    @Override
+    public List<QuizAttempt> getByUserIdOrdered(int userId) {
+        List<QuizAttempt> results = new ArrayList<>();
+
+        for (QuizAttempt attempt : quizAttempts) {
+            if (attempt.getUserId() == userId) {
+                results.add(attempt);
+            }
+        }
+
+        results.sort(Comparator.comparing(QuizAttempt::getCompletedAt));
+        return results;
     }
 }

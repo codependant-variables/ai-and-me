@@ -47,25 +47,16 @@ public class QuizAttemptService {
 
         int correct = 0;
 
-        for (QuizTemplateAnswer answer : selectedAnswers)
-        {
-            if (answer.isCorrect()) {
-                correct++;
-            }
-        }
-
-        // 1 — Create the top-level attempt record
+        // 1 — Create the top-level attempt record (results tally stored after iterating questions)
         QuizAttempt attempt = new QuizAttempt(
                 userId,
                 template.getName(),
                 Timestamp.from(Instant.now()),
-                correct
+                0
         );
         attemptDAO.add(attempt); // sets attempt.id
 
-        int correct = 0;
-
-        // 2 — Snapshot each question and the user's selected answer
+        // Snapshot each question and the user's selected answer
         for (QuizTemplateQuestion tq : template.getQuestions()) {
             QuizAttemptQuestion aq = new QuizAttemptQuestion(
                     attempt.getId(),
@@ -95,6 +86,10 @@ public class QuizAttemptService {
             }
         }
 
+        // 3 — Update the attempt record with the final correct-answer tally
+        attempt.setResults(correct);
+        attemptDAO.update(attempt);
+
         return correct;
     }
 
@@ -119,4 +114,5 @@ public class QuizAttemptService {
         int quizCount = attemptDAO.getByUserId(userId).size();
         return new AttemptStatistics(quizCount, 0);
     }
+
 }

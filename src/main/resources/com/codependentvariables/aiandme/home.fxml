@@ -47,10 +47,10 @@
                <children>
                   <LineChart fx:id="attemptChart" prefHeight="201.0" prefWidth="231.0">
                      <xAxis>
-                        <CategoryAxis side="BOTTOM" />
+                        <NumberAxis fx:id="xAxisQuizAttempts" side="BOTTOM" label="Attempt (5 -> Latest)" tickUnit="1" />
                      </xAxis>
                      <yAxis>
-                        <NumberAxis side="LEFT" />
+                        <NumberAxis fx:id="yAxisQuizAttempts" side="LEFT" label="Score" />
                      </yAxis>
                   </LineChart>
                </children>

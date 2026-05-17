@@ -3,7 +3,6 @@ package com.codependentvariables.aiandme.model.dao;
 import com.codependentvariables.aiandme.database.*;
 import com.codependentvariables.aiandme.model.*;
 
-import java.sql.*;
 import java.util.List;
 
 /**
@@ -30,7 +29,7 @@ public class SqliteQuizAttemptDAO extends BaseSqliteDAO implements IQuizAttemptD
      * Seed data inserted when the database is initialised.
      */
     private static final String seedDataQuery = """
-                INSERT INTO quiz_attempts (user_id, name, completed_at) VALUES (1, 'Basic Addition', '2026-04-27 00:00:00', 5);
+                INSERT INTO quiz_attempts (user_id, name, completed_at, results) VALUES (1, 'Basic Addition', '2026-04-27 00:00:00', 5);
             """;
 
     @Override
@@ -51,7 +50,7 @@ public class SqliteQuizAttemptDAO extends BaseSqliteDAO implements IQuizAttemptD
                 resultSet.getInt("user_id"),
                 resultSet.getString("name"),
                 resultSet.getTimestamp("completed_at"),
-                resultSet.getResults("results")
+                resultSet.getInt("results")
 
         );
         quizAttempt.setId(resultSet.getInt("id"));
@@ -64,13 +63,13 @@ public class SqliteQuizAttemptDAO extends BaseSqliteDAO implements IQuizAttemptD
      */
     @Override
     public void add(QuizAttempt quizAttempt) {
-        final String query = "INSERT INTO quiz_attempts (user_id, name, completed_at) VALUES (?, ?, ?)";
+        final String query = "INSERT INTO quiz_attempts (user_id, name, completed_at, results) VALUES (?, ?, ?, ?)";
 
         int id = executeSqlWithGeneratedKeys(query, statement -> {
             statement.setInt(1, quizAttempt.getUserId());
             statement.setString(2, quizAttempt.getName());
             statement.setTimestamp(3, quizAttempt.getCompletedAt());
-            statement.setResults(4, quizAttempt.getResults());
+            statement.setInt(4, quizAttempt.getResults());
         });
 
         quizAttempt.setId(id);
@@ -81,15 +80,14 @@ public class SqliteQuizAttemptDAO extends BaseSqliteDAO implements IQuizAttemptD
      */
     @Override
     public void update(QuizAttempt quizAttempt) {
-        final String query = "UPDATE quiz_attempts SET user_id = ?, name = ?, completed_at = ? WHERE id = ?";
+        final String query = "UPDATE quiz_attempts SET user_id = ?, name = ?, completed_at = ?, results = ? WHERE id = ?";
 
         executeSql(query, statement -> {
             statement.setInt(1, quizAttempt.getUserId());
             statement.setString(2, quizAttempt.getName());
             statement.setTimestamp(3, quizAttempt.getCompletedAt());
-            statement.setInt(4, quizAttempt.getId());
-            statement.setResults(4, quizAttempt.getResults());
-
+            statement.setInt(4, quizAttempt.getResults());
+            statement.setInt(5, quizAttempt.getId());
         });
     }
 
@@ -158,4 +156,17 @@ public class SqliteQuizAttemptDAO extends BaseSqliteDAO implements IQuizAttemptD
         List<QuizAttempt> attempts = executeQuery(query, preparedStatement -> preparedStatement.setInt(1, userId), QUIZ_ATTEMPT_MAPPER);
         return firstOrNull(attempts);
     }
+
+    /**
+     * Retrieves all quiz attempts for a specific user, ordered chronologically (oldest first).
+     * @param userId the user ID
+     * @return list of quiz attempts belonging to the user, ordered by completed_at ASC
+     */
+    @Override
+    public List<QuizAttempt> getByUserIdOrdered(int userId) {
+        final String query = "SELECT * FROM quiz_attempts WHERE user_id = ? ORDER BY completed_at ASC";
+
+        return executeQuery(query, preparedStatement -> preparedStatement.setInt(1, userId), QUIZ_ATTEMPT_MAPPER);
+    }
+
 }

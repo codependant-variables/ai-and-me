@@ -41,11 +41,11 @@ public class HomeController {
     private QuizAttemptService attemptsService = QuizAttemptService.getInstance();
 
     @FXML
-    public NumberAxis xAxisQuizAttempts = new NumberAxis();
+    public NumberAxis xAxisQuizAttempts;
     @FXML
-    public NumberAxis yAxisQuizAttempts = new NumberAxis();
+    public NumberAxis yAxisQuizAttempts;
     @FXML
-    public LineChart<Number,Number> attemptChart = new LineChart<Number,Number>(xAxisQuizAttempts,yAxisQuizAttempts);
+    public LineChart<Number, Number> attemptChart;
 
     //  quiz vs puzzle pie chart idk
     public PieChart ratioPie = new PieChart();
@@ -95,17 +95,26 @@ public class HomeController {
 
             List<QuizAttempt> recentAttempts = attemptsService.getAttemptsByUser(appState.getCurrentUser().getId());
 
-            //QuizAttemptSummary attemptSummary = new QuizAttemptSummary();
+            XYChart.Series<Number, Number> attemptSeries = new XYChart.Series<>();
+            attemptSeries.setName("Score (out of 10)");
 
-            XYChart.Series attemptSeries = new XYChart.Series();
-
-            for (int i = recentAttempts.size() - 1, count = 0; i >= 0 && count < 5; i--, count++) {
-                //QuizAttemptSummary attemptSummary = new QuizAttemptSummary();
-                //probably need to use the quizattemptsummary object with correlated id to get percentage correct or something like that
-                attemptSeries.getData().add(new XYChart.Data<>(recentAttempts.get(i).getCompletedAt().toString().substring(0,10) ,split.getQuizCount()));
+            int startIndex = Math.max(0, recentAttempts.size() - 5);
+            int attemptNumber = 1;
+            for (int i = startIndex; i < recentAttempts.size(); i++, attemptNumber++) {
+                attemptSeries.getData().add(new XYChart.Data<>(attemptNumber, recentAttempts.get(i).getResults()));
             }
 
-            attemptChart.getData().addAll(attemptSeries);
+            int totalPlotted = recentAttempts.size() - startIndex;
+            xAxisQuizAttempts.setAutoRanging(false);
+            xAxisQuizAttempts.setLowerBound(1);
+            xAxisQuizAttempts.setUpperBound(Math.max(totalPlotted, 1));
+            xAxisQuizAttempts.setTickUnit(1);
+            yAxisQuizAttempts.setAutoRanging(false);
+            yAxisQuizAttempts.setLowerBound(0);
+            yAxisQuizAttempts.setUpperBound(10);
+            yAxisQuizAttempts.setTickUnit(1);
+
+            attemptChart.getData().add(attemptSeries);
             ratioPie.setTitle("Score");
 
             ///////////////////////////
