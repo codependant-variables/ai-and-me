@@ -11,11 +11,6 @@ public class EmailValidatorTest {
 
     @BeforeEach
     void setUp() {
-        try {
-            Platform.startup(() -> {});
-        } catch (IllegalStateException e) {
-            // Toolkit already initialised - ignore
-        }
     }
     
     @Test

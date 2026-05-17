@@ -17,11 +17,6 @@ public class CategoryServiceTest {
 
     @BeforeEach
     void setUp() {
-        try {
-            Platform.startup(() -> {});
-        } catch (IllegalStateException e) {
-            // Toolkit already initialised - ignore
-        }
         mockCategoryDAO = new MockCategoryDAO();
         categoryService = new CategoryService(mockCategoryDAO);
 
