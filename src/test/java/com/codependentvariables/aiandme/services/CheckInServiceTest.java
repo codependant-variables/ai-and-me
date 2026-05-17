@@ -4,6 +4,7 @@ import com.codependentvariables.aiandme.model.CheckIn;
 import com.codependentvariables.aiandme.model.User;
 import com.codependentvariables.aiandme.model.mock.MockCheckInDAO;
 import com.codependentvariables.aiandme.state.AppState;
+import javafx.application.Platform;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -15,6 +16,15 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class CheckInServiceTest {
     private static CheckInService checkInService;
     private static User user;
+
+    @BeforeAll
+    public static void initJavaFX() {
+        try {
+            Platform.startup(() -> {});
+        } catch (IllegalStateException ignored) {
+            // Toolkit already initialized
+        }
+    }
 
     @BeforeAll
     public static void setup() {
