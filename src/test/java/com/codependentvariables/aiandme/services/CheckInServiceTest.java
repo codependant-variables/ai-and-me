@@ -1,5 +1,6 @@
 package com.codependentvariables.aiandme.services;
 
+import com.codependentvariables.aiandme.JavaFXTest;
 import com.codependentvariables.aiandme.model.CheckIn;
 import com.codependentvariables.aiandme.model.User;
 import com.codependentvariables.aiandme.model.mock.MockCheckInDAO;
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class CheckInServiceTest {
+public class CheckInServiceTest extends JavaFXTest {
     private static CheckInService checkInService;
     private static User user;
 

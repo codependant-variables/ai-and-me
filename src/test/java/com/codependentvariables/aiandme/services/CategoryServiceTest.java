@@ -1,5 +1,6 @@
 package com.codependentvariables.aiandme.services;
 
+import com.codependentvariables.aiandme.JavaFXTest;
 import com.codependentvariables.aiandme.model.Category;
 import com.codependentvariables.aiandme.model.User;
 import com.codependentvariables.aiandme.model.mock.MockCategoryDAO;
@@ -11,7 +12,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class CategoryServiceTest {
+public class CategoryServiceTest extends JavaFXTest {
     private MockCategoryDAO mockCategoryDAO;
     private CategoryService categoryService;
     private Category category;
