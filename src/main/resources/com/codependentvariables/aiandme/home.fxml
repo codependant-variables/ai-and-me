@@ -64,7 +64,7 @@
             <Insets />
          </HBox.margin>
       </VBox>
-      <VBox alignment="TOP_CENTER" prefHeight="578.0" prefWidth="232.0" spacing="10.0">
+      <VBox alignment="TOP_CENTER" prefHeight="578.0" prefWidth="232.0" spacing="20.0">
          <children>
             <HBox alignment="CENTER_LEFT" onMouseClicked="#navigateCheckIn" prefHeight="100.0" prefWidth="300.0" styleClass="dailyCIWidget">
                <children>
@@ -174,7 +174,7 @@
             <Insets left="20.0" right="20.0" />
          </padding>
       </VBox>
-      <VBox alignment="TOP_CENTER" prefHeight="578.0" prefWidth="288.0" spacing="10.0">
+      <VBox alignment="TOP_CENTER" prefHeight="578.0" prefWidth="288.0" spacing="20.0">
          <children>
             <VBox fx:id="dashboardWidgetQuiz" alignment="TOP_CENTER" onMouseClicked="#handleAttemptQuiz" prefWidth="288.0" styleClass="recomendedQuiz">
                <children>
@@ -230,7 +230,7 @@
          </HBox.margin>
       </VBox>
       <VBox.margin>
-         <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+         <Insets bottom="15.0" left="15.0" right="15.0" top="25.0" />
       </VBox.margin>
 
    </HBox>

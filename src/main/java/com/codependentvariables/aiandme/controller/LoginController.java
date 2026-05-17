@@ -20,6 +20,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 import javafx.util.converter.DefaultStringConverter;
@@ -43,6 +45,8 @@ public class LoginController {
     private Button loginButton;
     @FXML
     public SVGPath viewPasswordIcon;
+    @FXML
+    private AnchorPane background;
 
     private final UserService userService = UserService.getInstance();
     private final AppState appState = AppState.getInstance();
