@@ -45,8 +45,6 @@ public class LoginController {
     private Button loginButton;
     @FXML
     public SVGPath viewPasswordIcon;
-    @FXML
-    private AnchorPane background;
 
     private final UserService userService = UserService.getInstance();
     private final AppState appState = AppState.getInstance();
