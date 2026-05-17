@@ -21,7 +21,8 @@ public class SqliteQuizAttemptDAO extends BaseSqliteDAO implements IQuizAttemptD
                     id INTEGER PRIMARY KEY,
                     user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
                     name VARCHAR NOT NULL,
-                    completed_at TIMESTAMP NOT NULL
+                    completed_at TIMESTAMP NOT NULL,
+                    results INT NOT NULL
                 );
             """;
 
@@ -29,7 +30,7 @@ public class SqliteQuizAttemptDAO extends BaseSqliteDAO implements IQuizAttemptD
      * Seed data inserted when the database is initialised.
      */
     private static final String seedDataQuery = """
-                INSERT INTO quiz_attempts (user_id, name, completed_at) VALUES (1, 'Basic Addition', '2026-04-27 00:00:00');
+                INSERT INTO quiz_attempts (user_id, name, completed_at) VALUES (1, 'Basic Addition', '2026-04-27 00:00:00', 5);
             """;
 
     @Override
@@ -49,7 +50,9 @@ public class SqliteQuizAttemptDAO extends BaseSqliteDAO implements IQuizAttemptD
         QuizAttempt quizAttempt = new QuizAttempt(
                 resultSet.getInt("user_id"),
                 resultSet.getString("name"),
-                resultSet.getTimestamp("completed_at")
+                resultSet.getTimestamp("completed_at"),
+                resultSet.getResults("results")
+
         );
         quizAttempt.setId(resultSet.getInt("id"));
         return quizAttempt;
@@ -67,6 +70,7 @@ public class SqliteQuizAttemptDAO extends BaseSqliteDAO implements IQuizAttemptD
             statement.setInt(1, quizAttempt.getUserId());
             statement.setString(2, quizAttempt.getName());
             statement.setTimestamp(3, quizAttempt.getCompletedAt());
+            statement.setResults(4, quizAttempt.getResults());
         });
 
         quizAttempt.setId(id);
@@ -84,6 +88,8 @@ public class SqliteQuizAttemptDAO extends BaseSqliteDAO implements IQuizAttemptD
             statement.setString(2, quizAttempt.getName());
             statement.setTimestamp(3, quizAttempt.getCompletedAt());
             statement.setInt(4, quizAttempt.getId());
+            statement.setResults(4, quizAttempt.getResults());
+
         });
     }
 

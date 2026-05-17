@@ -1,11 +1,8 @@
 package com.codependentvariables.aiandme.controller;
 
 
-import com.codependentvariables.aiandme.model.CheckIn;
-import com.codependentvariables.aiandme.model.QuizAttempt;
+import com.codependentvariables.aiandme.model.*;
 import com.codependentvariables.aiandme.services.QuizAttemptService;
-import com.codependentvariables.aiandme.model.AttemptStatistics;
-import com.codependentvariables.aiandme.model.QuizTemplate;
 import com.codependentvariables.aiandme.navigation.Router;
 import com.codependentvariables.aiandme.navigation.View;
 import com.codependentvariables.aiandme.services.CheckInService;
@@ -77,16 +74,15 @@ public class HomeController {
 
             // for loop to go backwards five times maximum
             for (int i = recentCheckins.size() - 1, count = 0; i >= 0 && count < 5; i--, count++) {
-                //while (recentCheckins.get(i).getCompletedAt() !=)
                 //for every check in, create a point on a line graph for each category (requires time/date string and score float)
-                System.out.println("Completed at: ");
+                /*System.out.println("Completed at: ");
                 System.out.println(recentCheckins.get(i).getCompletedAt().toString());
                 System.out.println("Dependence: ");
                 System.out.println(recentCheckins.get(i).getAiDependence());
                 System.out.println("Happiness: ");
                 System.out.println(recentCheckins.get(i).getAiHappiness());
                 System.out.println("Use (frequency): ");
-                System.out.println(recentCheckins.get(i).getAiUse());
+                System.out.println(recentCheckins.get(i).getAiUse());*/
                 dependenceSeries.getData().add(new XYChart.Data<>(recentCheckins.get(i).getCompletedAt().toString().substring(0,10) ,recentCheckins.get(i).getAiDependence()));
                 useSeries.getData().add(new XYChart.Data<>(recentCheckins.get(i).getCompletedAt().toString().substring(0,10) ,recentCheckins.get(i).getAiUse()));
                 happinessSeries.getData().add(new XYChart.Data<>(recentCheckins.get(i).getCompletedAt().toString().substring(0,10),recentCheckins.get(i).getAiHappiness()));
@@ -99,10 +95,12 @@ public class HomeController {
 
             List<QuizAttempt> recentAttempts = attemptsService.getAttemptsByUser(appState.getCurrentUser().getId());
 
+            //QuizAttemptSummary attemptSummary = new QuizAttemptSummary();
+
             XYChart.Series attemptSeries = new XYChart.Series();
 
             for (int i = recentAttempts.size() - 1, count = 0; i >= 0 && count < 5; i--, count++) {
-
+                //QuizAttemptSummary attemptSummary = new QuizAttemptSummary();
                 //probably need to use the quizattemptsummary object with correlated id to get percentage correct or something like that
                 attemptSeries.getData().add(new XYChart.Data<>(recentAttempts.get(i).getCompletedAt().toString().substring(0,10) ,split.getQuizCount()));
             }

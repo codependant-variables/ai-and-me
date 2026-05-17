@@ -45,11 +45,21 @@ public class QuizAttemptService {
                            int userId,
                            List<QuizTemplateAnswer> selectedAnswers) {
 
+        int correct = 0;
+
+        for (QuizTemplateAnswer answer : selectedAnswers)
+        {
+            if (answer.isCorrect()) {
+                correct++;
+            }
+        }
+
         // 1 — Create the top-level attempt record
         QuizAttempt attempt = new QuizAttempt(
                 userId,
                 template.getName(),
-                Timestamp.from(Instant.now())
+                Timestamp.from(Instant.now()),
+                correct
         );
         attemptDAO.add(attempt); // sets attempt.id
 
