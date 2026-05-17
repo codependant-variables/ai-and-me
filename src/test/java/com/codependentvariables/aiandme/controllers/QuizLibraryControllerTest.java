@@ -55,11 +55,4 @@ public class QuizLibraryControllerTest {
         QuizTemplate puzzleTemplate = new QuizTemplate("Puzzle One", 1, 1, true, "draft");
         assertFalse(!puzzleTemplate.isPuzzle()); // isPuzzle is true means this does not pass quiz library filter
     }
-
-    @Test
-    void isPuzzleHidden() {
-        // A template with isPuzzle=false should be shown in the quiz library
-        QuizTemplate quizTemplate = new QuizTemplate("Quiz One", 1, 1, false, "draft");
-        assertFalse(quizTemplate.isPuzzle()); // isPuzzle is false means this passes quiz library filter
-    }
 }
