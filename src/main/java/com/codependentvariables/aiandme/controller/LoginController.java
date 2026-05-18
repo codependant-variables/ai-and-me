@@ -2,7 +2,7 @@ package com.codependentvariables.aiandme.controller;
 
 import com.codependentvariables.aiandme.AiAndMe;
 import com.codependentvariables.aiandme.Icon;
-import com.codependentvariables.aiandme.navigation.*;
+import com.codependentvariables.aiandme.modules.*;
 import com.codependentvariables.aiandme.model.User;
 import com.codependentvariables.aiandme.services.AuthService;
 import com.codependentvariables.aiandme.services.LoginResult;

@@ -4,7 +4,7 @@ import com.codependentvariables.aiandme.controller.QuizAttemptController;
 import com.codependentvariables.aiandme.model.QuizTemplate;
 import com.codependentvariables.aiandme.model.QuizTemplateAnswer;
 import com.codependentvariables.aiandme.model.QuizTemplateQuestion;
-import com.codependentvariables.aiandme.navigation.Dialogue;
+import com.codependentvariables.aiandme.modules.Dialogue;
 import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;

@@ -1,4 +1,4 @@
-package com.codependentvariables.aiandme.navigation;
+package com.codependentvariables.aiandme.modules;
 
 import java.util.function.Consumer;
 

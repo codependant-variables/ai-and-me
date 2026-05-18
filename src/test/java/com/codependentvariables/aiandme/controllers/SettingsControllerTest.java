@@ -3,7 +3,7 @@ package com.codependentvariables.aiandme.controllers;
 import com.codependentvariables.aiandme.JavaFXControllerLoader;
 import com.codependentvariables.aiandme.JavaFXTest;
 import com.codependentvariables.aiandme.controller.SettingsController;
-import com.codependentvariables.aiandme.navigation.View;
+import com.codependentvariables.aiandme.modules.View;
 import com.codependentvariables.aiandme.state.AppState;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
