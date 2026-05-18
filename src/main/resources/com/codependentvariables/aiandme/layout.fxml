@@ -7,6 +7,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
 
 <BorderPane stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codependentvariables.aiandme.controller.LayoutController">
     <top>
@@ -16,15 +18,33 @@
                 <Image url="@dark-logo.png" />
             </ImageView>
          <Region HBox.hgrow="ALWAYS" />
+            <!-- Navigation Buttons -->
+            <Button fx:id="navigateAbout" onAction="#navigateAbout" styleClass="navButton">About</Button>
             <Button onAction="#navigateHome" styleClass="navButton">Home</Button>
             <Button onAction="#navigateQuizLibrary" styleClass="navButton">Quiz Library</Button>
            <!-- <Button onAction="#navigateCheckin" styleClass="navButton">Daily Check-in</Button> -->
+
             <Button fx:id="loginButton" onAction="#navigateLogin" styleClass="navButton">Login</Button>
             <Button fx:id="signupButton" onAction="#navigateSignup" styleClass="navButton">Signup</Button>
-            <Button fx:id="profileButton" onAction="#navigateProfile" styleClass="navButton">Profile</Button>
-            <Button onAction="#navigateSettings" styleClass="navButton">Settings</Button>
-            <Button fx:id="logoutButton" onAction="#handleLogout" styleClass="navButton">Logout</Button>
-         <Region maxWidth="30.0" HBox.hgrow="ALWAYS" />
+            <!-- Profile Dropdown -->
+            <MenuButton fx:id="accountMenu"
+                        text="Account"
+                        styleClass="navButton">
+
+                <items>
+                    <MenuItem text="Profile"
+                              onAction="#navigateProfile" />
+
+                    <MenuItem text="Settings"
+                              onAction="#navigateSettings" />
+
+                    <MenuItem text="Logout"
+                              onAction="#handleLogout" />
+                </items>
+
+            </MenuButton>
+
+            <Region maxWidth="30.0" HBox.hgrow="ALWAYS" />
         </HBox>
     </top>
     <center>

@@ -11,6 +11,10 @@ import javafx.scene.control.Label;
 
 import java.util.function.Consumer;
 
+/**
+ * Controller for application dialogue popups.
+ * Handles displaying dialogue messages and processing user responses.
+ */
 public class DialogueController {
     @FXML
     public Label messageRef;
@@ -24,6 +28,9 @@ public class DialogueController {
     private final ObjectProperty<DialogueType> dialogueType = new SimpleObjectProperty<>(null);
     private Consumer<Boolean> callback;
 
+    /**
+     * Initialises dialogue button visibility defaults.
+     */
     @FXML
     public void initialize() {
         yesRef.managedProperty().bind(yesRef.visibleProperty());
@@ -33,6 +40,11 @@ public class DialogueController {
         cancelRef.managedProperty().bind(cancelRef.visibleProperty());
     }
 
+    /**
+     * Loads dialogue content and button labels.
+     *
+     * @param dialogueMessage dialogue configuration data
+     */
     public void initialiseData(DialogueMessage dialogueMessage) {
         messageRef.setText(dialogueMessage.message());
         dialogueType.set(dialogueMessage.type());
@@ -42,11 +54,19 @@ public class DialogueController {
         cancelRef.setText(dialogueMessage.cancelText());
     }
 
+    /**
+     * Closes the dialogue when the background is clicked.
+     */
     @FXML
     public void onBackgroundClick() {
         callback.accept(null);
     }
 
+    /**
+     * Handles dialogue button clicks and returns the result.
+     *
+     * @param actionEvent button click event
+     */
     @FXML
     public void onClick(ActionEvent actionEvent) {
         Object source = actionEvent.getSource();

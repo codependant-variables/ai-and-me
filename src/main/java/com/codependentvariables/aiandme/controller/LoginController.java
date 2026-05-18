@@ -23,6 +23,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 import javafx.util.converter.DefaultStringConverter;
 
+/**
+ * Controller for the login view.
+ * Handles user authentication and OTP verification.
+ */
 public class LoginController {
     @FXML
     public ImageView logoRef;
@@ -51,6 +55,11 @@ public class LoginController {
 
     private final BooleanProperty loggingIn = new SimpleBooleanProperty(false);
     private final BooleanProperty requireOtp = new SimpleBooleanProperty(false);
+
+    /**
+     * Restricts OTP input to numeric values
+     * with the correct maximum length.
+     */
     private final TextFormatter<String> totpTextFormatter = new TextFormatter<>(
             new DefaultStringConverter(),
             "",
@@ -69,12 +78,19 @@ public class LoginController {
             }
     );
 
+    /**
+     * Initialises bindings, theme settings,
+     * and login form behaviour.
+     */
     @FXML
     private void initialize() {
         var darkModeObservable = appState.getObservableIsDarkMode();
+
+        // Update logo depending on theme
         logoRef.imageProperty().bind(darkModeObservable.map(isDark -> new Image(isDark ? AiAndMe.darkLogoUrlString : AiAndMe.lightLogoUrlString)));
         viewPasswordIcon.fillProperty().bind(darkModeObservable.map(isDark -> isDark ? Color.WHITE : Color.BLACK));
 
+        // Toggle between hidden and visible password fields
         passwordTextField.visibleProperty().bind(passwordField.visibleProperty().not());
         viewPasswordIcon.contentProperty().bind(passwordField.visibleProperty().map(visible -> visible ? Icon.OPEN_EYE : Icon.CLOSED_EYE));
 
@@ -96,16 +112,29 @@ public class LoginController {
         loginButton.disableProperty().bind(this.loggingIn);
     }
 
+    /**
+     * Sets callbacks used after login or cancellation.
+     *
+     * @param postLoginCallback action to run after login
+     * @param cancelCallbackMessage message shown when cancelling
+     */
     public void initialiseCallback(Runnable postLoginCallback, String cancelCallbackMessage) {
         this.postLoginCallback = postLoginCallback;
         this.cancelCallbackMessage = cancelCallbackMessage;
     }
+
+    /**
+     * Toggles password visibility.
+     */
 
     @FXML
     private void toggleViewPassword() {
         passwordField.setVisible(!passwordField.isVisible());
     }
 
+    /**
+     * Validates login form input.
+     */
     private final FormValidator loginValidator = new FormValidator(
             new ValidationEntry<>(
                     () -> this.emailField.getText(),
@@ -124,6 +153,10 @@ public class LoginController {
             )
     );
 
+    /**
+     * Attempts to log the user in.
+     * Handles OTP requests and login validation.
+     */
     @FXML
     private void onLogin() {
         passwordField.setVisible(true);
@@ -134,7 +167,7 @@ public class LoginController {
             return;
         }
 
-        // This check is purposefully not in the form validator, as db queries only take place if form is valid
+        // Only query database if form is valid
         User user = userService.getByEmail(this.emailField.getText());
         if (user == null) {
             Toast.addMessage("Error", "User not found.", ToastMessageType.ERROR);
@@ -162,6 +195,9 @@ public class LoginController {
         this.loggingIn.setValue(false);
     }
 
+    /**
+     * Navigates back to the home page.
+     */
     @FXML
     private void navigateHome() {
         if (postLoginCallback != null) {
@@ -175,6 +211,9 @@ public class LoginController {
         }
     }
 
+    /**
+     * Navigates to the signup page.
+     */
     @FXML
     private void navigateSignup() {
         SignupController signupController = (SignupController)Router.navigateApp(View.SIGNUP);

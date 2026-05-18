@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.FontWeight?>
+<?import javafx.scene.text.Text?>
+
+<ScrollPane fitToWidth="true"
+            stylesheets="@stylesheet.css"
+            xmlns="http://javafx.com/javafx/26"
+            xmlns:fx="http://javafx.com/fxml/1">
+
+    <content>
+        <VBox spacing="20.0"
+              alignment="TOP_CENTER"
+              styleClass="background-VBox">
+
+            <padding>
+                <Insets top="30.0" right="40.0" bottom="30.0" left="40.0"/>
+            </padding>
+
+            <!-- Title -->
+            <Text text="About AI&amp;Me">
+                <font>
+                    <Font size="36.0"/>
+                </font>
+            </Text>
+
+            <Separator prefWidth="700.0"/>
+
+            <!-- Problem Statement -->
+            <VBox spacing="12.0" maxWidth="850.0" styleClass="widget-VBox">
+                <padding>
+                    <Insets top="20.0" right="20.0" bottom="20.0" left="20.0"/>
+                </padding>
+
+                <Text text="Problem Statement">
+                    <font>
+                        <Font name="System Bold" size="26.0"/>
+                    </font>
+                </Text>
+
+                <Text wrappingWidth="800.0"
+                      text="As AI systems become deeply integrated into everyday tasks, users are increasingly delegating cognitive, creative, and analytical work to these tools. While this improves efficiency, it also raises concerns about skill atrophy."/>
+
+                <Text wrappingWidth="800.0"
+                      text="Skill atrophy, in this context, can be defined as the reduced independent problem-solving ability and a growing dependency on AI in multiple facets of life."/>
+
+                <Text wrappingWidth="800.0"
+                      text="Currently, there is no widely accepted, accessible way for individuals to understand how their reliance on AI impacts their long-term skills, habits, or learning outcomes."/>
+
+                <Text wrappingWidth="800.0"
+                      text="AI&amp;Me aims to address this gap by providing tools to assist with skill retention, track and analyse AI usage, identify patterns of over-reliance, and encourage intentional, balanced engagement with AI technologies."/>
+
+                <Text wrappingWidth="800.0"
+                      style="-fx-fill: #4A90E2;"
+                      text="Reference: https://news.harvard.edu/gazette/story/2025/11/is-ai-dulling-our-minds/"/>
+            </VBox>
+
+            <!-- Mission -->
+            <VBox spacing="12.0" maxWidth="850.0" styleClass="widget-VBox">
+                <padding>
+                    <Insets top="20.0" right="20.0" bottom="20.0" left="20.0"/>
+                </padding>
+
+                <Text text="Our Mission">
+                    <font>
+                        <Font name="System Bold" size="26.0"/>
+                    </font>
+                </Text>
+
+                <Text wrappingWidth="800.0"
+                      text="The goal of AI&amp;Me is to encourage users to be critical and discerning with how they use AI tools and understand how it impacts their skills and learning."/>
+            </VBox>
+
+            <!-- Goals -->
+            <VBox spacing="18.0" maxWidth="850.0" styleClass="widget-VBox">
+                <padding>
+                    <Insets top="20.0" right="20.0" bottom="20.0" left="20.0"/>
+                </padding>
+
+                <Text text="Project Goals &amp; Objectives">
+                    <font>
+                        <Font name="System Bold" size="26.0"/>
+                    </font>
+                </Text>
+
+                <!-- Goal 1 -->
+                <VBox spacing="6.0">
+                    <Text text="1. Measure Skill Retention">
+                        <font>
+                            <Font name="System Bold" size="26.0"/>
+                        </font>
+                    </Text>
+
+                    <Text wrappingWidth="800.0"
+                          text="Provide users with quantifiable insights into how their skills can change over time when they rely on AI."/>
+
+                    <Text wrappingWidth="800.0"
+                          text="Features include check-ins, quizzes, and progress tracking to compare assisted and independent performance."/>
+                </VBox>
+
+                <!-- Goal 2 -->
+                <VBox spacing="6.0">
+                    <Text text="2. Track AI Usage">
+                        <font>
+                            <Font name="System Bold" size="26.0"/>
+                        </font>
+                    </Text>
+
+                    <Text wrappingWidth="800.0"
+                          text="Categorise and analyse reported user interaction with AI to identify patterns of dependency and over-reliance."/>
+                </VBox>
+
+                <!-- Goal 3 -->
+                <VBox spacing="6.0">
+                    <Text text="3. Promote Skill Preservation">
+                        <font>
+                            <Font name="System Bold" size="26.0"/>
+                        </font>
+                    </Text>
+
+                    <Text wrappingWidth="800.0"
+                          text="Offer challenges, suggestions, and activities which encourage users to maintain or rebuild crucial skills."/>
+                </VBox>
+
+                <!-- Goal 4 -->
+                <VBox spacing="6.0">
+                    <Text text="5. Create a Personalised Journey">
+                        <font>
+                            <Font name="System Bold" size="26.0"/>
+                        </font>
+                    </Text>
+
+                    <Text wrappingWidth="800.0"
+                          text="Support long-term engagement through user management, persistent storage, personalised recommendations, and progress tracking."/>
+                </VBox>
+            </VBox>
+
+        </VBox>
+    </content>
+</ScrollPane>

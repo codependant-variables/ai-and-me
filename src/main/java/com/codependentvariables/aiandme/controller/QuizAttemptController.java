@@ -15,15 +15,21 @@ import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Controller for quiz attempts.
+ * Handles quiz loading, question navigation,
+ * answer selection, and quiz submission.
+ */
 public class QuizAttemptController {
     private static final AppState appState = AppState.getInstance();
     private static final QuizAttemptService quizAttemptService = QuizAttemptService.getInstance();
-    private static final Logger logger = Logger.getLogger(QuizAttemptController.class.getName()); // Logger for class
+    private static final Logger logger = Logger.getLogger(QuizAttemptController.class.getName()); // Logger used for quiz attempt debugging.
 
     private QuizTemplate template;
     private List<QuizTemplateQuestion> questions = new ArrayList<>();
     private int currentIndex = 0;
 
+    // Stores answers selected by the user
     public final List<QuizTemplateAnswer> selectedAnswers = new ArrayList<>();
 
     private boolean testMode = false;
@@ -47,6 +53,9 @@ public class QuizAttemptController {
         this.testMode = testMode;
     }
 
+    /**
+     * Initialises the quiz attempt UI.
+     */
     @FXML
     private void initialize() {
         progressLabel.setText("No quiz loaded.");
@@ -55,6 +64,11 @@ public class QuizAttemptController {
         nextButton.setDisable(true);
     }
 
+    /**
+     * Loads and validates a quiz template.
+     *
+     * @param template quiz template to attempt
+     */
     public void initQuiz(QuizTemplate template) {
         if (template == null) {
             Dialogue.message("No quiz template was selected.");
@@ -75,7 +89,7 @@ public class QuizAttemptController {
             return;
         }
 
-        // Validate quiz before user starts
+        // Validate question answer lists before user starts quiz
         for (QuizTemplateQuestion question : questions) {
             if (question.getAnswers() == null || question.getAnswers().isEmpty()) {
                 Dialogue.message("Oops, this quiz is broken.");
@@ -96,18 +110,25 @@ public class QuizAttemptController {
     }
 
     /**
-     * Updates the progress label to show the current question number
-     * and the total number of questions in the quiz.
+     * Updates the progress label with the current question number.
      */
     private void updateProgress() {
         progressLabel.setText("Question " + (currentIndex + 1) + " of " + totalQuestions);
     }
 
-    // Gets the current question number, used for unit test
+    /**
+     * Returns the current question number.
+     * Used mainly for unit testing.
+     *
+     * @return current question number
+     */
     public int getQuestionNumber() {
         return currentIndex + 1;
     }
 
+    /**
+     * Loads the current quiz question and answers.
+     */
     private void loadQuestion() {
         QuizTemplateQuestion question = questions.get(currentIndex);
 
@@ -142,6 +163,9 @@ public class QuizAttemptController {
         nextButton.setText(isLastQuestion ? "Finish" : "Next >");
     }
 
+    /**
+     * Handles moving to the next question or finishing the quiz.
+     */
     @FXML
     public void handleNext() {
         QuizTemplateAnswer selectedAnswer = getSelectedAnswer();
@@ -158,6 +182,11 @@ public class QuizAttemptController {
         }
     }
 
+    /**
+     * Returns the currently selected answer.
+     *
+     * @return selected answer or null
+     */
     private QuizTemplateAnswer getSelectedAnswer() {
         for (javafx.scene.Node node : answersBox.getChildren()) {
             if (node instanceof RadioButton rb && rb.isSelected()) {
@@ -168,6 +197,10 @@ public class QuizAttemptController {
         return null;
     }
 
+    /**
+     * Submits the quiz attempt.
+     * Guest users are prompted to sign up first.
+     */
     private void submitQuiz() {
         if (testMode) return;
         if (appState.getCurrentUser() == null) {
@@ -177,6 +210,9 @@ public class QuizAttemptController {
         }
     }
 
+    /**
+     * Finalizes quiz submission and opens the results page.
+     */
     private void finishSubmitQuiz() {
         int correct = appState.getCurrentUser() == null
                 ? (int)selectedAnswers.stream().filter(QuizTemplateAnswer::isCorrect).count()
@@ -196,6 +232,9 @@ public class QuizAttemptController {
         controller.initialiseData(summary);
     }
 
+    /**
+     * Navigates back to the quiz library page.
+     */
     @FXML
     private void navigateBack() {
         Router.navigateLayout(View.QUIZ_LIBRARY);

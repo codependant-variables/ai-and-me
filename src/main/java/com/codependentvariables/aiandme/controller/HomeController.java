@@ -28,6 +28,10 @@ import javafx.scene.text.Text;
 
 import java.util.List;
 
+/**
+ * Controller for the home dashboard view.
+ * Displays user statistics, charts, quizzes, and navigation widgets.
+ */
 public class HomeController {
     @FXML
     private Label checkInStreak;
@@ -69,7 +73,7 @@ public class HomeController {
     @FXML
     private VBox dashboardWidgetNews;
 
-    //  quiz vs puzzle pie chart idk
+    // Pie chart comparing quiz and puzzle activity
     public PieChart ratioPie = new PieChart();
 
 
@@ -77,12 +81,17 @@ public class HomeController {
     private final QuizTemplateService quizTemplateService = QuizTemplateService.getInstance();
     private AppState appState = AppState.getInstance();
 
+    /**
+     * Initialises dashboard data, charts, and theme bindings.
+     */
     public void initialize() {
         checkInStreak.setText(homeService.getCheckInStreak());
         lastCheckIn.setText(homeService.getLastCheckInDate());
         yAxisCheckin.setLowerBound(0.0);
         yAxisCheckin.setUpperBound(100.0);
         yAxisCheckin.setTickUnit(10);
+
+        // Apply dark/light mode styling
         background.styleProperty().bind(appState.getObservableIsDarkMode().map(isDarkMode -> isDarkMode ? "-fx-background-color: #202430;" : "-fx-background-color: #f0edef;"));
         dashboardWidgetData.styleProperty().bind(appState.getObservableIsDarkMode().map(isDarkMode -> isDarkMode ? "-fx-background-color: #2e3440;" : "-fx-background-color: #ffffff;"));
         dashboardWidgetQuiz.styleProperty().bind(appState.getObservableIsDarkMode().map(isDarkMode -> isDarkMode ? "-fx-background-color: linear-gradient(to bottom, #2e3440, #ce78b1);" : "-fx-background-color: linear-gradient(to bottom, #ffffff, #ce78b1);"));
@@ -97,12 +106,9 @@ public class HomeController {
             XYChart.Series happinessSeries = new XYChart.Series();
 
             List<CheckIn> recentCheckins = checkInService.getAllByUserId(appState.getCurrentUser().getId());
-            // using getAllByUserId for now - may want to create a separate method for getRecentCheckIns in CheckInService class which checks timeframe
 
-            // for loop to go backwards five times maximum
+            // Add the 5 most recent check-ins to the graph
             for (int i = recentCheckins.size() - 1, count = 0; i >= 0 && count < 5; i--, count++) {
-                //while (recentCheckins.get(i).getCompletedAt() !=)
-                //for every check in, create a point on a line graph for each category (requires time/date string and score float)
                 dependenceSeries.getData().add(new XYChart.Data<>(recentCheckins.get(i).getCompletedAt().toString().substring(0, 10), recentCheckins.get(i).getAiDependence()));
                 useSeries.getData().add(new XYChart.Data<>(recentCheckins.get(i).getCompletedAt().toString().substring(0, 10), recentCheckins.get(i).getAiUse()));
                 happinessSeries.getData().add(new XYChart.Data<>(recentCheckins.get(i).getCompletedAt().toString().substring(0, 10), recentCheckins.get(i).getAiHappiness()));
@@ -111,31 +117,33 @@ public class HomeController {
             dependenceSeries.setName("Dependence");
             useSeries.setName("Frequency");
             happinessSeries.setName("Happiness");
-            ///////////////////////////
 
             List<QuizAttempt> recentAttempts = attemptsService.getAttemptsByUser(appState.getCurrentUser().getId());
 
             XYChart.Series attemptSeries = new XYChart.Series();
 
+            // Add recent quiz attempts to chart
             for (int i = recentAttempts.size() - 1, count = 0; i >= 0 && count < 5; i--, count++) {
-
-                //probably need to use the quizattemptsummary object with correlated id to get percentage correct or something like that
-
                 attemptSeries.getData().add(new XYChart.Data<>(recentAttempts.get(i).getCompletedAt().toString().substring(0, 10), recentAttempts.get(i).getId()));
             }
-            ///////////////////////////
 
-            //  dummy data
+            // Temporary pie chart data
             ObservableList<PieChart.Data> ratioData = FXCollections.observableArrayList(
                     new PieChart.Data("Quizzes", 75),
                     new PieChart.Data("Puzzles", 25));
             ratioPie.setTitle("Attempts by Category");
             ratioPie.setData(ratioData);
         }
+
+        // Load a random recommended quiz
         this.quizTemplate = quizTemplateService.getRandomTemplate();
         checkInName.setText(quizTemplate.getName());
     }
 
+    /**
+     * Opens the daily check-in page if the user
+     * has not already completed today's check-in.
+     */
     public void navigateCheckIn(MouseEvent mouseEvent) {
         if (checkInService.isExistingCheckInToday()) {
             Toast.addMessage("Check-in Completed", "You've already completed your daily check-in. Come back tomorrow!", ToastMessageType.INFORMATION);
@@ -144,6 +152,9 @@ public class HomeController {
         }
     }
 
+    /**
+     * Starts the recommended quiz attempt.
+     */
     public void handleAttemptQuiz(MouseEvent mouseEvent) {
         QuizAttemptController controller = (QuizAttemptController) Router.navigateLayout(View.QUIZ_ATTEMPT);
         controller.initQuiz(quizTemplate);

@@ -9,6 +9,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 
+/**
+ * Controller for the settings page.
+ * Handles application appearance and preference settings.
+ */
 public class SettingsController {
     private final AppState appState = AppState.getInstance();
     private final UserService userService = UserService.getInstance();
@@ -16,17 +20,24 @@ public class SettingsController {
     @FXML
     private GridPane background;
 
-
-    @FXML
-    private void initialize() {
-        themeIcon.contentProperty().bind(appState.getObservableIsDarkMode().map(isDarkMode -> isDarkMode ? Icon.SUN : Icon.MOON));
-        themeIcon.fillProperty().bind(appState.getObservableIsDarkMode().map(isDarkMode -> isDarkMode ? Color.YELLOW : Color.MEDIUMSLATEBLUE));
-        background.styleProperty().bind(appState.getObservableIsDarkMode().map(isDarkMode -> isDarkMode ? "-fx-background-color: #202430;" : "-fx-background-color: #f0edef;"));
-    }
-
     @FXML
     public SVGPath themeIcon;
 
+    /**
+     * Initialises theme defaults and background styling.
+     */
+    @FXML
+    private void initialize() {
+        // Change icon depending on current theme
+        themeIcon.contentProperty().bind(appState.getObservableIsDarkMode().map(isDarkMode -> isDarkMode ? Icon.SUN : Icon.MOON));
+        themeIcon.fillProperty().bind(appState.getObservableIsDarkMode().map(isDarkMode -> isDarkMode ? Color.YELLOW : Color.MEDIUMSLATEBLUE));
+        // Update background colour for dark/light mode
+        background.styleProperty().bind(appState.getObservableIsDarkMode().map(isDarkMode -> isDarkMode ? "-fx-background-color: #202430;" : "-fx-background-color: #f0edef;"));
+    }
+
+    /**
+     * Toggles dark mode on or off.
+     */
     @FXML
     public void switchTheme() {
         boolean isDarkMode = appState.getIsDarkMode();
@@ -36,19 +47,28 @@ public class SettingsController {
 
     }
 
+    /**
+     * Toggles application orientation settings.
+     */
     @FXML
     public void switchOrientation() {
         boolean isVertical = appState.getIsVertical();
         appState.setIsVertical(!isVertical);
-        // TODO: do something when orientation changes
+        // TODO: apply orientation changes to UI
         userService.updateCurrentUser();
     }
 
+    /**
+     * Returns to the previous page.
+     */
     @FXML
     public void navigateBack() {
         Router.navigateBack();
     }
 
+    /**
+     * Restores default application settings.
+     */
     @FXML
     public void revertToDefaultSettings() {
         // TODO: implement modal dialogue

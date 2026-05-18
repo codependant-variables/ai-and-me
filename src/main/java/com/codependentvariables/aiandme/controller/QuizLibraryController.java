@@ -1,6 +1,5 @@
 package com.codependentvariables.aiandme.controller;
 
-import com.codependentvariables.aiandme.AiAndMe;
 import com.codependentvariables.aiandme.model.*;
 import com.codependentvariables.aiandme.model.dao.*;
 import com.codependentvariables.aiandme.navigation.Router;
@@ -26,7 +25,7 @@ import java.util.Optional;
 
 /**
  * Controller for the Quiz Library screen.
- * Handles displaying quiz templates and user interactions (CRUD + attempt).
+ * Handles displaying quiz templates and quiz management actions.
  */
 public class QuizLibraryController {
     private final CategoryService categoryService = CategoryService.getInstance();
@@ -47,7 +46,7 @@ public class QuizLibraryController {
     private HBox selectedCard;
 
     /**
-     * Initializes UI state and loads templates.
+     * Initialises the quiz library view.
      */
     @FXML
     public void initialize() {
@@ -96,8 +95,11 @@ public class QuizLibraryController {
     }
 
     /**
-     * Builds a clickable UI card representing a quiz template.
-     * Shows the template name and which category it belongs to.
+     * Creates a UI card for a quiz template.
+     *
+     * @param template the quiz template
+     * @param categoryName the category name
+     * @return quiz card node
      */
     private HBox buildTemplateCard(QuizTemplate template, String categoryName) {
         Label nameLabel = new Label(template.getName());
@@ -116,17 +118,17 @@ public class QuizLibraryController {
             creatorName = (creator != null) ? creator.getName() : "Unknown";
         }
 
-        String getCatagorieIcon;
+        String getCategoryIcon;
         if ("Pattern Recognition".equalsIgnoreCase(categoryName)) {
-            getCatagorieIcon = "/com/codependentvariables/aiandme/Images/CatagoryPatternRecognition.png"; // pastal green
+            getCategoryIcon = "/com/codependentvariables/aiandme/Images/CatagoryPatternRecognition.png"; // pastal green
         } else if ("Critical Thinking".equalsIgnoreCase(categoryName)) {
-            getCatagorieIcon = "/com/codependentvariables/aiandme/Images/CatagoryCriticalThinking.png"; // pastal green
+            getCategoryIcon = "/com/codependentvariables/aiandme/Images/CatagoryCriticalThinking.png"; // pastal green
         } else if ("Mental Maths".equalsIgnoreCase(categoryName)) {
-            getCatagorieIcon = "/com/codependentvariables/aiandme/Images/CatagoryComprehension.png"; //red
+            getCategoryIcon = "/com/codependentvariables/aiandme/Images/CatagoryComprehension.png"; //red
         } else if ("Arithmetic".equalsIgnoreCase(categoryName)) {
-            getCatagorieIcon = "/com/codependentvariables/aiandme/Images/CatagoryArithmetic.png"; // primary purple
+            getCategoryIcon = "/com/codependentvariables/aiandme/Images/CatagoryArithmetic.png"; // primary purple
         } else {
-            getCatagorieIcon = "/com/codependentvariables/aiandme/Images/CatagoryOther.png"; //secondary pink
+            getCategoryIcon = "/com/codependentvariables/aiandme/Images/CatagoryOther.png"; //secondary pink
         }
 
         String cardColour = getCategory(categoryName);
@@ -135,7 +137,7 @@ public class QuizLibraryController {
         creatorLabel.setFont(Font.font("System", 13));
         creatorLabel.setWrapText(true);
 
-        Image catagorieIcon = new Image(Objects.requireNonNull(getClass().getResourceAsStream(getCatagorieIcon)));
+        Image catagorieIcon = new Image(Objects.requireNonNull(getClass().getResourceAsStream(getCategoryIcon)));
         ImageView catagorieIconView = new ImageView(catagorieIcon);
         catagorieIconView.setFitWidth(120);
         catagorieIconView.setPreserveRatio(true);
@@ -166,7 +168,6 @@ public class QuizLibraryController {
 
     /**
      * Loads category names into the filter dropdown.
-     * Adds an "All" option to show every quiz.
      */
     private void loadCategoryFilter() {
         categoryFilter.getItems().clear();
@@ -212,7 +213,7 @@ public class QuizLibraryController {
      * @param colour the category colour
      */
     private void selectCard(HBox card, QuizTemplate template, String colour) {
-        // Deselect previous card
+        // Reset previous card style
         if (selectedCard != null) {
             String prevColour = (String) selectedCard.getUserData();
             selectedCard.setStyle(cardStyle(false, prevColour));
@@ -228,8 +229,7 @@ public class QuizLibraryController {
     }
 
     /**
-     * Enables or disables action buttons
-     * based on whether a template is selected.
+     * Updates button availability based on selection state.
      */
     private void updateActionButtons() {
         boolean hasSelection = selectedTemplate != null;
@@ -241,13 +241,12 @@ public class QuizLibraryController {
     }
 
     /**
-     * Returns the style string for a quiz card.
+     * Builds the CSS style for a quiz card.
      *
      * @param selected whether the card is selected
-     * @param colour the border colour
-     * @return the CSS style string
+     * @param colour category border colour
+     * @return CSS style string
      */
-
     private String cardStyle(boolean selected, String colour) {
         String bg = selected
                 ? "-fx-background-color: #e3f2fd;" /* probably need to change for dark mode to work */
@@ -255,13 +254,9 @@ public class QuizLibraryController {
         return bg + "-fx-border-color: " + colour + "; -fx-border-width: 4; -fx-background-radius: 20px; -fx-border-radius: 15px; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, #00000033, 15, 0.1, 5, 5);";
     }
 
-    // Action Handlers
 
     /**
-     * Opens a pop-up dialog to create a new template.
-     * The user can select an existing category from a drop-down or tick
-     * "New Category?" to type a new category name which is persisted
-     * and immediately reflected in the library.
+     * Opens the create template dialog.
      */
     @FXML
     private void handleCreate() {
@@ -591,7 +586,6 @@ public class QuizLibraryController {
         refreshCategories();
     }
 
-    // Helper methods
     /**
      * Checks if a quiz has enough questions to attempt.
      *
