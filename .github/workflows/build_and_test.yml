@@ -52,6 +52,21 @@ jobs:
           name: aiandme-${{ matrix.os-profile }}
           path: staging/
 
+  javadoc:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'corretto'
+          cache: maven
+
       - name: Create Javadoc
         run: mvn javadoc:javadoc
 
