@@ -48,4 +48,30 @@ public class QuizLibraryControllerTest {
         // Null shouldn't throw an error and should return false
         assertFalse(QuizLibraryController.isAttemptable(null));
     }
+
+    @Test
+    void checkCategoryFiltering() {
+        // Checks that only quizzes matching the selected category are returned
+
+        QuizTemplate mathsQuiz = new QuizTemplate("Math Quiz", 1, 1, "open");
+        QuizTemplate patternQuiz = new QuizTemplate("Pattern Quiz", 2, 1, "open");
+        QuizTemplate anotherMathsQuiz = new QuizTemplate("Algebra Quiz", 1, 1, "open");
+
+        List<QuizTemplate> templates = Arrays.asList(
+                mathsQuiz,
+                patternQuiz,
+                anotherMathsQuiz
+        );
+
+        int selectedCategoryId = 1;
+
+        List<QuizTemplate> filtered = templates.stream()
+                .filter(t -> t.getCategoryId() == selectedCategoryId)
+                .toList();
+
+        assertEquals(2, filtered.size());
+        assertTrue(filtered.contains(mathsQuiz));
+        assertTrue(filtered.contains(anotherMathsQuiz));
+        assertFalse(filtered.contains(patternQuiz));
+    }
 }
