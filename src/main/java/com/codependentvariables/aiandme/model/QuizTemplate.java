@@ -123,8 +123,6 @@ public class QuizTemplate {
     public String toString() {
         return name;
     }
-<<<<<<< HEAD
+
 }
-=======
-}
->>>>>>> fetch-attempts
+
