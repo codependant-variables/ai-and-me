@@ -1,10 +1,7 @@
 package com.codependentvariables.aiandme.controller;
 
 
-import com.codependentvariables.aiandme.model.CheckIn;
-import com.codependentvariables.aiandme.model.QuizAttempt;
-import com.codependentvariables.aiandme.model.QuizAttemptSummary;
-import com.codependentvariables.aiandme.model.QuizTemplate;
+import com.codependentvariables.aiandme.model.*;
 import com.codependentvariables.aiandme.modules.Router;
 import com.codependentvariables.aiandme.modules.Toast;
 import com.codependentvariables.aiandme.modules.ToastMessageType;
@@ -96,47 +93,55 @@ public class HomeController {
             XYChart.Series useSeries = new XYChart.Series();
             XYChart.Series happinessSeries = new XYChart.Series();
 
-            List<CheckIn> recentCheckins = checkInService.getAllByUserId(appState.getCurrentUser().getId());
-            // using getAllByUserId for now - may want to create a separate method for getRecentCheckIns in CheckInService class which checks timeframe
+            User user = appState.getCurrentUser();
+            if (user != null)
+            {
+                List<CheckIn> recentCheckins = checkInService.getAllByUserId(appState.getCurrentUser().getId());
 
-            // for loop to go backwards five times maximum
-            for (int i = recentCheckins.size() - 1, count = 0; i >= 0 && count < 5; i--, count++) {
-                //while (recentCheckins.get(i).getCompletedAt() !=)
-                //for every check in, create a point on a line graph for each category (requires time/date string and score float)
-                dependenceSeries.getData().add(new XYChart.Data<>(recentCheckins.get(i).getCompletedAt().toString().substring(0, 10), recentCheckins.get(i).getAiDependence()));
-                useSeries.getData().add(new XYChart.Data<>(recentCheckins.get(i).getCompletedAt().toString().substring(0, 10), recentCheckins.get(i).getAiUse()));
-                happinessSeries.getData().add(new XYChart.Data<>(recentCheckins.get(i).getCompletedAt().toString().substring(0, 10), recentCheckins.get(i).getAiHappiness()));
+                // using getAllByUserId for now - may want to create a separate method for getRecentCheckIns in CheckInService class which checks timeframe
+
+                // for loop to go backwards five times maximum
+                for (int i = recentCheckins.size() - 1, count = 0; i >= 0 && count < 5; i--, count++) {
+                    //while (recentCheckins.get(i).getCompletedAt() !=)
+                    //for every check in, create a point on a line graph for each category (requires time/date string and score float)
+                    dependenceSeries.getData().add(new XYChart.Data<>(recentCheckins.get(i).getCompletedAt().toString().substring(0, 10), recentCheckins.get(i).getAiDependence()));
+                    useSeries.getData().add(new XYChart.Data<>(recentCheckins.get(i).getCompletedAt().toString().substring(0, 10), recentCheckins.get(i).getAiUse()));
+                    happinessSeries.getData().add(new XYChart.Data<>(recentCheckins.get(i).getCompletedAt().toString().substring(0, 10), recentCheckins.get(i).getAiHappiness()));
+                }
+                checkInChart.getData().addAll(dependenceSeries, useSeries, happinessSeries);
+                dependenceSeries.setName("Dependence");
+                useSeries.setName("Frequency");
+                happinessSeries.setName("Happiness");
+                ///////////////////////////
+
+                List<QuizAttempt> recentAttempts = attemptsService.getAttemptsByUser(appState.getCurrentUser().getId());
+
+                XYChart.Series attemptSeries = new XYChart.Series();
+
+                for (int i = recentAttempts.size() - 1, count = 0; i >= 0 && count < 5; i--, count++) {
+
+                    //probably need to use the quizattemptsummary object with correlated id to get percentage correct or something like that
+
+                    attemptSeries.getData().add(new XYChart.Data<>(recentAttempts.get(i).getCompletedAt().toString().substring(0, 10), recentAttempts.get(i).getId()));
+                }
+                ///////////////////////////
+
+                //  dummy data
+                ObservableList<PieChart.Data> ratioData = FXCollections.observableArrayList(
+                        new PieChart.Data("Quizzes", 75),
+                        new PieChart.Data("Puzzles", 25));
+                ratioPie.setTitle("Attempts by Category");
+                ratioPie.setData(ratioData);
+            } else {
+                // TODO: populate fake data for guests
             }
-            checkInChart.getData().addAll(dependenceSeries, useSeries, happinessSeries);
-            dependenceSeries.setName("Dependence");
-            useSeries.setName("Frequency");
-            happinessSeries.setName("Happiness");
-            ///////////////////////////
-
-            List<QuizAttempt> recentAttempts = attemptsService.getAttemptsByUser(appState.getCurrentUser().getId());
-
-            XYChart.Series attemptSeries = new XYChart.Series();
-
-            for (int i = recentAttempts.size() - 1, count = 0; i >= 0 && count < 5; i--, count++) {
-
-                //probably need to use the quizattemptsummary object with correlated id to get percentage correct or something like that
-
-                attemptSeries.getData().add(new XYChart.Data<>(recentAttempts.get(i).getCompletedAt().toString().substring(0, 10), recentAttempts.get(i).getId()));
-            }
-            ///////////////////////////
-
-            //  dummy data
-            ObservableList<PieChart.Data> ratioData = FXCollections.observableArrayList(
-                    new PieChart.Data("Quizzes", 75),
-                    new PieChart.Data("Puzzles", 25));
-            ratioPie.setTitle("Attempts by Category");
-            ratioPie.setData(ratioData);
         }
         this.quizTemplate = quizTemplateService.getRandomTemplate();
         checkInName.setText(quizTemplate.getName());
     }
 
     public void navigateCheckIn(MouseEvent mouseEvent) {
+        // TODO: fix existing checkin today
         if (checkInService.isExistingCheckInToday()) {
             Toast.addMessage("Check-in Completed", "You've already completed your daily check-in. Come back tomorrow!", ToastMessageType.INFORMATION);
         } else {
