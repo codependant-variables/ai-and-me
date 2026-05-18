@@ -6,6 +6,7 @@ import com.codependentvariables.aiandme.modules.Router;
 import com.codependentvariables.aiandme.modules.Toast;
 import com.codependentvariables.aiandme.modules.ToastMessageType;
 import com.codependentvariables.aiandme.modules.View;
+import com.codependentvariables.aiandme.services.CheckInService;
 import com.codependentvariables.aiandme.services.UserService;
 import com.codependentvariables.aiandme.state.AppState;
 import javafx.event.ActionEvent;
