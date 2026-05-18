@@ -2,8 +2,16 @@ package com.codependentvariables.aiandme.model.dao;
 
 import com.codependentvariables.aiandme.database.IDatabaseEntity;
 import com.codependentvariables.aiandme.database.IRowMapper;
+import com.codependentvariables.aiandme.model.QuizTemplate;
+import com.codependentvariables.aiandme.model.QuizTemplateAnswer;
 import com.codependentvariables.aiandme.model.QuizTemplateQuestion;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 public class SqliteQuizTemplateQuestionDAO extends BaseSqliteDAO implements IQuizTemplateQuestionDAO, IDatabaseEntity {
@@ -75,7 +83,12 @@ public class SqliteQuizTemplateQuestionDAO extends BaseSqliteDAO implements IQui
         var id = executeSqlWithGeneratedKeys(query, stmt -> {
             stmt.setInt(1, question.getQuizTemplateId());
             stmt.setString(2, question.getText());
-            stmt.setBytes(3, question.getImage());
+            byte[] imageBytes = question.getImage();
+            if (imageBytes != null) {
+                stmt.setBinaryStream(3, new ByteArrayInputStream(imageBytes), imageBytes.length);
+            } else {
+                stmt.setNull(3, java.sql.Types.BLOB);
+            }
         });
         question.setId(id);
     }
@@ -86,7 +99,12 @@ public class SqliteQuizTemplateQuestionDAO extends BaseSqliteDAO implements IQui
         executeSql(query, stmt -> {
             stmt.setInt(1, question.getQuizTemplateId());
             stmt.setString(2, question.getText());
-            stmt.setBytes(3, question.getImage());
+            byte[] imageBytes = question.getImage();
+            if (imageBytes != null) {
+                stmt.setBinaryStream(3, new ByteArrayInputStream(imageBytes), imageBytes.length);
+            } else {
+                stmt.setNull(3, java.sql.Types.BLOB);
+            }
             stmt.setInt(4, question.getId());
         });
     }
@@ -108,6 +126,74 @@ public class SqliteQuizTemplateQuestionDAO extends BaseSqliteDAO implements IQui
     public List<QuizTemplateQuestion> getQuestionsByTemplate(int quizTemplateId) {
         final String query = "SELECT * FROM quiz_template_questions WHERE quiz_template_id = ?";
         return executeQuery(query, stmt -> stmt.setInt(1, quizTemplateId), MAPPER);
+    }
+
+    /**
+     * Seeds the "Pattern Puzzle" template questions with PQ1.png images.
+     * Lives here because question/answer seeding belongs with the question DAO.
+     * The template row is inserted via SqliteQuizTemplateDAO so the FK is satisfied.
+     */
+    @Override
+    public void seedBinaryData() {
+        try {
+            URL resource = getClass().getResource(
+                    "/com/codependentvariables/aiandme/Images/PQ1.png");
+            if (resource == null) {
+                System.err.println("SqliteQuizTemplateQuestionDAO.seedBinaryData: PQ1.png not found — skipping.");
+                return;
+            }
+            byte[] pq1 = Files.readAllBytes(Paths.get(resource.toURI()));
+
+            SqliteQuizTemplateDAO templateDAO = new SqliteQuizTemplateDAO();
+            SqliteQuizTemplateAnswerDAO answerDAO = new SqliteQuizTemplateAnswerDAO();
+
+            QuizTemplate template = new QuizTemplate("Pattern Puzzle", 2, 1, true, "published");
+            templateDAO.add(template);
+
+            addPuzzleQuestion(answerDAO, template.getId(),
+                    "What shape completes the pattern?", pq1,
+                    new String[]{"Purple Circle", "Yellow Triangle", "Blue Square", "Red Pentagon"}, "Purple Circle");
+            addPuzzleQuestion(answerDAO, template.getId(),
+                    "Which colour follows the sequence?", pq1,
+                    new String[]{"Red", "Blue", "Green", "Yellow"}, "Blue");
+            addPuzzleQuestion(answerDAO, template.getId(),
+                    "How many shapes are in the next group?", pq1,
+                    new String[]{"3", "4", "5", "6"}, "4");
+            addPuzzleQuestion(answerDAO, template.getId(),
+                    "What is the missing symbol?", pq1,
+                    new String[]{"Star", "Arrow", "Cross", "Diamond"}, "Star");
+            addPuzzleQuestion(answerDAO, template.getId(),
+                    "Which row continues the pattern?", pq1,
+                    new String[]{"Row A", "Row B", "Row C", "Row D"}, "Row C");
+            addPuzzleQuestion(answerDAO, template.getId(),
+                    "What rotation comes next?", pq1,
+                    new String[]{"90°", "180°", "270°", "0°"}, "90°");
+            addPuzzleQuestion(answerDAO, template.getId(),
+                    "Which tile fits the grid?", pq1,
+                    new String[]{"Tile 1", "Tile 2", "Tile 3", "Tile 4"}, "Tile 2");
+            addPuzzleQuestion(answerDAO, template.getId(),
+                    "How does the pattern scale?", pq1,
+                    new String[]{"x2", "x3", "x4", "x5"}, "x2");
+            addPuzzleQuestion(answerDAO, template.getId(),
+                    "Which element is the odd one out?", pq1,
+                    new String[]{"Element A", "Element B", "Element C", "Element D"}, "Element C");
+            addPuzzleQuestion(answerDAO, template.getId(),
+                    "What comes at position 7 in the sequence?", pq1,
+                    new String[]{"13", "15", "17", "19"}, "13");
+
+        } catch (IOException | URISyntaxException e) {
+            System.err.println("SqliteQuizTemplateQuestionDAO.seedBinaryData: image load failed — " + e.getMessage());
+        }
+    }
+
+    private void addPuzzleQuestion(SqliteQuizTemplateAnswerDAO answerDAO,
+                                   int templateId, String text, byte[] image,
+                                   String[] options, String correct) {
+        QuizTemplateQuestion question = new QuizTemplateQuestion(templateId, text, image);
+        addQuestion(question);
+        for (String option : options) {
+            answerDAO.addAnswer(new QuizTemplateAnswer(question.getId(), option, option.equals(correct)));
+        }
     }
 }
 

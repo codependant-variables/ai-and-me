@@ -74,4 +74,34 @@ public class QuizTemplateDAOTest {
         assertEquals(1, userQuizzes.size());
         assertEquals("My Quiz", userQuizzes.get(0).getName()); // gets first quiz returned
     }
+
+    /** A template created by a logged-in user must retain that user's id. */
+    @Test
+    void isUserIdLogged() {
+        int loggedInUserId = 42;
+        QuizTemplate quiz = new QuizTemplate("User Quiz", 1, loggedInUserId, "draft");
+        quizTemplateDAO.add(quiz);
+
+        QuizTemplate saved = quizTemplateDAO.get(quiz.getId());
+        assertNotNull(saved);
+        assertEquals(loggedInUserId, saved.getUserId(),
+                "Template created by a logged-in user should store their user id");
+    }
+
+    /**
+     * A template created without a logged-in user uses userId=0 as the guest default.
+     * The DAO layer says 0 meaning SQL NULL; this test verifies the model/mock
+     * cycle preserving 0 so that downstream null replacement logic is started.
+     */
+    @Test
+    void isGuestUserZero() {
+        int guestUserId = 0; // placeholder for guest user
+        QuizTemplate quiz = new QuizTemplate("Guest Quiz", 1, guestUserId, "draft");
+        quizTemplateDAO.add(quiz);
+
+        QuizTemplate saved = quizTemplateDAO.get(quiz.getId());
+        assertNotNull(saved);
+        assertEquals(0, saved.getUserId(),
+                "Template created by a guest should have userId=0 (stored as NULL in SQL)");
+    }
 }

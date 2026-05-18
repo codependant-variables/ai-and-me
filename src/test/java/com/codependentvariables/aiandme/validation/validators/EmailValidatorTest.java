@@ -12,7 +12,7 @@ public class EmailValidatorTest {
     @BeforeEach
     void setUp() {
     }
-
+    
     @Test
     public void correct_error_message() {
         String error = validator.validate("invalid input", "My email");

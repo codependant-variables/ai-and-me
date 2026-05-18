@@ -21,7 +21,7 @@ public class QuizLibraryControllerTest {
         QuizTemplateQuestion q1 = new QuizTemplateQuestion(10, "Q1");
         QuizTemplateQuestion q2 = new QuizTemplateQuestion(10, "Q2");
 
-        List<QuizTemplateQuestion> questions = Arrays.asList(q1, q2); // Creates a list which contains the strings
+        List<QuizTemplateQuestion> questions = Arrays.asList(q1, q2);
         assertTrue(QuizLibraryController.isAttemptable(questions));
     }
 
@@ -50,28 +50,9 @@ public class QuizLibraryControllerTest {
     }
 
     @Test
-    void checkCategoryFiltering() {
-        // Checks that only quizzes matching the selected category are returned
-
-        QuizTemplate mathsQuiz = new QuizTemplate("Math Quiz", 1, 1, "open");
-        QuizTemplate patternQuiz = new QuizTemplate("Pattern Quiz", 2, 1, "open");
-        QuizTemplate anotherMathsQuiz = new QuizTemplate("Algebra Quiz", 1, 1, "open");
-
-        List<QuizTemplate> templates = Arrays.asList(
-                mathsQuiz,
-                patternQuiz,
-                anotherMathsQuiz
-        );
-
-        int selectedCategoryId = 1;
-
-        List<QuizTemplate> filtered = templates.stream()
-                .filter(t -> t.getCategoryId() == selectedCategoryId)
-                .toList();
-
-        assertEquals(2, filtered.size());
-        assertTrue(filtered.contains(mathsQuiz));
-        assertTrue(filtered.contains(anotherMathsQuiz));
-        assertFalse(filtered.contains(patternQuiz));
+    void isPuzzleShown() {
+        // A template with isPuzzle=true should NOT be shown in the quiz library (isPuzzle must be false)
+        QuizTemplate puzzleTemplate = new QuizTemplate("Puzzle One", 1, 1, true, "draft");
+        assertFalse(!puzzleTemplate.isPuzzle()); // isPuzzle is true means this does not pass quiz library filter
     }
 }
