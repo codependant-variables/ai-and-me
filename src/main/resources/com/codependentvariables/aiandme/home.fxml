@@ -6,7 +6,6 @@
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.chart.PieChart?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.image.Image?>
@@ -18,23 +17,26 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox alignment="CENTER" maxHeight="738.0" maxWidth="879.0" prefHeight="738.0" prefWidth="879.0" spacing="20.0" styleClass="background-VBox" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codependentvariables.aiandme.controller.HomeController">
-   <HBox alignment="CENTER" spacing="20.0" VBox.vgrow="ALWAYS">
-      <VBox alignment="CENTER" prefHeight="538.0" prefWidth="375.0" styleClass="widget-VBox">
+<VBox fx:id="background" alignment="CENTER" prefHeight="738.0" prefWidth="879.0" styleClass="background-VBox" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codependentvariables.aiandme.controller.HomeController">
+   <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
+      <VBox fx:id="dashboardWidgetData" alignment="TOP_CENTER" prefHeight="538.0" prefWidth="375.0" spacing="10.0" styleClass="widget-VBox">
          <children>
             <VBox alignment="CENTER" prefWidth="400" spacing="10.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Your activity:">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Check in data:">
                      <font>
                         <Font size="21.0" />
                      </font>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
                   </Text>
                   <Separator minHeight="-Infinity" prefHeight="9.0" prefWidth="243.0" />
                </children>
             </VBox>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <LineChart prefHeight="201.0" prefWidth="231.0">
+                  <LineChart fx:id="checkInChart" prefHeight="201.0" prefWidth="231.0">
                      <xAxis>
                         <CategoryAxis side="BOTTOM" />
                      </xAxis>
@@ -46,7 +48,7 @@
             </VBox>
             <VBox prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <LineChart prefHeight="201.0" prefWidth="231.0">
+                  <LineChart fx:id="attemptChart" prefHeight="201.0" prefWidth="231.0">
                      <xAxis>
                         <CategoryAxis side="BOTTOM" />
                      </xAxis>
@@ -56,12 +58,15 @@
                   </LineChart>
                </children>
             </VBox>
-            <PieChart prefHeight="213.0" prefWidth="266.0" />
+            <PieChart fx:id="ratioPie" prefHeight="213.0" prefWidth="266.0" />
          </children>
+         <HBox.margin>
+            <Insets />
+         </HBox.margin>
       </VBox>
-      <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="578.0" prefWidth="267.0" spacing="10.0">
+      <VBox alignment="TOP_CENTER" prefHeight="578.0" prefWidth="232.0" spacing="20.0">
          <children>
-            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="232.0" styleClass="dailyCIWidget">
+            <HBox alignment="CENTER_LEFT" onMouseClicked="#navigateCheckIn" prefHeight="100.0" prefWidth="300.0" styleClass="dailyCIWidget">
                <children>
                   <StackPane prefHeight="150.0" prefWidth="200.0">
                      <opaqueInsets>
@@ -83,7 +88,7 @@
                         </Label>
                      </children>
                   </StackPane>
-                  <VBox alignment="CENTER" prefHeight="50.0" prefWidth="232.0" styleClass="struct-Box-NS">
+                  <VBox alignment="CENTER" prefHeight="50.0" prefWidth="300.0" styleClass="struct-Box-NS">
                      <children>
                         <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Complete your" textAlignment="CENTER">
                            <font>
@@ -124,9 +129,9 @@
                   </VBox>
                </children>
             </HBox>
-            <HBox alignment="CENTER" layoutX="10.0" layoutY="169.0" prefHeight="313.0" prefWidth="232.0">
+            <HBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="300.0">
                <children>
-                  <VBox alignment="TOP_CENTER" prefWidth="232.0" styleClass="widget-VBox">
+                  <VBox fx:id="dashboardWidgetInsight" alignment="TOP_CENTER" minWidth="232.0" styleClass="widget-VBox" HBox.hgrow="ALWAYS">
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="AI Usage Impact" textAlignment="CENTER" wrappingWidth="231.13000106811523">
                            <font>
@@ -138,9 +143,9 @@
                   </VBox>
                </children>
             </HBox>
-            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="359.0" prefHeight="296.0" prefWidth="259.0" styleClass="widget-VBox">
+            <HBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="300.0">
                <children>
-                  <VBox alignment="CENTER" prefWidth="236.0" styleClass="widget-VBox">
+                  <VBox fx:id="dashboardWidgetNews" alignment="CENTER" minWidth="232.0" styleClass="widget-VBox" HBox.hgrow="ALWAYS">
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="News" textAlignment="CENTER" wrappingWidth="149.79205322265625">
                            <font>
@@ -162,71 +167,70 @@
                </children>
             </HBox>
          </children>
+         <HBox.margin>
+            <Insets />
+         </HBox.margin>
+         <padding>
+            <Insets left="20.0" right="20.0" />
+         </padding>
       </VBox>
-      <VBox alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" prefHeight="578.0" prefWidth="361.0" spacing="10.0">
+      <VBox alignment="TOP_CENTER" prefHeight="578.0" prefWidth="288.0" spacing="20.0">
          <children>
-            <HBox alignment="CENTER" prefHeight="318.0" prefWidth="288.0">
+            <VBox fx:id="dashboardWidgetQuiz" alignment="TOP_CENTER" onMouseClicked="#handleAttemptQuiz" prefWidth="288.0" styleClass="recomendedQuiz">
                <children>
-                  <VBox alignment="TOP_CENTER" prefWidth="285.0" styleClass="recomendedQuiz">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Quiz for you!" textAlignment="CENTER" wrappingWidth="231.13000106811523">
-                           <font>
-                              <Font size="26.0" />
-                           </font>
-                        </Text>
-                        <Separator minHeight="-Infinity" prefHeight="9.0" prefWidth="243.0" />
-                        <Label text="{recomendedQuiz}">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <Button mnemonicParsing="false" text="Start Quiz" />
-                        <Region prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-                        <ImageView fitWidth="285.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@Images/PuzzleWidgetIcon.png" />
-                           </image>
-                           <viewport>
-                              <Rectangle2D />
-                           </viewport>
-                        </ImageView>
-                     </children>
-                  </VBox>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Quiz for you!" textAlignment="CENTER" wrappingWidth="231.13000106811523">
+                     <font>
+                        <Font size="26.0" />
+                     </font>
+                  </Text>
+                  <Separator minHeight="-Infinity" prefHeight="9.0" prefWidth="243.0" />
+                  <Label fx:id="checkInName">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <Region prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                  <ImageView fitWidth="285.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@Images/PuzzleWidgetIcon.png" />
+                     </image>
+                     <viewport>
+                        <Rectangle2D />
+                     </viewport>
+                  </ImageView>
                </children>
-            </HBox>
-            <HBox alignment="CENTER" layoutX="10.0" layoutY="187.0" prefHeight="341.0" prefWidth="288.0">
+            </VBox>
+            <VBox fx:id="dashboardWidgetPuzzle" alignment="TOP_CENTER" prefWidth="288.0" styleClass="recomendedPuzzle">
                <children>
-                  <VBox alignment="TOP_CENTER" prefWidth="288.0" styleClass="recomendedPuzzle">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Puzzle for you!" textAlignment="CENTER" wrappingWidth="231.13000106811523">
-                           <font>
-                              <Font size="26.0" />
-                           </font>
-                        </Text>
-                        <Separator minHeight="-Infinity" prefHeight="9.0" prefWidth="243.0" />
-                        <Label text="{recomendedPuzzle}">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <Button mnemonicParsing="false" text="Start Puzzle" />
-                        <Region prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-                        <ImageView fitWidth="285.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@Images/PuzzleWidgetIcon.png" />
-                           </image>
-                           <viewport>
-                              <Rectangle2D />
-                           </viewport>
-                        </ImageView>
-                     </children>
-                  </VBox>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Puzzle for you!" textAlignment="CENTER" wrappingWidth="231.13000106811523">
+                     <font>
+                        <Font size="26.0" />
+                     </font>
+                  </Text>
+                  <Separator minHeight="-Infinity" prefHeight="9.0" prefWidth="243.0" />
+                  <Label text="{recomendedPuzzle}">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <Region prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                  <ImageView fitWidth="285.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@Images/PuzzleWidgetIcon.png" />
+                     </image>
+                     <viewport>
+                        <Rectangle2D />
+                     </viewport>
+                  </ImageView>
                </children>
-            </HBox>
+            </VBox>
          </children>
+         <HBox.margin>
+            <Insets />
+         </HBox.margin>
       </VBox>
       <VBox.margin>
-         <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+         <Insets bottom="15.0" left="15.0" right="15.0" top="25.0" />
       </VBox.margin>
 
    </HBox>

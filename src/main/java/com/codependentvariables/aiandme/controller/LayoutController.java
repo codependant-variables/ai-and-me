@@ -16,6 +16,7 @@ import javafx.scene.layout.StackPane;
 
 public class LayoutController {
     private final UserService userService = UserService.getInstance();
+    private final CheckInService checkInService = CheckInService.getInstance();
     private final AppState appState = AppState.getInstance();
 
     @FXML
@@ -89,10 +90,7 @@ public class LayoutController {
     }
 
     @FXML
-    public void navigateSettings() { Router.navigateLayout(View.SETTINGS); }
-
-    @FXML
-    public void navigateCheckin() {
-        Router.navigateLayout(View.CHECK_IN);
+    public void navigateSettings() {
+        Router.navigateLayout(View.SETTINGS);
     }
 }

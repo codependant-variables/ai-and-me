@@ -1,11 +1,17 @@
 package com.codependentvariables.aiandme.validation.validators;
 
+import javafx.application.Platform;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class EmailValidatorTest {
     private final EmailValidator validator = new EmailValidator();
+
+    @BeforeEach
+    void setUp() {
+    }
 
     @Test
     public void correct_error_message() {

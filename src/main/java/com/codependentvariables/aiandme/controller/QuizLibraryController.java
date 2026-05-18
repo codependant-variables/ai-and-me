@@ -39,6 +39,7 @@ public class QuizLibraryController {
     @FXML private Button btnDelete;
     @FXML private Button btnEditQuestions;
     @FXML private Button btnAttemptQuiz;
+    @FXML private ComboBox<String> categoryFilter;
 
     // Currently selected template and its UI card
     private QuizTemplate selectedTemplate;
@@ -54,6 +55,8 @@ public class QuizLibraryController {
         btnDelete.setDisable(true);
         btnEditQuestions.setDisable(true);
         btnAttemptQuiz.setDisable(true);
+
+        loadCategoryFilter();
         refreshCategories();
     }
 
@@ -69,14 +72,24 @@ public class QuizLibraryController {
         List<Category> categories = categoryService.getVisibleCategories();
 
         List<QuizTemplate> templates = templateService.getAllTemplates();
+
+        String selectedCategory = categoryFilter.getValue();
+
         for (QuizTemplate template : templates) {
             String categoryName = "Unknown";
+
             for (Category c : categories) {
                 if (c.getId() == template.getCategoryId()) {
                     categoryName = c.getName();
                     break;
                 }
             }
+
+            if (!"All".equals(selectedCategory)
+                    && !categoryName.equalsIgnoreCase(selectedCategory)) {
+                continue;
+            }
+
             categoryContainer.getChildren().add(buildTemplateCard(template, categoryName));
         }
     }
@@ -150,6 +163,30 @@ public class QuizLibraryController {
         return card;
     }
 
+    /**
+     * Loads category names into the filter dropdown.
+     * Adds an "All" option to show every quiz.
+     */
+    private void loadCategoryFilter() {
+        categoryFilter.getItems().clear();
+
+        categoryFilter.getItems().add("All");
+
+        List<Category> categories = categoryService.getVisibleCategories();
+
+        for (Category category : categories) {
+            categoryFilter.getItems().add(category.getName());
+        }
+
+        categoryFilter.setValue("All");
+    }
+
+    /**
+     * Returns the border colour used for a category card.
+     *
+     * @param categoryName the category name
+     * @return the hex colour value for the category
+     */
     private static String getCategory(String categoryName) {
         String cardColour;
         if ("Pattern Recognition".equalsIgnoreCase(categoryName)) {
@@ -166,6 +203,13 @@ public class QuizLibraryController {
         return cardColour;
     }
 
+    /**
+     * Selects a quiz card and updates button states.
+     *
+     * @param card the selected UI card
+     * @param template the selected quiz template
+     * @param colour the category colour
+     */
     private void selectCard(HBox card, QuizTemplate template, String colour) {
         // Deselect previous card
         if (selectedCard != null) {
@@ -182,6 +226,10 @@ public class QuizLibraryController {
         updateActionButtons();
     }
 
+    /**
+     * Enables or disables action buttons
+     * based on whether a template is selected.
+     */
     private void updateActionButtons() {
         boolean hasSelection = selectedTemplate != null;
         btnCreate.setDisable(false); // always enabled
@@ -191,23 +239,20 @@ public class QuizLibraryController {
         btnAttemptQuiz.setDisable(!hasSelection);
     }
 
+    /**
+     * Returns the style string for a quiz card.
+     *
+     * @param selected whether the card is selected
+     * @param colour the border colour
+     * @return the CSS style string
+     */
+
     private String cardStyle(boolean selected, String colour) {
         String bg = selected
                 ? "-fx-background-color: #e3f2fd;" /* probably need to change for dark mode to work */
                 : "-fx-background-color: #ffffff;"; /* need to change -fx-background-color: #ffffff for dark mode to work */
         return bg + "-fx-border-color: " + colour + "; -fx-border-width: 4; -fx-background-radius: 20px; -fx-border-radius: 15px; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, #00000033, 15, 0.1, 5, 5);";
     }
-
-//    private String cardStyle(boolean selected, String colour) {
-//        String border = selected
-//                //? "-fx-border-color: " + colour + "; -fx-border-width: 8;"
-//                ? "-fx-border-color: #000000; -fx-border-width: 4;"
-//                : "-fx-border-color: " + colour + "; -fx-border-width: 4;";
-//        String bg = selected
-//                ? "-fx-background-color: #e3f2fd;"
-//                : "-fx-background-color: #ffffff;";
-//        return bg + border + "-fx-background-radius: 20px; -fx-border-radius: 15px; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, #00000033, 15, 0.1, 5, 5);";
-//    }
 
     // Action Handlers
 
@@ -324,6 +369,9 @@ public class QuizLibraryController {
         }
     }
 
+    /**
+     * Opens the rename dialog for the selected template.
+     */
     @FXML
     private void handleModify() {
         if (selectedTemplate == null) return;
@@ -345,6 +393,9 @@ public class QuizLibraryController {
         });
     }
 
+    /**
+     * Deletes the selected quiz template after confirmation.
+     */
     @FXML
     private void handleDelete() {
         if (selectedTemplate == null) return;
@@ -363,12 +414,9 @@ public class QuizLibraryController {
         });
     }
 
-    // Helper methods
-
-    public static boolean isAttemptable(List<QuizTemplateQuestion> questions) {
-        return questions != null && questions.size() >= 2;
-    }
-
+    /**
+     * Opens the quiz attempt screen for the selected template.
+     */
     @FXML
     private void handleAttemptQuiz() {
         if (selectedTemplate == null) return;
@@ -386,6 +434,10 @@ public class QuizLibraryController {
         }
     }
 
+    /**
+     * Opens the question editor for the selected quiz template.
+     * Allows adding, removing, and updating questions and answers.
+     */
     @FXML
     private void handleEditQuestions() {
         if (selectedTemplate == null) return;
@@ -529,12 +581,42 @@ public class QuizLibraryController {
         }
     }
 
+    /**
+     * Handles category filter selection changes.
+     * Refreshes the displayed quiz templates.
+     */
+    @FXML
+    private void handleCategoryFilter() {
+        refreshCategories();
+    }
+
+    // Helper methods
+    /**
+     * Checks if a quiz has enough questions to attempt.
+     *
+     * @param questions the quiz questions
+     * @return true if the quiz can be attempted
+     */
+    public static boolean isAttemptable(List<QuizTemplateQuestion> questions) {
+        return questions != null && questions.size() >= 2;
+    }
+
+    /**
+     * Displays an information dialog message.
+     *
+     * @param message the message to display
+     */
     private void showInfo(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION, message, ButtonType.OK);
         alert.setHeaderText(null);
         alert.showAndWait();
     }
 
+    /**
+     * Displays a warning dialog message.
+     *
+     * @param message the message to display
+     */
     private void showWarning(String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING, message, ButtonType.OK);
         alert.setHeaderText(null);
