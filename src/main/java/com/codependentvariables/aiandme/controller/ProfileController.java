@@ -200,6 +200,18 @@ public class ProfileController {
     }
 
     @FXML
+    private void clearCheckIns() {
+        dataDeletionService.deleteCurrentUserCheckIns();
+        Toast.addMessage("Check-ins Deleted", "All check-ins associated with this account have been deleted.", ToastMessageType.INFORMATION);
+    }
+
+    @FXML
+    private void clearQuizAttempts() {
+        dataDeletionService.deleteCurrentUserQuizAttempts();
+        Toast.addMessage("Quiz Attempts Deleted", "All quiz attempts associated with this account have been deleted.", ToastMessageType.INFORMATION);
+    }
+
+    @FXML
     private void deleteUser() {
         Dialogue.confirmationWithCancel(result -> {
             if (result == null || !result) {
