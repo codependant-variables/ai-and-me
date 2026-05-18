@@ -6,6 +6,8 @@ import com.codependentvariables.aiandme.model.QuizAttempt;
 import com.codependentvariables.aiandme.model.QuizAttemptSummary;
 import com.codependentvariables.aiandme.model.QuizTemplate;
 import com.codependentvariables.aiandme.navigation.Router;
+import com.codependentvariables.aiandme.navigation.Toast;
+import com.codependentvariables.aiandme.navigation.ToastMessageType;
 import com.codependentvariables.aiandme.navigation.View;
 import com.codependentvariables.aiandme.services.CheckInService;
 import com.codependentvariables.aiandme.services.QuizAttemptService;
@@ -42,7 +44,7 @@ public class HomeController {
     @FXML
     public NumberAxis yAxisCheckin = new NumberAxis();
     @FXML
-    public LineChart<String,Number> checkInChart = new LineChart<String,Number>(xAxisCheckin,yAxisCheckin);
+    public LineChart<String, Number> checkInChart = new LineChart<String, Number>(xAxisCheckin, yAxisCheckin);
 
     private CheckInService checkInService = CheckInService.getInstance();
     private QuizAttemptService attemptsService = QuizAttemptService.getInstance();
@@ -52,7 +54,7 @@ public class HomeController {
     @FXML
     public NumberAxis yAxisQuizAttempts = new NumberAxis();
     @FXML
-    public LineChart<Number,Number> attemptChart = new LineChart<Number,Number>(xAxisQuizAttempts,yAxisQuizAttempts);
+    public LineChart<Number, Number> attemptChart = new LineChart<Number, Number>(xAxisQuizAttempts, yAxisQuizAttempts);
 
     @FXML
     private VBox background;
@@ -69,8 +71,6 @@ public class HomeController {
 
     //  quiz vs puzzle pie chart idk
     public PieChart ratioPie = new PieChart();
-
-
 
 
     private final HomeService homeService = HomeService.getInstance();
@@ -103,9 +103,9 @@ public class HomeController {
             for (int i = recentCheckins.size() - 1, count = 0; i >= 0 && count < 5; i--, count++) {
                 //while (recentCheckins.get(i).getCompletedAt() !=)
                 //for every check in, create a point on a line graph for each category (requires time/date string and score float)
-                dependenceSeries.getData().add(new XYChart.Data<>(recentCheckins.get(i).getCompletedAt().toString().substring(0,10) ,recentCheckins.get(i).getAiDependence()));
-                useSeries.getData().add(new XYChart.Data<>(recentCheckins.get(i).getCompletedAt().toString().substring(0,10) ,recentCheckins.get(i).getAiUse()));
-                happinessSeries.getData().add(new XYChart.Data<>(recentCheckins.get(i).getCompletedAt().toString().substring(0,10),recentCheckins.get(i).getAiHappiness()));
+                dependenceSeries.getData().add(new XYChart.Data<>(recentCheckins.get(i).getCompletedAt().toString().substring(0, 10), recentCheckins.get(i).getAiDependence()));
+                useSeries.getData().add(new XYChart.Data<>(recentCheckins.get(i).getCompletedAt().toString().substring(0, 10), recentCheckins.get(i).getAiUse()));
+                happinessSeries.getData().add(new XYChart.Data<>(recentCheckins.get(i).getCompletedAt().toString().substring(0, 10), recentCheckins.get(i).getAiHappiness()));
             }
             checkInChart.getData().addAll(dependenceSeries, useSeries, happinessSeries);
             dependenceSeries.setName("Dependence");
@@ -121,12 +121,12 @@ public class HomeController {
 
                 //probably need to use the quizattemptsummary object with correlated id to get percentage correct or something like that
 
-                attemptSeries.getData().add(new XYChart.Data<>(recentAttempts.get(i).getCompletedAt().toString().substring(0,10) ,recentAttempts.get(i).getId()));
+                attemptSeries.getData().add(new XYChart.Data<>(recentAttempts.get(i).getCompletedAt().toString().substring(0, 10), recentAttempts.get(i).getId()));
             }
             ///////////////////////////
 
             //  dummy data
-            ObservableList<PieChart.Data> ratioData =  FXCollections.observableArrayList(
+            ObservableList<PieChart.Data> ratioData = FXCollections.observableArrayList(
                     new PieChart.Data("Quizzes", 75),
                     new PieChart.Data("Puzzles", 25));
             ratioPie.setTitle("Attempts by Category");
@@ -137,11 +137,15 @@ public class HomeController {
     }
 
     public void navigateCheckIn(MouseEvent mouseEvent) {
-        Router.navigateLayout(View.CHECK_IN);
+        if (checkInService.isExistingCheckInToday()) {
+            Toast.addMessage("Check-in Completed", "You've already completed your daily check-in. Come back tomorrow!", ToastMessageType.INFORMATION);
+        } else {
+            Router.navigateLayout(View.CHECK_IN);
+        }
     }
 
     public void handleAttemptQuiz(MouseEvent mouseEvent) {
-        QuizAttemptController controller = (QuizAttemptController)Router.navigateLayout(View.QUIZ_ATTEMPT);
+        QuizAttemptController controller = (QuizAttemptController) Router.navigateLayout(View.QUIZ_ATTEMPT);
         controller.initQuiz(quizTemplate);
     }
 }

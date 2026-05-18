@@ -6,6 +6,7 @@ import com.codependentvariables.aiandme.navigation.Router;
 import com.codependentvariables.aiandme.navigation.Toast;
 import com.codependentvariables.aiandme.navigation.ToastMessageType;
 import com.codependentvariables.aiandme.navigation.View;
+import com.codependentvariables.aiandme.services.CheckInService;
 import com.codependentvariables.aiandme.services.UserService;
 import com.codependentvariables.aiandme.state.AppState;
 import javafx.event.ActionEvent;
@@ -17,6 +18,7 @@ import javafx.scene.layout.StackPane;
 
 public class LayoutController {
     private final UserService userService = UserService.getInstance();
+    private final CheckInService checkInService = CheckInService.getInstance();
     private final AppState appState = AppState.getInstance();
 
     @FXML
