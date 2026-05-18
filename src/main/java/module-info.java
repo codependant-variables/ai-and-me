@@ -1,20 +1,24 @@
 module com.codependentvariables.aiandme {
+    requires atlantafx.base;
+    requires com.google.zxing;
+    requires java.sql;
     requires javafx.controls;
     requires javafx.fxml;
-    requires java.sql;
     requires jdk.compiler;
-    requires atlantafx.base;
     requires org.apache.commons.codec;
-    requires com.google.zxing;
     requires org.xerial.sqlitejdbc;
 
-
-    opens com.codependentvariables.aiandme to javafx.fxml;
     exports com.codependentvariables.aiandme;
     exports com.codependentvariables.aiandme.controller;
-    opens com.codependentvariables.aiandme.controller to javafx.fxml;
+    exports com.codependentvariables.aiandme.database;
     exports com.codependentvariables.aiandme.model;
+    exports com.codependentvariables.aiandme.modules;
+    exports com.codependentvariables.aiandme.services;
+    exports com.codependentvariables.aiandme.state;
+    exports com.codependentvariables.aiandme.validation;
+
+    opens com.codependentvariables.aiandme to javafx.fxml;
+    opens com.codependentvariables.aiandme.controller to javafx.fxml;
     opens com.codependentvariables.aiandme.model to javafx.fxml;
-    exports com.codependentvariables.aiandme.navigation;
-    opens com.codependentvariables.aiandme.navigation to javafx.fxml;
+    opens com.codependentvariables.aiandme.modules to javafx.fxml;
 }

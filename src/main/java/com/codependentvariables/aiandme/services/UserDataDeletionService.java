@@ -34,4 +34,12 @@ public class UserDataDeletionService {
         checkInDAO.deleteByUserId(appState.getCurrentUser().getId());
         quizAttDAO.deleteByUserId(appState.getCurrentUser().getId());
     }
+
+    public void deleteCurrentUserCheckIns() {
+        checkInDAO.deleteByUserId(appState.getCurrentUser().getId());
+    }
+
+    public void deleteCurrentUserQuizAttempts() {
+        quizAttDAO.deleteByUserId(appState.getCurrentUser().getId());
+    }
 }

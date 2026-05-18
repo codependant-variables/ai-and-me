@@ -1,12 +1,14 @@
 package com.codependentvariables.aiandme.controller;
 
 
-import com.codependentvariables.aiandme.model.*;
-import com.codependentvariables.aiandme.services.QuizAttemptService;
-import com.codependentvariables.aiandme.navigation.Router;
-import com.codependentvariables.aiandme.navigation.Toast;
-import com.codependentvariables.aiandme.navigation.ToastMessageType;
-import com.codependentvariables.aiandme.navigation.View;
+import com.codependentvariables.aiandme.model.CheckIn;
+import com.codependentvariables.aiandme.model.QuizAttempt;
+import com.codependentvariables.aiandme.model.QuizAttemptSummary;
+import com.codependentvariables.aiandme.model.QuizTemplate;
+import com.codependentvariables.aiandme.modules.Router;
+import com.codependentvariables.aiandme.modules.Toast;
+import com.codependentvariables.aiandme.modules.ToastMessageType;
+import com.codependentvariables.aiandme.modules.View;
 import com.codependentvariables.aiandme.services.CheckInService;
 import com.codependentvariables.aiandme.services.QuizTemplateService;
 import com.codependentvariables.aiandme.state.AppState;

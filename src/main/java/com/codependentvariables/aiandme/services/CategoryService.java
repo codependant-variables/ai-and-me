@@ -4,8 +4,8 @@ import com.codependentvariables.aiandme.model.Category;
 import com.codependentvariables.aiandme.model.User;
 import com.codependentvariables.aiandme.model.dao.ICategoryDAO;
 import com.codependentvariables.aiandme.model.dao.SqliteCategoryDAO;
-import com.codependentvariables.aiandme.navigation.Toast;
-import com.codependentvariables.aiandme.navigation.ToastMessageType;
+import com.codependentvariables.aiandme.modules.Toast;
+import com.codependentvariables.aiandme.modules.ToastMessageType;
 import com.codependentvariables.aiandme.state.AppState;
 
 import java.util.List;

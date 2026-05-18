@@ -2,8 +2,8 @@ package com.codependentvariables.aiandme.controller;
 
 import com.codependentvariables.aiandme.model.QuizAttemptSummary;
 import com.codependentvariables.aiandme.model.QuizAttemptSummary.ResultRow;
-import com.codependentvariables.aiandme.navigation.Router;
-import com.codependentvariables.aiandme.navigation.View;
+import com.codependentvariables.aiandme.modules.Router;
+import com.codependentvariables.aiandme.modules.View;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

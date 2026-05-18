@@ -1,4 +1,4 @@
-package com.codependentvariables.aiandme.navigation;
+package com.codependentvariables.aiandme.modules;
 
 import com.codependentvariables.aiandme.controller.DialogueController;
 import com.codependentvariables.aiandme.controller.LoginController;

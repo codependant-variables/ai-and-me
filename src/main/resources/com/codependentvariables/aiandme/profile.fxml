@@ -67,9 +67,11 @@
     </GridPane>
     <VBox alignment="CENTER" spacing="10">
         <Label styleClass="title" text="Actions" />
-        <Button maxWidth="Infinity" onAction="#navigateCheckInHistory" text="View My Check Ins" />
+        <Button maxWidth="Infinity" onAction="#navigateCheckInHistory" text="View my check-ins" />
         <Button maxWidth="Infinity" onAction="#exportData" text="Export my data" />
-        <Button maxWidth="Infinity" onAction="#clearData" text="Clear my data" />
+        <Button maxWidth="Infinity" onAction="#clearCheckIns" text="Clear check-ins"/>
+        <Button maxWidth="Infinity" onAction="#clearQuizAttempts" text="Clear quiz attempts"/>
+        <Button maxWidth="Infinity" onAction="#clearData" text="Clear all data" />
         <Button maxWidth="Infinity" onAction="#deleteUser" styleClass="alert" text="Delete Account" />
     </VBox>
 </HBox>

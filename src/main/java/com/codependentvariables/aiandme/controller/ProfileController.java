@@ -2,7 +2,7 @@ package com.codependentvariables.aiandme.controller;
 
 import com.codependentvariables.aiandme.Icon;
 import com.codependentvariables.aiandme.model.User;
-import com.codependentvariables.aiandme.navigation.*;
+import com.codependentvariables.aiandme.modules.*;
 import com.codependentvariables.aiandme.services.UserDataDeletionService;
 import com.codependentvariables.aiandme.services.UserService;
 import com.codependentvariables.aiandme.state.AppState;
@@ -197,6 +197,18 @@ public class ProfileController {
     private void clearData() {
         dataDeletionService.deleteCurrentUserData();
         Toast.addMessage("Data Cleared", "All data associated with this account has been deleted.", ToastMessageType.INFORMATION);
+    }
+
+    @FXML
+    private void clearCheckIns() {
+        dataDeletionService.deleteCurrentUserCheckIns();
+        Toast.addMessage("Check-ins Deleted", "All check-ins associated with this account have been deleted.", ToastMessageType.INFORMATION);
+    }
+
+    @FXML
+    private void clearQuizAttempts() {
+        dataDeletionService.deleteCurrentUserQuizAttempts();
+        Toast.addMessage("Quiz Attempts Deleted", "All quiz attempts associated with this account have been deleted.", ToastMessageType.INFORMATION);
     }
 
     @FXML
