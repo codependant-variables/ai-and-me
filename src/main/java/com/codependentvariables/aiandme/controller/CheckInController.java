@@ -1,7 +1,7 @@
 package com.codependentvariables.aiandme.controller;
 
 import com.codependentvariables.aiandme.model.CheckIn;
-import com.codependentvariables.aiandme.navigation.*;
+import com.codependentvariables.aiandme.modules.*;
 import com.codependentvariables.aiandme.services.CheckInService;
 import com.codependentvariables.aiandme.state.AppState;
 import javafx.fxml.FXML;

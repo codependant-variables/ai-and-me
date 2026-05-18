@@ -1,7 +1,7 @@
 package com.codependentvariables.aiandme.controller;
 
 import com.codependentvariables.aiandme.Icon;
-import com.codependentvariables.aiandme.navigation.Router;
+import com.codependentvariables.aiandme.modules.Router;
 import com.codependentvariables.aiandme.services.UserService;
 import com.codependentvariables.aiandme.state.AppState;
 import javafx.fxml.FXML;

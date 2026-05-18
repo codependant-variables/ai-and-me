@@ -1,9 +1,9 @@
 package com.codependentvariables.aiandme.controller;
 
 import com.codependentvariables.aiandme.model.*;
-import com.codependentvariables.aiandme.navigation.Dialogue;
-import com.codependentvariables.aiandme.navigation.Router;
-import com.codependentvariables.aiandme.navigation.View;
+import com.codependentvariables.aiandme.modules.Dialogue;
+import com.codependentvariables.aiandme.modules.Router;
+import com.codependentvariables.aiandme.modules.View;
 import com.codependentvariables.aiandme.services.QuizAttemptService;
 import com.codependentvariables.aiandme.services.QuizTemplateService;
 import com.codependentvariables.aiandme.state.AppState;

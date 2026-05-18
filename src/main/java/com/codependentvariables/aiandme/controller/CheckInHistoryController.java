@@ -2,8 +2,8 @@ package com.codependentvariables.aiandme.controller;
 
 import com.codependentvariables.aiandme.model.CheckIn;
 import com.codependentvariables.aiandme.model.User;
-import com.codependentvariables.aiandme.navigation.Router;
-import com.codependentvariables.aiandme.navigation.View;
+import com.codependentvariables.aiandme.modules.Router;
+import com.codependentvariables.aiandme.modules.View;
 import com.codependentvariables.aiandme.services.CheckInService;
 import com.codependentvariables.aiandme.state.AppState;
 import javafx.collections.FXCollections;

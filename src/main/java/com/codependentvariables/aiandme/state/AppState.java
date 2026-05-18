@@ -2,7 +2,6 @@ package com.codependentvariables.aiandme.state;
 
 import com.codependentvariables.aiandme.AiAndMe;
 import com.codependentvariables.aiandme.model.User;
-import com.codependentvariables.aiandme.navigation.Router;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
