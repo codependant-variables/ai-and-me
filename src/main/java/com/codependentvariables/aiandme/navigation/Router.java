@@ -1,7 +1,6 @@
 package com.codependentvariables.aiandme.navigation;
 
 import javafx.scene.layout.StackPane;
-import javafx.scene.Parent;
 
 /**
  * Router for application root.
@@ -29,13 +28,15 @@ public class Router {
         layout = stackPane;
     }
 
-    public static void navigateApp(View view) {
+    public static Object navigateApp(View view) {
         if (currentAppView == view) {
-            return;
+            return null;
         }
 
+        Object controller = null;
+
         if (app != null) {
-            loadView(app, view);
+            controller = ViewUtils.loadView(app, view);
         }
 
         lastView = currentAppView;
@@ -45,6 +46,8 @@ public class Router {
         if (currentAppView != View.LAYOUT) {
             currentLayoutView = null;
         }
+
+        return controller;
     }
 
     public static Object navigateLayout(View view) {
@@ -83,15 +86,5 @@ public class Router {
         } else {
             navigateApp(lastView);
         }
-    }
-
-    private static void loadView(StackPane stackPane, View view) {
-        setLoading(stackPane);
-        ViewUtils.loadView(stackPane, view);
-    }
-
-    // TODO: decide if this is needed as it loads fast enough to never see Loading..
-    private static void setLoading(StackPane stackPane) {
-        ViewUtils.loadView(stackPane, View.LOADING);
     }
 }

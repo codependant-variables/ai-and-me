@@ -85,11 +85,6 @@ public class QuizAttemptService {
                 if (isCorrect) correct++;
             }
         }
-
-        // 3 — Update the attempt record with the final correct-answer tally
-        attempt.setResults(correct);
-        attemptDAO.update(attempt);
-
         return correct;
     }
 

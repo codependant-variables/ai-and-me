@@ -6,8 +6,10 @@ import com.codependentvariables.aiandme.navigation.Router;
 import com.codependentvariables.aiandme.navigation.Toast;
 import com.codependentvariables.aiandme.navigation.ToastMessageType;
 import com.codependentvariables.aiandme.navigation.View;
+import com.codependentvariables.aiandme.services.CheckInService;
 import com.codependentvariables.aiandme.services.UserService;
 import com.codependentvariables.aiandme.state.AppState;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -16,6 +18,7 @@ import javafx.scene.layout.StackPane;
 
 public class LayoutController {
     private final UserService userService = UserService.getInstance();
+    private final CheckInService checkInService = CheckInService.getInstance();
     private final AppState appState = AppState.getInstance();
 
     @FXML
@@ -61,6 +64,11 @@ public class LayoutController {
     }
 
     @FXML
+    public void navigatePuzzleLibrary() {
+        Router.navigateLayout(View.PUZZLE_LIBRARY);
+    }
+
+    @FXML
     public void navigateLogin() {
         Router.navigateApp(View.LOGIN);
     }
@@ -90,4 +98,7 @@ public class LayoutController {
 
     @FXML
     public void navigateSettings() { Router.navigateLayout(View.SETTINGS); }
+
+    public void navigateCheckin(ActionEvent actionEvent) {
+    }
 }

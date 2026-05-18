@@ -13,6 +13,7 @@ public enum View {
     QUIZ_ATTEMPT,
     QUIZ_ATTEMPT_RESULTS,
     QUIZ_LIBRARY,
+    PUZZLE_LIBRARY,
     SETTINGS,
     SETUP_MFA,
     SIGNUP

@@ -7,6 +7,8 @@ import com.codependentvariables.aiandme.model.dao.SqliteCheckInDAO;
 import com.codependentvariables.aiandme.navigation.Toast;
 import com.codependentvariables.aiandme.navigation.ToastMessageType;
 import com.codependentvariables.aiandme.state.AppState;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 public class CheckInService {
@@ -49,7 +51,6 @@ public class CheckInService {
         }
 
         checkIn.setUserId(currentUser.getId());
-
         checkInDAO.add(checkIn);
 
         Toast.addMessage(
@@ -75,5 +76,13 @@ public class CheckInService {
 
     public List<CheckIn> getAllByUserId(int userId) {
         return checkInDAO.getAllByUserId(userId);
+    }
+
+    public boolean isExistingCheckInToday() {
+        List<CheckIn> userCheckIns = checkInDAO.getAllByUserId(appState.getCurrentUser().getId());
+        if (appState.getCurrentUser() != null && !userCheckIns.isEmpty()) {
+            return ChronoUnit.DAYS.between(userCheckIns.getFirst().getCompletedAt().toLocalDate(), LocalDate.now()) < 1;
+        }
+        return false;
     }
 }

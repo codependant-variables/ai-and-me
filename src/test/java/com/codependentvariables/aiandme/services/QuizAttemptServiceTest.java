@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class QuizAttemptServiceTest {
 
     @Test
-    void saveAttemptCountsCorrectAnswers() {
+    void saveAttemptCount() {
         QuizAttemptService service = new QuizAttemptService(new MockQuizAttemptDAO(), new MockQuizAttemptQuestionDAO(), new MockQuizAttemptAnswerDAO()
         );
 

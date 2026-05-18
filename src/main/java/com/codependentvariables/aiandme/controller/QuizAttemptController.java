@@ -10,24 +10,56 @@ import com.codependentvariables.aiandme.state.AppState;
 import javafx.fxml.FXML;
 import java.util.logging.Logger;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 public class QuizAttemptController {
+    private static final AppState appState = AppState.getInstance();
+    private static final QuizAttemptService quizAttemptService = QuizAttemptService.getInstance();
+    private static final Logger logger = Logger.getLogger(QuizAttemptController.class.getName()); // Logger for class
 
     private QuizTemplate template;
     private List<QuizTemplateQuestion> questions = new ArrayList<>();
     private int currentIndex = 0;
 
-    private final List<QuizTemplateAnswer> selectedAnswers = new ArrayList<>();
-    private static final Logger logger = Logger.getLogger(QuizAttemptController.class.getName()); // Logger for class
+    public final List<QuizTemplateAnswer> selectedAnswers = new ArrayList<>();
 
-    @FXML private Label progressLabel;
-    @FXML private Label questionLabel;
-    @FXML private VBox answersBox;
-    @FXML private Button nextButton;
+    private boolean testMode = false;
+    private boolean showImages = false;
+    private int totalQuestions;
+
+    @FXML
+    public Label progressLabel;
+    @FXML
+    public Label questionLabel;
+    @FXML
+    public ImageView questionImageView;
+    @FXML
+    public VBox answersBox;
+    @FXML
+    public Button nextButton;
+
+    /**
+     * Enables or disables test mode.
+     * In test mode, UI actions and external calls are skipped.
+     * @param testMode testMode true to enable test mode, false otherwise
+     */
+    public void setTestMode(boolean testMode) {
+        this.testMode = testMode;
+    }
+
+    /**
+     * When set to true, the question image is displayed during the attempt.
+     * Called by PuzzleLibraryController before initQuiz().
+     */
+    public void setShowImages(boolean showImages) {
+        this.showImages = showImages;
+    }
 
     @FXML
     private void initialize() {
@@ -46,7 +78,9 @@ public class QuizAttemptController {
 
         this.template = template;
 
-        QuizTemplateService.getInstance().loadQuestionsIntoTemplate(template);
+        if (!testMode) {
+            QuizTemplateService.getInstance().loadQuestionsIntoTemplate(template);
+        }
         this.questions = template.getQuestions();
 
         if (questions == null || questions.size() < 2) {
@@ -67,23 +101,48 @@ public class QuizAttemptController {
         logger.info("Quiz loaded: " + template.getName());
         logger.info("Question count: " + (questions == null ? 0 : questions.size()));
 
+        this.totalQuestions = questions.size();
         this.currentIndex = 0;
         this.selectedAnswers.clear();
 
         loadQuestion();
+        updateProgress();
+    }
+
+    /**
+     * Updates the progress label to show the current question number
+     * and the total number of questions in the quiz.
+     */
+    private void updateProgress() {
+        progressLabel.setText("Question " + (currentIndex + 1) + " of " + totalQuestions);
+    }
+
+    // Gets the current question number, used for unit test
+    public int getQuestionNumber() {
+        return currentIndex + 1;
     }
 
     private void loadQuestion() {
         QuizTemplateQuestion question = questions.get(currentIndex);
 
-        progressLabel.setText("Question " + (currentIndex + 1) + " of " + questions.size());
         questionLabel.setText(question.getText());
         answersBox.getChildren().clear();
 
-        List<QuizTemplateAnswer> answers = question.getAnswers();
+        // Show image for puzzle attempts
+        if (showImages && questionImageView != null) {
+            byte[] imgBytes = question.getImage();
+            if (imgBytes != null && imgBytes.length > 0) {
+                questionImageView.setImage(new Image(new ByteArrayInputStream(imgBytes)));
+                questionImageView.setVisible(true);
+                questionImageView.setManaged(true);
+            } else {
+                questionImageView.setImage(null);
+                questionImageView.setVisible(false);
+                questionImageView.setManaged(false);
+            }
+        }
 
-        System.out.println("Question: " + question.getText());
-        System.out.println("Answer count: " + (answers == null ? 0 : answers.size()));
+        List<QuizTemplateAnswer> answers = question.getAnswers();
 
         if (answers == null || answers.isEmpty()) {
             answersBox.getChildren().add(new Label("No answers found for this question."));
@@ -103,20 +162,17 @@ public class QuizAttemptController {
 
         nextButton.setDisable(true);
 
-        group.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
-            nextButton.setDisable(newToggle == null);
-        });
+        group.selectedToggleProperty().addListener((obs, oldToggle, newToggle) ->
+                nextButton.setDisable(newToggle == null)
+        );
 
-        // TODO: Future UX improvement:
-        // selecting an answer could automatically move to the next question,
-        // with a previous button for user for corrections and confirmation before finishing
-        nextButton.setText(currentIndex == questions.size() - 1 ? "Finish" : "Next >");
+        boolean isLastQuestion = currentIndex == totalQuestions - 1;
+        nextButton.setText(isLastQuestion ? "Finish" : "Next >");
     }
 
     @FXML
-    private void handleNext() {
+    public void handleNext() {
         QuizTemplateAnswer selectedAnswer = getSelectedAnswer();
-
         if (selectedAnswer == null) return;
 
         selectedAnswers.add(selectedAnswer);
@@ -124,8 +180,9 @@ public class QuizAttemptController {
         if (currentIndex < questions.size() - 1) {
             currentIndex++;
             loadQuestion();
+            updateProgress();
         } else {
-            finishQuiz();
+            submitQuiz();
         }
     }
 
@@ -139,41 +196,32 @@ public class QuizAttemptController {
         return null;
     }
 
-    private void finishQuiz() {
-        User currentUser = AppState.getInstance().getCurrentUser();
-        boolean isGuest = currentUser == null;
-
-        try {
-            int correct;
-            if (isGuest) {
-                // Guest: count correct answers locally, do not save to the database
-                correct = 0;
-                for (QuizTemplateAnswer answer : selectedAnswers) {
-                    if (answer.isCorrect()) correct++;
-                }
-            } else {
-                correct = QuizAttemptService.getInstance().saveAttempt(template, currentUser.getId(), selectedAnswers);
-            }
-
-            QuizAttemptSummary summary = QuizAttemptSummary.of(
-                            template.getName(),
-                            correct,
-                            questions.size(),
-                            java.sql.Timestamp.from(java.time.Instant.now()),
-                            questions,
-                            selectedAnswers
-            );
-
-            QuizAttemptResultsController controller = (QuizAttemptResultsController) Router.navigateLayout(View.QUIZ_ATTEMPT_RESULTS);
-
-            if (controller != null) {
-                controller.initResults(summary);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            Dialogue.message("Failed to save quiz attempt: " + e.getMessage());
+    private void submitQuiz() {
+        if (testMode) return;
+        if (appState.getCurrentUser() == null) {
+            Dialogue.signupToSave(this::finishSubmitQuiz, this::finishSubmitQuiz);
+        } else {
+            this.finishSubmitQuiz();
         }
+    }
+
+    private void finishSubmitQuiz() {
+        int correct = appState.getCurrentUser() == null
+                ? (int)selectedAnswers.stream().filter(QuizTemplateAnswer::isCorrect).count()
+                : quizAttemptService.saveAttempt(template, appState.getCurrentUser().getId(), selectedAnswers);
+
+        QuizAttemptSummary summary = QuizAttemptSummary.of(
+                template.getName(),
+                correct,
+                questions.size(),
+                java.sql.Timestamp.from(java.time.Instant.now()),
+                questions,
+                selectedAnswers
+        );
+
+        QuizAttemptResultsController controller = (QuizAttemptResultsController) Router.navigateLayout(View.QUIZ_ATTEMPT_RESULTS);
+        assert controller != null;
+        controller.initialiseData(summary);
     }
 
     @FXML

@@ -1,5 +1,6 @@
 package com.codependentvariables.aiandme.controller;
 
+import com.codependentvariables.aiandme.navigation.DialogueMessage;
 import com.codependentvariables.aiandme.navigation.DialogueType;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -25,7 +26,6 @@ public class DialogueController {
 
     @FXML
     public void initialize() {
-        yesRef.textProperty().bind(dialogueType.map(dialogueType -> dialogueType == DialogueType.MESSAGE ? "Ok" : "Yes"));
         yesRef.managedProperty().bind(yesRef.visibleProperty());
         noRef.visibleProperty().bind(dialogueType.map(dialogueType -> dialogueType != DialogueType.MESSAGE));
         noRef.managedProperty().bind(noRef.visibleProperty());
@@ -33,10 +33,13 @@ public class DialogueController {
         cancelRef.managedProperty().bind(cancelRef.visibleProperty());
     }
 
-    public void initialiseData(String message, DialogueType dialogueType, Consumer<Boolean> callback) {
-        messageRef.setText(message);
-        this.dialogueType.set(dialogueType);
-        this.callback = callback;
+    public void initialiseData(DialogueMessage dialogueMessage) {
+        messageRef.setText(dialogueMessage.message());
+        dialogueType.set(dialogueMessage.type());
+        callback = dialogueMessage.callback();
+        yesRef.setText(dialogueMessage.yesText());
+        noRef.setText(dialogueMessage.noText());
+        cancelRef.setText(dialogueMessage.cancelText());
     }
 
     @FXML

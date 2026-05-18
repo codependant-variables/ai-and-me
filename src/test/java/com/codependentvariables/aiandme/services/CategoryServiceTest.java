@@ -6,6 +6,9 @@ import com.codependentvariables.aiandme.model.User;
 import com.codependentvariables.aiandme.model.mock.MockCategoryDAO;
 import com.codependentvariables.aiandme.state.AppState;
 import static org.junit.jupiter.api.Assertions.*;
+
+import javafx.application.Platform;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,6 +16,15 @@ public class CategoryServiceTest extends JavaFXTest {
     private MockCategoryDAO mockCategoryDAO;
     private CategoryService categoryService;
     private Category category;
+
+    @BeforeAll
+    static void initJavaFX() {
+        try {
+            Platform.startup(() -> {});
+        } catch (IllegalStateException ignored) {
+            // Toolkit already initialized
+        }
+    }
 
     @BeforeEach
     void setUp() {

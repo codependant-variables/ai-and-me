@@ -3,6 +3,8 @@ package com.codependentvariables.aiandme.model.mock;
 import com.codependentvariables.aiandme.model.*;
 import com.codependentvariables.aiandme.model.dao.IUserDAO;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -30,6 +32,11 @@ public class MockUserDAO implements IUserDAO {
                 break;
             }
         }
+    }
+
+    @Override
+    public void updateLastLoginAt(User user) {
+        user.setLastLoginAt(Timestamp.valueOf(LocalDateTime.now()));
     }
 
     @Override

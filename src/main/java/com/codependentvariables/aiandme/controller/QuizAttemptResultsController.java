@@ -19,18 +19,22 @@ import javafx.scene.text.FontWeight;
  * Controller responsible for displaying the results of a completed quiz attempt.
  */
 public class QuizAttemptResultsController {
-
-    @FXML private Label lblQuizName;
-    @FXML private Label lblScore;
-    @FXML private Label lblPercentage;
-    @FXML private Label lblCompletedAt;
-    @FXML private VBox  resultsContainer;
+    @FXML
+    private Label lblQuizName;
+    @FXML
+    private Label lblScore;
+    @FXML
+    private Label lblPercentage;
+    @FXML
+    private Label lblCompletedAt;
+    @FXML
+    private VBox  resultsContainer;
 
     /**
      * Initializes the results view with summary data.
      * Populates header info and dynamically builds result rows.
      */
-    public void initResults(QuizAttemptSummary summary) {
+    public void initialiseData(QuizAttemptSummary summary) {
         lblQuizName.setText(summary.getQuizName());
         lblScore.setText("Score:  " + summary.getCorrect() + " / " + summary.getTotal());
         lblPercentage.setText(summary.getPercentage() + "%");
@@ -77,8 +81,7 @@ public class QuizAttemptResultsController {
     }
 
     @FXML
-    private void handleBack() {
-        Router.navigateBack();
+    public void handleBack() {
+        Router.navigateLayout(View.QUIZ_LIBRARY);
     }
-    // TODO: @FXML private void handleBackToLibrary() { ... }
 }

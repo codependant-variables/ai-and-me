@@ -9,18 +9,25 @@ public class QuizTemplate {
     private String name;
     private int categoryId;
     private int userId;
+    private boolean isPuzzle;
     private String status;
 
     /* Storage in memory temporatily here */
     private final List<QuizTemplateQuestion> questions = new ArrayList<>();
 
-    public QuizTemplate(String name, int categoryId, int userId, String status) {
+    public QuizTemplate(String name, int categoryId, int userId, boolean isPuzzle, String status) {
         if (name == null || name.isBlank()) throw new IllegalArgumentException("name must not be blank");
         if (status == null) throw new IllegalArgumentException("status must not be null");
         this.name = name;
         this.categoryId = categoryId;
         this.userId = userId;
+        this.isPuzzle = isPuzzle;
         this.status = status;
+    }
+
+    /** Constructor with isPuzzle defaulting to false. */
+    public QuizTemplate(String name, int categoryId, int userId, String status) {
+        this(name, categoryId, userId, false, status);
     }
 
     public int getId() {
@@ -53,6 +60,14 @@ public class QuizTemplate {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public boolean isPuzzle() {
+        return isPuzzle;
+    }
+
+    public void setPuzzle(boolean isPuzzle) {
+        this.isPuzzle = isPuzzle;
     }
 
     public String getStatus() {

@@ -4,6 +4,8 @@ package com.codependentvariables.aiandme.controller;
 import com.codependentvariables.aiandme.model.*;
 import com.codependentvariables.aiandme.services.QuizAttemptService;
 import com.codependentvariables.aiandme.navigation.Router;
+import com.codependentvariables.aiandme.navigation.Toast;
+import com.codependentvariables.aiandme.navigation.ToastMessageType;
 import com.codependentvariables.aiandme.navigation.View;
 import com.codependentvariables.aiandme.services.CheckInService;
 import com.codependentvariables.aiandme.services.QuizTemplateService;
@@ -16,6 +18,10 @@ import javafx.scene.chart.*;
 import javafx.scene.control.Label;
 import com.codependentvariables.aiandme.services.HomeService;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import java.util.List;
@@ -64,18 +70,21 @@ public class HomeController {
     public void initialize() {
         checkInStreak.setText(homeService.getCheckInStreak());
         lastCheckIn.setText(homeService.getLastCheckInDate());
-        checkInChart.setLegendVisible(true);
-        checkInChart.setLegendSide(Side.RIGHT);
-        dependenceSeries.setName("Dependence");
-        useSeries.setName("Frequency");
-        happinessSeries.setName("Happiness");
+        yAxisCheckin.setLowerBound(0.0);
+        yAxisCheckin.setUpperBound(100.0);
+        yAxisCheckin.setTickUnit(10);
+        background.styleProperty().bind(appState.getObservableIsDarkMode().map(isDarkMode -> isDarkMode ? "-fx-background-color: #202430;" : "-fx-background-color: #f0edef;"));
+        dashboardWidgetData.styleProperty().bind(appState.getObservableIsDarkMode().map(isDarkMode -> isDarkMode ? "-fx-background-color: #2e3440;" : "-fx-background-color: #ffffff;"));
+        dashboardWidgetQuiz.styleProperty().bind(appState.getObservableIsDarkMode().map(isDarkMode -> isDarkMode ? "-fx-background-color: linear-gradient(to bottom, #2e3440, #ce78b1);" : "-fx-background-color: linear-gradient(to bottom, #ffffff, #ce78b1);"));
+        dashboardWidgetPuzzle.styleProperty().bind(appState.getObservableIsDarkMode().map(isDarkMode -> isDarkMode ? "-fx-background-color: linear-gradient(to bottom, #2e3440, #79d1ed);" : "-fx-background-color: linear-gradient(to bottom, #ffffff, #79d1ed);"));
+        dashboardWidgetInsight.styleProperty().bind(appState.getObservableIsDarkMode().map(isDarkMode -> isDarkMode ? "-fx-background-color: #2e3440;" : "-fx-background-color: #ffffff;"));
+        dashboardWidgetNews.styleProperty().bind(appState.getObservableIsDarkMode().map(isDarkMode -> isDarkMode ? "-fx-background-color: #2e3440;" : "-fx-background-color: #ffffff;"));
 
         if (appState.getCurrentUser() != null) {
             AttemptStatistics split = attemptsService.getAttemptCountByUser(appState.getCurrentUser().getId());
 
             List<CheckIn> recentCheckins = checkInService.getAllByUserId(appState.getCurrentUser().getId());
             // using getAllByUserId for now - may want to create a separate method for getRecentCheckIns in CheckInService class which checks timeframe
-
 
             dependenceSeries.setName("Dependence");
             useSeries.setName("Frequency");
@@ -147,11 +156,15 @@ public class HomeController {
     }
 
     public void navigateCheckIn(MouseEvent mouseEvent) {
-        Router.navigateLayout(View.CHECK_IN);
+        if (checkInService.isExistingCheckInToday()) {
+            Toast.addMessage("Check-in Completed", "You've already completed your daily check-in. Come back tomorrow!", ToastMessageType.INFORMATION);
+        } else {
+            Router.navigateLayout(View.CHECK_IN);
+        }
     }
 
     public void handleAttemptQuiz(MouseEvent mouseEvent) {
-        QuizAttemptController controller = (QuizAttemptController)Router.navigateLayout(View.QUIZ_ATTEMPT);
+        QuizAttemptController controller = (QuizAttemptController) Router.navigateLayout(View.QUIZ_ATTEMPT);
         controller.initQuiz(quizTemplate);
     }
 }

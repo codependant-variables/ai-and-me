@@ -7,6 +7,7 @@
     -fx-pref-width: 1024px;
     -fx-min-height: 768px;
     -fx-padding: 0 0 0 0;
+    -fx-effect: innershadow(three-pass-box, #00000033, 10, 0, 0, 5);
 }
 
 /*------ Style Class - Background StackPane ------*/
@@ -19,9 +20,13 @@
     -fx-min-height: 768px;
 }
 
+/*------ Style Class - Background OtherPane ------*/
+.background-VBox {
+    -fx-effect: innershadow(three-pass-box, #00000033, 10, 0, 0, 5);
+}
+
 /*------ Style Class - Widgets ------*/
 .widget-VBox {
-
     -fx-border-color: #ffffff;
     -fx-background-radius: 15px;
     -fx-border-radius: 15px;
@@ -61,6 +66,10 @@ Button {
 .title {
     -fx-font-size: 18pt;
     -fx-font-weight: bold;
+}
+
+.center {
+    -fx-min-width: -Infinity;
 }
 
 .bold {
@@ -128,7 +137,7 @@ Button {
 .widget-VBox {
     -fx-border-color: #ffffff;
     -fx-background-radius: 15px;
-    -fx-border-radius: 15px;
+    -fx-border-width: 0px;
     -fx-effect: dropshadow(three-pass-box, #00000033, 15, 0.1, 5, 5);
 }
 
@@ -165,9 +174,19 @@ Button {
 
 /*------------------------ Page - Quiz/Puzzle Library ------------------------*/
 /*------ Style Class - Library Buttons ------*/
-.libraryButton {
+.libraryButtonPrimary {
     -fx-cursor: hand;
+    -fx-background-color: #8cc978;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
 }
+
+.libraryButtonSecondary {
+    -fx-cursor: hand;
+    -fx-border-width: 2px;
+    -fx-border-color: #8CC978;
+}
+
 
 /*------ Style Class - Library Widgets ------*/
 .libraryWidget {

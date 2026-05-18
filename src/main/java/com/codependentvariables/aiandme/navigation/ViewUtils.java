@@ -1,6 +1,8 @@
 package com.codependentvariables.aiandme.navigation;
 
 import com.codependentvariables.aiandme.AiAndMe;
+import com.codependentvariables.aiandme.controller.PuzzleLibraryController;
+import com.codependentvariables.aiandme.controller.QuizLibraryController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
@@ -26,6 +28,14 @@ public final class ViewUtils {
 
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(resourceUrl);
+
+            // quiz-library.fxml has no fx:controller so both library views inject their controller here
+            if (view == View.QUIZ_LIBRARY) {
+                fxmlLoader.setController(new QuizLibraryController());
+            } else if (view == View.PUZZLE_LIBRARY) {
+                fxmlLoader.setController(new PuzzleLibraryController());
+            }
+
             Node loadedNode = fxmlLoader.load();
             stackPane.getChildren().setAll(loadedNode);
             return fxmlLoader.getController();
@@ -46,12 +56,12 @@ public final class ViewUtils {
             case View.DIALOGUE -> "dialogue.fxml";
             case View.HOME -> "home.fxml";
             case View.LAYOUT -> "layout.fxml";
-            case View.LOADING -> "loading.fxml";
             case View.LOGIN -> "login.fxml";
             case View.PROFILE -> "profile.fxml";
             case View.QUIZ_ATTEMPT -> "quiz-attempt.fxml";
             case View.QUIZ_ATTEMPT_RESULTS -> "quiz-attempt-results.fxml";
             case View.QUIZ_LIBRARY -> "quiz-library.fxml";
+            case View.PUZZLE_LIBRARY -> "quiz-library.fxml";
             case View.SETTINGS -> "settings.fxml";
             case View.SETUP_MFA -> "setup-mfa.fxml";
             case View.SIGNUP -> "signup.fxml";
