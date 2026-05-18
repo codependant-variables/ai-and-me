@@ -13,14 +13,15 @@ public class SqliteQuizTemplateDAO extends BaseSqliteDAO implements IQuizTemplat
                     name VARCHAR NOT NULL,
                     category_id INTEGER NOT NULL REFERENCES categories(id),
                     user_id INTEGER REFERENCES users(id),
+                    ispuzzle INTEGER NOT NULL,
                     status VARCHAR NOT NULL DEFAULT 'draft'
                 );
             """;
 
     private static final String seedDataQuery = """
-                INSERT INTO quiz_templates (name, category_id, user_id, status) VALUES ('Mental Maths', 1, 1, 'published');
-                INSERT INTO quiz_templates (name, category_id, user_id, status) VALUES ('Find The Pattern', 2, 1, 'published');
-                INSERT INTO quiz_templates (name, category_id, user_id, status) VALUES ('Groupings', 2, 1, 'published');
+                INSERT INTO quiz_templates (name, category_id, user_id, ispuzzle, status) VALUES ('Mental Maths', 1, 1, 0, 'published');
+                INSERT INTO quiz_templates (name, category_id, user_id, ispuzzle, status) VALUES ('Find The Pattern', 2, 1, 0, 'published');
+                INSERT INTO quiz_templates (name, category_id, user_id, ispuzzle, status) VALUES ('Groupings', 2, 1, 0, 'published');
             """;
 
     @Override
@@ -33,11 +34,20 @@ public class SqliteQuizTemplateDAO extends BaseSqliteDAO implements IQuizTemplat
         return seedDataQuery;
     }
 
+    /**
+     * Seeds the example "Pattern Puzzle" template with PQ1.png on each question.
+     * Seeding is handled by SqliteQuizTemplateQuestionDAO.seedBinaryData() because
+     * the question/answer data belongs there. Nothing to do here.
+     */
+    @Override
+    public void seedBinaryData() {}
+
     private static final IRowMapper<QuizTemplate> QUIZ_TEMPLATE_MAPPER = (resultSet) -> {
         QuizTemplate template = new QuizTemplate(
                 resultSet.getString("name"),
                 resultSet.getInt("category_id"),
                 resultSet.getInt("user_id"),
+                resultSet.getInt("ispuzzle") == 1,
                 resultSet.getString("status")
         );
         template.setId(resultSet.getInt("id"));
@@ -46,13 +56,18 @@ public class SqliteQuizTemplateDAO extends BaseSqliteDAO implements IQuizTemplat
 
     @Override
     public void add(QuizTemplate quizTemplate) {
-        final String query = "INSERT INTO quiz_templates(name, category_id, user_id, status) VALUES(?, ?, ?, ?)";
+        final String query = "INSERT INTO quiz_templates(name, category_id, user_id, ispuzzle, status) VALUES(?, ?, ?, ?, ?)";
 
         var id = executeSqlWithGeneratedKeys(query, statement -> {
             statement.setString(1, quizTemplate.getName());
             statement.setInt(2, quizTemplate.getCategoryId());
-            statement.setInt(3, quizTemplate.getUserId());
-            statement.setString(4, quizTemplate.getStatus());
+            if (quizTemplate.getUserId() == 0) {
+                statement.setNull(3, java.sql.Types.INTEGER);
+            } else {
+                statement.setInt(3, quizTemplate.getUserId());
+            }
+            statement.setInt(4, quizTemplate.isPuzzle() ? 1 : 0);
+            statement.setString(5, quizTemplate.getStatus());
         });
 
         quizTemplate.setId(id);
@@ -60,14 +75,19 @@ public class SqliteQuizTemplateDAO extends BaseSqliteDAO implements IQuizTemplat
 
     @Override
     public void update(QuizTemplate quizTemplate) {
-        final String query = "UPDATE quiz_templates SET name = ?, category_id = ?, user_id = ?, status = ? WHERE id = ?";
+        final String query = "UPDATE quiz_templates SET name = ?, category_id = ?, user_id = ?, ispuzzle = ?, status = ? WHERE id = ?";
 
         executeSql(query, statement -> {
             statement.setString(1, quizTemplate.getName());
             statement.setInt(2, quizTemplate.getCategoryId());
-            statement.setInt(3, quizTemplate.getUserId());
-            statement.setString(4, quizTemplate.getStatus());
-            statement.setInt(5, quizTemplate.getId());
+            if (quizTemplate.getUserId() == 0) {
+                statement.setNull(3, java.sql.Types.INTEGER);
+            } else {
+                statement.setInt(3, quizTemplate.getUserId());
+            }
+            statement.setInt(4, quizTemplate.isPuzzle() ? 1 : 0);
+            statement.setString(5, quizTemplate.getStatus());
+            statement.setInt(6, quizTemplate.getId());
         });
     }
 

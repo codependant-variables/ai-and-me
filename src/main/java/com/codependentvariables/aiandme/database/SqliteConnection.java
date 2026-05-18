@@ -76,6 +76,11 @@ public class SqliteConnection {
 
             connection.commit();
             connection.setAutoCommit(true);
+
+            // Seed any binary data (e.g. images) that cannot go in SQL strings
+            for (IDatabaseEntity entity : entities) {
+                entity.seedBinaryData();
+            }
         } catch (SQLException e) {
             System.err.println("Transaction failed; rolling back schema changes.");
             connection.rollback();
