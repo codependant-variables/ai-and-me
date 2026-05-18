@@ -1,5 +1,9 @@
 module:com.codependentvariables.aiandme
 com.codependentvariables.aiandme
 com.codependentvariables.aiandme.controller
+com.codependentvariables.aiandme.database
 com.codependentvariables.aiandme.model
-com.codependentvariables.aiandme.navigation
+com.codependentvariables.aiandme.modules
+com.codependentvariables.aiandme.services
+com.codependentvariables.aiandme.state
+com.codependentvariables.aiandme.validation
