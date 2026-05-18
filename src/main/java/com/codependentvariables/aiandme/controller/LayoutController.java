@@ -94,14 +94,4 @@ public class LayoutController {
     public void navigateSettings() {
         Router.navigateLayout(View.SETTINGS);
     }
-
-    @FXML
-    public void navigateCheckin() {
-        if (checkInService.isExistingCheckInToday()) {
-            Toast.addMessage("Check-in Completed", "You've already completed your daily check-in. Come back tomorrow!", ToastMessageType.INFORMATION);
-        }
-        else {
-            Router.navigateLayout(View.CHECK_IN);
-        }
-    }
 }
