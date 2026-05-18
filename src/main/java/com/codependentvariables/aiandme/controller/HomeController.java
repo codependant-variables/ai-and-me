@@ -53,7 +53,7 @@ public class HomeController {
     public NumberAxis yAxisQuizAttempts;
     @FXML
     public XYChart<Number, Number> attemptChart;
-    //  quiz vs puzzle pie chart idk
+    @FXML
     public PieChart ratioPie = new PieChart();
 
 
@@ -70,12 +70,13 @@ public class HomeController {
         useSeries.setName("Frequency");
         happinessSeries.setName("Happiness");
 
+
+
         if (appState.getCurrentUser() != null) {
             AttemptStatistics split = attemptsService.getAttemptCountByUser(appState.getCurrentUser().getId());
 
             List<CheckIn> recentCheckins = checkInService.getAllByUserId(appState.getCurrentUser().getId());
             // using getAllByUserId for now - may want to create a separate method for getRecentCheckIns in CheckInService class which checks timeframe
-
 
             dependenceSeries.setName("Dependence");
             useSeries.setName("Frequency");
@@ -84,23 +85,22 @@ public class HomeController {
             int checkInNumber = 1;
             for (int i = 5; i != 0; i--, checkInNumber++) {
                 //for every check in, create a point on a line graph for each category (requires time/date string and score float)
-                dependenceSeries.getData().add(new XYChart.Data<>(checkInNumber, recentCheckins.get(i).getAiDependence()));
-                useSeries.getData().add(new XYChart.Data<>(checkInNumber, recentCheckins.get(i).getAiUse()));
-                happinessSeries.getData().add(new XYChart.Data<>(checkInNumber, recentCheckins.get(i).getAiHappiness()));
+                dependenceSeries.getData().add(new XYChart.Data<>(checkInNumber, recentCheckins.get(i-1).getAiDependence()));
+                useSeries.getData().add(new XYChart.Data<>(checkInNumber, recentCheckins.get(i-1).getAiUse()));
+                happinessSeries.getData().add(new XYChart.Data<>(checkInNumber, recentCheckins.get(i-1).getAiHappiness()));
             }
 
             xAxisCheckin.setAutoRanging(false);
             xAxisCheckin.setLowerBound(1);
             xAxisCheckin.setUpperBound(5);
             xAxisCheckin.setTickUnit(1);
-
-            xAxisQuizAttempts.setTickUnit(1);
-
-            yAxisQuizAttempts.setUpperBound(100.0);
-
+            yAxisCheckin.setAutoRanging(false);
             yAxisCheckin.setLowerBound(0);
             yAxisCheckin.setUpperBound(100.0);
             yAxisCheckin.setTickUnit(10);
+
+            xAxisQuizAttempts.setTickUnit(1);
+            yAxisQuizAttempts.setUpperBound(100.0);
 
             dependenceSeries.setName("Dependence");
             useSeries.setName("Frequency");
