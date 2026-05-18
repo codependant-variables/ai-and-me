@@ -1,10 +1,15 @@
 package com.codependentvariables.aiandme.controllers;
 
 
+import com.codependentvariables.aiandme.controller.QuizLibraryController;
+import com.codependentvariables.aiandme.model.QuizTemplateQuestion;
+import org.junit.jupiter.api.Test;
+import java.util.Arrays;
+import java.util.List;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
-public class QuizLibraryControllerTest {
-
-<<<<<<< HEAD
+public class QuizControllerTest {
     // Research for asList: https://docs.oracle.com/javase/8/docs/api/java/util/Arrays.html
     @Test
     void checkTwoQuestions() {
@@ -12,7 +17,7 @@ public class QuizLibraryControllerTest {
         QuizTemplateQuestion q1 = new QuizTemplateQuestion(10, "Q1");
         QuizTemplateQuestion q2 = new QuizTemplateQuestion(10, "Q2");
 
-        List<QuizTemplateQuestion> questions = Arrays.asList(q1, q2);
+        List<QuizTemplateQuestion> questions = Arrays.asList(q1, q2); // Creates a list which contains the strings
         assertTrue(QuizLibraryController.isAttemptable(questions));
     }
 
@@ -39,14 +44,4 @@ public class QuizLibraryControllerTest {
         // Null shouldn't throw an error and should return false
         assertFalse(QuizLibraryController.isAttemptable(null));
     }
-
-    @Test
-    void isPuzzleShown() {
-        // A template with isPuzzle=true should NOT be shown in the quiz library (isPuzzle must be false)
-        QuizTemplate puzzleTemplate = new QuizTemplate("Puzzle One", 1, 1, true, "draft");
-        assertFalse(!puzzleTemplate.isPuzzle()); // isPuzzle is true means this does not pass quiz library filter
-    }
 }
-=======
-}
->>>>>>> fetch-attempts

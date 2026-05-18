@@ -55,4 +55,6 @@ public interface IQuizAttemptDAO {
      * @return the latest quiz attempt for that user
      */
     QuizAttempt getLatestByUserId(int userId);
+
+    List<QuizAttempt> getByUserIdOrdered(int userId);
 }

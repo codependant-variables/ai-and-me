@@ -39,7 +39,6 @@ public class QuizAttemptResultsController {
         lblScore.setText("Score:  " + summary.getCorrect() + " / " + summary.getTotal());
         lblPercentage.setText(summary.getPercentage() + "%");
         lblCompletedAt.setText("Completed: " + summary.getFormattedDate());
-
         resultsContainer.getChildren().clear();
         for (ResultRow row : summary.getRows()) {
             resultsContainer.getChildren().add(buildRowNode(row));

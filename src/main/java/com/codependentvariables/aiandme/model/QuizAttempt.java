@@ -7,11 +7,13 @@ public class QuizAttempt {
     private int userId; // FK
     private String name;
     private Timestamp completedAt;
+    private int results;
 
-    public QuizAttempt(int userId, String name, Timestamp completedAt){
+    public QuizAttempt(int userId, String name, Timestamp completedAt, int results){
         this.userId = userId;
         this.name = name;
         this.completedAt = completedAt;
+        this.results = results;
     }
 
     public int getId() {
@@ -41,4 +43,8 @@ public class QuizAttempt {
     public void setCompletedAt(Timestamp completedAt) {
         this.completedAt = completedAt;
     }
+
+    public int getResults() { return results; }
+    public void setResults(int results) { this.results = results; }
+
 }
