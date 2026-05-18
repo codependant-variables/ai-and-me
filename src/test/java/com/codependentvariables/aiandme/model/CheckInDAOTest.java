@@ -14,14 +14,11 @@ public class CheckInDAOTest {
 
     @Test
     public void get() {
-        CheckIn checkIn = new CheckIn(1,6.4f, 5.0f, 5.0f, "test", LocalDateTime.now());
-        checkIn.setId(1);
-        checkIn.setUserId(1);
-
+        CheckIn checkIn = new CheckIn(1, 6.4f, 5.0f, 5.0f, "test", LocalDateTime.now());
         checkInDAO.add(checkIn);
 
         // I've read checkin so much it's starting to look like chicken
-        CheckIn result = checkInDAO.get(1);
+        CheckIn result = checkInDAO.get(checkIn.getId());
 
         assertNotNull(result);
         assertEquals(6.4f, result.getAiUse());

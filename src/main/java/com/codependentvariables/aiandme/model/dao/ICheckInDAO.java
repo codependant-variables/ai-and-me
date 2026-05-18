@@ -21,6 +21,8 @@ public interface ICheckInDAO {
      */
     void delete(CheckIn checkIn);
 
+    void deleteByUserId(int userId);
+
     /**
      * Retrieves all check-ins from the DB.
      * @return A list of all check-ins in the DB, or null if none exist.

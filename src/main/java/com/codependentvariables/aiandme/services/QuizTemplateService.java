@@ -40,6 +40,9 @@ public class QuizTemplateService {
      * @throws IllegalArgumentException if the name is blank or categoryId is invalid.
      */
     public QuizTemplate createTemplate(String name, int categoryId, int userId) {
+        return createTemplate(name, categoryId, userId, false);
+    }
+    public QuizTemplate createTemplate(String name, int categoryId, int userId, boolean isPuzzle) {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Template name must not be blank.");
         }
@@ -47,7 +50,7 @@ public class QuizTemplateService {
             throw new IllegalArgumentException("A valid category must be selected.");
         }
 
-        QuizTemplate template = new QuizTemplate(name.trim(), categoryId, userId, "draft");
+        QuizTemplate template = new QuizTemplate(name.trim(), categoryId, userId, isPuzzle, "draft");
         templateDAO.add(template);
         return template;
     }
@@ -73,6 +76,15 @@ public class QuizTemplateService {
             deleteQuestionAndAnswers(q);
         }
         templateDAO.delete(template);
+    }
+
+    /**
+     * Returns the image bytes of the first question for the given template, null otherwise.
+     */
+    public byte[] getFirstQuestionImage(int templateId) {
+        List<QuizTemplateQuestion> questions = questionDAO.getQuestionsByTemplate(templateId);
+        if (questions == null || questions.isEmpty()) return null;
+        return questions.get(0).getImage();
     }
 
     public List<QuizTemplate> getAllTemplates() {
@@ -153,6 +165,14 @@ public class QuizTemplateService {
             answerDAO.deleteAnswer(a);
         }
         questionDAO.deleteQuestion(question);
+    }
+
+    public QuizTemplate getRandomTemplate(){
+        QuizTemplate testQuiz = new QuizTemplate("Comphrehension",  1, 1, "TestSRrt");
+        return testQuiz;
+
+        // TODO Need to add Recomeed quiz Template
+
     }
 }
 

@@ -4,9 +4,12 @@ import com.codependentvariables.aiandme.model.CheckIn;
 import com.codependentvariables.aiandme.model.User;
 import com.codependentvariables.aiandme.model.dao.ICheckInDAO;
 import com.codependentvariables.aiandme.model.dao.SqliteCheckInDAO;
-import com.codependentvariables.aiandme.navigation.Toast;
-import com.codependentvariables.aiandme.navigation.ToastMessageType;
+import com.codependentvariables.aiandme.modules.Toast;
+import com.codependentvariables.aiandme.modules.ToastMessageType;
 import com.codependentvariables.aiandme.state.AppState;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 public class CheckInService {
     private static CheckInService instance;
@@ -14,19 +17,19 @@ public class CheckInService {
 
     private static final AppState appState = AppState.getInstance();
 
-    private CheckInService() {
-        this(new SqliteCheckInDAO());
-    }
-
-    // Package-private constructor for unit tests
-    CheckInService(ICheckInDAO checkInDAO) {
+    private CheckInService(ICheckInDAO checkInDAO) {
         this.checkInDAO = checkInDAO;
     }
 
     public static CheckInService getInstance() {
         if (instance == null) {
-            instance = new CheckInService();
+            instance = new CheckInService(new SqliteCheckInDAO());
         }
+        return instance;
+    }
+
+    public static CheckInService createForTest(ICheckInDAO dao) {
+        instance = new CheckInService(dao);
         return instance;
     }
 
@@ -34,12 +37,12 @@ public class CheckInService {
         User currentUser = appState.getCurrentUser();
 
         if (currentUser == null) {
-            safeToast("Check-in Unable to be Submitted","User must be logged in to submit a check-in.", ToastMessageType.ERROR);
+            Toast.addMessage("Check-in Unable to be Submitted","User must be logged in to submit a check-in.", ToastMessageType.ERROR);
             throw new IllegalStateException("User must be logged in to submit a check-in.");
         }
 
         if (!isValid(checkIn)) {
-            safeToast(
+            Toast.addMessage(
                     "Check-in Incomplete",
                     "Please fill out all fields before submitting check in",
                     ToastMessageType.ERROR
@@ -48,10 +51,9 @@ public class CheckInService {
         }
 
         checkIn.setUserId(currentUser.getId());
-
         checkInDAO.add(checkIn);
 
-        safeToast(
+        Toast.addMessage(
                 "Check-in submitted",
                 "Thanks for completing your check-in!",
                 ToastMessageType.INFORMATION
@@ -68,11 +70,19 @@ public class CheckInService {
                 && checkIn.getAiUse() <= 100;
     }
 
-    private void safeToast(String title, String msg, ToastMessageType type) {
-        try {
-            Toast.addMessage(title, msg, type);
-        } catch (Throwable ignored) {
-            // Ignore in unit tests as JavaFX is not running
+    public CheckIn getById(int id) {
+        return checkInDAO.get(id);
+    }
+
+    public List<CheckIn> getAllByUserId(int userId) {
+        return checkInDAO.getAllByUserId(userId);
+    }
+
+    public boolean isExistingCheckInToday() {
+        List<CheckIn> userCheckIns = checkInDAO.getAllByUserId(appState.getCurrentUser().getId());
+        if (appState.getCurrentUser() != null && !userCheckIns.isEmpty()) {
+            return ChronoUnit.DAYS.between(userCheckIns.getFirst().getCompletedAt().toLocalDate(), LocalDate.now()) < 1;
         }
+        return false;
     }
 }

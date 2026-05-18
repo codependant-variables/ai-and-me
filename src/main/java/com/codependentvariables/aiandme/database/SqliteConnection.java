@@ -8,11 +8,13 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Logger;
 
 public class SqliteConnection {
     private static SqliteConnection instance;
     private final Connection connection;
     private static final String DB_PATH = "app.db";
+    private static final Logger logger = Logger.getLogger(SqliteConnection.class.getName());
 
     private SqliteConnection() {
         try {
@@ -29,6 +31,8 @@ public class SqliteConnection {
             connection = DriverManager.getConnection(url, config.toProperties());
             if (isNewDatabase)
                 setupSchema();
+            else
+                deleteInactiveAccounts();
         } catch (SQLException e) {
             throw new RuntimeException("Failed to connect to SQLite " + DB_PATH, e);
         }
@@ -72,6 +76,11 @@ public class SqliteConnection {
 
             connection.commit();
             connection.setAutoCommit(true);
+
+            // Seed any binary data (e.g. images) that cannot go in SQL strings
+            for (IDatabaseEntity entity : entities) {
+                entity.seedBinaryData();
+            }
         } catch (SQLException e) {
             System.err.println("Transaction failed; rolling back schema changes.");
             connection.rollback();
@@ -84,5 +93,17 @@ public class SqliteConnection {
      */
     public static Connection getConnection() {
         return getInstance().connection;
+    }
+
+    private void deleteInactiveAccounts() {
+        String deleteQuery = "DELETE FROM users WHERE last_login_at < (strftime('%s', 'now') * 1000 - 30 * 24 * 60 * 60 * 1000);";
+        try {
+            Statement statement = connection.createStatement();
+            int accountsDeleted = statement.executeUpdate(deleteQuery);
+            logger.info("Inactive accounts deleted: " + accountsDeleted);
+        } catch (SQLException e) {
+            System.err.println(e);
+            logger.severe("Failed to delete inactive accounts.");
+        }
     }
 }

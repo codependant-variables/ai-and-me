@@ -3,13 +3,15 @@ package com.codependentvariables.aiandme.model.mock;
 import com.codependentvariables.aiandme.model.*;
 import com.codependentvariables.aiandme.model.dao.IUserDAO;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class MockUserDAO implements IUserDAO {
-    public static final ArrayList<User> users = new ArrayList<>();
-    private static int autoIncrementedId = 1;
+    private final ArrayList<User> users = new ArrayList<>();
+    private int autoIncrementedId = 1;
 
     public MockUserDAO() {
         add(new User("Amy Adams", "amy.adams@mydomain.gov", "Zl3QG3XY5/Gsus8Ec4WTi6jMcM7EkrCGCqBMgwwYUzg=", "sKH9XkLaT2i1XR687zjlHQ=="));
@@ -30,6 +32,11 @@ public class MockUserDAO implements IUserDAO {
                 break;
             }
         }
+    }
+
+    @Override
+    public void updateLastLoginAt(User user) {
+        user.setLastLoginAt(Timestamp.valueOf(LocalDateTime.now()));
     }
 
     @Override

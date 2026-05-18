@@ -1,4 +1,4 @@
-package com.codependentvariables.aiandme.navigation;
+package com.codependentvariables.aiandme.modules;
 
 import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;

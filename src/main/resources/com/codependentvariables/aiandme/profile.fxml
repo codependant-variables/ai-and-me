@@ -1,64 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.*?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.SVGPath?>
 
-<HBox alignment="CENTER" spacing="20" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.codependentvariables.aiandme.controller.ProfileController">
+<HBox alignment="CENTER" spacing="20" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codependentvariables.aiandme.controller.ProfileController">
     <GridPane alignment="CENTER" hgap="5" vgap="10">
 
         <columnConstraints>
             <ColumnConstraints prefWidth="80.0" />
-            <ColumnConstraints prefWidth="300.0" />
-            <ColumnConstraints prefWidth="30.0" />
-            <ColumnConstraints prefWidth="30.0" />
+            <ColumnConstraints prefWidth="320.0" />
+            <ColumnConstraints />
+            <ColumnConstraints />
         </columnConstraints>
 
-        <Label text="Edit Details" styleClass="title" GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER" />
+        <Label styleClass="title" text="Edit Details" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="0" />
 
-        <Label text="Name:" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.columnIndex="0" />
-        <TextField fx:id="nameField" maxWidth="Infinity" onAction="#editName" disable="true" GridPane.rowIndex="1" GridPane.columnIndex="1" />
-        <Button fx:id="nameButton" onAction="#editName" GridPane.rowIndex="1" GridPane.columnIndex="2">
+        <Label text="Name:" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+        <TextField fx:id="nameField" disable="true" maxWidth="Infinity" onAction="#editName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+        <Button fx:id="nameButton" onAction="#editName" styleClass="emptyButton" GridPane.columnIndex="2" GridPane.rowIndex="1">
             <graphic>
-                <SVGPath content="M20.9888 4.28491L19.6405 2.93089C18.4045 1.6897 16.4944 1.6897 15.2584 2.93089L13.0112 5.30042L18.7416 11.055L21.1011 8.68547C21.6629 8.1213 22 7.33145 22 6.54161C22 5.75176 21.5506 4.84908 20.9888 4.28491ZM16.2697 10.9422L11.7753 6.42877L2.89888 15.3427C2.33708 15.9069 2 16.6968 2 17.5994V21.0973C2 21.5487 2.33708 22 2.89888 22H6.49438C7.2809 22 8.06742 21.6615 8.74157 21.0973L17.618 12.1834L16.2697 10.9422Z" />
+                <SVGPath fx:id="editNameSvg" />
             </graphic>
         </Button>
-        <Button fx:id="cancelNameButton" onAction="#cancelEditName" GridPane.rowIndex="1" GridPane.columnIndex="3">
+        <Button fx:id="cancelNameButton" onAction="#cancelEditName" styleClass="emptyButton" GridPane.columnIndex="3" GridPane.rowIndex="1">
             <graphic>
-                <SVGPath content="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z" />
-            </graphic>
-        </Button>
-
-        <Label text="Email:" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.columnIndex="0" />
-        <TextField fx:id="emailField" maxWidth="Infinity" onAction="#editEmail" disable="true" GridPane.rowIndex="2" GridPane.columnIndex="1" />
-        <Button fx:id="emailButton" onAction="#editEmail" GridPane.rowIndex="2" GridPane.columnIndex="2">
-            <graphic>
-             <SVGPath content="M20.9888 4.28491L19.6405 2.93089C18.4045 1.6897 16.4944 1.6897 15.2584 2.93089L13.0112 5.30042L18.7416 11.055L21.1011 8.68547C21.6629 8.1213 22 7.33145 22 6.54161C22 5.75176 21.5506 4.84908 20.9888 4.28491ZM16.2697 10.9422L11.7753 6.42877L2.89888 15.3427C2.33708 15.9069 2 16.6968 2 17.5994V21.0973C2 21.5487 2.33708 22 2.89888 22H6.49438C7.2809 22 8.06742 21.6615 8.74157 21.0973L17.618 12.1834L16.2697 10.9422Z" />
-            </graphic>
-        </Button>
-        <Button fx:id="cancelEmailButton" onAction="#cancelEditEmail" GridPane.rowIndex="2" GridPane.columnIndex="3">
-            <graphic>
-                <SVGPath content="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z" />
+                <SVGPath fx:id="cancelNameSvg" />
             </graphic>
         </Button>
 
-        <Button onAction="#navigateChangePassword" maxWidth="Infinity" text="Change password" GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.columnSpan="2" />
+        <Label text="Email:" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
+        <TextField fx:id="emailField" disable="true" maxWidth="Infinity" onAction="#editEmail" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+        <Button fx:id="emailButton" onAction="#editEmail" styleClass="emptyButton" GridPane.columnIndex="2" GridPane.rowIndex="2">
+            <graphic>
+                <SVGPath fx:id="editEmailSvg" />
+            </graphic>
+        </Button>
+        <Button fx:id="cancelEmailButton" onAction="#cancelEditEmail" styleClass="emptyButton" GridPane.columnIndex="3" GridPane.rowIndex="2">
+            <graphic>
+                <SVGPath fx:id="cancelEmailSvg" />
+            </graphic>
+        </Button>
 
-        <HBox alignment="CENTER" spacing="10" GridPane.rowIndex="4" GridPane.columnIndex="0" GridPane.columnSpan="4" GridPane.halignment="CENTER">
+        <Button maxWidth="Infinity" onAction="#navigateChangePassword" text="Change password" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+        <HBox alignment="CENTER" spacing="10" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4">
             <Label text="Multi-Factor Authentication:" />
             <CheckBox fx:id="mfaCheckbox" disable="true" />
             <Button fx:id="mfaButton" onAction="#clickMfa" text="Setup MFA" />
         </HBox>
+      <rowConstraints>
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+      </rowConstraints>
 
     </GridPane>
     <VBox alignment="CENTER" spacing="10">
-        <Label text="Actions" styleClass="title" />
-        <Button maxWidth="Infinity" onAction="#viewCheckIns" text="View My Check Ins" />
+        <Label styleClass="title" text="Actions" />
+        <Button maxWidth="Infinity" onAction="#navigateCheckInHistory" text="View my check-ins" />
         <Button maxWidth="Infinity" onAction="#exportData" text="Export my data" />
-        <Button maxWidth="Infinity" onAction="#clearData" text="Clear my data" />
-        <Button maxWidth="Infinity" onAction="#deleteUser" text="Delete Account" styleClass="alert" />
+        <Button maxWidth="Infinity" onAction="#clearCheckIns" text="Clear check-ins"/>
+        <Button maxWidth="Infinity" onAction="#clearQuizAttempts" text="Clear quiz attempts"/>
+        <Button maxWidth="Infinity" onAction="#clearData" text="Clear all data" />
+        <Button maxWidth="Infinity" onAction="#deleteUser" styleClass="alert" text="Delete Account" />
     </VBox>
 </HBox>

@@ -4,7 +4,6 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class QuizAttemptSummary {
 
@@ -13,6 +12,7 @@ public class QuizAttemptSummary {
     private final int total;
     private final Timestamp completedAt;
     private final List<ResultRow> rows;
+    private final List<QuizTemplateAnswer> selectedAnswers = new ArrayList<>();
 
     public QuizAttemptSummary(String quizName, int correct, int total,
                                Timestamp completedAt, List<ResultRow> rows) {
@@ -32,10 +32,10 @@ public class QuizAttemptSummary {
     public static QuizAttemptSummary of(String quizName, int correct, int total,
                                         Timestamp completedAt,
                                         List<QuizTemplateQuestion> questions,
-                                        Map<Integer, QuizTemplateAnswer> selections) {
+                                        List<QuizTemplateAnswer> selectedAnswers) {
         return new QuizAttemptSummary(
                 quizName, correct, total, completedAt,
-                buildResultRows(questions, selections)
+                buildResultRows(questions, selectedAnswers)
         );
     }
 
@@ -63,15 +63,20 @@ public class QuizAttemptSummary {
 
     public static List<ResultRow> buildResultRows(
             List<QuizTemplateQuestion> questions,
-            Map<Integer, QuizTemplateAnswer> selections) {
+            List<QuizTemplateAnswer> selectedAnswers) {
 
         List<ResultRow> rows = new ArrayList<>();
-        for (QuizTemplateQuestion q : questions) {
-            QuizTemplateAnswer selected = selections.get(q.getId());
+
+        for (QuizTemplateQuestion question : questions) {
+            QuizTemplateAnswer selected = selectedAnswers.stream()
+                    .filter(answer -> answer.getQuizTemplateQuestionId() == question.getId())
+                    .findFirst()
+                    .orElse(null);
+
             if (selected != null) {
-                rows.add(new ResultRow(q.getText(), selected.getText(), selected.isCorrect()));
+                rows.add(new ResultRow(question.getText(), selected.getText(), selected.isCorrect()));
             } else {
-                rows.add(new ResultRow(q.getText(), "–", false));
+                rows.add(new ResultRow(question.getText(), "–", false));
             }
         }
         return List.copyOf(rows);

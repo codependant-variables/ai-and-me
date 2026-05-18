@@ -15,8 +15,12 @@ jobs:
           distribution: 'corretto'
           cache: maven
 
-      - name: Test
-        run: mvn test --batch-mode
+      - name: Install xvfb (Virtual Display)
+        run: sudo apt-get update && sudo apt-get install -y libgl1 xvfb libgtk-3-0
+        shell: bash
+
+      - name: Run tests
+        run: xvfb-run mvn test --batch-mode
 
   build:
     needs: test
@@ -48,3 +52,29 @@ jobs:
         with:
           name: aiandme-${{ matrix.os-profile }}
           path: staging/
+
+  javadoc:
+    needs: build
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'corretto'
+          cache: maven
+
+      - name: Create Javadoc
+        run: mvn clean compile javadoc:javadoc
+
+      - name: Publish Javadoc
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: target/docs/javadoc

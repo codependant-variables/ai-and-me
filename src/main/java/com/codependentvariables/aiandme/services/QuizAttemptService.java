@@ -6,7 +6,6 @@ import com.codependentvariables.aiandme.model.dao.*;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
-import java.util.Map;
 
 /****
  * Service layer for handling quiz attempts.
@@ -26,7 +25,7 @@ public class QuizAttemptService {
              new SqliteQuizAttemptAnswerDAO());
     }
 
-    // Package-private for unit tests
+    // Not public but tests in this package can use it
     QuizAttemptService(IQuizAttemptDAO attemptDAO,
                        IQuizAttemptQuestionDAO attemptQuestionDAO,
                        IQuizAttemptAnswerDAO attemptAnswerDAO) {
@@ -44,7 +43,7 @@ public class QuizAttemptService {
 
     public int saveAttempt(QuizTemplate template,
                            int userId,
-                           Map<Integer, QuizTemplateAnswer> selections) {
+                           List<QuizTemplateAnswer> selectedAnswers) {
 
         // 1 — Create the top-level attempt record
         QuizAttempt attempt = new QuizAttempt(
@@ -65,7 +64,14 @@ public class QuizAttemptService {
             );
             attemptQuestionDAO.add(aq); // sets aq.id
 
-            QuizTemplateAnswer selected = selections.get(tq.getId());
+            QuizTemplateAnswer selected = null;
+
+            for (QuizTemplateAnswer answer : selectedAnswers) {
+                if (answer.getQuizTemplateQuestionId() == tq.getId()) {
+                    selected = answer;
+                    break;
+                }
+            }
             if (selected != null) {
                 boolean isCorrect = selected.isCorrect();
                 QuizAttemptAnswer aa = new QuizAttemptAnswer(
@@ -78,7 +84,6 @@ public class QuizAttemptService {
                 if (isCorrect) correct++;
             }
         }
-
         return correct;
     }
 
@@ -91,5 +96,6 @@ public class QuizAttemptService {
     public List<QuizAttempt> getAttemptsByUser(int userId) {
         return attemptDAO.getByUserId(userId);
     }
+
 }
 

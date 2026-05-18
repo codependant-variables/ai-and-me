@@ -1,56 +1,56 @@
 package com.codependentvariables.aiandme.services;
 
+import com.codependentvariables.aiandme.JavaFXTest;
 import com.codependentvariables.aiandme.model.CheckIn;
 import com.codependentvariables.aiandme.model.User;
 import com.codependentvariables.aiandme.model.mock.MockCheckInDAO;
 import com.codependentvariables.aiandme.state.AppState;
-import org.junit.jupiter.api.BeforeEach;
+import javafx.application.Platform;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class CheckInServiceTest {
-    private MockCheckInDAO mockCheckinDAO;
-    private CheckInService checkInService;
-    private CheckIn checkin;
+public class CheckInServiceTest extends JavaFXTest {
+    private static CheckInService checkInService;
+    private static User user;
 
-    @BeforeEach
-    public void setUp() {
-        mockCheckinDAO = new MockCheckInDAO();
-        checkInService = new CheckInService(mockCheckinDAO);
+    @BeforeAll
+    public static void initJavaFX() {
+        try {
+            Platform.startup(() -> {});
+        } catch (IllegalStateException ignored) {
+            // Toolkit already initialized
+        }
+    }
 
-        // reset AppState
-        AppState.getInstance().setCurrentUser(null);
+    @BeforeAll
+    public static void setup() {
+        checkInService = CheckInService.createForTest(new MockCheckInDAO());
 
-        // create user
-        User user = new User("Test user", "test@example.com", "hash", "salt");
+        user = new User("Test user", "test@example.com", "hash", "salt");
         user.setId(1);
         AppState.getInstance().setCurrentUser(user);
-
-        // create checkin
-        checkin = new CheckIn(
-                user.getId(),
-                5.0f,
-                5.0f,
-                5.0f,
-                "Ai usage looking ok",
-                LocalDateTime.now()
-        );
     }
 
     @Test
-    public void submitCheckIn_setsUserId() {
-        checkInService.submitCheckIn(checkin);
-
-        assertEquals(1, checkin.getUserId());
+    public void submit_invalid_check_in() {
+        CheckIn checkIn = new CheckIn(user.getId(), 5.0f,  5.0f, 5.0f, null, LocalDateTime.now());
+        checkInService.submitCheckIn(checkIn);
+        CheckIn matchedCheckIn = checkInService.getById(checkIn.getId());
+        assertNotNull(matchedCheckIn);
+        assertEquals(user.getId(), matchedCheckIn.getUserId());
     }
 
     @Test
-    public void submitCheckIn_savesToDAO() {
-        checkInService.submitCheckIn(checkin);
-
-        assertEquals(1, mockCheckinDAO.getAll().size());
+    public void submit_valid_check_in() {
+        CheckIn checkIn = new CheckIn(user.getId(), 5.0f,  5.0f, 5.0f, "Ai usage looking ok", LocalDateTime.now());
+        checkInService.submitCheckIn(checkIn);
+        CheckIn matchedCheckIn = checkInService.getById(checkIn.getId());
+        assertNotNull(matchedCheckIn);
+        assertEquals(user.getId(), matchedCheckIn.getUserId());
     }
 }

@@ -1,5 +1,6 @@
 package com.codependentvariables.aiandme.model.mock;
 
+import com.codependentvariables.aiandme.model.QuizAttemptAnswer;
 import com.codependentvariables.aiandme.model.QuizAttemptQuestion;
 import com.codependentvariables.aiandme.model.dao.IQuizAttemptQuestionDAO;
 
@@ -51,6 +52,14 @@ public class MockQuizAttemptQuestionDAO implements IQuizAttemptQuestionDAO {
     @Override
     public void delete(QuizAttemptQuestion quizAttemptQuestion) {
         questions.removeIf(question -> question.getId() == quizAttemptQuestion.getId());
+    }
+
+    @Override
+    public QuizAttemptQuestion get(int id) {
+        return questions.stream()
+                .filter(c -> c.getId() == id)
+                .findFirst()
+                .orElse(null);
     }
 
     /**

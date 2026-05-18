@@ -1,12 +1,15 @@
 package com.codependentvariables.aiandme.controller;
 
 import com.codependentvariables.aiandme.AiAndMe;
-import com.codependentvariables.aiandme.navigation.Router;
-import com.codependentvariables.aiandme.navigation.Toast;
-import com.codependentvariables.aiandme.navigation.ToastMessageType;
-import com.codependentvariables.aiandme.navigation.View;
+import com.codependentvariables.aiandme.modules.Dialogue;
+import com.codependentvariables.aiandme.modules.Router;
+import com.codependentvariables.aiandme.modules.Toast;
+import com.codependentvariables.aiandme.modules.ToastMessageType;
+import com.codependentvariables.aiandme.modules.View;
+import com.codependentvariables.aiandme.services.CheckInService;
 import com.codependentvariables.aiandme.services.UserService;
 import com.codependentvariables.aiandme.state.AppState;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -15,6 +18,7 @@ import javafx.scene.layout.StackPane;
 
 public class LayoutController {
     private final UserService userService = UserService.getInstance();
+    private final CheckInService checkInService = CheckInService.getInstance();
     private final AppState appState = AppState.getInstance();
 
     @FXML
@@ -60,6 +64,11 @@ public class LayoutController {
     }
 
     @FXML
+    public void navigatePuzzleLibrary() {
+        Router.navigateLayout(View.PUZZLE_LIBRARY);
+    }
+
+    @FXML
     public void navigateLogin() {
         Router.navigateApp(View.LOGIN);
     }
@@ -71,10 +80,15 @@ public class LayoutController {
 
     @FXML
     public void handleLogout() {
-        // TODO: implement modal dialogue as "Are you sure?"
-        userService.logout();
-        Router.navigateLayout(View.HOME); // In case of seeing sensitive data
-        Toast.addMessage("Logged Out", "Goodbye!", ToastMessageType.INFORMATION);
+        Dialogue.confirmation(result -> {
+            if (result == null || !result) {
+                return;
+            }
+
+            userService.logout();
+            Router.navigateLayout(View.HOME); // In case of seeing sensitive data
+            Toast.addMessage("Logged Out", "Goodbye!", ToastMessageType.INFORMATION);
+        });
     }
 
     @FXML
@@ -85,8 +99,6 @@ public class LayoutController {
     @FXML
     public void navigateSettings() { Router.navigateLayout(View.SETTINGS); }
 
-    @FXML
-    public void navigateCheckin() {
-        Router.navigateLayout(View.CHECKIN);
+    public void navigateCheckin(ActionEvent actionEvent) {
     }
 }

@@ -52,6 +52,12 @@ public class SqlitePreferredCategoryDAO extends BaseSqliteDAO implements IPrefer
         });
     }
 
+    public void deleteByUserId(int userId) {
+        final String query = "DELETE FROM user_preferred_categories WHERE user_id = ?";
+
+        executeSql(query, statement -> statement.setInt(1, userId));
+    }
+
     public List<Category> getByUserId(int userId) {
         final String query = """
                 SELECT user_preferred_categories.category_id, categories.name FROM user_preferred_categories

@@ -78,6 +78,12 @@ public class SqliteCheckInDAO extends BaseSqliteDAO implements ICheckInDAO, IDat
         executeSql(query, statement -> statement.setInt(1, checkIn.getId()));
     }
 
+    public void deleteByUserId(int userId) {
+        final String query = "DELETE FROM check_ins WHERE user_id = ?";
+
+        executeSql(query, statement -> statement.setInt(1, userId));
+    }
+
     public List<CheckIn> getAll() {
         final String query = "SELECT * FROM check_ins ORDER BY completed_at DESC";
         return executeQuery(query, CHECKIN_MAPPER);

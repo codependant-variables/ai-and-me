@@ -59,9 +59,10 @@ public class SqliteQuizAttemptAnswerDAO extends BaseSqliteDAO implements IQuizAt
         executeSql(query, statement -> statement.setInt(1, quizAttemptAnswer.getId()));
     }
 
-    public List<QuizAttemptAnswer> get(int id) {
+    public QuizAttemptAnswer get(int id) {
         final String query = "SELECT * FROM quiz_attempt_answers WHERE id = ?";
-        return executeQuery(query, statement -> statement.setInt(1, id), QUIZ_ATTEMPT_ANSWER_MAPPER);
+        List<QuizAttemptAnswer> answers = executeQuery(query, statement -> statement.setInt(1, id), QUIZ_ATTEMPT_ANSWER_MAPPER);
+        return firstOrNull(answers);
     }
 
     public List<QuizAttemptAnswer> getByQuizAttemptQuestionId(int quizAttemptQuestionId) {

@@ -1,7 +1,7 @@
 package com.codependentvariables.aiandme.validation;
 
-import com.codependentvariables.aiandme.navigation.Toast;
-import com.codependentvariables.aiandme.navigation.ToastMessageType;
+import com.codependentvariables.aiandme.modules.Toast;
+import com.codependentvariables.aiandme.modules.ToastMessageType;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -3,10 +3,10 @@ package com.codependentvariables.aiandme;
 import atlantafx.base.theme.NordDark;
 import atlantafx.base.theme.NordLight;
 import com.codependentvariables.aiandme.database.SqliteConnection;
-import com.codependentvariables.aiandme.navigation.Toast;
-import com.codependentvariables.aiandme.navigation.ToastMessageType;
-import com.codependentvariables.aiandme.navigation.View;
-import com.codependentvariables.aiandme.navigation.ViewUtils;
+import com.codependentvariables.aiandme.modules.Toast;
+import com.codependentvariables.aiandme.modules.ToastMessageType;
+import com.codependentvariables.aiandme.modules.View;
+import com.codependentvariables.aiandme.modules.ViewUtils;
 import com.codependentvariables.aiandme.state.AppState;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -20,7 +20,7 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class  AiAndMe extends Application {
+public class AiAndMe extends Application {
     private static final Logger logger = Logger.getLogger(AiAndMe.class.getName());
     private static final AppState appState = AppState.getInstance();
 

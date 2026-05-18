@@ -1,6 +1,8 @@
-package com.codependentvariables.aiandme.navigation;
+package com.codependentvariables.aiandme.modules;
 
 import com.codependentvariables.aiandme.AiAndMe;
+import com.codependentvariables.aiandme.controller.PuzzleLibraryController;
+import com.codependentvariables.aiandme.controller.QuizLibraryController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
@@ -12,10 +14,12 @@ public final class ViewUtils {
 
     /**
      * Loads view onto the provided pane
+     *
      * @param stackPane StackPane to load view into
      * @param view View to load
+     * @return Loaded controller
      */
-    public static void loadView(StackPane stackPane, View view) {
+    public static Object loadView(StackPane stackPane, View view) {
         String resourceName = getResourceName(view);
         URL resourceUrl = AiAndMe.class.getResource(resourceName);
         if (resourceUrl == null) {
@@ -23,8 +27,18 @@ public final class ViewUtils {
         }
 
         try {
-            Node loadedNode = FXMLLoader.load(resourceUrl);
+            FXMLLoader fxmlLoader = new FXMLLoader(resourceUrl);
+
+            // quiz-library.fxml has no fx:controller so both library views inject their controller here
+            if (view == View.QUIZ_LIBRARY) {
+                fxmlLoader.setController(new QuizLibraryController());
+            } else if (view == View.PUZZLE_LIBRARY) {
+                fxmlLoader.setController(new PuzzleLibraryController());
+            }
+
+            Node loadedNode = fxmlLoader.load();
             stackPane.getChildren().setAll(loadedNode);
+            return fxmlLoader.getController();
         } catch (IOException ex) {
             throw new RuntimeException(String.format("Could not load resource: %s", resourceName), ex);
         }
@@ -37,14 +51,17 @@ public final class ViewUtils {
     public static String getResourceName(View view) {
         return switch (view) {
             case View.APP -> "app.fxml";
-            case View.CHECKIN -> "checkin.fxml";
-            case View.CHECKIN_HISTORY -> "checkin-history.fxml";
+            case View.CHECK_IN -> "checkin.fxml";
+            case View.CHECK_IN_HISTORY -> "checkin-history.fxml";
+            case View.DIALOGUE -> "dialogue.fxml";
             case View.HOME -> "home.fxml";
             case View.LAYOUT -> "layout.fxml";
-            case View.LOADING -> "loading.fxml";
             case View.LOGIN -> "login.fxml";
             case View.PROFILE -> "profile.fxml";
+            case View.QUIZ_ATTEMPT -> "quiz-attempt.fxml";
+            case View.QUIZ_ATTEMPT_RESULTS -> "quiz-attempt-results.fxml";
             case View.QUIZ_LIBRARY -> "quiz-library.fxml";
+            case View.PUZZLE_LIBRARY -> "quiz-library.fxml";
             case View.SETTINGS -> "settings.fxml";
             case View.SETUP_MFA -> "setup-mfa.fxml";
             case View.SIGNUP -> "signup.fxml";

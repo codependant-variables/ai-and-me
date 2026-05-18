@@ -1,11 +1,8 @@
 package com.codependentvariables.aiandme.controller;
 
 import com.codependentvariables.aiandme.AiAndMe;
-import com.codependentvariables.aiandme.Svg;
-import com.codependentvariables.aiandme.navigation.Router;
-import com.codependentvariables.aiandme.navigation.Toast;
-import com.codependentvariables.aiandme.navigation.ToastMessageType;
-import com.codependentvariables.aiandme.navigation.View;
+import com.codependentvariables.aiandme.Icon;
+import com.codependentvariables.aiandme.modules.*;
 import com.codependentvariables.aiandme.services.UserService;
 import com.codependentvariables.aiandme.state.AppState;
 import com.codependentvariables.aiandme.validation.FormValidator;
@@ -36,6 +33,9 @@ public class SignupController {
     private final UserService userService = UserService.getInstance();
     private final AppState appState = AppState.getInstance();
 
+    private Runnable postSignupCallback;
+    private String cancelCallbackMessage;
+
     @FXML
     private void initialize() {
         var darkModeObservable = appState.getObservableIsDarkMode();
@@ -43,12 +43,17 @@ public class SignupController {
         viewPasswordIcon.fillProperty().bind(darkModeObservable.map(isDark -> isDark ? Color.WHITE : Color.BLACK));
 
         passwordTextField.visibleProperty().bind(passwordField.visibleProperty().not());
-        viewPasswordIcon.contentProperty().bind(passwordField.visibleProperty().map(visible -> visible ? Svg.OPEN_EYE : Svg.CLOSED_EYE));
+        viewPasswordIcon.contentProperty().bind(passwordField.visibleProperty().map(visible -> visible ? Icon.OPEN_EYE : Icon.CLOSED_EYE));
 
         passwordField.textProperty().bindBidirectional(passwordTextField.textProperty());
         passwordField.managedProperty().bind(passwordField.visibleProperty());
         passwordTextField.setOnAction(onMousePressed -> toggleViewPassword());
         passwordTextField.managedProperty().bind(passwordTextField.visibleProperty());
+    }
+
+    public void initialiseCallback(Runnable postSignupCallback, String cancelCallbackMessage) {
+        this.postSignupCallback = postSignupCallback;
+        this.cancelCallbackMessage = cancelCallbackMessage;
     }
 
     @FXML
@@ -83,16 +88,30 @@ public class SignupController {
 
         userService.signup(this.nameField.getText(), this.emailField.getText(), this.passwordField.getText());
         Toast.addMessage("Woohoo!", "Welcome to AI & Me. This is the dashboard, where you'll spend most of your time.", ToastMessageType.INFORMATION);
-        navigateHome();
+        if (postSignupCallback != null) {
+            postSignupCallback.run();
+        } else {
+            Router.navigateLayout(View.HOME);
+        }
     }
 
     @FXML
     private void navigateHome() {
-        Router.navigateLayout(View.HOME);
+        if (postSignupCallback != null) {
+            Dialogue.show(new DialogueMessage(cancelCallbackMessage, DialogueType.YES_NO_CANCEL, result -> {
+                if (result != null && result) {
+                    Router.navigateLayout(View.HOME);
+                }
+            }));
+        } else {
+            Router.navigateLayout(View.HOME);
+        }
     }
 
     @FXML
     private void navigateLogin() {
-        Router.navigateApp(View.LOGIN);
+        LoginController loginController = (LoginController)Router.navigateApp(View.LOGIN);
+        assert loginController != null;
+        loginController.initialiseCallback(postSignupCallback, cancelCallbackMessage);
     }
 }

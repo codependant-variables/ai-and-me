@@ -27,6 +27,8 @@ public interface IQuizAttemptDAO {
      */
     void delete(QuizAttempt quizAttempt);
 
+    void deleteByUserId(int userId);
+
     /**
      * Retrieves all quiz attempts from the database.
      * @return a list of all quiz attempts

@@ -1,11 +1,8 @@
 package com.codependentvariables.aiandme.controller;
 
 import com.codependentvariables.aiandme.AiAndMe;
-import com.codependentvariables.aiandme.Svg;
-import com.codependentvariables.aiandme.navigation.Router;
-import com.codependentvariables.aiandme.navigation.Toast;
-import com.codependentvariables.aiandme.navigation.ToastMessageType;
-import com.codependentvariables.aiandme.navigation.View;
+import com.codependentvariables.aiandme.Icon;
+import com.codependentvariables.aiandme.modules.*;
 import com.codependentvariables.aiandme.model.User;
 import com.codependentvariables.aiandme.services.AuthService;
 import com.codependentvariables.aiandme.services.LoginResult;
@@ -20,6 +17,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 import javafx.util.converter.DefaultStringConverter;
@@ -46,6 +45,9 @@ public class LoginController {
 
     private final UserService userService = UserService.getInstance();
     private final AppState appState = AppState.getInstance();
+
+    private Runnable postLoginCallback;
+    private String cancelCallbackMessage;
 
     private final BooleanProperty loggingIn = new SimpleBooleanProperty(false);
     private final BooleanProperty requireOtp = new SimpleBooleanProperty(false);
@@ -74,7 +76,7 @@ public class LoginController {
         viewPasswordIcon.fillProperty().bind(darkModeObservable.map(isDark -> isDark ? Color.WHITE : Color.BLACK));
 
         passwordTextField.visibleProperty().bind(passwordField.visibleProperty().not());
-        viewPasswordIcon.contentProperty().bind(passwordField.visibleProperty().map(visible -> visible ? Svg.OPEN_EYE : Svg.CLOSED_EYE));
+        viewPasswordIcon.contentProperty().bind(passwordField.visibleProperty().map(visible -> visible ? Icon.OPEN_EYE : Icon.CLOSED_EYE));
 
         emailField.disableProperty().bind(this.loggingIn.or(this.requireOtp));
 
@@ -92,6 +94,11 @@ public class LoginController {
         otpField.setTextFormatter(totpTextFormatter);
 
         loginButton.disableProperty().bind(this.loggingIn);
+    }
+
+    public void initialiseCallback(Runnable postLoginCallback, String cancelCallbackMessage) {
+        this.postLoginCallback = postLoginCallback;
+        this.cancelCallbackMessage = cancelCallbackMessage;
     }
 
     @FXML
@@ -138,7 +145,11 @@ public class LoginController {
         LoginResult loginResult = userService.attemptLogin(user, this.passwordField.getText(), this.otpField.getText());
         if (loginResult == LoginResult.VALID) {
             Toast.addMessage("Logged In", String.format("Welcome, %s!", user.getName()), ToastMessageType.INFORMATION);
-            Router.navigateLayout(View.HOME);
+            if (postLoginCallback != null) {
+                postLoginCallback.run();
+            } else {
+                Router.navigateLayout(View.HOME);
+            }
         } else if (loginResult == LoginResult.REQUIRES_TOTP) {
             this.requireOtp.setValue(true);
             Toast.addMessage("OTP Required", "Please enter a one-time password.", ToastMessageType.WARNING);
@@ -153,11 +164,21 @@ public class LoginController {
 
     @FXML
     private void navigateHome() {
-        Router.navigateLayout(View.HOME);
+        if (postLoginCallback != null) {
+            Dialogue.show(new DialogueMessage(cancelCallbackMessage, DialogueType.YES_NO_CANCEL, result -> {
+                if (result != null && result) {
+                    Router.navigateLayout(View.HOME);
+                }
+            }));
+        } else {
+            Router.navigateLayout(View.HOME);
+        }
     }
 
     @FXML
     private void navigateSignup() {
-        Router.navigateApp(View.SIGNUP);
+        SignupController signupController = (SignupController)Router.navigateApp(View.SIGNUP);
+        assert signupController != null;
+        signupController.initialiseCallback(postLoginCallback, cancelCallbackMessage);
     }
 }
