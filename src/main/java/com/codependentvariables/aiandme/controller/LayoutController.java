@@ -97,8 +97,11 @@ public class LayoutController {
     }
 
     @FXML
-    public void navigateSettings() { Router.navigateLayout(View.SETTINGS); }
+    public void navigateSettings() {
+        Router.navigateLayout(View.SETTINGS);
+    }
 
-    public void navigateCheckin(ActionEvent actionEvent) {
+    public void navigateCheckin() {
+        Router.navigateLayout(View.CHECK_IN);
     }
 }

@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /* Research
 * https://docs.junit.org/5.0.0/api/org/junit/jupiter/api/BeforeAll.html
-* https://docs.oracle.com/en/java/java-components/javafx/26/docs/javafx.graphics/javafx/application/Platform.html
+* https://docs.oracle.com/en/java/java-components/javafx/21/docs/javafx.graphics/javafx/application/Platform.html
 * https://stackoverflow.com/questions/11385604/how-do-you-unit-test-a-javafx-controller-with-junit
 * https://www.javamex.com/tutorials/threads/CountDownLatch.shtml
 * https://www.baeldung.com/java-arrays-aslist-vs-list-of

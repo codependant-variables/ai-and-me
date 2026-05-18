@@ -2,12 +2,10 @@ package com.codependentvariables.aiandme.controller;
 
 
 import com.codependentvariables.aiandme.model.*;
-import com.codependentvariables.aiandme.modules.Router;
-import com.codependentvariables.aiandme.modules.Toast;
-import com.codependentvariables.aiandme.modules.ToastMessageType;
-import com.codependentvariables.aiandme.modules.View;
-import com.codependentvariables.aiandme.services.CheckInService;
 import com.codependentvariables.aiandme.services.QuizAttemptService;
+import com.codependentvariables.aiandme.navigation.Router;
+import com.codependentvariables.aiandme.navigation.View;
+import com.codependentvariables.aiandme.services.CheckInService;
 import com.codependentvariables.aiandme.services.QuizTemplateService;
 import com.codependentvariables.aiandme.state.AppState;
 import javafx.collections.FXCollections;
@@ -18,10 +16,6 @@ import javafx.scene.chart.*;
 import javafx.scene.control.Label;
 import com.codependentvariables.aiandme.services.HomeService;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import java.util.List;
@@ -59,21 +53,8 @@ public class HomeController {
     public NumberAxis yAxisQuizAttempts;
     @FXML
     public XYChart<Number, Number> attemptChart;
-    //  quiz vs puzzle pie chart idk
+    @FXML
     public PieChart ratioPie = new PieChart();
-
-    @FXML
-    private VBox background;
-    @FXML
-    private VBox dashboardWidgetData;
-    @FXML
-    private VBox dashboardWidgetQuiz;
-    @FXML
-    private VBox dashboardWidgetPuzzle;
-    @FXML
-    private VBox dashboardWidgetInsight;
-    @FXML
-    private VBox dashboardWidgetNews;
 
 
     private final HomeService homeService = HomeService.getInstance();
@@ -83,15 +64,13 @@ public class HomeController {
     public void initialize() {
         checkInStreak.setText(homeService.getCheckInStreak());
         lastCheckIn.setText(homeService.getLastCheckInDate());
-        yAxisCheckin.setLowerBound(0.0);
-        yAxisCheckin.setUpperBound(100.0);
-        yAxisCheckin.setTickUnit(10);
-        background.styleProperty().bind(appState.getObservableIsDarkMode().map(isDarkMode -> isDarkMode ? "-fx-background-color: #202430;" : "-fx-background-color: #f0edef;"));
-        dashboardWidgetData.styleProperty().bind(appState.getObservableIsDarkMode().map(isDarkMode -> isDarkMode ? "-fx-background-color: #2e3440;" : "-fx-background-color: #ffffff;"));
-        dashboardWidgetQuiz.styleProperty().bind(appState.getObservableIsDarkMode().map(isDarkMode -> isDarkMode ? "-fx-background-color: linear-gradient(to bottom, #2e3440, #ce78b1);" : "-fx-background-color: linear-gradient(to bottom, #ffffff, #ce78b1);"));
-        dashboardWidgetPuzzle.styleProperty().bind(appState.getObservableIsDarkMode().map(isDarkMode -> isDarkMode ? "-fx-background-color: linear-gradient(to bottom, #2e3440, #79d1ed);" : "-fx-background-color: linear-gradient(to bottom, #ffffff, #79d1ed);"));
-        dashboardWidgetInsight.styleProperty().bind(appState.getObservableIsDarkMode().map(isDarkMode -> isDarkMode ? "-fx-background-color: #2e3440;" : "-fx-background-color: #ffffff;"));
-        dashboardWidgetNews.styleProperty().bind(appState.getObservableIsDarkMode().map(isDarkMode -> isDarkMode ? "-fx-background-color: #2e3440;" : "-fx-background-color: #ffffff;"));
+        checkInChart.setLegendVisible(true);
+        checkInChart.setLegendSide(Side.RIGHT);
+        dependenceSeries.setName("Dependence");
+        useSeries.setName("Frequency");
+        happinessSeries.setName("Happiness");
+
+
 
         if (appState.getCurrentUser() != null) {
             AttemptStatistics split = attemptsService.getAttemptCountByUser(appState.getCurrentUser().getId());
@@ -103,32 +82,25 @@ public class HomeController {
             useSeries.setName("Frequency");
             happinessSeries.setName("Happiness");
         //for (int i = recentCheckins.size() - 1, count = 0; i >= 0 && count < 5; i--, count++) {
-            int startIndex = Math.max(0, recentCheckins.size() - 5);
             int checkInNumber = 1;
-
-            for (int i = startIndex; i < recentCheckins.size(); i++, checkInNumber++) {
-                dependenceSeries.getData().add(
-                        new XYChart.Data<>(checkInNumber, recentCheckins.get(i).getAiDependence()));
-
-                useSeries.getData().add(
-                        new XYChart.Data<>(checkInNumber, recentCheckins.get(i).getAiUse()));
-
-                happinessSeries.getData().add(
-                        new XYChart.Data<>(checkInNumber, recentCheckins.get(i).getAiHappiness()));
+            for (int i = 5; i != 0; i--, checkInNumber++) {
+                //for every check in, create a point on a line graph for each category (requires time/date string and score float)
+                dependenceSeries.getData().add(new XYChart.Data<>(checkInNumber, recentCheckins.get(i-1).getAiDependence()));
+                useSeries.getData().add(new XYChart.Data<>(checkInNumber, recentCheckins.get(i-1).getAiUse()));
+                happinessSeries.getData().add(new XYChart.Data<>(checkInNumber, recentCheckins.get(i-1).getAiHappiness()));
             }
 
             xAxisCheckin.setAutoRanging(false);
             xAxisCheckin.setLowerBound(1);
             xAxisCheckin.setUpperBound(5);
             xAxisCheckin.setTickUnit(1);
-
-            xAxisQuizAttempts.setTickUnit(1);
-
-            yAxisQuizAttempts.setUpperBound(100.0);
-
+            yAxisCheckin.setAutoRanging(false);
             yAxisCheckin.setLowerBound(0);
             yAxisCheckin.setUpperBound(100.0);
             yAxisCheckin.setTickUnit(10);
+
+            xAxisQuizAttempts.setTickUnit(1);
+            yAxisQuizAttempts.setUpperBound(100.0);
 
             dependenceSeries.setName("Dependence");
             useSeries.setName("Frequency");
@@ -142,7 +114,7 @@ public class HomeController {
             XYChart.Series<Number, Number> attemptSeries = new XYChart.Series<>();
             attemptSeries.setName("Score (out of 10)");
 
-            startIndex = Math.max(0, recentAttempts.size() - 5);
+            int startIndex = Math.max(0, recentAttempts.size() - 5);
             int attemptNumber = 1;
             for (int i = startIndex; i < recentAttempts.size(); i++, attemptNumber++) {
                 attemptSeries.getData().add(new XYChart.Data<>(attemptNumber, recentAttempts.get(i).getResults()));
@@ -175,15 +147,11 @@ public class HomeController {
     }
 
     public void navigateCheckIn(MouseEvent mouseEvent) {
-        if (checkInService.isExistingCheckInToday()) {
-            Toast.addMessage("Check-in Completed", "You've already completed your daily check-in. Come back tomorrow!", ToastMessageType.INFORMATION);
-        } else {
-            Router.navigateLayout(View.CHECK_IN);
-        }
+        Router.navigateLayout(View.CHECK_IN);
     }
 
     public void handleAttemptQuiz(MouseEvent mouseEvent) {
-        QuizAttemptController controller = (QuizAttemptController) Router.navigateLayout(View.QUIZ_ATTEMPT);
+        QuizAttemptController controller = (QuizAttemptController)Router.navigateLayout(View.QUIZ_ATTEMPT);
         controller.initQuiz(quizTemplate);
     }
 }
