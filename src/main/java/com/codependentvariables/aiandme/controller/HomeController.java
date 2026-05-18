@@ -103,13 +103,13 @@ public class HomeController {
             if (user != null) {
                 List<CheckIn> recentCheckins = checkInService.getAllByUserId(appState.getCurrentUser().getId());
 
-                if (recentCheckins.getFirst() != null) {
+                if (!recentCheckins.isEmpty()) {
                     dependenceSeries.setName("Dependence");
                     useSeries.setName("Frequency");
                     happinessSeries.setName("Happiness");
-                    //for (int i = recentCheckins.size() - 1, count = 0; i >= 0 && count < 5; i--, count++)
+                    int totalCheckins = Math.min(recentCheckins.size(), 5);
                     int checkInNumber = 1;
-                    for (int i = 5; i != 0; i--, checkInNumber++) {
+                    for (int i = totalCheckins; i != 0; i--, checkInNumber++) {
                         //for every check in, create a point on a line graph for each category (requires time/date string and score float)
                         dependenceSeries.getData().add(new XYChart.Data<>(checkInNumber, recentCheckins.get(i - 1).getAiDependence()));
                         useSeries.getData().add(new XYChart.Data<>(checkInNumber, recentCheckins.get(i - 1).getAiUse()));
@@ -122,7 +122,7 @@ public class HomeController {
                     xAxisCheckin.setTickUnit(1);
                     yAxisCheckin.setAutoRanging(false);
                     yAxisCheckin.setLowerBound(0);
-                    yAxisCheckin.setUpperBound(100.0);
+                    yAxisCheckin.setUpperBound(10.0);
                     yAxisCheckin.setTickUnit(10);
 
                     xAxisQuizAttempts.setTickUnit(1);
