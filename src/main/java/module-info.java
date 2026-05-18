@@ -7,6 +7,7 @@ module com.codependentvariables.aiandme {
     requires jdk.compiler;
     requires org.apache.commons.codec;
     requires org.xerial.sqlitejdbc;
+    requires org.json;
 
     exports com.codependentvariables.aiandme;
     exports com.codependentvariables.aiandme.controller;
