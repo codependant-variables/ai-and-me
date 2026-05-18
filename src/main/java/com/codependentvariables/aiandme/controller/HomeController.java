@@ -1,15 +1,13 @@
 package com.codependentvariables.aiandme.controller;
 
 
-import com.codependentvariables.aiandme.model.CheckIn;
-import com.codependentvariables.aiandme.model.QuizAttempt;
-import com.codependentvariables.aiandme.model.QuizAttemptSummary;
-import com.codependentvariables.aiandme.model.QuizTemplate;
+import com.codependentvariables.aiandme.model.*;
 import com.codependentvariables.aiandme.modules.Router;
 import com.codependentvariables.aiandme.modules.Toast;
 import com.codependentvariables.aiandme.modules.ToastMessageType;
 import com.codependentvariables.aiandme.modules.View;
 import com.codependentvariables.aiandme.services.CheckInService;
+import com.codependentvariables.aiandme.services.QuizAttemptService;
 import com.codependentvariables.aiandme.services.QuizTemplateService;
 import com.codependentvariables.aiandme.state.AppState;
 import javafx.collections.FXCollections;
@@ -64,6 +62,19 @@ public class HomeController {
     //  quiz vs puzzle pie chart idk
     public PieChart ratioPie = new PieChart();
 
+    @FXML
+    private VBox background;
+    @FXML
+    private VBox dashboardWidgetData;
+    @FXML
+    private VBox dashboardWidgetQuiz;
+    @FXML
+    private VBox dashboardWidgetPuzzle;
+    @FXML
+    private VBox dashboardWidgetInsight;
+    @FXML
+    private VBox dashboardWidgetNews;
+
 
     private final HomeService homeService = HomeService.getInstance();
     private final QuizTemplateService quizTemplateService = QuizTemplateService.getInstance();
@@ -92,12 +103,18 @@ public class HomeController {
             useSeries.setName("Frequency");
             happinessSeries.setName("Happiness");
         //for (int i = recentCheckins.size() - 1, count = 0; i >= 0 && count < 5; i--, count++) {
+            int startIndex = Math.max(0, recentCheckins.size() - 5);
             int checkInNumber = 1;
-            for (int i = 5; i != 0; i--, checkInNumber++) {
-                //for every check in, create a point on a line graph for each category (requires time/date string and score float)
-                dependenceSeries.getData().add(new XYChart.Data<>(checkInNumber, recentCheckins.get(i).getAiDependence()));
-                useSeries.getData().add(new XYChart.Data<>(checkInNumber, recentCheckins.get(i).getAiUse()));
-                happinessSeries.getData().add(new XYChart.Data<>(checkInNumber, recentCheckins.get(i).getAiHappiness()));
+
+            for (int i = startIndex; i < recentCheckins.size(); i++, checkInNumber++) {
+                dependenceSeries.getData().add(
+                        new XYChart.Data<>(checkInNumber, recentCheckins.get(i).getAiDependence()));
+
+                useSeries.getData().add(
+                        new XYChart.Data<>(checkInNumber, recentCheckins.get(i).getAiUse()));
+
+                happinessSeries.getData().add(
+                        new XYChart.Data<>(checkInNumber, recentCheckins.get(i).getAiHappiness()));
             }
 
             xAxisCheckin.setAutoRanging(false);
@@ -125,7 +142,7 @@ public class HomeController {
             XYChart.Series<Number, Number> attemptSeries = new XYChart.Series<>();
             attemptSeries.setName("Score (out of 10)");
 
-            int startIndex = Math.max(0, recentAttempts.size() - 5);
+            startIndex = Math.max(0, recentAttempts.size() - 5);
             int attemptNumber = 1;
             for (int i = startIndex; i < recentAttempts.size(); i++, attemptNumber++) {
                 attemptSeries.getData().add(new XYChart.Data<>(attemptNumber, recentAttempts.get(i).getResults()));
