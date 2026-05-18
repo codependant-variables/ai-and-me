@@ -24,7 +24,6 @@ jobs:
 
   build:
     needs: test
-    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -52,3 +51,11 @@ jobs:
         with:
           name: aiandme-${{ matrix.os-profile }}
           path: staging/
+
+      - name: Create Javadoc
+        run: mvn javadoc:javadoc
+
+      - name: Publish Javadoc
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: target/docs/javadoc
