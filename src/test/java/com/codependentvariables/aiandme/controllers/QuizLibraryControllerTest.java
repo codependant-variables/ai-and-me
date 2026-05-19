@@ -1,10 +1,18 @@
 package com.codependentvariables.aiandme.controllers;
 
+import com.codependentvariables.aiandme.controller.QuizLibraryController;
+import com.codependentvariables.aiandme.model.QuizTemplate;
+import com.codependentvariables.aiandme.model.QuizTemplateQuestion;
+import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class QuizLibraryControllerTest {
 
-<<<<<<< HEAD
     // Research for asList: https://docs.oracle.com/javase/8/docs/api/java/util/Arrays.html
     @Test
     void checkTwoQuestions() {
@@ -47,6 +55,3 @@ public class QuizLibraryControllerTest {
         assertFalse(!puzzleTemplate.isPuzzle()); // isPuzzle is true means this does not pass quiz library filter
     }
 }
-=======
-}
->>>>>>> fetch-attempts
