@@ -45,17 +45,18 @@ public class QuizAttemptService {
                            int userId,
                            List<QuizTemplateAnswer> selectedAnswers) {
 
-        // 1 — Create the top-level attempt record
+        int correct = 0;
+
+        // 1 — Create the top-level attempt record (results tally stored after iterating questions)
         QuizAttempt attempt = new QuizAttempt(
                 userId,
                 template.getName(),
-                Timestamp.from(Instant.now())
+                Timestamp.from(Instant.now()),
+                0
         );
         attemptDAO.add(attempt); // sets attempt.id
 
-        int correct = 0;
-
-        // 2 — Snapshot each question and the user's selected answer
+        // Snapshot each question and the user's selected answer
         for (QuizTemplateQuestion tq : template.getQuestions()) {
             QuizAttemptQuestion aq = new QuizAttemptQuestion(
                     attempt.getId(),
@@ -84,6 +85,11 @@ public class QuizAttemptService {
                 if (isCorrect) correct++;
             }
         }
+
+        // 3 — Update the attempt record with the final correct-answer tally
+        attempt.setResults(correct);
+        attemptDAO.update(attempt);
+
         return correct;
     }
 
@@ -97,5 +103,16 @@ public class QuizAttemptService {
         return attemptDAO.getByUserId(userId);
     }
 
-}
+    /**
+     * Returns the split of quiz vs puzzle attempts for a user.
+     * Puzzle counting is not yet implemented, therefore all attempts are treated as quizzes.
+     *
+     * @param userId the user to query
+     * @return an {@link AttemptStatistics} with quiz count and percentages ready for charts in controller's
+     */
+    public AttemptStatistics getAttemptCountByUser(int userId) {
+        int quizCount = attemptDAO.getByUserId(userId).size();
+        return new AttemptStatistics(quizCount, 0);
+    }
 
+}

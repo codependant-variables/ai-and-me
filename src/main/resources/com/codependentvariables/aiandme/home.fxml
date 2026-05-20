@@ -2,7 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.geometry.Rectangle2D?>
-<?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.chart.PieChart?>
@@ -36,12 +35,12 @@
             </VBox>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <LineChart fx:id="checkInChart" prefHeight="201.0" prefWidth="231.0">
+                  <LineChart legendVisible="true" legendSide="BOTTOM" fx:id="checkInChart" prefHeight="201.0" prefWidth="231.0">
                      <xAxis>
-                        <CategoryAxis side="BOTTOM" />
+                        <NumberAxis label="Your Check-ins" side="BOTTOM" tickUnit="1" fx:id="xAxisCheckin" />
                      </xAxis>
                      <yAxis>
-                        <NumberAxis side="LEFT" />
+                        <NumberAxis upperBound="100.0" label="Ratings" fx:id="yAxisCheckin" side="LEFT" tickUnit="10" />
                      </yAxis>
                   </LineChart>
                </children>
@@ -50,10 +49,10 @@
                <children>
                   <LineChart fx:id="attemptChart" prefHeight="201.0" prefWidth="231.0">
                      <xAxis>
-                        <CategoryAxis side="BOTTOM" />
+                        <NumberAxis label="Attempt (5 -&gt; Latest)" side="BOTTOM" tickUnit="1" fx:id="xAxisQuizAttempts" />
                      </xAxis>
                      <yAxis>
-                        <NumberAxis side="LEFT" />
+                        <NumberAxis fx:id="yAxisQuizAttempts" label="Score" side="LEFT" />
                      </yAxis>
                   </LineChart>
                </children>
