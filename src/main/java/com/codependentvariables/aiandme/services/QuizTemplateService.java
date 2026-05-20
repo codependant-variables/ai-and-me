@@ -3,7 +3,9 @@ package com.codependentvariables.aiandme.services;
 import com.codependentvariables.aiandme.model.*;
 import com.codependentvariables.aiandme.model.dao.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class QuizTemplateService {
 
@@ -167,12 +169,68 @@ public class QuizTemplateService {
         questionDAO.deleteQuestion(question);
     }
 
-    public QuizTemplate getRandomTemplate(){
-        QuizTemplate testQuiz = new QuizTemplate("Comphrehension",  1, 1, "TestSRrt");
-        return testQuiz;
+    public QuizTemplate getRandomTemplate() {
 
-        // TODO Need to add Recomeed quiz Template
+        List<QuizTemplate> templates = templateDAO.getAll();
+        List<QuizTemplate> validTemplates = new ArrayList<>();
 
+        for (QuizTemplate template : templates) {
+
+            // Skip puzzles
+            if (template.isPuzzle()) {
+                continue;
+            }
+
+            loadQuestionsIntoTemplate(template);
+
+            if (template.getQuestions() != null && template.getQuestions().size() >= 2) {
+
+                validTemplates.add(template);
+            }
+        }
+
+        if (validTemplates.isEmpty()) {
+            return null;
+        }
+
+        Random random = new Random();
+
+        return validTemplates.get(
+                random.nextInt(validTemplates.size())
+        );
+    }
+
+    public QuizTemplate getRandomPuzzle() {
+
+        List<QuizTemplate> templates = templateDAO.getAll();
+        List<QuizTemplate> validPuzzles = new ArrayList<>();
+
+        for (QuizTemplate template : templates) {
+
+            // Only puzzles
+            if (!template.isPuzzle()) {
+                continue;
+            }
+
+            // IMPORTANT
+            loadQuestionsIntoTemplate(template);
+
+            if (template.getQuestions() != null &&
+                    template.getQuestions().size() >= 2) {
+
+                validPuzzles.add(template);
+            }
+        }
+
+        if (validPuzzles.isEmpty()) {
+            return null;
+        }
+
+        Random random = new Random();
+
+        return validPuzzles.get(
+                random.nextInt(validPuzzles.size())
+        );
     }
 }
 
