@@ -3,6 +3,7 @@ package com.codependentvariables.aiandme.controller;
 import com.codependentvariables.aiandme.Icon;
 import com.codependentvariables.aiandme.model.User;
 import com.codependentvariables.aiandme.modules.*;
+import com.codependentvariables.aiandme.services.DataExportService;
 import com.codependentvariables.aiandme.services.UserDataDeletionService;
 import com.codependentvariables.aiandme.services.UserService;
 import com.codependentvariables.aiandme.state.AppState;
@@ -23,6 +24,7 @@ public class ProfileController {
     private final AppState appState = AppState.getInstance();
     private final UserService userService = UserService.getInstance();
     private final UserDataDeletionService dataDeletionService = UserDataDeletionService.getInstance();
+    private final DataExportService dataExportService = DataExportService.getInstance();
 
     private User currentUser;
 
@@ -190,7 +192,7 @@ public class ProfileController {
 
     @FXML
     private void exportData() {
-        throw new RuntimeException("Export user data not implemented.");
+        dataExportService.exportUserData();
     }
 
     @FXML
