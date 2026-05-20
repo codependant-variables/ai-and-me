@@ -199,7 +199,7 @@
                   </ImageView>
                </children>
             </VBox>
-            <VBox fx:id="dashboardWidgetPuzzle" alignment="TOP_CENTER" prefWidth="288.0" styleClass="recomendedPuzzle">
+            <VBox fx:id="dashboardWidgetPuzzle" alignment="TOP_CENTER" onMouseClicked="#handleAttemptPuzzle" prefWidth="288.0" styleClass="recomendedPuzzle">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Puzzle for you!" textAlignment="CENTER" wrappingWidth="231.13000106811523">
                      <font>

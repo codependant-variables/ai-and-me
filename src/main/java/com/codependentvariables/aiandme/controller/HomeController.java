@@ -31,6 +31,8 @@ public class HomeController {
     @FXML
     private QuizTemplate quizTemplate;
     @FXML
+    private QuizTemplate puzzleTemplate;
+    @FXML
     private Label checkInName;
 
 
@@ -169,15 +171,32 @@ public class HomeController {
                     ratioPie.setData(ratioData);
                 }
                 this.quizTemplate = quizTemplateService.getRandomTemplate();
-                checkInName.setText(quizTemplate.getName());
+                this.puzzleTemplate = quizTemplateService.getRandomPuzzle();
+
+                System.out.println("Quiz: " + quizTemplate);
+                System.out.println("Puzzle: " + puzzleTemplate);
+
+                if (quizTemplate != null) {
+                    checkInName.setText(quizTemplate.getName());
+                }
             }
         }
     }
 
     public void navigateCheckIn(MouseEvent mouseEvent) {
-        // TODO: fix existing checkin today
+        // Guest users can always access check-ins
+        if (appState.getCurrentUser() == null) {
+
+            Router.navigateLayout(View.CHECK_IN);
+            return;
+        }
+        // Logged-in user check
         if (checkInService.isExistingCheckInToday()) {
-            Toast.addMessage("Check-in Completed", "You've already completed your daily check-in. Come back tomorrow!", ToastMessageType.INFORMATION);
+            Toast.addMessage(
+                    "Check-in Completed",
+                    "You've already completed your daily check-in. Come back tomorrow!",
+                    ToastMessageType.INFORMATION
+            );
         } else {
             Router.navigateLayout(View.CHECK_IN);
         }
@@ -187,6 +206,11 @@ public class HomeController {
         QuizAttemptController controller = (QuizAttemptController) Router.navigateLayout(View.QUIZ_ATTEMPT);
         controller.initQuiz(quizTemplate);
     }
-}
+
+
+    public void handleAttemptPuzzle(MouseEvent mouseEvent) {
+        QuizAttemptController controller = (QuizAttemptController) Router.navigateLayout(View.QUIZ_ATTEMPT);
+        controller.initQuiz(puzzleTemplate);
+    }}
 
 
