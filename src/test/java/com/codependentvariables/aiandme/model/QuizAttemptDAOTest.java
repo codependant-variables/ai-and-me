@@ -53,7 +53,9 @@ public class QuizAttemptDAOTest {
                 2,
                 "Bob's Quiz Attempt",
                 Timestamp.valueOf("2026-04-18 10:30:00"),
-                5
+                5,
+                "Maths",
+                false
         );
 
         quizAttemptDAO.add(quizAttempt);
@@ -74,14 +76,18 @@ public class QuizAttemptDAOTest {
                 1,
                 "Older Attempt",
                 Timestamp.valueOf("2026-04-16 09:00:00"),
-                5
+                5,
+                "Maths",
+                false
         ));
 
         quizAttemptDAO.add(new QuizAttempt(
                 1,
                 "Newest Attempt",
                 Timestamp.valueOf("2026-04-18 12:00:00"),
-                5
+                5,
+                "Maths",
+                false
         ));
 
         // Cast required because method is not in interface

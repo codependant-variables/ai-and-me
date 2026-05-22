@@ -70,119 +70,224 @@ public class HomeController {
     private VBox dashboardWidgetInsight;
     @FXML
     private VBox dashboardWidgetNews;
-
-    //  quiz vs puzzle pie chart idk
-    public PieChart ratioPie = new PieChart();
+    @FXML
+    private PieChart ratioPie;
 
 
     private final HomeService homeService = HomeService.getInstance();
     private final QuizTemplateService quizTemplateService = QuizTemplateService.getInstance();
     private AppState appState = AppState.getInstance();
 
+    /**
+     * Initializes the dashboard view and loads all user analytics data.
+     * <p>
+     * This includes:
+     * <ul>
+     *     <li>User check-in streak information</li>
+     *     <li>Recent check-in line chart data</li>
+     *     <li>Recent quiz attempt scores</li>
+     *     <li>Quiz/puzzle category pie chart statistics</li>
+     *     <li>Recommended quizzes and puzzles</li>
+     * </ul>
+     * Applies dynamic styling based on the current theme.
+     */
     public void initialize() {
+
         checkInStreak.setText(homeService.getCheckInStreak());
         lastCheckIn.setText(homeService.getLastCheckInDate());
+
         yAxisCheckin.setLowerBound(0.0);
         yAxisCheckin.setUpperBound(100.0);
         yAxisCheckin.setTickUnit(10);
-        background.styleProperty().bind(appState.getObservableIsDarkMode().map(isDarkMode -> isDarkMode ? "-fx-background-color: #202430;" : "-fx-background-color: #f0edef;"));
-        dashboardWidgetData.styleProperty().bind(appState.getObservableIsDarkMode().map(isDarkMode -> isDarkMode ? "-fx-background-color: #2e3440;" : "-fx-background-color: #ffffff;"));
-        dashboardWidgetQuiz.styleProperty().bind(appState.getObservableIsDarkMode().map(isDarkMode -> isDarkMode ? "-fx-background-color: linear-gradient(to bottom, #2e3440, #ce78b1);" : "-fx-background-color: linear-gradient(to bottom, #ffffff, #ce78b1);"));
-        dashboardWidgetPuzzle.styleProperty().bind(appState.getObservableIsDarkMode().map(isDarkMode -> isDarkMode ? "-fx-background-color: linear-gradient(to bottom, #2e3440, #79d1ed);" : "-fx-background-color: linear-gradient(to bottom, #ffffff, #79d1ed);"));
-        dashboardWidgetInsight.styleProperty().bind(appState.getObservableIsDarkMode().map(isDarkMode -> isDarkMode ? "-fx-background-color: #2e3440;" : "-fx-background-color: #ffffff;"));
-        dashboardWidgetNews.styleProperty().bind(appState.getObservableIsDarkMode().map(isDarkMode -> isDarkMode ? "-fx-background-color: #2e3440;" : "-fx-background-color: #ffffff;"));
-        checkInChart.setLegendVisible(true);
-        checkInChart.setLegendSide(Side.RIGHT);
-        dependenceSeries.setName("Dependence");
-        useSeries.setName("Frequency");
-        happinessSeries.setName("Happiness");
 
+        background.styleProperty().bind(
+                appState.getObservableIsDarkMode().map(
+                        isDarkMode -> isDarkMode
+                                ? "-fx-background-color: #202430;"
+                                : "-fx-background-color: #f0edef;"
+                )
+        );
+
+        dashboardWidgetData.styleProperty().bind(
+                appState.getObservableIsDarkMode().map(
+                        isDarkMode -> isDarkMode
+                                ? "-fx-background-color: #2e3440;"
+                                : "-fx-background-color: #ffffff;"
+                )
+        );
+
+        dashboardWidgetQuiz.styleProperty().bind(
+                appState.getObservableIsDarkMode().map(
+                        isDarkMode -> isDarkMode
+                                ? "-fx-background-color: linear-gradient(to bottom, #2e3440, #ce78b1);"
+                                : "-fx-background-color: linear-gradient(to bottom, #ffffff, #ce78b1);"
+                )
+        );
+
+        dashboardWidgetPuzzle.styleProperty().bind(
+                appState.getObservableIsDarkMode().map(
+                        isDarkMode -> isDarkMode
+                                ? "-fx-background-color: linear-gradient(to bottom, #2e3440, #79d1ed);"
+                                : "-fx-background-color: linear-gradient(to bottom, #ffffff, #79d1ed);"
+                )
+        );
+
+        dashboardWidgetInsight.styleProperty().bind(
+                appState.getObservableIsDarkMode().map(
+                        isDarkMode -> isDarkMode
+                                ? "-fx-background-color: #2e3440;"
+                                : "-fx-background-color: #ffffff;"
+                )
+        );
+
+        dashboardWidgetNews.styleProperty().bind(
+                appState.getObservableIsDarkMode().map(
+                        isDarkMode -> isDarkMode
+                                ? "-fx-background-color: #2e3440;"
+                                : "-fx-background-color: #ffffff;"
+                )
+        );
 
         if (appState.getCurrentUser() != null) {
-            AttemptStatistics split = attemptsService.getAttemptCountByUser(appState.getCurrentUser().getId());
 
             User user = appState.getCurrentUser();
-            if (user != null) {
-                List<CheckIn> recentCheckins = checkInService.getAllByUserId(appState.getCurrentUser().getId());
 
-                if (!recentCheckins.isEmpty()) {
-                    dependenceSeries.setName("Dependence");
-                    useSeries.setName("Frequency");
-                    happinessSeries.setName("Happiness");
-                    int totalCheckins = Math.min(recentCheckins.size(), 5);
-                    int checkInNumber = 1;
-                    for (int i = totalCheckins; i != 0; i--, checkInNumber++) {
-                        //for every check in, create a point on a line graph for each category (requires time/date string and score float)
-                        dependenceSeries.getData().add(new XYChart.Data<>(checkInNumber, recentCheckins.get(i - 1).getAiDependence()));
-                        useSeries.getData().add(new XYChart.Data<>(checkInNumber, recentCheckins.get(i - 1).getAiUse()));
-                        happinessSeries.getData().add(new XYChart.Data<>(checkInNumber, recentCheckins.get(i - 1).getAiHappiness()));
-                    }
+            AttemptStatistics split =
+                    attemptsService.getAttemptCountByUser(user.getId());
 
-                    xAxisCheckin.setAutoRanging(false);
-                    xAxisCheckin.setLowerBound(1);
-                    xAxisCheckin.setUpperBound(5);
-                    xAxisCheckin.setTickUnit(1);
-                    yAxisCheckin.setAutoRanging(false);
-                    yAxisCheckin.setLowerBound(0);
-                    yAxisCheckin.setUpperBound(10.0);
-                    yAxisCheckin.setTickUnit(10);
+            /////////////////////////////////
+            // CHECK-IN GRAPH
+            /////////////////////////////////
 
-                    xAxisQuizAttempts.setTickUnit(1);
-                    yAxisQuizAttempts.setUpperBound(100.0);
+            List<CheckIn> recentCheckins =
+                    checkInService.getAllByUserId(user.getId());
 
-                    dependenceSeries.setName("Dependence");
-                    useSeries.setName("Frequency");
-                    happinessSeries.setName("Happiness");
-                    checkInChart.setLegendVisible(true);
-                    checkInChart.setLegendSide(Side.RIGHT);
-                    checkInChart.getData().addAll(dependenceSeries, useSeries, happinessSeries);
-                    ///////////////////////////
-                    List<QuizAttempt> recentAttempts = attemptsService.getAttemptsByUser(appState.getCurrentUser().getId());
+            if (!recentCheckins.isEmpty()) {
 
-                    XYChart.Series<Number, Number> attemptSeries = new XYChart.Series<>();
-                    attemptSeries.setName("Score (out of 10)");
+                dependenceSeries.setName("Dependence");
+                useSeries.setName("Frequency");
+                happinessSeries.setName("Happiness");
 
-                    int startIndex = Math.max(0, recentAttempts.size() - 5);
-                    int attemptNumber = 1;
-                    for (int i = startIndex; i < recentAttempts.size(); i++, attemptNumber++) {
-                        attemptSeries.getData().add(new XYChart.Data<>(attemptNumber, recentAttempts.get(i).getResults()));
-                    }
+                int totalCheckins =
+                        Math.min(recentCheckins.size(), 5);
 
-                    int totalPlotted = recentAttempts.size() - startIndex;
-                    xAxisQuizAttempts.setAutoRanging(false);
-                    xAxisQuizAttempts.setLowerBound(1);
-                    xAxisQuizAttempts.setUpperBound(Math.max(totalPlotted, 1));
-                    xAxisQuizAttempts.setTickUnit(1);
-                    yAxisQuizAttempts.setAutoRanging(false);
-                    yAxisQuizAttempts.setLowerBound(0);
-                    yAxisQuizAttempts.setUpperBound(10);
-                    yAxisQuizAttempts.setTickUnit(1);
+                int checkInNumber = 1;
 
-                    attemptChart.getData().add(attemptSeries);
-                    ratioPie.setTitle("Score");
+                for (int i = totalCheckins;
+                     i != 0;
+                     i--, checkInNumber++) {
 
-                    ///////////////////////////
+                    dependenceSeries.getData().add(
+                            new XYChart.Data<>(
+                                    checkInNumber,
+                                    recentCheckins.get(i - 1).getAiDependence()
+                            )
+                    );
 
-                    //  dummy data
-                    ObservableList<PieChart.Data> ratioData = FXCollections.observableArrayList(
-                            new PieChart.Data("Quizzes", split.getQuizCount()),
-                            new PieChart.Data("Puzzles", split.getPuzzleCount()));
-                    ratioPie.setTitle("Attempts by Category");
-                    ratioPie.setData(ratioData);
+                    useSeries.getData().add(
+                            new XYChart.Data<>(
+                                    checkInNumber,
+                                    recentCheckins.get(i - 1).getAiUse()
+                            )
+                    );
+
+                    happinessSeries.getData().add(
+                            new XYChart.Data<>(
+                                    checkInNumber,
+                                    recentCheckins.get(i - 1).getAiHappiness()
+                            )
+                    );
                 }
-                this.quizTemplate = quizTemplateService.getRandomTemplate();
-                this.puzzleTemplate = quizTemplateService.getRandomPuzzle();
 
-                System.out.println("Quiz: " + quizTemplate);
-                System.out.println("Puzzle: " + puzzleTemplate);
+                checkInChart.getData().addAll(
+                        dependenceSeries,
+                        useSeries,
+                        happinessSeries
+                );
+            }
 
-                if (quizTemplate != null) {
-                    checkInName.setText(quizTemplate.getName());
+            /////////////////////////////////
+            // QUIZ ATTEMPT GRAPH
+            /////////////////////////////////
+
+            List<QuizAttempt> recentAttempts =
+                    attemptsService.getAttemptsByUser(user.getId());
+
+            XYChart.Series<Number, Number> attemptSeries =
+                    new XYChart.Series<>();
+
+            attemptSeries.setName("Score (out of 10)");
+
+            int startIndex =
+                    Math.max(0, recentAttempts.size() - 5);
+
+            int attemptNumber = 1;
+
+            for (int i = startIndex;
+                 i < recentAttempts.size();
+                 i++, attemptNumber++) {
+
+                attemptSeries.getData().add(
+                        new XYChart.Data<>(
+                                attemptNumber,
+                                recentAttempts.get(i).getResults()
+                        )
+                );
+            }
+
+            attemptChart.getData().add(attemptSeries);
+
+            /////////////////////////////////
+            // PIE CHART
+            /////////////////////////////////
+
+            ObservableList<PieChart.Data> ratioData =
+                    FXCollections.observableArrayList();
+
+            List<CategoryStat> stats =
+                    split.getCategoryStats();
+            if (stats != null) {
+                for (CategoryStat stat : stats) {
+                    String type = stat.isPuzzle() ? "Puzzle" : "Quiz";
+                    ratioData.add(new PieChart.Data(type + " - " + stat.getCategoryName(), stat.getCount()));
                 }
+            }
+
+            ratioPie.setTitle("Attempts by Category");
+            ratioPie.setData(ratioData);
+
+            System.out.println("Pie slices: " + ratioData.size()
+            );
+
+            for (PieChart.Data data : ratioData) {
+                System.out.println(data.getName() + " = " + data.getPieValue());
+            }
+
+            /////////////////////////////////
+            // RECOMMENDED QUIZZES
+            /////////////////////////////////
+
+            this.quizTemplate = quizTemplateService.getRandomTemplate();
+
+            this.puzzleTemplate = quizTemplateService.getRandomPuzzle();
+
+            System.out.println("Quiz: " + quizTemplate);
+            System.out.println("Puzzle: " + puzzleTemplate);
+
+            if (quizTemplate != null) {
+                checkInName.setText(quizTemplate.getName());
             }
         }
     }
 
+    /**
+     * Navigates the user to the daily check-in page.
+     * Guest users can always access the check-in page.
+     * Logged-in users are prevented from completing multiple
+     * check-ins on the same day.
+     *
+     * @param mouseEvent mouse click event triggered by the user
+     */
     public void navigateCheckIn(MouseEvent mouseEvent) {
         // Guest users can always access check-ins
         if (appState.getCurrentUser() == null) {
@@ -202,12 +307,23 @@ public class HomeController {
         }
     }
 
+    /**
+     * Opens the recommended quiz attempt page
+     * and loads the selected quiz template.
+     *
+     * @param mouseEvent mouse click event triggered by the user
+     */
     public void handleAttemptQuiz(MouseEvent mouseEvent) {
         QuizAttemptController controller = (QuizAttemptController) Router.navigateLayout(View.QUIZ_ATTEMPT);
         controller.initQuiz(quizTemplate);
     }
 
-
+    /**
+     * Opens the recommended puzzle attempt page
+     * and loads the selected puzzle template.
+     *
+     * @param mouseEvent mouse click event triggered by the user
+     */
     public void handleAttemptPuzzle(MouseEvent mouseEvent) {
         QuizAttemptController controller = (QuizAttemptController) Router.navigateLayout(View.QUIZ_ATTEMPT);
         controller.initQuiz(puzzleTemplate);
