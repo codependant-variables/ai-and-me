@@ -160,8 +160,7 @@ public class HomeController {
             // CHECK-IN GRAPH
             /////////////////////////////////
 
-            List<CheckIn> recentCheckins =
-                    checkInService.getAllByUserId(user.getId());
+            List<CheckIn> recentCheckins = checkInService.getRecentCheckInsByUserId(user.getId(), 5);
 
             if (!recentCheckins.isEmpty()) {
 
@@ -169,8 +168,7 @@ public class HomeController {
                 useSeries.setName("AI Use");
                 happinessSeries.setName("AI Happiness");
 
-                int totalCheckins =
-                        Math.min(recentCheckins.size(), 5);
+                int totalCheckins = recentCheckins.size();
 
                 int checkInNumber = 1;
 
