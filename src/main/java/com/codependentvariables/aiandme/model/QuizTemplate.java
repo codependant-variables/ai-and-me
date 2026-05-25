@@ -16,7 +16,7 @@ public class QuizTemplate {
     private int userId;
     private String status;
     private String category;
-    private boolean puzzle;
+    private boolean isPuzzle;
 
     /* Storage in memory temporatily here */
     private final List<QuizTemplateQuestion> questions = new ArrayList<>();
@@ -36,7 +36,7 @@ public class QuizTemplate {
         this.name = name;
         this.categoryId = categoryId;
         this.userId = userId;
-        this.puzzle = puzzle;
+        this.isPuzzle = puzzle;
         this.status = status;
     }
 
@@ -127,10 +127,10 @@ public class QuizTemplate {
     /**
      * Checks whether this template is a puzzle.
      *
-     * @return true if puzzle, false if quiz
+     * @return true if isPuzzle, false if quiz
      */
     public boolean isPuzzle() {
-        return puzzle;
+        return isPuzzle;
     }
 
     /**
@@ -139,7 +139,7 @@ public class QuizTemplate {
      * @param puzzle true if puzzle, false if quiz
      */
     public void setPuzzle(boolean puzzle) {
-        this.puzzle = puzzle;
+        this.isPuzzle = puzzle;
     }
 
     /**
@@ -237,10 +237,6 @@ public class QuizTemplate {
      * @return category name
      */
     public String getCategory() {
-
-        if (category == null) {
-            return "General";
-        }
         return category;
     }
 

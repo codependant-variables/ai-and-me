@@ -2,12 +2,13 @@ package com.codependentvariables.aiandme.services;
 
 import com.codependentvariables.aiandme.model.*;
 import com.codependentvariables.aiandme.model.dao.*;
+import com.codependentvariables.aiandme.services.home.AttemptStatistics;
+import com.codependentvariables.aiandme.services.home.CategoryStat;
 
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /****
  * Service layer for handling quiz attempts.

@@ -1,4 +1,4 @@
-package com.codependentvariables.aiandme.model;
+package com.codependentvariables.aiandme.services.home;
 
 /**
  * Stores statistics for a specific quiz or puzzle category.

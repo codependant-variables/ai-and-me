@@ -9,11 +9,12 @@ import com.codependentvariables.aiandme.modules.View;
 import com.codependentvariables.aiandme.services.QuizAttemptService;
 import com.codependentvariables.aiandme.services.CheckInService;
 import com.codependentvariables.aiandme.services.QuizTemplateService;
+import com.codependentvariables.aiandme.services.home.AttemptStatistics;
+import com.codependentvariables.aiandme.services.home.CategoryStat;
 import com.codependentvariables.aiandme.state.AppState;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.geometry.Side;
 import javafx.scene.chart.*;
 import javafx.scene.control.Label;
 import com.codependentvariables.aiandme.services.HomeService;
@@ -164,9 +165,9 @@ public class HomeController {
 
             if (!recentCheckins.isEmpty()) {
 
-                dependenceSeries.setName("Dependence");
-                useSeries.setName("Frequency");
-                happinessSeries.setName("Happiness");
+                dependenceSeries.setName("AI Dependence");
+                useSeries.setName("AI Use");
+                happinessSeries.setName("AI Happiness");
 
                 int totalCheckins =
                         Math.min(recentCheckins.size(), 5);
@@ -249,6 +250,11 @@ public class HomeController {
             if (stats != null) {
                 for (CategoryStat stat : stats) {
                     String type = stat.isPuzzle() ? "Puzzle" : "Quiz";
+                    String categoryName = stat.getCategoryName();
+
+                    if (categoryName == null) {
+                        categoryName = "General";
+                    }
                     ratioData.add(new PieChart.Data(type + " - " + stat.getCategoryName(), stat.getCount()));
                 }
             }
