@@ -43,10 +43,10 @@ public abstract class QuizController {
     @FXML private Label pageTitle;
     @FXML private FlowPane categoryContainer;
     @FXML private Button btnCreate;
-    @FXML private Button btnModify;
+    @FXML private Button btnEdit;
+    @FXML private Button btnRename;
     @FXML private Button btnDelete;
-    @FXML private Button btnEditQuestions;
-    @FXML private Button btnAttemptQuiz;
+    @FXML private Button btnStart;
     @FXML private ComboBox<String> categoryFilter;
 
     // Currently selected template and its UI card
@@ -63,17 +63,18 @@ public abstract class QuizController {
      */
     @FXML
     public void initialize() {
-        pageTitle.setText(getPageTitle());
+        pageTitle.setText(getPageName() + " Library");
         btnCreate.setDisable(false);
-        btnModify.setDisable(true);
+        btnEdit.setDisable(true);
+        btnRename.setDisable(true);
         btnDelete.setDisable(true);
-        btnEditQuestions.setDisable(true);
-        btnAttemptQuiz.setDisable(true);
+        btnStart.setText("Start " + getPageName());
+        btnStart.setDisable(true);
         loadCategoryFilter();
         refreshCategories();
     }
 
-    protected abstract String getPageTitle();
+    protected abstract String getPageName();
 
     /**
      * Subclasses that want to display a question image on each card (e.g. PuzzleLibraryController)
@@ -267,10 +268,10 @@ public abstract class QuizController {
     private void updateActionButtons() {
         boolean hasSelection = selectedTemplate != null;
         btnCreate.setDisable(false); // always enabled
-        btnModify.setDisable(!hasSelection);
+        btnEdit.setDisable(!hasSelection);
+        btnRename.setDisable(!hasSelection);
         btnDelete.setDisable(!hasSelection);
-        btnEditQuestions.setDisable(!hasSelection);
-        btnAttemptQuiz.setDisable(!hasSelection);
+        btnStart.setDisable(!hasSelection);
     }
 
     private String cardStyle(boolean selected, String colour) {
@@ -407,7 +408,7 @@ public abstract class QuizController {
     }
 
     @FXML
-    private void handleModify() {
+    private void handleRename() {
         if (selectedTemplate == null) return;
 
         TextInputDialog nameDialog = new TextInputDialog(selectedTemplate.getName());
@@ -452,24 +453,18 @@ public abstract class QuizController {
     }
 
     @FXML
-    protected void handleAttemptQuiz() {
-        if (selectedTemplate == null) return;
-
-        try {
-            QuizAttemptController controller = (QuizAttemptController) Router.navigateLayout(View.QUIZ_ATTEMPT);
-
-            if (controller != null) {
-                controller.initQuiz(selectedTemplate);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            showWarning("Failed to open quiz attempt page: " + e.getMessage());
+    protected void handleStart() {
+        if (selectedTemplate == null) {
+            return;
         }
+
+        QuizAttemptController controller = (QuizAttemptController) Router.navigateLayout(View.QUIZ_ATTEMPT);
+        assert controller != null;
+        controller.initQuiz(selectedTemplate);
     }
 
     @FXML
-    private void handleEditQuestions() {
+    private void handleEdit() {
         if (selectedTemplate == null) return;
 
         QuizTemplate template = selectedTemplate;

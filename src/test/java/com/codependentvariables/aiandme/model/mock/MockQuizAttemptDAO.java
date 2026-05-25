@@ -21,7 +21,7 @@ public class MockQuizAttemptDAO implements IQuizAttemptDAO {
      * Constructor seeds initial mock data.
      */
     public MockQuizAttemptDAO() {
-        add(new QuizAttempt(1, "Emma's Quiz Attempt", Timestamp.valueOf("2026-04-17 00:00:00"), 5));
+        add(new QuizAttempt(1, "Emma's Quiz Attempt", Timestamp.valueOf("2026-04-17 00:00:00"), 5, "Maths", false));
     }
 
     /**

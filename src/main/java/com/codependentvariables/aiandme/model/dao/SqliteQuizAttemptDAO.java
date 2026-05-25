@@ -21,7 +21,9 @@ public class SqliteQuizAttemptDAO extends BaseSqliteDAO implements IQuizAttemptD
                     user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
                     name VARCHAR NOT NULL,
                     completed_at TIMESTAMP NOT NULL,
-                    results INT NOT NULL
+                    results INT NOT NULL,
+                    category TEXT DEFAULT 'General',
+                    is_puzzle INTEGER NOT NULL DEFAULT 0
                 );
             """;
 
@@ -29,7 +31,7 @@ public class SqliteQuizAttemptDAO extends BaseSqliteDAO implements IQuizAttemptD
      * Seed data inserted when the database is initialised.
      */
     private static final String seedDataQuery = """
-                INSERT INTO quiz_attempts (user_id, name, completed_at, results) VALUES (1, 'Basic Addition', '2026-04-27 00:00:00', 5);
+                INSERT INTO quiz_attempts (user_id, name, completed_at, results, category, is_puzzle) VALUES (1, 'Basic Addition', '2026-04-27 00:00:00', 5, "Maths", false);
             """;
 
     @Override
@@ -50,8 +52,9 @@ public class SqliteQuizAttemptDAO extends BaseSqliteDAO implements IQuizAttemptD
                 resultSet.getInt("user_id"),
                 resultSet.getString("name"),
                 resultSet.getTimestamp("completed_at"),
-                resultSet.getInt("results")
-
+                resultSet.getInt("results"),
+                resultSet.getString("category"),
+                resultSet.getBoolean("is_puzzle")
         );
         quizAttempt.setId(resultSet.getInt("id"));
         return quizAttempt;
@@ -63,13 +66,15 @@ public class SqliteQuizAttemptDAO extends BaseSqliteDAO implements IQuizAttemptD
      */
     @Override
     public void add(QuizAttempt quizAttempt) {
-        final String query = "INSERT INTO quiz_attempts (user_id, name, completed_at, results) VALUES (?, ?, ?, ?)";
+        final String query = "INSERT INTO quiz_attempts (user_id, name, completed_at, results, category, is_puzzle) VALUES (?, ?, ?, ?, ?, ?)";
 
         int id = executeSqlWithGeneratedKeys(query, statement -> {
             statement.setInt(1, quizAttempt.getUserId());
             statement.setString(2, quizAttempt.getName());
             statement.setTimestamp(3, quizAttempt.getCompletedAt());
             statement.setInt(4, quizAttempt.getResults());
+            statement.setString(5, quizAttempt.getCategory());
+            statement.setBoolean(6, quizAttempt.isPuzzle());
         });
 
         quizAttempt.setId(id);
@@ -80,14 +85,16 @@ public class SqliteQuizAttemptDAO extends BaseSqliteDAO implements IQuizAttemptD
      */
     @Override
     public void update(QuizAttempt quizAttempt) {
-        final String query = "UPDATE quiz_attempts SET user_id = ?, name = ?, completed_at = ?, results = ? WHERE id = ?";
+        final String query = "UPDATE quiz_attempts SET user_id = ?, name = ?, completed_at = ?, results = ?, category = ?, is_puzzle = ? WHERE id = ?";
 
         executeSql(query, statement -> {
             statement.setInt(1, quizAttempt.getUserId());
             statement.setString(2, quizAttempt.getName());
             statement.setTimestamp(3, quizAttempt.getCompletedAt());
             statement.setInt(4, quizAttempt.getResults());
-            statement.setInt(5, quizAttempt.getId());
+            statement.setString(5, quizAttempt.getCategory());
+            statement.setBoolean(6, quizAttempt.isPuzzle());
+            statement.setInt(7, quizAttempt.getId());
         });
     }
 

@@ -40,7 +40,7 @@
                         <NumberAxis label="Your Check-ins" side="BOTTOM" tickUnit="1" fx:id="xAxisCheckin" />
                      </xAxis>
                      <yAxis>
-                        <NumberAxis upperBound="100.0" label="Ratings" fx:id="yAxisCheckin" side="LEFT" tickUnit="10" />
+                         <NumberAxis upperBound="100.0" label="Ratings" fx:id="yAxisCheckin" side="LEFT" tickUnit="10" />
                      </yAxis>
                   </LineChart>
                </children>

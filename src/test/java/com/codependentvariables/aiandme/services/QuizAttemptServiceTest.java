@@ -12,8 +12,7 @@ class QuizAttemptServiceTest {
 
     @Test
     void saveAttemptCount() {
-        QuizAttemptService service = new QuizAttemptService(new MockQuizAttemptDAO(), new MockQuizAttemptQuestionDAO(), new MockQuizAttemptAnswerDAO()
-        );
+        QuizAttemptService service = new QuizAttemptService(new MockQuizAttemptDAO(), new MockQuizAttemptQuestionDAO(), new MockQuizAttemptAnswerDAO(), new MockCategoryDAO());
 
         QuizTemplate quiz = new QuizTemplate("Quiz", 1, 1, "published");
 

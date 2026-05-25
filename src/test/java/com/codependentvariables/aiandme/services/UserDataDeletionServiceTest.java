@@ -60,7 +60,7 @@ public class UserDataDeletionServiceTest extends JavaFXTest {
 
     @Test
     public void are_quiz_attempts_deleted() {
-        QuizAttempt testQuizAtt = new QuizAttempt(appState.getCurrentUser().getId(), "Test", Timestamp.valueOf(LocalDateTime.now()),5);
+        QuizAttempt testQuizAtt = new QuizAttempt(appState.getCurrentUser().getId(), "Test", Timestamp.valueOf(LocalDateTime.now()),5, "Maths", false);
         testQuizAttDAO.add(testQuizAtt);
 
         QuizAttemptQuestion testQuizAttQ = new QuizAttemptQuestion(testQuizAtt.getId(), "Test", null);

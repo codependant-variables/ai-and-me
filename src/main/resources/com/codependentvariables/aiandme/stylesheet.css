@@ -173,21 +173,6 @@ Button {
 
 
 /*------------------------ Page - Quiz/Puzzle Library ------------------------*/
-/*------ Style Class - Library Buttons ------*/
-.libraryButtonPrimary {
-    -fx-cursor: hand;
-    -fx-background-color: #8cc978;
-    -fx-text-fill: #ffffff;
-    -fx-font-weight: bold;
-}
-
-.libraryButtonSecondary {
-    -fx-cursor: hand;
-    -fx-border-width: 2px;
-    -fx-border-color: #8CC978;
-}
-
-
 /*------ Style Class - Library Widgets ------*/
 .libraryWidget {
     -fx-background-radius: 15px;

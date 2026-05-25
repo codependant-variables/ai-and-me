@@ -1,13 +1,5 @@
 package com.codependentvariables.aiandme.controller;
 
-import com.codependentvariables.aiandme.model.*;
-import com.codependentvariables.aiandme.model.dao.*;
-import com.codependentvariables.aiandme.modules.Router;
-import com.codependentvariables.aiandme.modules.View;
-import com.codependentvariables.aiandme.services.CategoryService;
-import com.codependentvariables.aiandme.services.QuizAttemptService;
-import com.codependentvariables.aiandme.services.QuizTemplateService;
-import com.codependentvariables.aiandme.state.AppState;
 import javafx.fxml.FXML;
 
 /**
@@ -20,8 +12,8 @@ public class QuizLibraryController extends QuizController {
         super.initialize();
     }
     @Override
-    protected String getPageTitle() {
-        return "Quiz Library";
+    protected String getPageName() {
+        return "Quiz";
     }
 
     /** Only show templates that are NOT puzzles. */
