@@ -85,4 +85,18 @@ public class CheckInService {
         }
         return false;
     }
+
+    /**
+     * Gets the 5 most recent check-ins for a user.
+     *
+     * @param userId user ID
+     * @param limit maximum number of check-ins to return
+     * @return list of recent check-ins
+     */
+    public List<CheckIn> getRecentCheckInsByUserId(int userId, int limit) {
+        List<CheckIn> allCheckIns = getAllByUserId(userId);
+        int startIndex = Math.max(0, allCheckIns.size() - limit);
+
+        return allCheckIns.subList(startIndex, allCheckIns.size());
+    }
 }

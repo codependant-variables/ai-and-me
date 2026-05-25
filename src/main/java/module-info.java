@@ -22,4 +22,6 @@ module com.codependentvariables.aiandme {
     opens com.codependentvariables.aiandme.controller to javafx.fxml;
     opens com.codependentvariables.aiandme.model to javafx.fxml;
     opens com.codependentvariables.aiandme.modules to javafx.fxml;
+    exports com.codependentvariables.aiandme.services.home;
+    opens com.codependentvariables.aiandme.services.home to javafx.fxml;
 }

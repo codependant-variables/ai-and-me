@@ -2,9 +2,12 @@ package com.codependentvariables.aiandme.services;
 
 import com.codependentvariables.aiandme.model.*;
 import com.codependentvariables.aiandme.model.dao.*;
+import com.codependentvariables.aiandme.services.home.AttemptStatistics;
+import com.codependentvariables.aiandme.services.home.CategoryStat;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 /****
@@ -18,20 +21,19 @@ public class QuizAttemptService {
     private final IQuizAttemptDAO attemptDAO;
     private final IQuizAttemptQuestionDAO attemptQuestionDAO;
     private final IQuizAttemptAnswerDAO attemptAnswerDAO;
+    private final ICategoryDAO categoryDAO;
+
 
     private QuizAttemptService() {
-        this(new SqliteQuizAttemptDAO(),
-             new SqliteQuizAttemptQuestionDAO(),
-             new SqliteQuizAttemptAnswerDAO());
+        this(new SqliteQuizAttemptDAO(), new SqliteQuizAttemptQuestionDAO(), new SqliteQuizAttemptAnswerDAO(), new SqliteCategoryDAO());
     }
 
     // Not public but tests in this package can use it
-    QuizAttemptService(IQuizAttemptDAO attemptDAO,
-                       IQuizAttemptQuestionDAO attemptQuestionDAO,
-                       IQuizAttemptAnswerDAO attemptAnswerDAO) {
+    QuizAttemptService(IQuizAttemptDAO attemptDAO, IQuizAttemptQuestionDAO attemptQuestionDAO, IQuizAttemptAnswerDAO attemptAnswerDAO, ICategoryDAO categoryDAO) {
         this.attemptDAO         = attemptDAO;
         this.attemptQuestionDAO = attemptQuestionDAO;
         this.attemptAnswerDAO   = attemptAnswerDAO;
+        this.categoryDAO = categoryDAO;
     }
 
     public static QuizAttemptService getInstance() {
@@ -47,12 +49,22 @@ public class QuizAttemptService {
 
         int correct = 0;
 
-        // 1 — Create the top-level attempt record (results tally stored after iterating questions)
+        // Get the real category from the database
+        Category category = categoryDAO.get(template.getCategoryId());
+
+        String categoryName = "General";
+
+        if (category != null) {
+            categoryName = category.getName();
+        }
+
         QuizAttempt attempt = new QuizAttempt(
                 userId,
                 template.getName(),
                 Timestamp.from(Instant.now()),
-                0
+                0,
+                categoryName,
+                template.isPuzzle()
         );
         attemptDAO.add(attempt); // sets attempt.id
 
@@ -105,14 +117,70 @@ public class QuizAttemptService {
 
     /**
      * Returns the split of quiz vs puzzle attempts for a user.
-     * Puzzle counting is not yet implemented, therefore all attempts are treated as quizzes.
+     * Also generates category statistics used for the dashboard pie chart.
      *
      * @param userId the user to query
-     * @return an {@link AttemptStatistics} with quiz count and percentages ready for charts in controller's
+     * @return AttemptStatistics containing attempt counts and category data
      */
     public AttemptStatistics getAttemptCountByUser(int userId) {
-        int quizCount = attemptDAO.getByUserId(userId).size();
-        return new AttemptStatistics(quizCount, 0);
-    }
 
+        // Get all attempts made by the user
+        List<QuizAttempt> attempts = attemptDAO.getByUserId(userId);
+
+        int quizCount = 0;
+        int puzzleCount = 0;
+
+        // Stores all category statistics
+        List<CategoryStat> categoryStats = new ArrayList<>();
+
+        // Loop through every attempt
+        for (QuizAttempt attempt : attempts) {
+
+            // Get category name
+            String category = attempt.getCategory();
+
+            // Prevent null category values
+            if (category == null || category.isBlank()) {
+                category = "General";
+            }
+
+            boolean isPuzzle = attempt.isPuzzle();
+
+            // Count quizzes and puzzles
+            if (isPuzzle) {
+                puzzleCount++;
+            } else {
+                quizCount++;
+            }
+
+            boolean found = false;
+
+            // Check if category already exists
+            for (CategoryStat stat : categoryStats) {
+
+                // Match both category name and type
+                if (category.equals(stat.getCategoryName()) && stat.isPuzzle() == isPuzzle) {
+                    // Increase count
+                    stat.setCount(stat.getCount() + 1);
+
+                    found = true;
+                    break;
+                }
+            }
+
+            // Create new category if it does not exist
+            if (!found) {
+                categoryStats.add(new CategoryStat(category, 1, isPuzzle)
+                );
+            }
+        }
+
+        // Create final statistics object
+        AttemptStatistics stats = new AttemptStatistics(quizCount, puzzleCount);
+
+        // Attach category data
+        stats.setCategoryStats(categoryStats);
+
+        return stats;
+    }
 }
