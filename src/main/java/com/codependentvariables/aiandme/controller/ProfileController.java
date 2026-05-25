@@ -20,6 +20,10 @@ import javafx.scene.shape.SVGPath;
 
 import java.util.Objects;
 
+/**
+ * Controller for the user profile page.
+ * Handles profile editing, MFA settings, and account actions.
+ */
 public class ProfileController {
     private final AppState appState = AppState.getInstance();
     private final UserService userService = UserService.getInstance();
@@ -53,11 +57,18 @@ public class ProfileController {
     @FXML
     public Button mfaButton;
 
+    /**
+     * Validates the user's name field.
+     */
     private final ValidationEntry<String> nameValidator = new ValidationEntry<>(
             () -> this.nameField.getText(),
             "Name",
             new StringNotEmptyValidator()
     );
+
+    /**
+     * Validates the user's email field.
+     */
     private final ValidationEntry<String> emailValidator = new ValidationEntry<>(
             () -> this.emailField.getText(),
             "Email",
@@ -68,6 +79,9 @@ public class ProfileController {
             })
     );
 
+    /**
+     * Initialises profile data and UI defaults.
+     */
     @FXML
     private void initialize() {
         this.currentUser = appState.getCurrentUser();
@@ -102,6 +116,9 @@ public class ProfileController {
         );
     }
 
+    /**
+     * Enables editing and saves the updated user name.
+     */
     @FXML
     private void editName() {
         boolean isDisable = nameField.isDisable();
@@ -124,12 +141,18 @@ public class ProfileController {
         displaySaved();
     }
 
+    /**
+     * Cancels name editing and restores original data.
+     */
     @FXML
     private void cancelEditName() {
         nameField.setDisable(true);
         nameField.setText(currentUser.getName());
     }
 
+    /**
+     * Enables editing and saves the updated email address.
+     */
     @FXML
     private void editEmail() {
         boolean isDisable = emailField.isDisable();
@@ -152,25 +175,42 @@ public class ProfileController {
         displaySaved();
     }
 
+    /**
+     * Cancels email editing and restores original data.
+     */
     @FXML
     private void cancelEditEmail() {
         emailField.setDisable(true);
         emailField.setText(currentUser.getEmail());
     }
 
+    /**
+     * Displays a validation error message.
+     *
+     * @param error validation error text
+     */
     private void displayError(String error) {
         Toast.addMessage("Invalid", error, ToastMessageType.ERROR);
     }
 
+    /**
+     * Displays a successful save message.
+     */
     private void displaySaved() {
         Toast.addMessage("Success", "Saved data.", ToastMessageType.INFORMATION);
     }
 
+    /**
+     * Opens the change password page.
+     */
     @FXML
     private void navigateChangePassword() {
         throw new RuntimeException("Change password not implemented.");
     }
 
+    /**
+     * Enables or removes MFA.
+     */
     @FXML
     private void clickMfa() {
         if (currentUser.getTotpSecret() == null) {
@@ -185,16 +225,25 @@ public class ProfileController {
         Toast.addMessage("Success", "MFA removed.", ToastMessageType.INFORMATION);
     }
 
+    /**
+     * Opens the check-in history page.
+     */
     @FXML
     private void navigateCheckInHistory() {
         Router.navigateLayout(View.CHECK_IN_HISTORY);
     }
 
+    /**
+     * Exports the user's account data.
+     */
     @FXML
     private void exportData() {
         dataExportService.exportUserData();
     }
 
+    /**
+     * Deletes all user-related stored data.
+     */
     @FXML
     private void clearData() {
         dataDeletionService.deleteCurrentUserData();
@@ -213,6 +262,9 @@ public class ProfileController {
         Toast.addMessage("Quiz Attempts Deleted", "All quiz attempts associated with this account have been deleted.", ToastMessageType.INFORMATION);
     }
 
+    /**
+     * Deletes the current user account after confirmation.
+     */
     @FXML
     private void deleteUser() {
         Dialogue.confirmationWithCancel(result -> {

@@ -16,7 +16,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 /**
- * Controller responsible for displaying the results of a completed quiz attempt.
+ * Controller for displaying quiz attempt results.
+ * Shows quiz statistics and question-by-question feedback.
  */
 public class QuizAttemptResultsController {
     @FXML
@@ -31,8 +32,9 @@ public class QuizAttemptResultsController {
     private VBox  resultsContainer;
 
     /**
-     * Initializes the results view with summary data.
-     * Populates header info and dynamically builds result rows.
+     * Loads quiz result summary data into the view.
+     *
+     *@param summary completed quiz summary
      */
     public void initialiseData(QuizAttemptSummary summary) {
         lblQuizName.setText(summary.getQuizName());
@@ -46,8 +48,10 @@ public class QuizAttemptResultsController {
     }
 
     /**
-     * Creates a visual row representing a single question result.
-     * Includes correctness indicator, question text, and selected answer.
+     * Creates a visual result row for a question.
+     *
+     * @param row question result data
+     * @return styled result row
      */
     private HBox buildRowNode(ResultRow row) {
         // Correct/Incorrect indicator label
@@ -80,6 +84,9 @@ public class QuizAttemptResultsController {
         return hbox;
     }
 
+    /**
+     * Navigates back to the quiz library page.
+     */
     @FXML
     public void handleBack() {
         Router.navigateLayout(View.QUIZ_LIBRARY);

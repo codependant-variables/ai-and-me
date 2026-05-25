@@ -11,11 +11,8 @@ import com.codependentvariables.aiandme.state.AppState;
 import javafx.fxml.FXML;
 
 /**
- * Controller for the Quiz Library screen.
- * Uses quiz-library.fxml which is used also for PuzzleLibrary.
- * Handles displaying and showing functionality for quiz templates.
+ * Handles displaying quiz templates and quiz management actions.
  */
-
 public class QuizLibraryController extends QuizController {
     @FXML
     @Override
@@ -33,6 +30,9 @@ public class QuizLibraryController extends QuizController {
         return false;
     }
 
+    /**
+     * Initialises the quiz library view.
+     */
     @Override
     public void initialise() {
 
