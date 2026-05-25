@@ -30,8 +30,8 @@ public class PuzzleLibraryController extends QuizController {
     }
 
     @Override
-    protected String getPageTitle() {
-        return "Puzzle Library";
+    protected String getPageName() {
+        return "Puzzle";
     }
 
     @Override
@@ -54,16 +54,11 @@ public class PuzzleLibraryController extends QuizController {
      */
     @FXML
     @Override
-    protected void handleAttemptQuiz() {
-        try {
-            QuizAttemptController controller = (QuizAttemptController) Router.navigateLayout(View.QUIZ_ATTEMPT);
-            if (controller != null) {
-                controller.setShowImages(true);
-                controller.initQuiz(getSelectedTemplate());
-            }
-        } catch (Exception e) {
-            showWarning("Failed to open puzzle attempt page: " + e.getMessage());
-        }
+    protected void handleStart() {
+        QuizAttemptController controller = (QuizAttemptController) Router.navigateLayout(View.QUIZ_ATTEMPT);
+        assert controller != null;
+        controller.setShowImages(true);
+        controller.initQuiz(getSelectedTemplate());
     }
 
     /**
