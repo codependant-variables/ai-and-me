@@ -39,6 +39,8 @@ public abstract class QuizController {
     private final IUserDAO userDAO = new SqliteUserDAO();
     private final QuizTemplateService templateService = QuizTemplateService.getInstance();
     private final QuizAttemptService attemptService = QuizAttemptService.getInstance();
+    private AppState appState = AppState.getInstance();
+
 
     @FXML private Label pageTitle;
     @FXML private FlowPane categoryContainer;
@@ -275,22 +277,15 @@ public abstract class QuizController {
     }
 
     private String cardStyle(boolean selected, String colour) {
+        boolean isDarkMode = appState.getIsDarkMode();
+
         String bg = selected
-                ? "-fx-background-color: #e3f2fd;" /* probably need to change for dark mode to work */
-                : "-fx-background-color: #ffffff;"; /* need to change -fx-background-color: #ffffff for dark mode to work */
+                ? (!isDarkMode ? "-fx-background-color: #e3f2fd;" : "-fx-background-color: #51728A;") //selected
+
+                : (isDarkMode ? "-fx-background-color: #2e3440;" : "-fx-background-color: #ffffff;" ); //not selected
+
         return bg + "-fx-border-color: " + colour + "; -fx-border-width: 4; -fx-background-radius: 20px; -fx-border-radius: 15px; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, #00000033, 15, 0.1, 5, 5);";
     }
-
-//    private String cardStyle(boolean selected, String colour) {
-//        String border = selected
-//                //? "-fx-border-color: " + colour + "; -fx-border-width: 8;"
-//                ? "-fx-border-color: #000000; -fx-border-width: 4;"
-//                : "-fx-border-color: " + colour + "; -fx-border-width: 4;";
-//        String bg = selected
-//                ? "-fx-background-color: #e3f2fd;"
-//                : "-fx-background-color: #ffffff;";
-//        return bg + border + "-fx-background-radius: 20px; -fx-border-radius: 15px; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, #00000033, 15, 0.1, 5, 5);";
-//    }
 
     // Action Handlers
 
