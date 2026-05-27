@@ -24,6 +24,10 @@ import javafx.scene.text.Text;
 
 import java.util.List;
 
+/**
+ * Controller for the home dashboard view.
+ * Displays user statistics, charts, quizzes, and navigation widgets.
+ */
 public class HomeController {
     @FXML
     private Label checkInStreak;

@@ -30,6 +30,9 @@ import java.util.Objects;
 import java.util.Optional;
 import javafx.stage.FileChooser;
 
+/**
+ * Controller for the quiz view.
+ */
 public abstract class QuizController {
 
     private final CategoryService categoryService = CategoryService.getInstance();
@@ -689,8 +692,9 @@ public abstract class QuizController {
     @FXML
     public abstract void initialise();
 
-
-
+    /**
+     * Navigates back to the home page.
+     */
     @FXML
     public void navigateHome() {
         Router.navigateLayout(View.HOME);

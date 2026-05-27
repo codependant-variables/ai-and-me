@@ -10,6 +10,10 @@ import javafx.scene.control.TextArea;
 
 import java.time.LocalDateTime;
 
+/**
+ * Controller for the daily check-in view.
+ * Handles collecting and submitting user check-in data.
+ */
 public class CheckInController {
     @FXML
     private Slider useSlider;
@@ -25,6 +29,10 @@ public class CheckInController {
 
     private CheckIn checkIn;
 
+    /**
+     * Creates and submits a new check-in.
+     * Prompts guest users to sign up before saving.
+     */
     @FXML
     public void clickSubmit() {
         checkIn = new CheckIn(0,
@@ -42,12 +50,19 @@ public class CheckInController {
         }
     }
 
+    /**
+     * Saves the check-in for the current user
+     * and returns to the home page.
+     */
     private void submitCheckIn() {
         checkIn.setUserId(appState.getCurrentUser().getId());
         checkInService.submitCheckIn(checkIn);
         Router.navigateLayout(View.HOME);
     }
 
+    /**
+     * Navigates back to the home page.
+     */
     @FXML
     public void navigateHome() {
         Router.navigateLayout(View.HOME);
