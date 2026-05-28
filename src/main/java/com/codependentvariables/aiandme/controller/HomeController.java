@@ -247,7 +247,6 @@ public class HomeController {
                         )
                 );
             }
-
             attemptChart.getData().add(attemptSeries);
 
             /////////////////////////////////

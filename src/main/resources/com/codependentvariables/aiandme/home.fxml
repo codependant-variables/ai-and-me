@@ -55,7 +55,7 @@
                <children>
                   <LineChart fx:id="attemptChart" title="Quiz/Puzzle Scores" legendVisible="false">
                      <xAxis>
-                        <NumberAxis forceZeroInRange="false" lowerBound="1" minorTickVisible="false" side="BOTTOM" tickLabelsVisible="false" tickUnit="1" upperBound="5" visible="false" fx:id="xAxisQuizAttempts" />
+                        <NumberAxis forceZeroInRange="false" autoRanging="false" minorTickVisible="false" side="BOTTOM" tickLabelsVisible="false" visible="false" tickUnit="1" lowerBound="1.0" upperBound="5.0" fx:id="xAxisQuizAttempts" />
                      </xAxis>
                      <yAxis>
                         <NumberAxis fx:id="yAxisQuizAttempts" autoRanging="false" side="LEFT" upperBound="10" />
