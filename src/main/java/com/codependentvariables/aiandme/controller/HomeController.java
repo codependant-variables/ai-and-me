@@ -15,6 +15,7 @@ import com.codependentvariables.aiandme.state.AppState;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Side;
 import javafx.scene.chart.*;
 import javafx.scene.control.Label;
 import com.codependentvariables.aiandme.services.HomeService;
@@ -102,8 +103,12 @@ public class HomeController {
         lastCheckIn.setText(homeService.getLastCheckInDate());
 
         yAxisCheckin.setLowerBound(0.0);
-        yAxisCheckin.setUpperBound(100.0);
-        yAxisCheckin.setTickUnit(10);
+        yAxisCheckin.setUpperBound(10.0);
+        yAxisCheckin.setTickUnit(1.0);
+
+        xAxisCheckin.setLowerBound(1);
+        xAxisCheckin.setUpperBound(5);
+        xAxisCheckin.setTickUnit(1);
 
         background.styleProperty().bind(
                 appState.getObservableIsDarkMode().map(
@@ -172,6 +177,15 @@ public class HomeController {
                 useSeries.setName("AI Use");
                 happinessSeries.setName("AI Happiness");
 
+                yAxisCheckin.setLowerBound(0.0);
+                yAxisCheckin.setUpperBound(10.0);
+                yAxisCheckin.setTickUnit(1.0);
+
+                xAxisCheckin.setLowerBound(1);
+                xAxisCheckin.setUpperBound(5);
+                xAxisCheckin.setTickUnit(1);
+                xAxisCheckin.setVisible(false);
+
                 int totalCheckins = recentCheckins.size();
 
                 int checkInNumber = 1;
@@ -219,7 +233,7 @@ public class HomeController {
             XYChart.Series<Number, Number> attemptSeries =
                     new XYChart.Series<>();
 
-            attemptSeries.setName("Score (out of 10)");
+            //attemptSeries.setName("Score (out of 10)");
 
             int startIndex =
                     Math.max(0, recentAttempts.size() - 5);
@@ -237,7 +251,6 @@ public class HomeController {
                         )
                 );
             }
-
             attemptChart.getData().add(attemptSeries);
 
             /////////////////////////////////
@@ -262,6 +275,9 @@ public class HomeController {
             }
 
             ratioPie.setTitle("Attempts by Category");
+            ratioPie.setLabelsVisible(false);
+            ratioPie.setLegendVisible(true);
+            ratioPie.setLegendSide(Side.BOTTOM);
             ratioPie.setData(ratioData);
 
             System.out.println("Pie slices: " + ratioData.size()
