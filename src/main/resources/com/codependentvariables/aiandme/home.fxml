@@ -22,7 +22,7 @@
          <children>
             <VBox alignment="CENTER" prefWidth="400" spacing="10.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Check in data:">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Your Statistics:">
                      <font>
                         <Font size="21.0" />
                      </font>
@@ -33,31 +33,39 @@
                   <Separator minHeight="-Infinity" prefHeight="9.0" prefWidth="243.0" />
                </children>
             </VBox>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+            <VBox alignment="CENTER" prefHeight="250.0" prefWidth="100.0">
                <children>
-                  <LineChart legendVisible="true" legendSide="BOTTOM" fx:id="checkInChart" prefHeight="201.0" prefWidth="231.0">
+                  <LineChart fx:id="checkInChart" title="Check-in Data" titleSide="TOP" legendSide="RIGHT" legendVisible="true">
                      <xAxis>
-                        <NumberAxis label="Your Check-ins" side="BOTTOM" tickUnit="1" fx:id="xAxisCheckin" />
+                        <NumberAxis autoRanging="false" forceZeroInRange="false"  lowerBound="1.0" minorTickLength="0.0" side="BOTTOM" tickLabelsVisible="false" upperBound="5" fx:id="xAxisCheckin">
+                           <tickLabelFont>
+                              <Font size="10.0" />
+                           </tickLabelFont></NumberAxis>
                      </xAxis>
                      <yAxis>
-                         <NumberAxis upperBound="100.0" label="Ratings" fx:id="yAxisCheckin" side="LEFT" tickUnit="10" />
+                         <NumberAxis fx:id="yAxisCheckin" autoRanging="false" side="LEFT" tickLabelGap="2.0" tickLength="10.0" upperBound="10.0">
+                           <tickLabelFont>
+                              <Font size="10.0" />
+                           </tickLabelFont></NumberAxis>
                      </yAxis>
                   </LineChart>
                </children>
             </VBox>
-            <VBox prefHeight="200.0" prefWidth="100.0">
+            <VBox prefHeight="250.0" prefWidth="100.0">
                <children>
-                  <LineChart fx:id="attemptChart" prefHeight="201.0" prefWidth="231.0">
+                  <LineChart fx:id="attemptChart" title="Quiz/Puzzle Scores" legendVisible="false">
                      <xAxis>
-                        <NumberAxis label="Attempt (5 -&gt; Latest)" side="BOTTOM" tickUnit="1" fx:id="xAxisQuizAttempts" />
+                        <NumberAxis forceZeroInRange="false" lowerBound="1" minorTickVisible="false" side="BOTTOM" tickLabelsVisible="false" tickUnit="1" upperBound="5" visible="false" fx:id="xAxisQuizAttempts" />
                      </xAxis>
                      <yAxis>
-                        <NumberAxis fx:id="yAxisQuizAttempts" label="Score" side="LEFT" />
+                        <NumberAxis fx:id="yAxisQuizAttempts" autoRanging="false" side="LEFT" upperBound="10" />
                      </yAxis>
                   </LineChart>
                </children>
             </VBox>
-            <PieChart fx:id="ratioPie" prefHeight="213.0" prefWidth="266.0" />
+            <VBox>
+            <PieChart fx:id="ratioPie" labelLineLength="0.0" legendSide="LEFT" />
+            </VBox>
          </children>
          <HBox.margin>
             <Insets />
