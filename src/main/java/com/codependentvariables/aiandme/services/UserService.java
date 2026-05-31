@@ -223,7 +223,6 @@ public class UserService {
         json.put("quizAttempts", exportQuizAttempts(userId));
 
         DirectoryChooser directoryChooser = new DirectoryChooser();
-        //directoryChooser.setTitle("Select Project Folder");
         String userHome = System.getProperty("user.home");
         directoryChooser.setInitialDirectory(new File(userHome));
         File selectedDirectory = directoryChooser.showDialog(null);
