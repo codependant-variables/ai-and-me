@@ -1,23 +1,7 @@
 /*------------------------ Universal ------------------------*/
 /*------ Style Class - Background AnchorPane ------*/
-.background-AnchorPane {
-    -fx-min-height: 768px;
-    -fx-max-width: 1024px;
-    -fx-pref-height: 768px;
-    -fx-pref-width: 1024px;
-    -fx-min-height: 768px;
-    -fx-padding: 0 0 0 0;
+.background {
     -fx-effect: innershadow(three-pass-box, #00000033, 10, 0, 0, 5);
-}
-
-/*------ Style Class - Background StackPane ------*/
-.background-StackPane {
-    -fx-background-color: transparent;
-    -fx-min-height: 768px;
-    -fx-max-width: 1024px;
-    -fx-pref-height: 768px;
-    -fx-pref-width: 1024px;
-    -fx-min-height: 768px;
 }
 
 /*------ Style Class - Background OtherPane ------*/
