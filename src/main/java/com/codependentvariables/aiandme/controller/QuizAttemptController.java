@@ -254,11 +254,10 @@ public class QuizAttemptController {
         controller.initialiseData(summary);
     }
 
-    /**
-     * Navigates back to the quiz library page.
-     */
     @FXML
     private void navigateBack() {
-        Router.navigateLayout(View.QUIZ_LIBRARY);
+        Dialogue.confirmationWithCancel(x -> {
+            Router.navigateBack();
+        });
     }
 }
