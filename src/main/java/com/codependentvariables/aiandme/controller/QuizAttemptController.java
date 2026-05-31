@@ -256,8 +256,10 @@ public class QuizAttemptController {
 
     @FXML
     private void navigateBack() {
-        Dialogue.confirmationWithCancel(x -> {
-            Router.navigateBack();
+        Dialogue.confirmationWithCancel(result -> {
+            if (result != null && result) {
+                Router.navigateBack();
+            }
         });
     }
 }
