@@ -1,10 +1,11 @@
-package com.codependentvariables.aiandme.model.dao;
+package com.codependentvariables.aiandme.database.dao;
 
 import com.codependentvariables.aiandme.database.IDatabaseEntity;
 import com.codependentvariables.aiandme.database.IRowMapper;
 import com.codependentvariables.aiandme.model.QuizTemplate;
 import com.codependentvariables.aiandme.model.QuizTemplateAnswer;
 import com.codependentvariables.aiandme.model.QuizTemplateQuestion;
+import com.codependentvariables.aiandme.model.dao.IQuizTemplateQuestionDAO;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

@@ -3,7 +3,7 @@ package com.codependentvariables.aiandme.services;
 import com.codependentvariables.aiandme.model.Category;
 import com.codependentvariables.aiandme.model.User;
 import com.codependentvariables.aiandme.model.dao.ICategoryDAO;
-import com.codependentvariables.aiandme.model.dao.SqliteCategoryDAO;
+import com.codependentvariables.aiandme.database.dao.SqliteCategoryDAO;
 import com.codependentvariables.aiandme.modules.toast.Toast;
 import com.codependentvariables.aiandme.modules.toast.ToastMessageType;
 import com.codependentvariables.aiandme.modules.state.AppState;

@@ -1,5 +1,8 @@
 package com.codependentvariables.aiandme.services;
 
+import com.codependentvariables.aiandme.database.dao.SqliteQuizTemplateAnswerDAO;
+import com.codependentvariables.aiandme.database.dao.SqliteQuizTemplateDAO;
+import com.codependentvariables.aiandme.database.dao.SqliteQuizTemplateQuestionDAO;
 import com.codependentvariables.aiandme.model.*;
 import com.codependentvariables.aiandme.model.dao.*;
 

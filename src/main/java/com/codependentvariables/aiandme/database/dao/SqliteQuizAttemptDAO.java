@@ -1,7 +1,8 @@
-package com.codependentvariables.aiandme.model.dao;
+package com.codependentvariables.aiandme.database.dao;
 
 import com.codependentvariables.aiandme.database.*;
 import com.codependentvariables.aiandme.model.*;
+import com.codependentvariables.aiandme.model.dao.IQuizAttemptDAO;
 
 import java.util.List;
 

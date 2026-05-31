@@ -1,6 +1,6 @@
 package com.codependentvariables.aiandme.database;
 
-import com.codependentvariables.aiandme.model.dao.*;
+import com.codependentvariables.aiandme.database.dao.*;
 import org.sqlite.SQLiteConfig;
 
 import java.io.File;

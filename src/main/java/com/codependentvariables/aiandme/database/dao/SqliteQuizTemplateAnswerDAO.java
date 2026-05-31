@@ -1,8 +1,10 @@
-package com.codependentvariables.aiandme.model.dao;
+package com.codependentvariables.aiandme.database.dao;
 
 import com.codependentvariables.aiandme.database.IDatabaseEntity;
 import com.codependentvariables.aiandme.database.IRowMapper;
 import com.codependentvariables.aiandme.model.QuizTemplateAnswer;
+import com.codependentvariables.aiandme.model.dao.IQuizTemplateAnswerDAO;
+
 import java.util.List;
 
 public class SqliteQuizTemplateAnswerDAO extends BaseSqliteDAO implements IQuizTemplateAnswerDAO, IDatabaseEntity {

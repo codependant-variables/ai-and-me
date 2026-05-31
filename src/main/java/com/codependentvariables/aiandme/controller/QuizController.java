@@ -2,7 +2,7 @@ package com.codependentvariables.aiandme.controller;
 
 import com.codependentvariables.aiandme.model.*;
 import com.codependentvariables.aiandme.model.dao.IUserDAO;
-import com.codependentvariables.aiandme.model.dao.SqliteUserDAO;
+import com.codependentvariables.aiandme.database.dao.SqliteUserDAO;
 import com.codependentvariables.aiandme.modules.router.Router;
 import com.codependentvariables.aiandme.modules.router.View;
 import com.codependentvariables.aiandme.services.CategoryService;

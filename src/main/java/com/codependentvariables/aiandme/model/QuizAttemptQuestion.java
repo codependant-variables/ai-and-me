@@ -1,7 +1,5 @@
 package com.codependentvariables.aiandme.model;
 
-import com.codependentvariables.aiandme.model.dao.BaseSqliteDAO;
-
 public class QuizAttemptQuestion {
     private int id;
     private int quizAttemptId;

@@ -1,4 +1,4 @@
-package com.codependentvariables.aiandme.model.dao;
+package com.codependentvariables.aiandme.database.dao;
 
 import com.codependentvariables.aiandme.database.*;
 

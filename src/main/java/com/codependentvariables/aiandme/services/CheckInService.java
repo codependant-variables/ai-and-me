@@ -3,7 +3,7 @@ package com.codependentvariables.aiandme.services;
 import com.codependentvariables.aiandme.model.CheckIn;
 import com.codependentvariables.aiandme.model.User;
 import com.codependentvariables.aiandme.model.dao.ICheckInDAO;
-import com.codependentvariables.aiandme.model.dao.SqliteCheckInDAO;
+import com.codependentvariables.aiandme.database.dao.SqliteCheckInDAO;
 import com.codependentvariables.aiandme.modules.toast.Toast;
 import com.codependentvariables.aiandme.modules.toast.ToastMessageType;
 import com.codependentvariables.aiandme.modules.state.AppState;
