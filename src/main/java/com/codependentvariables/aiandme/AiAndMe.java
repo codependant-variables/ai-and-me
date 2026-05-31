@@ -30,8 +30,8 @@ public class AiAndMe extends Application {
 
     public static final String lightModeStylesheet = new NordLight().getUserAgentStylesheet();
     public static final String darkModeStylesheet = new NordDark().getUserAgentStylesheet();
-    public static final String lightLogoUrlString = Objects.requireNonNull(AiAndMe.class.getResource("dark-logo.png")).toString();
-    public static final String darkLogoUrlString = Objects.requireNonNull(AiAndMe.class.getResource("logo.png")).toString();
+    public static final String lightLogoUrlString = Objects.requireNonNull(AiAndMe.class.getResource("Images/dark-logo.png")).toString();
+    public static final String darkLogoUrlString = Objects.requireNonNull(AiAndMe.class.getResource("Images/logo.png")).toString();
 
     public static void main(String[] args) {
         launch(args);

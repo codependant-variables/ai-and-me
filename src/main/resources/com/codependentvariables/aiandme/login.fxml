@@ -21,7 +21,7 @@
         </columnConstraints>
 
         <ImageView fx:id="logoRef" fitWidth="255.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="0">
-            <Image url="@dark-logo.png" />
+            <Image url="@Images/dark-logo.png" />
         </ImageView>
 
         <Label styleClass="title" text="Login" GridPane.columnIndex="1" GridPane.rowIndex="1">

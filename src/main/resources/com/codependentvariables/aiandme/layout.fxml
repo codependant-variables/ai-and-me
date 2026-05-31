@@ -17,7 +17,7 @@
             </padding>
 
             <ImageView fx:id="logoRef" fitHeight="72.0" preserveRatio="true" layoutY="10.0">
-                <Image url="@dark-logo.png" />
+                <Image url="@Images/dark-logo.png" />
             </ImageView>
             <Region HBox.hgrow="ALWAYS" />
             <Button onAction="#navigateHome" styleClass="nav-button" style="-fx-border-width: 0;" text="Home" wrapText="true" />
