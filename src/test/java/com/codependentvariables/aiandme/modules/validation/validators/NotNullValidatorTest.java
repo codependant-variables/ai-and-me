@@ -1,4 +1,4 @@
-package com.codependentvariables.aiandme.validation.validators;
+package com.codependentvariables.aiandme.modules.validation.validators;
 
 import com.codependentvariables.aiandme.modules.validation.validators.NotNullValidator;
 import org.junit.jupiter.api.Test;

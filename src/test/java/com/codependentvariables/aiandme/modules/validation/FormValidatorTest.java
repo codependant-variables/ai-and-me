@@ -1,4 +1,4 @@
-package com.codependentvariables.aiandme.validation;
+package com.codependentvariables.aiandme.modules.validation;
 
 import com.codependentvariables.aiandme.modules.validation.FormValidator;
 import com.codependentvariables.aiandme.modules.validation.ValidationEntry;
