@@ -1,4 +1,4 @@
-package com.codependentvariables.aiandme.validation.validators;
+package com.codependentvariables.aiandme.modules.validation.validators;
 
 /**
  * Requires strings to be greater than or equal to the provided length.

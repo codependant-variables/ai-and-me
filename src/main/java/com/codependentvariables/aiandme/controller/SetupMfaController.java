@@ -1,14 +1,14 @@
 package com.codependentvariables.aiandme.controller;
 
 import com.codependentvariables.aiandme.model.User;
-import com.codependentvariables.aiandme.modules.Router;
-import com.codependentvariables.aiandme.modules.Toast;
-import com.codependentvariables.aiandme.modules.ToastMessageType;
+import com.codependentvariables.aiandme.modules.router.Router;
+import com.codependentvariables.aiandme.modules.toast.Toast;
+import com.codependentvariables.aiandme.modules.toast.ToastMessageType;
 import com.codependentvariables.aiandme.services.AuthService;
 import com.codependentvariables.aiandme.services.UserService;
-import com.codependentvariables.aiandme.state.AppState;
-import com.codependentvariables.aiandme.validation.ValidationEntry;
-import com.codependentvariables.aiandme.validation.validators.DynamicValidator;
+import com.codependentvariables.aiandme.modules.state.AppState;
+import com.codependentvariables.aiandme.modules.validation.ValidationEntry;
+import com.codependentvariables.aiandme.modules.validation.validators.DynamicValidator;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;

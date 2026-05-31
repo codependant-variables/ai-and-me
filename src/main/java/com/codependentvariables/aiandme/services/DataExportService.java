@@ -2,7 +2,7 @@ package com.codependentvariables.aiandme.services;
 
 import com.codependentvariables.aiandme.model.*;
 import com.codependentvariables.aiandme.model.dao.*;
-import com.codependentvariables.aiandme.state.AppState;
+import com.codependentvariables.aiandme.modules.state.AppState;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

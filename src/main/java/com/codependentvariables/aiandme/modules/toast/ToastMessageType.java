@@ -1,4 +1,4 @@
-package com.codependentvariables.aiandme.modules;
+package com.codependentvariables.aiandme.modules.toast;
 
 public enum ToastMessageType {
     INFORMATION,

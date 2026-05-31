@@ -1,7 +1,6 @@
-package com.codependentvariables.aiandme.validation.validators;
+package com.codependentvariables.aiandme.modules.validation.validators;
 
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 /**
  * A flexible validator that allows each instance to define the validation function

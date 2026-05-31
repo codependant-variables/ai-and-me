@@ -1,4 +1,4 @@
-package com.codependentvariables.aiandme.modules;
+package com.codependentvariables.aiandme.modules.dialogue;
 
 public enum DialogueType {
     MESSAGE,

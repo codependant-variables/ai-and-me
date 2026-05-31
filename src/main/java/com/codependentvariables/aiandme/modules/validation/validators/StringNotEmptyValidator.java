@@ -1,4 +1,4 @@
-package com.codependentvariables.aiandme.validation.validators;
+package com.codependentvariables.aiandme.modules.validation.validators;
 
 /**
  * Requires a string to not be empty, i.e. not null nor length of 0, though whitespace is valid

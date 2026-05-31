@@ -1,4 +1,4 @@
-package com.codependentvariables.aiandme.validation.validators;
+package com.codependentvariables.aiandme.modules.validation.validators;
 
 import java.util.Objects;
 

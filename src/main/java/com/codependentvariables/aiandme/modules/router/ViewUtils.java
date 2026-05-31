@@ -1,4 +1,4 @@
-package com.codependentvariables.aiandme.modules;
+package com.codependentvariables.aiandme.modules.router;
 
 import com.codependentvariables.aiandme.AiAndMe;
 import com.codependentvariables.aiandme.controller.PuzzleLibraryController;

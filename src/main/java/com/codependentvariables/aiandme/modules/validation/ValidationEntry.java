@@ -1,8 +1,7 @@
-package com.codependentvariables.aiandme.validation;
+package com.codependentvariables.aiandme.modules.validation;
 
-import com.codependentvariables.aiandme.validation.validators.IValidator;
+import com.codependentvariables.aiandme.modules.validation.validators.IValidator;
 
-import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 

@@ -1,8 +1,10 @@
 package com.codependentvariables.aiandme.validation;
 
-import com.codependentvariables.aiandme.validation.validators.MinStringLengthValidator;
-import com.codependentvariables.aiandme.validation.validators.NotNullValidator;
-import com.codependentvariables.aiandme.validation.validators.StringNotEmptyValidator;
+import com.codependentvariables.aiandme.modules.validation.FormValidator;
+import com.codependentvariables.aiandme.modules.validation.ValidationEntry;
+import com.codependentvariables.aiandme.modules.validation.validators.MinStringLengthValidator;
+import com.codependentvariables.aiandme.modules.validation.validators.NotNullValidator;
+import com.codependentvariables.aiandme.modules.validation.validators.StringNotEmptyValidator;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

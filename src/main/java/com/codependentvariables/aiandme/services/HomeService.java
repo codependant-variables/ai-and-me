@@ -3,7 +3,7 @@ package com.codependentvariables.aiandme.services;
 import com.codependentvariables.aiandme.model.CheckIn;
 import com.codependentvariables.aiandme.model.dao.ICheckInDAO;
 import com.codependentvariables.aiandme.model.dao.SqliteCheckInDAO;
-import com.codependentvariables.aiandme.state.AppState;
+import com.codependentvariables.aiandme.modules.state.AppState;
 
 import java.time.Duration;
 import java.time.LocalDateTime;

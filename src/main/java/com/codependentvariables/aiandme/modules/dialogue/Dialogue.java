@@ -1,8 +1,11 @@
-package com.codependentvariables.aiandme.modules;
+package com.codependentvariables.aiandme.modules.dialogue;
 
 import com.codependentvariables.aiandme.controller.DialogueController;
 import com.codependentvariables.aiandme.controller.LoginController;
 import com.codependentvariables.aiandme.controller.SignupController;
+import com.codependentvariables.aiandme.modules.router.Router;
+import com.codependentvariables.aiandme.modules.router.View;
+import com.codependentvariables.aiandme.modules.router.ViewUtils;
 import javafx.scene.layout.StackPane;
 import java.util.function.Consumer;
 
@@ -64,7 +67,7 @@ public class Dialogue {
     private static void loadDialogueMessage(DialogueMessage dialogueMessage) {
         if (paneRef == null || testMode) return;
 
-        DialogueController controller = (DialogueController)ViewUtils.loadView(paneRef, View.DIALOGUE);
+        DialogueController controller = (DialogueController) ViewUtils.loadView(paneRef, View.DIALOGUE);
         controller.initialiseData(dialogueMessage.withCallback(result -> {
             paneRef.getChildren().clear();
             dialogueMessage.callback().accept(result);

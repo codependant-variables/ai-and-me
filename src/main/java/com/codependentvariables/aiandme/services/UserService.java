@@ -3,7 +3,7 @@ package com.codependentvariables.aiandme.services;
 import com.codependentvariables.aiandme.model.dao.IUserDAO;
 import com.codependentvariables.aiandme.model.dao.SqliteUserDAO;
 import com.codependentvariables.aiandme.model.User;
-import com.codependentvariables.aiandme.state.AppState;
+import com.codependentvariables.aiandme.modules.state.AppState;
 import com.codependentvariables.aiandme.services.AuthService.HashResult;
 
 public class UserService {

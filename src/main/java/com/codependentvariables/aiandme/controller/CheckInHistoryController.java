@@ -2,10 +2,10 @@ package com.codependentvariables.aiandme.controller;
 
 import com.codependentvariables.aiandme.model.CheckIn;
 import com.codependentvariables.aiandme.model.User;
-import com.codependentvariables.aiandme.modules.Router;
-import com.codependentvariables.aiandme.modules.View;
+import com.codependentvariables.aiandme.modules.router.Router;
+import com.codependentvariables.aiandme.modules.router.View;
 import com.codependentvariables.aiandme.services.CheckInService;
-import com.codependentvariables.aiandme.state.AppState;
+import com.codependentvariables.aiandme.modules.state.AppState;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;

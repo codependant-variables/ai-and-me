@@ -1,4 +1,4 @@
-package com.codependentvariables.aiandme.validation.validators;
+package com.codependentvariables.aiandme.modules.validation.validators;
 
 /**
  * Validates a String is a valid email, as if in regex \w+@\w{2,}\.\w{2,}

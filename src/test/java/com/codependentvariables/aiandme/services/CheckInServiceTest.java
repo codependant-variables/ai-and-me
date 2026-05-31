@@ -4,7 +4,7 @@ import com.codependentvariables.aiandme.JavaFXTest;
 import com.codependentvariables.aiandme.model.CheckIn;
 import com.codependentvariables.aiandme.model.User;
 import com.codependentvariables.aiandme.model.mock.MockCheckInDAO;
-import com.codependentvariables.aiandme.state.AppState;
+import com.codependentvariables.aiandme.modules.state.AppState;
 import javafx.application.Platform;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

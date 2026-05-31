@@ -1,12 +1,12 @@
 package com.codependentvariables.aiandme.controller;
 
 import com.codependentvariables.aiandme.model.*;
-import com.codependentvariables.aiandme.modules.Dialogue;
-import com.codependentvariables.aiandme.modules.Router;
-import com.codependentvariables.aiandme.modules.View;
+import com.codependentvariables.aiandme.modules.dialogue.Dialogue;
+import com.codependentvariables.aiandme.modules.router.Router;
+import com.codependentvariables.aiandme.modules.router.View;
 import com.codependentvariables.aiandme.services.QuizAttemptService;
 import com.codependentvariables.aiandme.services.QuizTemplateService;
-import com.codependentvariables.aiandme.state.AppState;
+import com.codependentvariables.aiandme.modules.state.AppState;
 import javafx.fxml.FXML;
 import java.util.logging.Logger;
 import javafx.scene.control.*;

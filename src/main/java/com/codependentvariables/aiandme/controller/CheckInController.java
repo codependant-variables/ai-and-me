@@ -1,9 +1,11 @@
 package com.codependentvariables.aiandme.controller;
 
 import com.codependentvariables.aiandme.model.CheckIn;
-import com.codependentvariables.aiandme.modules.*;
+import com.codependentvariables.aiandme.modules.dialogue.Dialogue;
+import com.codependentvariables.aiandme.modules.router.Router;
+import com.codependentvariables.aiandme.modules.router.View;
 import com.codependentvariables.aiandme.services.CheckInService;
-import com.codependentvariables.aiandme.state.AppState;
+import com.codependentvariables.aiandme.modules.state.AppState;
 import javafx.fxml.FXML;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextArea;

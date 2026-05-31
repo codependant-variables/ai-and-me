@@ -1,6 +1,6 @@
 package com.codependentvariables.aiandme.validation.validators;
 
-import javafx.application.Platform;
+import com.codependentvariables.aiandme.modules.validation.validators.EmailValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

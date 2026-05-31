@@ -4,7 +4,7 @@ import com.codependentvariables.aiandme.controller.QuizAttemptController;
 import com.codependentvariables.aiandme.model.QuizTemplate;
 import com.codependentvariables.aiandme.model.QuizTemplateAnswer;
 import com.codependentvariables.aiandme.model.QuizTemplateQuestion;
-import com.codependentvariables.aiandme.modules.Dialogue;
+import com.codependentvariables.aiandme.modules.dialogue.Dialogue;
 import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -16,7 +16,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

@@ -1,4 +1,4 @@
-package com.codependentvariables.aiandme.state;
+package com.codependentvariables.aiandme.modules.state;
 
 import com.codependentvariables.aiandme.AiAndMe;
 import com.codependentvariables.aiandme.model.User;

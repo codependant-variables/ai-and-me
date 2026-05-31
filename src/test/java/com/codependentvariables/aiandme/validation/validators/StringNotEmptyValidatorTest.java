@@ -1,5 +1,6 @@
 package com.codependentvariables.aiandme.validation.validators;
 
+import com.codependentvariables.aiandme.modules.validation.validators.StringNotEmptyValidator;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

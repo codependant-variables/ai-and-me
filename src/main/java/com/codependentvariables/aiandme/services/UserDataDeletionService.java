@@ -1,7 +1,7 @@
 package com.codependentvariables.aiandme.services;
 
 import com.codependentvariables.aiandme.model.dao.*;
-import com.codependentvariables.aiandme.state.AppState;
+import com.codependentvariables.aiandme.modules.state.AppState;
 
 public class UserDataDeletionService {
     private static UserDataDeletionService instance;

@@ -1,4 +1,4 @@
-package com.codependentvariables.aiandme.validation.validators;
+package com.codependentvariables.aiandme.modules.validation.validators;
 
 /**
  * Interface for a class that validates a value of T

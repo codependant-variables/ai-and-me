@@ -3,7 +3,7 @@ package com.codependentvariables.aiandme.services;
 import com.codependentvariables.aiandme.JavaFXTest;
 import com.codependentvariables.aiandme.model.mock.MockUserDAO;
 import com.codependentvariables.aiandme.model.User;
-import com.codependentvariables.aiandme.state.AppState;
+import com.codependentvariables.aiandme.modules.state.AppState;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
