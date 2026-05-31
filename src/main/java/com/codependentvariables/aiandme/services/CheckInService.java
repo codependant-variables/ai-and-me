@@ -63,11 +63,11 @@ public class CheckInService {
     private boolean isValid(CheckIn checkIn) {
         return checkIn != null
                 && checkIn.getAiDependence() >= 0
-                && checkIn.getAiDependence() <= 100
+                && checkIn.getAiDependence() <= 10
                 && checkIn.getAiHappiness() >= 0
-                && checkIn.getAiHappiness() <= 100
+                && checkIn.getAiHappiness() <= 10
                 && checkIn.getAiUse() >= 0
-                && checkIn.getAiUse() <= 100;
+                && checkIn.getAiUse() <= 10;
     }
 
     public CheckIn getById(int id) {

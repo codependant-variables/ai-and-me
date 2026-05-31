@@ -11,18 +11,19 @@ public class MockCategoryDAO implements ICategoryDAO {
     private int autoIncrementId = 1;
 
     public MockCategoryDAO() {
+        add(new Category("Mental Maths"));
+        add(new Category("Comprehension"));
     }
 
     @Override
     public void add(Category category) {
-        category.setId(autoIncrementId);
-        autoIncrementId++;
+        category.setId(autoIncrementId++);
         categories.add(category);
     }
 
     @Override
     public void update(Category category) {
-        for(int i = 0; i < categories.size(); i++) {
+        for (int i = 0; i < categories.size(); i++) {
             if(categories.get(i).getId() == category.getId()) {
                 categories.set(i, category);
                 break;
@@ -42,8 +43,8 @@ public class MockCategoryDAO implements ICategoryDAO {
 
     @Override
     public Category get(int id) {
-        for(Category category : categories ) {
-            if(category.getId() == id) {
+        for (Category category : categories) {
+            if (category.getId() == id) {
                 return category;
             }
         }

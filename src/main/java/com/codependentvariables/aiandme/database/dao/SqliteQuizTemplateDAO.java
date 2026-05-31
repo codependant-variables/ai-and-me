@@ -13,15 +13,15 @@ public class SqliteQuizTemplateDAO extends BaseSqliteDAO implements IQuizTemplat
                     name VARCHAR NOT NULL,
                     category_id INTEGER NOT NULL REFERENCES categories(id),
                     user_id INTEGER REFERENCES users(id),
-                    ispuzzle INTEGER NOT NULL,
+                    is_puzzle INTEGER NOT NULL,
                     status VARCHAR NOT NULL DEFAULT 'draft'
                 );
             """;
 
     private static final String seedDataQuery = """
-                INSERT INTO quiz_templates (name, category_id, user_id, ispuzzle, status) VALUES ('Mental Maths', 1, 1, 0, 'published');
-                INSERT INTO quiz_templates (name, category_id, user_id, ispuzzle, status) VALUES ('Find The Pattern', 2, 1, 0, 'published');
-                INSERT INTO quiz_templates (name, category_id, user_id, ispuzzle, status) VALUES ('Groupings', 2, 1, 0, 'published');
+                INSERT INTO quiz_templates (name, category_id, user_id, is_puzzle, status) VALUES ('Mental Maths', 1, 1, FALSE, 'published');
+                INSERT INTO quiz_templates (name, category_id, user_id, is_puzzle, status) VALUES ('Find The Pattern', 2, 1, FALSE, 'published');
+                INSERT INTO quiz_templates (name, category_id, user_id, is_puzzle, status) VALUES ('Groupings', 2, 1, FALSE, 'published');
             """;
 
     @Override
@@ -34,20 +34,12 @@ public class SqliteQuizTemplateDAO extends BaseSqliteDAO implements IQuizTemplat
         return seedDataQuery;
     }
 
-    /**
-     * Seeds the example "Pattern Puzzle" template with PQ1.png on each question.
-     * Seeding is handled by SqliteQuizTemplateQuestionDAO.seedBinaryData() because
-     * the question/answer data belongs there. Nothing to do here.
-     */
-    @Override
-    public void seedBinaryData() {}
-
     private static final IRowMapper<QuizTemplate> QUIZ_TEMPLATE_MAPPER = (resultSet) -> {
         QuizTemplate template = new QuizTemplate(
                 resultSet.getString("name"),
                 resultSet.getInt("category_id"),
                 resultSet.getInt("user_id"),
-                resultSet.getInt("ispuzzle") == 1,
+                resultSet.getBoolean("is_puzzle"),
                 resultSet.getString("status")
         );
         template.setId(resultSet.getInt("id"));
@@ -56,7 +48,7 @@ public class SqliteQuizTemplateDAO extends BaseSqliteDAO implements IQuizTemplat
 
     @Override
     public void add(QuizTemplate quizTemplate) {
-        final String query = "INSERT INTO quiz_templates(name, category_id, user_id, ispuzzle, status) VALUES(?, ?, ?, ?, ?)";
+        final String query = "INSERT INTO quiz_templates(name, category_id, user_id, is_puzzle, status) VALUES(?, ?, ?, ?, ?)";
 
         var id = executeSqlWithGeneratedKeys(query, statement -> {
             statement.setString(1, quizTemplate.getName());
@@ -75,7 +67,7 @@ public class SqliteQuizTemplateDAO extends BaseSqliteDAO implements IQuizTemplat
 
     @Override
     public void update(QuizTemplate quizTemplate) {
-        final String query = "UPDATE quiz_templates SET name = ?, category_id = ?, user_id = ?, ispuzzle = ?, status = ? WHERE id = ?";
+        final String query = "UPDATE quiz_templates SET name = ?, category_id = ?, user_id = ?, is_puzzle = ?, status = ? WHERE id = ?";
 
         executeSql(query, statement -> {
             statement.setString(1, quizTemplate.getName());
@@ -109,6 +101,20 @@ public class SqliteQuizTemplateDAO extends BaseSqliteDAO implements IQuizTemplat
     @Override
     public List<QuizTemplate> getAll() {
         final String query = "SELECT * FROM quiz_templates";
+
+        return executeQuery(query, QUIZ_TEMPLATE_MAPPER);
+    }
+
+    @Override
+    public List<QuizTemplate> getAllQuizzes() {
+        final String query = "SELECT * FROM quiz_templates WHERE is_puzzle == FALSE";
+
+        return executeQuery(query, QUIZ_TEMPLATE_MAPPER);
+    }
+
+    @Override
+    public List<QuizTemplate> getAllPuzzles() {
+        final String query = "SELECT * FROM quiz_templates WHERE is_puzzle == TRUE";
 
         return executeQuery(query, QUIZ_TEMPLATE_MAPPER);
     }

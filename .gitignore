@@ -674,3 +674,4 @@ nohup.out
 
 app.db
 copilotDiffState.xml
+sqldialects.sql

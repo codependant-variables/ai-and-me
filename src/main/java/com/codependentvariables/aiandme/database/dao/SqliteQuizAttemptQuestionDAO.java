@@ -103,7 +103,7 @@ public class SqliteQuizAttemptQuestionDAO extends BaseSqliteDAO implements IQuiz
      * Retrieves all questions for a given quiz attempt.
      */
     @Override
-    public List<QuizAttemptQuestion> getByQuizAttemptId(int quizAttemptId) {
+    public List<QuizAttemptQuestion> getByAttemptId(int quizAttemptId) {
         final String query = "SELECT * FROM quiz_attempt_questions WHERE quiz_attempt_id = ?";
 
         return executeQuery(query, statement -> statement.setInt(1, quizAttemptId), QUIZ_ATTEMPT_QUESTION_MAPPER);

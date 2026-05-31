@@ -1,32 +1,41 @@
 package com.codependentvariables.aiandme.services;
 
-import com.codependentvariables.aiandme.database.dao.SqliteCheckInDAO;
-import com.codependentvariables.aiandme.database.dao.SqlitePreferredCategoryDAO;
-import com.codependentvariables.aiandme.database.dao.SqliteQuizAttemptDAO;
-import com.codependentvariables.aiandme.model.dao.ICheckInDAO;
-import com.codependentvariables.aiandme.model.dao.IPreferredCategoryDAO;
-import com.codependentvariables.aiandme.model.dao.IQuizAttemptDAO;
-import com.codependentvariables.aiandme.model.dao.IUserDAO;
-import com.codependentvariables.aiandme.database.dao.SqliteUserDAO;
-import com.codependentvariables.aiandme.model.User;
+import com.codependentvariables.aiandme.database.dao.*;
+import com.codependentvariables.aiandme.model.*;
+import com.codependentvariables.aiandme.model.dao.*;
 import com.codependentvariables.aiandme.modules.state.AppState;
 import com.codependentvariables.aiandme.services.AuthService.HashResult;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.List;
 
 public class UserService {
     private static UserService instance;
 
     private static final AppState appState = AppState.getInstance();
     private static final AuthService authService = AuthService.getInstance();
-    private final ICheckInDAO checkInDao;
-    private final IPreferredCategoryDAO preferredCategoryDao;
-    private final IQuizAttemptDAO quizAttemptDao;
-    private final IUserDAO userDao;
+    private final ICheckInDAO checkInDAO;
+    private final IQuizAttemptDAO quizAttemptDAO;
+    private final IQuizAttemptQuestionDAO quizAttemptQuestionDAO;
+    private final IQuizAttemptAnswerDAO quizAttemptAnswerDAO;
+    private final IQuizTemplateDAO quizTemplateDAO;
+    private final IQuizTemplateQuestionDAO quizTemplateQuestionDAO;
+    private final IQuizTemplateAnswerDAO quizTemplateAnswerDAO;
+    private final IUserDAO userDAO;
+    private final IUserPreferredCategoryDAO userPreferredCategoryDAO;
 
-    private UserService(ICheckInDAO checkInDao, IPreferredCategoryDAO preferredCategoryDao, IQuizAttemptDAO quizAttemptDao, IUserDAO userDao) {
-        this.checkInDao = checkInDao;
-        this.preferredCategoryDao = preferredCategoryDao;
-        this.quizAttemptDao = quizAttemptDao;
-        this.userDao = userDao;
+    private UserService(ICheckInDAO checkInDAO, IQuizAttemptDAO quizAttemptDAO, IQuizAttemptQuestionDAO quizAttemptQuestionDAO, IQuizAttemptAnswerDAO quizAttemptAnswerDAO, IQuizTemplateDAO quizTemplateDAO, IQuizTemplateQuestionDAO quizTemplateQuestionDAO, IQuizTemplateAnswerDAO quizTemplateAnswerDAO, IUserDAO userDAO, IUserPreferredCategoryDAO userPreferredCategoryDAO) {
+        this.checkInDAO = checkInDAO;
+        this.quizAttemptDAO = quizAttemptDAO;
+        this.quizAttemptQuestionDAO = quizAttemptQuestionDAO;
+        this.quizAttemptAnswerDAO = quizAttemptAnswerDAO;
+        this.quizTemplateDAO = quizTemplateDAO;
+        this.quizTemplateQuestionDAO = quizTemplateQuestionDAO;
+        this.quizTemplateAnswerDAO = quizTemplateAnswerDAO;
+        this.userDAO = userDAO;
+        this.userPreferredCategoryDAO = userPreferredCategoryDAO;
     }
 
     /**
@@ -34,7 +43,7 @@ public class UserService {
      */
     public static UserService getInstance() {
         if (instance == null) {
-            instance = new UserService(new SqliteCheckInDAO(), new SqlitePreferredCategoryDAO(), new SqliteQuizAttemptDAO(), new SqliteUserDAO());
+            instance = new UserService(new SqliteCheckInDAO(), new SqliteQuizAttemptDAO(), new SqliteQuizAttemptQuestionDAO(), new SqliteQuizAttemptAnswerDAO(), new SqliteQuizTemplateDAO(), new SqliteQuizTemplateQuestionDAO(), new SqliteQuizTemplateAnswerDAO(), new SqliteUserDAO(), new SqliteUserPreferredCategoryDAO());
         }
         return instance;
     }
@@ -42,8 +51,8 @@ public class UserService {
     /**
      * Instance provider for unit testing.
      */
-    public static UserService createForTest(ICheckInDAO checkInDao, IPreferredCategoryDAO preferredCategoryDao, IQuizAttemptDAO quizAttemptDao, IUserDAO userDao) {
-        instance = new UserService(checkInDao, preferredCategoryDao, quizAttemptDao, userDao);
+    public static UserService createForTest(ICheckInDAO checkInDAO, IQuizAttemptDAO quizAttemptDAO, IQuizAttemptQuestionDAO quizAttemptQuestionDAO, IQuizAttemptAnswerDAO quizAttemptAnswerDAO, IQuizTemplateDAO quizTemplateDAO, IQuizTemplateQuestionDAO quizTemplateQuestionDAO, IQuizTemplateAnswerDAO quizTemplateAnswerDAO, IUserDAO userDAO, IUserPreferredCategoryDAO userPreferredCategoryDAO) {
+        instance = new UserService(checkInDAO, quizAttemptDAO, quizAttemptQuestionDAO, quizAttemptAnswerDAO, quizTemplateDAO, quizTemplateQuestionDAO, quizTemplateAnswerDAO, userDAO, userPreferredCategoryDAO);
         return instance;
     }
 
@@ -96,7 +105,7 @@ public class UserService {
      * @return User with the provided email.
      */
     public User getByEmail(String email) {
-        return userDao.getByEmail(email);
+        return userDAO.getByEmail(email);
     }
 
     /**
@@ -105,7 +114,7 @@ public class UserService {
      * @return True if email is unused.
      */
     public boolean isUniqueEmail(String email) {
-        return userDao.getByEmail(email) == null;
+        return userDAO.getByEmail(email) == null;
     }
 
     /**
@@ -113,7 +122,7 @@ public class UserService {
      * @param user User to add.
      */
     public void addUser(User user) {
-        userDao.add(user);
+        userDAO.add(user);
     }
 
     /**
@@ -125,7 +134,7 @@ public class UserService {
     public void signup(String name, String email, String password) {
         HashResult hashResult = authService.hash(password);
         User user = new User(name, email, hashResult.hash(), hashResult.salt());
-        userDao.add(user);
+        userDAO.add(user);
         login(user);
     }
 
@@ -135,7 +144,7 @@ public class UserService {
      */
     private void login(User user) {
         appState.setCurrentUser(user);
-        userDao.updateLastLoginAt(user);
+        userDAO.updateLastLoginAt(user);
     }
 
     /**
@@ -151,7 +160,7 @@ public class UserService {
     public void updateCurrentUser() {
         User currentUser = appState.getCurrentUser();
         if (currentUser != null) {
-            userDao.update(currentUser);
+            userDAO.update(currentUser);
         }
     }
 
@@ -164,22 +173,90 @@ public class UserService {
             return;
         }
 
-        userDao.delete(currentUser);
+        userDAO.delete(currentUser);
         appState.setCurrentUser(null);
     }
 
+    /**
+     * Delete app state current user data.
+     */
     public void deleteCurrentUserData() {
-        int userId = appState.getCurrentUser().getId();
         deleteCurrentUserCheckIns();
-        preferredCategoryDao.deleteByUserId(userId);
-        quizAttemptDao.deleteByUserId(userId);
+        userPreferredCategoryDAO.deleteByUserId(appState.getCurrentUser().getId());
+        deleteCurrentUserQuizAttempts();
     }
 
+    /**
+     * Delete app state current user check-ins.
+     */
     public void deleteCurrentUserCheckIns() {
-        checkInDao.deleteByUserId(appState.getCurrentUser().getId());
+        checkInDAO.deleteByUserId(appState.getCurrentUser().getId());
     }
 
+    /**
+     * Delete app state current user quiz attempts;
+     */
     public void deleteCurrentUserQuizAttempts() {
-        quizAttemptDao.deleteByUserId(appState.getCurrentUser().getId());
+        quizAttemptDAO.deleteByUserId(appState.getCurrentUser().getId());
+    }
+
+    /**
+     * Export current user data as a JSON file.
+     */
+    public void exportCurrentUserData() {
+        updateCurrentUser();
+        User user = appState.getCurrentUser();
+        int userId = user.getId();
+
+        JSONObject json = new JSONObject();
+        json.put("user", user);
+        json.put("preferredCategories", userPreferredCategoryDAO.getByUserId(userId));
+        json.put("checkIns", checkInDAO.getAllByUserId(userId));
+        json.put("quizTemplates", exportQuizTemplates(userId));
+        json.put("quizAttempts", exportQuizAttempts(userId));
+
+        try (FileWriter writer = new FileWriter("userdata.json")) {
+            json.write(writer, 4, 0);
+        } catch (IOException e) {
+            System.err.println(e);
+        }
+    }
+
+    private JSONArray exportQuizTemplates(int userId) {
+        List<QuizTemplate> quizTemplates = quizTemplateDAO.getByUserId(userId);
+        return new JSONArray(quizTemplates.stream().map(x -> {
+            List<QuizTemplateQuestion> quizTemplateQuestions = quizTemplateQuestionDAO.getByTemplateId(x.getId());
+            JSONObject jsonQuizTemplate = new JSONObject(x);
+            jsonQuizTemplate.put("questions", quizTemplateQuestions.stream().map(y -> {
+                List<QuizTemplateAnswer> quizTemplateAnswers = quizTemplateAnswerDAO.getByQuestionId(y.getId());
+                JSONObject jsonQuizTemplateQuestion = new JSONObject(y);
+                jsonQuizTemplateQuestion.put("answers", quizTemplateAnswers);
+                return jsonQuizTemplateQuestion;
+            }));
+            return jsonQuizTemplate;
+        }));
+    }
+
+    private JSONArray exportQuizAttempts(int userId) {
+        List<QuizAttempt> quizAttempts = quizAttemptDAO.getByUserId(userId);
+        return new JSONArray(quizAttempts.stream().map(x -> {
+            List<QuizAttemptQuestion> quizAttemptQuestions = quizAttemptQuestionDAO.getByAttemptId(x.getId());
+            JSONObject jsonQuizTemplate = new JSONObject(x);
+            jsonQuizTemplate.put("questions", quizAttemptQuestions.stream().map(y -> {
+                List<QuizAttemptAnswer> quizAttemptAnswers = quizAttemptAnswerDAO.getByQuestionId(y.getId());
+                JSONObject jsonQuizAttemptQuestion = new JSONObject(y);
+                jsonQuizAttemptQuestion.put("answers", quizAttemptAnswers);
+                return jsonQuizAttemptQuestion;
+            }));
+            return jsonQuizTemplate;
+        }));
+    }
+
+    public List<UserPreferredCategory> getCurrentUserPreferredCategories() {
+        return userPreferredCategoryDAO.getByUserId(appState.getCurrentUser().getId());
+    }
+
+    public void removeUserPreferredCategory(UserPreferredCategory userPreferredCategory) {
+        userPreferredCategoryDAO.delete(userPreferredCategory);
     }
 }

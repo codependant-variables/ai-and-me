@@ -1,6 +1,5 @@
 package com.codependentvariables.aiandme.controller;
 
-
 import com.codependentvariables.aiandme.model.*;
 import com.codependentvariables.aiandme.modules.router.Router;
 import com.codependentvariables.aiandme.modules.toast.Toast;
@@ -18,7 +17,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Side;
 import javafx.scene.chart.*;
 import javafx.scene.control.Label;
-import com.codependentvariables.aiandme.services.HomeService;
+import com.codependentvariables.aiandme.services.home.HomeService;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -55,8 +54,8 @@ public class HomeController {
     @FXML
     public XYChart.Series<Number, Number> happinessSeries = new XYChart.Series<Number, Number>();
 
-    private CheckInService checkInService = CheckInService.getInstance();
-    private QuizAttemptService attemptsService = QuizAttemptService.getInstance();
+    private final CheckInService checkInService = CheckInService.getInstance();
+    private final QuizAttemptService quizAttemptService = QuizAttemptService.getInstance();
 
     @FXML
     public NumberAxis xAxisQuizAttempts;
@@ -79,10 +78,9 @@ public class HomeController {
     @FXML
     private PieChart ratioPie;
 
-
     private final HomeService homeService = HomeService.getInstance();
     private final QuizTemplateService quizTemplateService = QuizTemplateService.getInstance();
-    private AppState appState = AppState.getInstance();
+    private final AppState appState = AppState.getInstance();
 
     /**
      * Initializes the dashboard view and loads all user analytics data.
@@ -162,8 +160,7 @@ public class HomeController {
 
             User user = appState.getCurrentUser();
 
-            AttemptStatistics split =
-                    attemptsService.getAttemptCountByUser(user.getId());
+            AttemptStatistics split = quizAttemptService.getAttemptCountByUser(user.getId());
 
             /////////////////////////////////
             // CHECK-IN GRAPH
@@ -227,8 +224,7 @@ public class HomeController {
             // QUIZ ATTEMPT GRAPH
             /////////////////////////////////
 
-            List<QuizAttempt> recentAttempts =
-                    attemptsService.getAttemptsByUser(user.getId());
+            List<QuizAttempt> recentAttempts = quizAttemptService.getByUserId(user.getId());
 
             XYChart.Series<Number, Number> attemptSeries =
                     new XYChart.Series<>();
@@ -291,8 +287,7 @@ public class HomeController {
             // RECOMMENDED QUIZZES
             /////////////////////////////////
 
-            this.quizTemplate = quizTemplateService.getRandomTemplate();
-
+            this.quizTemplate = quizTemplateService.getRandomQuiz();
             this.puzzleTemplate = quizTemplateService.getRandomPuzzle();
 
             System.out.println("Quiz: " + quizTemplate);

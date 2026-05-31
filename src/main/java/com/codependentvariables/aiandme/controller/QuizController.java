@@ -6,7 +6,6 @@ import com.codependentvariables.aiandme.database.dao.SqliteUserDAO;
 import com.codependentvariables.aiandme.modules.router.Router;
 import com.codependentvariables.aiandme.modules.router.View;
 import com.codependentvariables.aiandme.services.CategoryService;
-import com.codependentvariables.aiandme.services.QuizAttemptService;
 import com.codependentvariables.aiandme.services.QuizTemplateService;
 import com.codependentvariables.aiandme.modules.state.AppState;
 import javafx.fxml.FXML;
@@ -38,8 +37,7 @@ public abstract class QuizController {
     private final CategoryService categoryService = CategoryService.getInstance();
     private final IUserDAO userDAO = new SqliteUserDAO();
     private final QuizTemplateService templateService = QuizTemplateService.getInstance();
-    private final QuizAttemptService attemptService = QuizAttemptService.getInstance();
-    private AppState appState = AppState.getInstance();
+    private final AppState appState = AppState.getInstance();
 
 
     @FXML private Label pageTitle;
@@ -119,7 +117,6 @@ public abstract class QuizController {
     protected void handleCategoryFilter() {
         refreshCategories();
     }
-
 
     /**
      * Reloads all quiz templates and rebuilds UI cards.
@@ -665,7 +662,7 @@ public abstract class QuizController {
         saveCurrentToModel.run();
 
         try {
-            templateService.saveQuestions(template, workingQuestions, removedQuestions);
+            templateService.saveQuestions(workingQuestions, removedQuestions);
             showInfo("Questions saved for \"" + template.getName() + "\".");
         } catch (IllegalArgumentException e) {
             showWarning(e.getMessage());

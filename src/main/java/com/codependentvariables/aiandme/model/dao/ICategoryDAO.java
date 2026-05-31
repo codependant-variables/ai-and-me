@@ -30,7 +30,7 @@ public interface ICategoryDAO {
     List<Category> getAll();
 
     /**
-     * Retrieves a category from the database.
+     * Retrieves a category by name from the database.
      * @param id The id of the category to retrieve.
      * @return The category with the given id, or null if not found.
      */

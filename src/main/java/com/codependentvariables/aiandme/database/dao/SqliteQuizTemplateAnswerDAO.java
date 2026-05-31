@@ -171,7 +171,7 @@ public class SqliteQuizTemplateAnswerDAO extends BaseSqliteDAO implements IQuizT
     };
 
     @Override
-    public void addAnswer(QuizTemplateAnswer answer) {
+    public void add(QuizTemplateAnswer answer) {
         final String query = "INSERT INTO quiz_template_answers(quiz_template_question_id, text, image, is_correct) VALUES(?, ?, ?, ?)";
         var id = executeSqlWithGeneratedKeys(query, stmt -> {
             stmt.setInt(1, answer.getQuizTemplateQuestionId());
@@ -183,7 +183,7 @@ public class SqliteQuizTemplateAnswerDAO extends BaseSqliteDAO implements IQuizT
     }
 
     @Override
-    public void updateAnswer(QuizTemplateAnswer answer) {
+    public void update(QuizTemplateAnswer answer) {
         final String query = "UPDATE quiz_template_answers SET quiz_template_question_id = ?, text = ?, image = ?, is_correct = ? WHERE id = ?";
         executeSql(query, stmt -> {
             stmt.setInt(1, answer.getQuizTemplateQuestionId());
@@ -195,7 +195,7 @@ public class SqliteQuizTemplateAnswerDAO extends BaseSqliteDAO implements IQuizT
     }
 
     @Override
-    public void deleteAnswer(QuizTemplateAnswer answer) {
+    public void delete(QuizTemplateAnswer answer) {
         final String query = "DELETE FROM quiz_template_answers WHERE id = ?";
         executeSql(query, stmt -> stmt.setInt(1, answer.getId()));
     }
@@ -208,7 +208,7 @@ public class SqliteQuizTemplateAnswerDAO extends BaseSqliteDAO implements IQuizT
     }
 
     @Override
-    public List<QuizTemplateAnswer> getAnswersByQuestion(int questionId) {
+    public List<QuizTemplateAnswer> getByQuestionId(int questionId) {
         final String query = "SELECT * FROM quiz_template_answers WHERE quiz_template_question_id = ?";
         return executeQuery(query, stmt -> stmt.setInt(1, questionId), MAPPER);
     }

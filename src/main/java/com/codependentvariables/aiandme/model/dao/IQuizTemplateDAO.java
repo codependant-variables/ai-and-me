@@ -37,6 +37,18 @@ public interface IQuizTemplateDAO {
     List<QuizTemplate> getAll();
 
     /**
+     * Retrieves all non-puzzle quiz templates.
+     * @return A list of all quiz templates.
+     */
+    List<QuizTemplate> getAllQuizzes();
+
+    /**
+     * Retrieves all puzzle quiz templates.
+     * @return A list of all quiz templates.
+     */
+    List<QuizTemplate> getAllPuzzles();
+
+    /**
      * Retrieves all quiz templates for a given category.
      * @param categoryId The category id to filter by.
      * @return A list of quiz templates belonging to the given category.

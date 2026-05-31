@@ -60,7 +60,7 @@ public class SqliteConnection {
                 new SqliteQuizAttemptDAO(),
                 new SqliteQuizAttemptQuestionDAO(),
                 new SqliteQuizAttemptAnswerDAO(),
-                new SqlitePreferredCategoryDAO()
+                new SqliteUserPreferredCategoryDAO()
         };
 
         try {

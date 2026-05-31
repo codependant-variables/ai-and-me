@@ -79,7 +79,7 @@ public class SqliteQuizTemplateQuestionDAO extends BaseSqliteDAO implements IQui
     };
 
     @Override
-    public void addQuestion(QuizTemplateQuestion question) {
+    public void add(QuizTemplateQuestion question) {
         final String query = "INSERT INTO quiz_template_questions(quiz_template_id, text, image) VALUES(?, ?, ?)";
         var id = executeSqlWithGeneratedKeys(query, stmt -> {
             stmt.setInt(1, question.getQuizTemplateId());
@@ -95,7 +95,7 @@ public class SqliteQuizTemplateQuestionDAO extends BaseSqliteDAO implements IQui
     }
 
     @Override
-    public void updateQuestion(QuizTemplateQuestion question) {
+    public void update(QuizTemplateQuestion question) {
         final String query = "UPDATE quiz_template_questions SET quiz_template_id = ?, text = ?, image = ? WHERE id = ?";
         executeSql(query, stmt -> {
             stmt.setInt(1, question.getQuizTemplateId());
@@ -111,7 +111,7 @@ public class SqliteQuizTemplateQuestionDAO extends BaseSqliteDAO implements IQui
     }
 
     @Override
-    public void deleteQuestion(QuizTemplateQuestion question) {
+    public void delete(QuizTemplateQuestion question) {
         final String query = "DELETE FROM quiz_template_questions WHERE id = ?";
         executeSql(query, stmt -> stmt.setInt(1, question.getId()));
     }
@@ -124,7 +124,7 @@ public class SqliteQuizTemplateQuestionDAO extends BaseSqliteDAO implements IQui
     }
 
     @Override
-    public List<QuizTemplateQuestion> getQuestionsByTemplate(int quizTemplateId) {
+    public List<QuizTemplateQuestion> getByTemplateId(int quizTemplateId) {
         final String query = "SELECT * FROM quiz_template_questions WHERE quiz_template_id = ?";
         return executeQuery(query, stmt -> stmt.setInt(1, quizTemplateId), MAPPER);
     }
@@ -134,7 +134,6 @@ public class SqliteQuizTemplateQuestionDAO extends BaseSqliteDAO implements IQui
      * Lives here because question/answer seeding belongs with the question DAO.
      * The template row is inserted via SqliteQuizTemplateDAO so the FK is satisfied.
      */
-    @Override
     public void seedBinaryData() {
         try {
             URL resource = getClass().getResource(
@@ -191,9 +190,9 @@ public class SqliteQuizTemplateQuestionDAO extends BaseSqliteDAO implements IQui
                                    int templateId, String text, byte[] image,
                                    String[] options, String correct) {
         QuizTemplateQuestion question = new QuizTemplateQuestion(templateId, text, image);
-        addQuestion(question);
+        add(question);
         for (String option : options) {
-            answerDAO.addAnswer(new QuizTemplateAnswer(question.getId(), option, option.equals(correct)));
+            answerDAO.add(new QuizTemplateAnswer(question.getId(), option, option.equals(correct)));
         }
     }
 }

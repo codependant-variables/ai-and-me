@@ -66,7 +66,7 @@ public class SqliteQuizAttemptAnswerDAO extends BaseSqliteDAO implements IQuizAt
         return firstOrNull(answers);
     }
 
-    public List<QuizAttemptAnswer> getByQuizAttemptQuestionId(int quizAttemptQuestionId) {
+    public List<QuizAttemptAnswer> getByQuestionId(int quizAttemptQuestionId) {
         final String query = "SELECT * FROM quiz_attempt_answers WHERE quiz_attempt_question_id = ?";
 
         return executeQuery(query, statement -> statement.setInt(1, quizAttemptQuestionId), QUIZ_ATTEMPT_ANSWER_MAPPER);

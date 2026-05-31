@@ -38,15 +38,7 @@ public class CategoryService {
     public List<Category> getVisibleCategories() {
         return categoryDAO.getAll();
     }
-    /*public List<Category> getVisibleCategories() {
-        return categoryDAO.getAll().stream()
-                // Keeps only categories marked as visible
-                .filter(Category::isVisible)
-                // Keeps only categories marked as active
-                .filter(Category::isActive)
-                .toList();
-    }
-*/
+    
     // Creates and saves a new category
     public void submitCategory(Category category) {
         User currentUser = appState.getCurrentUser();

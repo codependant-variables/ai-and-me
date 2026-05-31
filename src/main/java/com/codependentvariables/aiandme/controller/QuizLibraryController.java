@@ -26,7 +26,5 @@ public class QuizLibraryController extends QuizController {
      * Initialises the quiz library view.
      */
     @Override
-    public void initialise() {
-
-    }
+    public void initialise() {}
 }

@@ -1,4 +1,4 @@
-package com.codependentvariables.aiandme.services;
+package com.codependentvariables.aiandme.services.home;
 
 import com.codependentvariables.aiandme.model.CheckIn;
 import com.codependentvariables.aiandme.model.dao.ICheckInDAO;
