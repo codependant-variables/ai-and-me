@@ -31,7 +31,7 @@
     </HBox>
 
     <!-- ScrollPane allows overflow when many categories are added -->
-    <ScrollPane fitToWidth="true" styleClass="innerDropshadow" VBox.vgrow="ALWAYS">
+    <ScrollPane fitToWidth="true" styleClass="shadow" VBox.vgrow="ALWAYS">
         <FlowPane fx:id="categoryContainer" hgap="15" style="-fx-padding: 10;" vgap="15">
             <!-- Category boxes are injected here dynamically via controller -->
         </FlowPane>
