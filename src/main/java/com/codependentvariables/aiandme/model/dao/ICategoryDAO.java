@@ -30,9 +30,16 @@ public interface ICategoryDAO {
     List<Category> getAll();
 
     /**
-     * Retrieves a category by name from the database.
+     * Retrieves a category by id from the database.
      * @param id The id of the category to retrieve.
      * @return The category with the given id, or null if not found.
      */
     Category get(int id);
+
+    /**
+     * Retrieves a category by name from the database.
+     * @param name The name of the category to retrieve.
+     * @return The category with the given name, or null if not found.
+     */
+    Category getByName(String name);
 }

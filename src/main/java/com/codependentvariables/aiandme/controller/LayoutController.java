@@ -37,6 +37,8 @@ public class LayoutController {
     @FXML
     private StackPane contentRef;
 
+    private QuizLibraryController quizLibraryController;
+
     /**
      * Initialises layout bindings and navigation state.
      */
@@ -70,13 +72,24 @@ public class LayoutController {
     /** Navigates to the quiz library page. */
     @FXML
     public void navigateQuizLibrary() {
-        Router.navigateLayout(View.QUIZ_LIBRARY);
+        navigateQuizLibrary(false);
     }
 
     /** Navigates to the puzzle library page. */
     @FXML
     public void navigatePuzzleLibrary() {
-        Router.navigateLayout(View.PUZZLE_LIBRARY);
+        navigateQuizLibrary(true);
+    }
+
+    private void navigateQuizLibrary(boolean isPuzzle) {
+        appState.setIsPuzzle(isPuzzle);
+        if (Router.getLayoutView() == View.QUIZ_LIBRARY) {
+            quizLibraryController.loadTemplates(isPuzzle);
+        } else {
+            quizLibraryController = (QuizLibraryController) Router.navigateLayout(View.QUIZ_LIBRARY);
+            assert quizLibraryController != null;
+            quizLibraryController.loadTemplates(isPuzzle);
+        }
     }
 
     /** Navigates to the login page. */

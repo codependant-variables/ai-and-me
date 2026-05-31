@@ -72,4 +72,12 @@ public class SqliteCategoryDAO extends BaseSqliteDAO implements ICategoryDAO, ID
         List<Category> categories = executeQuery(query, statement -> statement.setInt(1, id), CATEGORY_MAPPER);
         return firstOrNull(categories);
     }
+
+    @Override
+    public Category getByName(String name) {
+        final String query = "SELECT * FROM categories WHERE name = ? LIMIT 1";
+
+        List<Category> categories = executeQuery(query, statement -> statement.setString(1, name), CATEGORY_MAPPER);
+        return firstOrNull(categories);
+    }
 }

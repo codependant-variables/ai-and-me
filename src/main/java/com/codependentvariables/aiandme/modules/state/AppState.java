@@ -15,6 +15,7 @@ public class AppState {
     private final ObjectProperty<User> currentUser = new SimpleObjectProperty<>(null);
     private final BooleanProperty isDarkMode = new SimpleBooleanProperty(false);
     private final BooleanProperty isVertical = new SimpleBooleanProperty(false);
+    private boolean isPuzzle = false;
 
     public static AppState getInstance() {
         if (instance == null) {
@@ -68,5 +69,13 @@ public class AppState {
         if (currentUser.get() != null) {
             currentUser.get().setIsVertical(isVertical);
         }
+    }
+
+    public boolean getIsPuzzle() {
+        return isPuzzle;
+    }
+
+    public void setIsPuzzle(boolean isPuzzles) {
+        this.isPuzzle = isPuzzles;
     }
 }

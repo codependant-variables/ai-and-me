@@ -5,6 +5,7 @@ import com.codependentvariables.aiandme.model.dao.ICategoryDAO;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MockCategoryDAO implements ICategoryDAO {
     private final ArrayList<Category> categories = new ArrayList<>();
@@ -45,6 +46,16 @@ public class MockCategoryDAO implements ICategoryDAO {
     public Category get(int id) {
         for (Category category : categories) {
             if (category.getId() == id) {
+                return category;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Category getByName(String name) {
+        for (Category category : categories) {
+            if (Objects.equals(category.getName(), name)) {
                 return category;
             }
         }

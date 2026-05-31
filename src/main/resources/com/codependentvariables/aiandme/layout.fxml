@@ -22,7 +22,7 @@
             <Region HBox.hgrow="ALWAYS" />
             <Button onAction="#navigateHome" styleClass="nav-button" style="-fx-border-width: 0;" text="Home" wrapText="true" />
             <Button onAction="#navigateQuizLibrary" styleClass="nav-button" text="Quiz Library" wrapText="true" />
-            <Button layoutX="357.0" layoutY="36.0" onAction="#navigatePuzzleLibrary" styleClass="nav-button" text="Puzzle Library" wrapText="true" />
+            <Button onAction="#navigatePuzzleLibrary" styleClass="nav-button" text="Puzzle Library" wrapText="true" />
             <Button onAction="#navigateCheckin" styleClass="nav-button" text="Daily Check-In" wrapText="true" />
             <Button fx:id="loginButton" onAction="#navigateLogin" styleClass="nav-button" text="Login" wrapText="true" />
             <Button fx:id="signupButton" onAction="#navigateSignup" styleClass="nav-button" text="Signup" wrapText="true" />

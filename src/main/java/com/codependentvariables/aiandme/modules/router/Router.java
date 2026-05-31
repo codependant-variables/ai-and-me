@@ -51,7 +51,8 @@ public class Router {
     }
 
     public static Object navigateLayout(View view) {
-        if (currentAppView != View.LAYOUT) {
+        boolean fromLayout = currentAppView == View.LAYOUT;
+        if (!fromLayout) {
             navigateApp(View.LAYOUT);
         }
 
@@ -59,15 +60,17 @@ public class Router {
             return null;
         }
 
-        Object controller = null; // can hold any obj
+        Object controller = null;
 
         if (layout != null) {
             controller = ViewUtils.loadView(layout, view);
         }
 
-        lastView = currentLayoutView;
+        if (fromLayout) {
+            lastView = currentLayoutView;
+            isLastViewLayout = true;
+        }
         currentLayoutView = view;
-        isLastViewLayout = true;
 
         return controller;
     }

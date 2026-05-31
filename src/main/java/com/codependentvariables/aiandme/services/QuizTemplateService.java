@@ -59,9 +59,6 @@ public class QuizTemplateService {
      * @throws IllegalArgumentException if the new name is blank.
      */
     public void renameTemplate(QuizTemplate template, String newName) {
-        if (newName == null || newName.isBlank()) {
-            throw new IllegalArgumentException("Template name must not be blank.");
-        }
         template.setName(newName.trim());
         quizTemplateDAO.update(template);
     }
@@ -167,6 +164,22 @@ public class QuizTemplateService {
         QuizTemplate quizTemplate = quizTemplates.get(random.nextInt(quizTemplates.size()));
         loadQuestionsIntoTemplate(quizTemplate);
         return quizTemplate;
+    }
+
+    /**
+     * Retrieves all non-puzzle quiz templates.
+     * @return A list of all quiz templates.
+     */
+    public List<QuizTemplate> getAllQuizzes() {
+        return quizTemplateDAO.getAllQuizzes();
+    }
+
+    /**
+     * Retrieves all puzzle quiz templates.
+     * @return A list of all puzzle templates.
+     */
+    public List<QuizTemplate> getAllPuzzles() {
+        return quizTemplateDAO.getAllPuzzles();
     }
 }
 

@@ -44,7 +44,7 @@ public interface IQuizTemplateDAO {
 
     /**
      * Retrieves all puzzle quiz templates.
-     * @return A list of all quiz templates.
+     * @return A list of all puzzle templates.
      */
     List<QuizTemplate> getAllPuzzles();
 

@@ -122,6 +122,15 @@ public class UserService {
     }
 
     /**
+     * Gets a user by id via DAO.
+     * @param id Id to search for.
+     * @return User matched.
+     */
+    public User get(int id) {
+        return userDAO.get(id);
+    }
+
+    /**
      * Adds user via DAO. Intended for user in unit tests only.
      * @param user User to add.
      */
@@ -263,6 +272,14 @@ public class UserService {
             }).toList());
             return jsonQuizTemplate;
         }).toList());
+    }
+
+    public void addCurrentUserPreferredCategory(UserPreferredCategory userPreferredCategory) {
+        userPreferredCategoryDAO.add(userPreferredCategory);
+    }
+
+    public void deleteCurrentUserPreferredCategory(UserPreferredCategory userPreferredCategory) {
+        userPreferredCategoryDAO.delete(userPreferredCategory);
     }
 
     public List<UserPreferredCategory> getCurrentUserPreferredCategories() {

@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="CENTER" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codependentvariables.aiandme.controller.QuizLibraryController">
     <padding>
         <Insets topRightBottomLeft="20" />
     </padding>
@@ -19,7 +19,7 @@
 
     <HBox spacing="10" alignment="CENTER_LEFT">
         <Label styleClass="bold" text="Category:" />
-        <ComboBox fx:id="categoryFilter" onAction="#handleCategoryFilter" />
+        <ComboBox fx:id="categoryFilter" onAction="#refreshCards" />
 
         <Region HBox.hgrow="ALWAYS" />
 
@@ -32,7 +32,7 @@
 
     <!-- ScrollPane allows overflow when many categories are added -->
     <ScrollPane fitToWidth="true" styleClass="shadow" VBox.vgrow="ALWAYS">
-        <FlowPane fx:id="categoryContainer" hgap="15" style="-fx-padding: 10;" vgap="15">
+        <FlowPane fx:id="cardContainer" hgap="15" style="-fx-padding: 10;" vgap="15">
             <!-- Category boxes are injected here dynamically via controller -->
         </FlowPane>
     </ScrollPane>

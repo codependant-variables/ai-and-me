@@ -329,22 +329,20 @@ public class HomeController {
     /**
      * Opens the recommended quiz attempt page
      * and loads the selected quiz template.
-     *
-     * @param mouseEvent mouse click event triggered by the user
      */
-    public void handleAttemptQuiz(MouseEvent mouseEvent) {
+    public void handleAttemptQuiz() {
         QuizAttemptController controller = (QuizAttemptController) Router.navigateLayout(View.QUIZ_ATTEMPT);
+        assert controller != null;
         controller.initQuiz(quizTemplate);
     }
 
     /**
      * Opens the recommended puzzle attempt page
      * and loads the selected puzzle template.
-     *
-     * @param mouseEvent mouse click event triggered by the user
      */
-    public void handleAttemptPuzzle(MouseEvent mouseEvent) {
+    public void handleAttemptPuzzle() {
         QuizAttemptController controller = (QuizAttemptController) Router.navigateLayout(View.QUIZ_ATTEMPT);
+        assert controller != null;
         controller.initQuiz(puzzleTemplate);
     }}
 
