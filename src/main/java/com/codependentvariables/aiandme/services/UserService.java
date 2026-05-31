@@ -5,10 +5,14 @@ import com.codependentvariables.aiandme.model.*;
 import com.codependentvariables.aiandme.model.dao.*;
 import com.codependentvariables.aiandme.modules.state.AppState;
 import com.codependentvariables.aiandme.services.AuthService.HashResult;
+import javafx.stage.DirectoryChooser;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class UserService {
@@ -209,16 +213,26 @@ public class UserService {
         int userId = user.getId();
 
         JSONObject json = new JSONObject();
-        json.put("user", user);
+        JSONObject jsonUser = new JSONObject(user);
+        jsonUser.remove("password");
+        jsonUser.remove("salt");
+        json.put("user", jsonUser);
         json.put("preferredCategories", userPreferredCategoryDAO.getByUserId(userId));
         json.put("checkIns", checkInDAO.getAllByUserId(userId));
         json.put("quizTemplates", exportQuizTemplates(userId));
         json.put("quizAttempts", exportQuizAttempts(userId));
 
-        try (FileWriter writer = new FileWriter("userdata.json")) {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        //directoryChooser.setTitle("Select Project Folder");
+        String userHome = System.getProperty("user.home");
+        directoryChooser.setInitialDirectory(new File(userHome));
+        File selectedDirectory = directoryChooser.showDialog(null);
+        File jsonFile = new File(selectedDirectory, String.format("user-data_%1$tY-%1$tm-%1$td_%1$tH-%1$tM-%1$tS.json", LocalDateTime.now()));
+
+        try (FileWriter writer = new FileWriter(jsonFile)) {
             json.write(writer, 4, 0);
         } catch (IOException e) {
-            System.err.println(e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -232,9 +246,9 @@ public class UserService {
                 JSONObject jsonQuizTemplateQuestion = new JSONObject(y);
                 jsonQuizTemplateQuestion.put("answers", quizTemplateAnswers);
                 return jsonQuizTemplateQuestion;
-            }));
+            }).toList());
             return jsonQuizTemplate;
-        }));
+        }).toList());
     }
 
     private JSONArray exportQuizAttempts(int userId) {
@@ -247,9 +261,9 @@ public class UserService {
                 JSONObject jsonQuizAttemptQuestion = new JSONObject(y);
                 jsonQuizAttemptQuestion.put("answers", quizAttemptAnswers);
                 return jsonQuizAttemptQuestion;
-            }));
+            }).toList());
             return jsonQuizTemplate;
-        }));
+        }).toList());
     }
 
     public List<UserPreferredCategory> getCurrentUserPreferredCategories() {

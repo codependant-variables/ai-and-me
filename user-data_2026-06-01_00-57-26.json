@@ -1,0 +1,205 @@
+{
+    "quizTemplates": [{
+        "valid": false,
+        "puzzle": false,
+        "name": "abc",
+        "questions": [{
+            "valid": false,
+            "quizTemplateId": 5,
+            "answers": [
+                {
+                    "valid": true,
+                    "correct": true,
+                    "quizTemplateQuestionId": 43,
+                    "id": 169,
+                    "text": "a"
+                },
+                {
+                    "valid": true,
+                    "correct": false,
+                    "quizTemplateQuestionId": 43,
+                    "id": 170,
+                    "text": "b"
+                }
+            ],
+            "id": 43,
+            "text": "New Question"
+        }],
+        "id": 5,
+        "userId": 3,
+        "categoryId": 3,
+        "status": "draft"
+    }],
+    "quizAttempts": [
+        {
+            "completedAt": "2026-06-01 00:30:29.749",
+            "puzzle": true,
+            "name": "Pattern Puzzle",
+            "questions": [
+                {
+                    "answers": [{
+                        "quizAttemptQuestionId": 2,
+                        "id": 5,
+                        "text": "Purple Circle",
+                        "isCorrect": true
+                    }],
+                    "id": 2,
+                    "text": "What shape completes the pattern?",
+                    "quizAttemptId": 2
+                },
+                {
+                    "answers": [{
+                        "quizAttemptQuestionId": 3,
+                        "id": 6,
+                        "text": "Blue",
+                        "isCorrect": true
+                    }],
+                    "id": 3,
+                    "text": "Which colour follows the sequence?",
+                    "quizAttemptId": 2
+                },
+                {
+                    "answers": [{
+                        "quizAttemptQuestionId": 4,
+                        "id": 7,
+                        "text": "3",
+                        "isCorrect": false
+                    }],
+                    "id": 4,
+                    "text": "How many shapes are in the next group?",
+                    "quizAttemptId": 2
+                },
+                {
+                    "answers": [{
+                        "quizAttemptQuestionId": 5,
+                        "id": 8,
+                        "text": "Cross",
+                        "isCorrect": false
+                    }],
+                    "id": 5,
+                    "text": "What is the missing symbol?",
+                    "quizAttemptId": 2
+                },
+                {
+                    "answers": [{
+                        "quizAttemptQuestionId": 6,
+                        "id": 9,
+                        "text": "Row D",
+                        "isCorrect": false
+                    }],
+                    "id": 6,
+                    "text": "Which row continues the pattern?",
+                    "quizAttemptId": 2
+                },
+                {
+                    "answers": [{
+                        "quizAttemptQuestionId": 7,
+                        "id": 10,
+                        "text": "180°",
+                        "isCorrect": false
+                    }],
+                    "id": 7,
+                    "text": "What rotation comes next?",
+                    "quizAttemptId": 2
+                },
+                {
+                    "answers": [{
+                        "quizAttemptQuestionId": 8,
+                        "id": 11,
+                        "text": "Tile 1",
+                        "isCorrect": false
+                    }],
+                    "id": 8,
+                    "text": "Which tile fits the grid?",
+                    "quizAttemptId": 2
+                },
+                {
+                    "answers": [{
+                        "quizAttemptQuestionId": 9,
+                        "id": 12,
+                        "text": "x2",
+                        "isCorrect": true
+                    }],
+                    "id": 9,
+                    "text": "How does the pattern scale?",
+                    "quizAttemptId": 2
+                },
+                {
+                    "answers": [{
+                        "quizAttemptQuestionId": 10,
+                        "id": 13,
+                        "text": "Element B",
+                        "isCorrect": false
+                    }],
+                    "id": 10,
+                    "text": "Which element is the odd one out?",
+                    "quizAttemptId": 2
+                },
+                {
+                    "answers": [{
+                        "quizAttemptQuestionId": 11,
+                        "id": 14,
+                        "text": "13",
+                        "isCorrect": true
+                    }],
+                    "id": 11,
+                    "text": "What comes at position 7 in the sequence?",
+                    "quizAttemptId": 2
+                }
+            ],
+            "id": 2,
+            "category": "Pattern Recognition",
+            "results": 4,
+            "userId": 3
+        },
+        {
+            "completedAt": "2026-06-01 00:33:10.641",
+            "puzzle": false,
+            "name": "abc",
+            "questions": [{
+                "answers": [{
+                    "quizAttemptQuestionId": 12,
+                    "id": 15,
+                    "text": "a",
+                    "isCorrect": true
+                }],
+                "id": 12,
+                "text": "New Question",
+                "quizAttemptId": 3
+            }],
+            "id": 3,
+            "category": "a",
+            "results": 1,
+            "userId": 3
+        }
+    ],
+    "preferredCategories": [],
+    "checkIns": [
+        {
+            "completedAt": "2026-06-01T00:30:07.538885100",
+            "aiDependence": 9,
+            "aiHappiness": 3,
+            "aiUse": 8,
+            "comment": "a",
+            "id": 4,
+            "userId": 3
+        },
+        {
+            "completedAt": "2026-06-01T00:29:59.640971",
+            "aiDependence": 7,
+            "aiHappiness": 2,
+            "aiUse": 3,
+            "comment": "Abcedfg",
+            "id": 3,
+            "userId": 3
+        }
+    ],
+    "user": {
+        "lastLoginAt": "2026-06-01 00:56:54.0457943",
+        "isVertical": false,
+        "name": "a",
+        "isDarkMode": false,
+        "id": 3,
+        "email": "a@aa.aa"
+    }
+}

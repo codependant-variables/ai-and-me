@@ -97,12 +97,6 @@ public class QuizAttemptController {
         }
         this.questions = template.getQuestions();
 
-        if (questions == null || questions.size() < 2) {
-            Dialogue.message("This quiz needs at least 2 questions before it can be attempted.");
-            navigateBack();
-            return;
-        }
-
         // Validate question answer lists before user starts quiz
         for (QuizTemplateQuestion question : questions) {
             if (question.getAnswers() == null || question.getAnswers().isEmpty()) {

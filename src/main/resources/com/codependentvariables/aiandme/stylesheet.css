@@ -99,13 +99,6 @@ Button {
     -fx-fill: #787878;
 }
 
-/*------ Style Class - Empty Button ------*/
-.emptyButton {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-    -fx-cursor: hand;
-}
-
 /*------------------------ Page - Dashboard ------------------------*/
 /*------ Style Class - Daily check-in ------*/
 .widget-VBox {
