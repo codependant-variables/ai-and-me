@@ -12,6 +12,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
+/**
+ * Static class for toast messages.
+ */
 public class Toast {
     private static final int MAX_MESSAGES = 5;
     private static final int STAY_SECONDS = 6;
@@ -21,10 +24,18 @@ public class Toast {
 
     public record ToastMessage(String title, String description, ToastMessageType type) {}
 
-    public static boolean isSetup() {
+    /**
+     * Determines if the toast module is set up.
+     * @return True if the toast module is set up.
+     */
+    public static boolean isSetUp() {
         return toastContainer.getMaxWidth() == MAX_WIDTH;
     }
 
+    /**
+     * Initialises the toast module with the pane used to place messages.
+     * @param toastRef Pane for toast messages.
+     */
     public static void setRef(StackPane toastRef) {
         toastContainer.setPickOnBounds(false);
         toastContainer.setAlignment(Pos.BOTTOM_RIGHT);
@@ -33,10 +44,20 @@ public class Toast {
         toastRef.getChildren().add(toastContainer);
     }
 
+    /**
+     * Adds a toast message to the queue.
+     * @param title Title for the toast message.
+     * @param description Description for the toast message.
+     * @param type Type for the toast message.
+     */
     public static void addMessage(String title, String description, ToastMessageType type) {
         addMessage(new ToastMessage(title, description, type));
     }
 
+    /**
+     * Adds a toast message to the queue.
+     * @param message Toast message to add.
+     */
     public static void addMessage(ToastMessage message) {
         Platform.runLater(() -> {
             if (toastContainer.getChildren().size() >= MAX_MESSAGES) {
@@ -65,6 +86,11 @@ public class Toast {
         });
     }
 
+    /**
+     * Constructs a HBox of a toast message.
+     * @param message Toast message to use.
+     * @return HBox containing toast message information.
+     */
     private static HBox createToastMessageUI(ToastMessage message) {
         HBox box = new HBox();
 

@@ -56,13 +56,6 @@
             <CheckBox fx:id="mfaCheckbox" disable="true" />
             <Button fx:id="mfaButton" onAction="#clickMfa" text="Setup MFA" />
         </HBox>
-      <rowConstraints>
-         <RowConstraints />
-         <RowConstraints />
-         <RowConstraints />
-         <RowConstraints />
-         <RowConstraints />
-      </rowConstraints>
 
     </GridPane>
     <VBox alignment="CENTER" spacing="10">

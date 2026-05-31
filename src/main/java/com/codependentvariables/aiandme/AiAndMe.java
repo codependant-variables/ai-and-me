@@ -42,7 +42,7 @@ public class AiAndMe extends Application {
         Thread.setDefaultUncaughtExceptionHandler((Thread t, Throwable e) -> {
             logger.log(Level.SEVERE, "Uncaught exception in thread: " + t.getName(), e);
 
-            if (Toast.isSetup()) {
+            if (Toast.isSetUp()) {
                 // If the UI is alive, push to the FX thread to show the toast
                 Platform.runLater(() -> {
                     Toast.addMessage("Error", "Oops, an unexpected error occurred. Please try again later.", ToastMessageType.ERROR);

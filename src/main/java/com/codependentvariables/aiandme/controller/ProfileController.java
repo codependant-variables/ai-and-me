@@ -8,7 +8,6 @@ import com.codependentvariables.aiandme.modules.router.View;
 import com.codependentvariables.aiandme.modules.toast.Toast;
 import com.codependentvariables.aiandme.modules.toast.ToastMessageType;
 import com.codependentvariables.aiandme.services.DataExportService;
-import com.codependentvariables.aiandme.services.UserDataDeletionService;
 import com.codependentvariables.aiandme.services.UserService;
 import com.codependentvariables.aiandme.modules.state.AppState;
 import com.codependentvariables.aiandme.modules.validation.ValidationEntry;
@@ -30,9 +29,8 @@ import java.util.Objects;
  */
 public class ProfileController {
     private final AppState appState = AppState.getInstance();
-    private final UserService userService = UserService.getInstance();
-    private final UserDataDeletionService dataDeletionService = UserDataDeletionService.getInstance();
     private final DataExportService dataExportService = DataExportService.getInstance();
+    private final UserService userService = UserService.getInstance();
 
     private User currentUser;
 
@@ -222,11 +220,16 @@ public class ProfileController {
             return;
         }
 
-        // TODO: modal dialogue "Are you sure?"
-        currentUser.setTotpSecret(null);
-        userService.updateCurrentUser();
-        mfaCheckbox.setSelected(false);
-        Toast.addMessage("Success", "MFA removed.", ToastMessageType.INFORMATION);
+        Dialogue.confirmationWithCancel(result -> {
+            if (result == null || !result) {
+                return;
+            }
+
+            currentUser.setTotpSecret(null);
+            userService.updateCurrentUser();
+            mfaCheckbox.setSelected(false);
+            Toast.addMessage("Success", "MFA removed.", ToastMessageType.INFORMATION);
+        });
     }
 
     /**
@@ -250,20 +253,38 @@ public class ProfileController {
      */
     @FXML
     private void clearData() {
-        dataDeletionService.deleteCurrentUserData();
-        Toast.addMessage("Data Cleared", "All data associated with this account has been deleted.", ToastMessageType.INFORMATION);
+        Dialogue.confirmationWithCancel(result -> {
+            if (result == null || !result) {
+                return;
+            }
+
+            userService.deleteCurrentUserData();
+            Toast.addMessage("Data Cleared", "All data associated with this account has been deleted.", ToastMessageType.INFORMATION);
+        });
     }
 
     @FXML
     private void clearCheckIns() {
-        dataDeletionService.deleteCurrentUserCheckIns();
-        Toast.addMessage("Check-ins Deleted", "All check-ins associated with this account have been deleted.", ToastMessageType.INFORMATION);
+        Dialogue.confirmationWithCancel(result -> {
+            if (result == null || !result) {
+                return;
+            }
+
+            userService.deleteCurrentUserCheckIns();
+            Toast.addMessage("Check-ins Deleted", "All check-ins associated with this account have been deleted.", ToastMessageType.INFORMATION);
+        });
     }
 
     @FXML
     private void clearQuizAttempts() {
-        dataDeletionService.deleteCurrentUserQuizAttempts();
-        Toast.addMessage("Quiz Attempts Deleted", "All quiz attempts associated with this account have been deleted.", ToastMessageType.INFORMATION);
+        Dialogue.confirmationWithCancel(result -> {
+            if (result == null || !result) {
+                return;
+            }
+
+            userService.deleteCurrentUserQuizAttempts();
+            Toast.addMessage("Quiz Attempts Deleted", "All quiz attempts associated with this account have been deleted.", ToastMessageType.INFORMATION);
+        });
     }
 
     /**

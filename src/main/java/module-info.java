@@ -12,7 +12,9 @@ module com.codependentvariables.aiandme {
     exports com.codependentvariables.aiandme;
     exports com.codependentvariables.aiandme.controller;
     exports com.codependentvariables.aiandme.database;
+    exports com.codependentvariables.aiandme.database.dao;
     exports com.codependentvariables.aiandme.model;
+    exports com.codependentvariables.aiandme.model.dao;
     exports com.codependentvariables.aiandme.modules.dialogue;
     exports com.codependentvariables.aiandme.modules.router;
     exports com.codependentvariables.aiandme.modules.state;
