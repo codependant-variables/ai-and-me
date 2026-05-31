@@ -675,3 +675,4 @@ nohup.out
 app.db
 copilotDiffState.xml
 sqldialects.sql
+user-data_*.json
