@@ -230,7 +230,14 @@ public abstract class QuizController {
 
         card.setStyle("-fx-border-color: " + cardColour + "; -fx-background-radius: 20px; -fx-border-width: 5; -fx-border-radius: 20px; -fx-effect: dropshadow(three-pass-box, #00000033, 15, 0.1, 5, 5); ");
 
-        card.setOnMouseClicked(e -> selectCard(card, template, cardColour));
+        card.setOnMouseClicked(e -> {
+            if (e.getClickCount() == 2) {
+                selectCard(card, template, cardColour);
+                handleStart();
+            } else {
+                selectCard(card, template, cardColour);
+            }
+        });
 
         return card;
     }
