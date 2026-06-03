@@ -1,24 +1,23 @@
 package com.codependentvariables.aiandme.controller;
 
-
 import com.codependentvariables.aiandme.model.*;
-import com.codependentvariables.aiandme.modules.Router;
-import com.codependentvariables.aiandme.modules.Toast;
-import com.codependentvariables.aiandme.modules.ToastMessageType;
-import com.codependentvariables.aiandme.modules.View;
+import com.codependentvariables.aiandme.modules.router.Router;
+import com.codependentvariables.aiandme.modules.toast.Toast;
+import com.codependentvariables.aiandme.modules.toast.ToastMessageType;
+import com.codependentvariables.aiandme.modules.router.View;
 import com.codependentvariables.aiandme.services.QuizAttemptService;
 import com.codependentvariables.aiandme.services.CheckInService;
 import com.codependentvariables.aiandme.services.QuizTemplateService;
 import com.codependentvariables.aiandme.services.home.AttemptStatistics;
 import com.codependentvariables.aiandme.services.home.CategoryStat;
-import com.codependentvariables.aiandme.state.AppState;
+import com.codependentvariables.aiandme.modules.state.AppState;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Side;
 import javafx.scene.chart.*;
 import javafx.scene.control.Label;
-import com.codependentvariables.aiandme.services.HomeService;
+import com.codependentvariables.aiandme.services.home.HomeService;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -55,8 +54,8 @@ public class HomeController {
     @FXML
     public XYChart.Series<Number, Number> happinessSeries = new XYChart.Series<Number, Number>();
 
-    private CheckInService checkInService = CheckInService.getInstance();
-    private QuizAttemptService attemptsService = QuizAttemptService.getInstance();
+    private final CheckInService checkInService = CheckInService.getInstance();
+    private final QuizAttemptService quizAttemptService = QuizAttemptService.getInstance();
 
     @FXML
     public NumberAxis xAxisQuizAttempts;
@@ -79,10 +78,9 @@ public class HomeController {
     @FXML
     private PieChart ratioPie;
 
-
     private final HomeService homeService = HomeService.getInstance();
     private final QuizTemplateService quizTemplateService = QuizTemplateService.getInstance();
-    private AppState appState = AppState.getInstance();
+    private final AppState appState = AppState.getInstance();
 
     /**
      * Initializes the dashboard view and loads all user analytics data.
@@ -162,8 +160,7 @@ public class HomeController {
 
             User user = appState.getCurrentUser();
 
-            AttemptStatistics split =
-                    attemptsService.getAttemptCountByUser(user.getId());
+            AttemptStatistics split = quizAttemptService.getAttemptCountByUser(user.getId());
 
             /////////////////////////////////
             // CHECK-IN GRAPH
@@ -227,8 +224,7 @@ public class HomeController {
             // QUIZ ATTEMPT GRAPH
             /////////////////////////////////
 
-            List<QuizAttempt> recentAttempts =
-                    attemptsService.getAttemptsByUser(user.getId());
+            List<QuizAttempt> recentAttempts = quizAttemptService.getByUserId(user.getId());
 
             XYChart.Series<Number, Number> attemptSeries =
                     new XYChart.Series<>();
@@ -291,8 +287,7 @@ public class HomeController {
             // RECOMMENDED QUIZZES
             /////////////////////////////////
 
-            this.quizTemplate = quizTemplateService.getRandomTemplate();
-
+            this.quizTemplate = quizTemplateService.getRandomQuiz();
             this.puzzleTemplate = quizTemplateService.getRandomPuzzle();
 
             System.out.println("Quiz: " + quizTemplate);
@@ -334,22 +329,20 @@ public class HomeController {
     /**
      * Opens the recommended quiz attempt page
      * and loads the selected quiz template.
-     *
-     * @param mouseEvent mouse click event triggered by the user
      */
-    public void handleAttemptQuiz(MouseEvent mouseEvent) {
+    public void handleAttemptQuiz() {
         QuizAttemptController controller = (QuizAttemptController) Router.navigateLayout(View.QUIZ_ATTEMPT);
+        assert controller != null;
         controller.initQuiz(quizTemplate);
     }
 
     /**
      * Opens the recommended puzzle attempt page
      * and loads the selected puzzle template.
-     *
-     * @param mouseEvent mouse click event triggered by the user
      */
-    public void handleAttemptPuzzle(MouseEvent mouseEvent) {
+    public void handleAttemptPuzzle() {
         QuizAttemptController controller = (QuizAttemptController) Router.navigateLayout(View.QUIZ_ATTEMPT);
+        assert controller != null;
         controller.initQuiz(puzzleTemplate);
     }}
 

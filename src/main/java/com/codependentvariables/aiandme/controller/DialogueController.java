@@ -1,7 +1,7 @@
 package com.codependentvariables.aiandme.controller;
 
-import com.codependentvariables.aiandme.modules.DialogueMessage;
-import com.codependentvariables.aiandme.modules.DialogueType;
+import com.codependentvariables.aiandme.modules.dialogue.DialogueMessage;
+import com.codependentvariables.aiandme.modules.dialogue.DialogueType;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;

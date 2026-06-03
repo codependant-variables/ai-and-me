@@ -5,13 +5,12 @@ import com.codependentvariables.aiandme.JavaFXTest;
 import com.codependentvariables.aiandme.controller.CheckInHistoryController;
 import com.codependentvariables.aiandme.model.CheckIn;
 import com.codependentvariables.aiandme.model.User;
-import com.codependentvariables.aiandme.model.mock.MockCheckInDAO;
-import com.codependentvariables.aiandme.model.mock.MockUserDAO;
-import com.codependentvariables.aiandme.modules.Router;
-import com.codependentvariables.aiandme.modules.View;
+import com.codependentvariables.aiandme.model.mock.*;
+import com.codependentvariables.aiandme.modules.router.Router;
+import com.codependentvariables.aiandme.modules.router.View;
 import com.codependentvariables.aiandme.services.CheckInService;
 import com.codependentvariables.aiandme.services.UserService;
-import com.codependentvariables.aiandme.state.AppState;
+import com.codependentvariables.aiandme.modules.state.AppState;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,7 +28,7 @@ public class CheckInHistoryControllerTest extends JavaFXTest {
     @BeforeAll
     public static void setup() {
         appState = AppState.getInstance();
-        userService = UserService.createForTest(new MockUserDAO());
+        userService = UserService.createForTest(new MockCheckInDAO(), new MockQuizAttemptDAO(), new MockQuizAttemptQuestionDAO(), new MockQuizAttemptAnswerDAO(), new MockQuizTemplateDAO(), new MockQuizTemplateQuestionDAO(), new MockQuizTemplateAnswerDAO(), new MockUserDAO(), new MockUserPreferredCategoryDAO());
         checkInService = CheckInService.createForTest(new MockCheckInDAO());
     }
 

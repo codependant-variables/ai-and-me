@@ -12,16 +12,22 @@ module com.codependentvariables.aiandme {
     exports com.codependentvariables.aiandme;
     exports com.codependentvariables.aiandme.controller;
     exports com.codependentvariables.aiandme.database;
+    exports com.codependentvariables.aiandme.database.dao;
     exports com.codependentvariables.aiandme.model;
-    exports com.codependentvariables.aiandme.modules;
+    exports com.codependentvariables.aiandme.model.dao;
+    exports com.codependentvariables.aiandme.modules.dialogue;
+    exports com.codependentvariables.aiandme.modules.router;
+    exports com.codependentvariables.aiandme.modules.state;
+    exports com.codependentvariables.aiandme.modules.toast;
+    exports com.codependentvariables.aiandme.modules.validation;
     exports com.codependentvariables.aiandme.services;
-    exports com.codependentvariables.aiandme.state;
-    exports com.codependentvariables.aiandme.validation;
+    exports com.codependentvariables.aiandme.services.home;
 
     opens com.codependentvariables.aiandme to javafx.fxml;
     opens com.codependentvariables.aiandme.controller to javafx.fxml;
     opens com.codependentvariables.aiandme.model to javafx.fxml;
-    opens com.codependentvariables.aiandme.modules to javafx.fxml;
-    exports com.codependentvariables.aiandme.services.home;
     opens com.codependentvariables.aiandme.services.home to javafx.fxml;
+    opens com.codependentvariables.aiandme.modules.toast to javafx.fxml;
+    opens com.codependentvariables.aiandme.modules.router to javafx.fxml;
+    opens com.codependentvariables.aiandme.modules.dialogue to javafx.fxml;
 }

@@ -99,7 +99,6 @@ public class QuizTemplate {
 
     /**
      * Sets the category ID.
-     *
      * @param categoryId category ID
      */
     public void setCategoryId(int categoryId) {
@@ -108,7 +107,6 @@ public class QuizTemplate {
 
     /**
      * Gets the creator user ID.
-     *
      * @return user ID
      */
     public int getUserId() {
@@ -117,7 +115,6 @@ public class QuizTemplate {
 
     /**
      * Sets the creator user ID.
-     *
      * @param userId user ID
      */
     public void setUserId(int userId) {
@@ -126,7 +123,6 @@ public class QuizTemplate {
 
     /**
      * Checks whether this template is a puzzle.
-     *
      * @return true if isPuzzle, false if quiz
      */
     public boolean isPuzzle() {
@@ -135,8 +131,7 @@ public class QuizTemplate {
 
     /**
      * Sets whether this template is a puzzle.
-     *
-     * @param puzzle true if puzzle, false if quiz
+     * @param puzzle True if a puzzle.
      */
     public void setPuzzle(boolean puzzle) {
         this.isPuzzle = puzzle;
@@ -144,7 +139,6 @@ public class QuizTemplate {
 
     /**
      * Gets the template status.
-     *
      * @return template status
      */
     public String getStatus() {
@@ -153,7 +147,6 @@ public class QuizTemplate {
 
     /**
      * Sets the template status.
-     *
      * @param status template status
      */
     public void setStatus(String status) {
@@ -162,7 +155,6 @@ public class QuizTemplate {
 
     /**
      * Returns an unmodifiable list of questions.
-     *
      * @return question list
      */
     public List<QuizTemplateQuestion> getQuestions() {
@@ -178,15 +170,6 @@ public class QuizTemplate {
     public void addQuestion(QuizTemplateQuestion question) {
         question.setQuizTemplateId(this.id);
         questions.add(question);
-    }
-
-    /**
-     * Removes a question from the template.
-     *
-     * @param question question to remove
-     */
-    public void removeQuestion(QuizTemplateQuestion question) {
-        questions.remove(question);
     }
 
     /**
@@ -233,7 +216,6 @@ public class QuizTemplate {
     /**
      * Gets the category name for this quiz or puzzle template.
      * If no category has been assigned, "General" is returned as a default value to prevent null errors in charts and analytics.
-     *
      * @return category name
      */
     public String getCategory() {
@@ -242,7 +224,6 @@ public class QuizTemplate {
 
     /**
      * Sets the category name.
-     *
      * @param category category name
      */
     public void setCategory(String category) {

@@ -1,15 +1,13 @@
 package com.codependentvariables.aiandme.controller;
 
 import com.codependentvariables.aiandme.AiAndMe;
-import com.codependentvariables.aiandme.modules.Dialogue;
-import com.codependentvariables.aiandme.modules.Router;
-import com.codependentvariables.aiandme.modules.Toast;
-import com.codependentvariables.aiandme.modules.ToastMessageType;
-import com.codependentvariables.aiandme.modules.View;
-import com.codependentvariables.aiandme.services.CheckInService;
+import com.codependentvariables.aiandme.modules.dialogue.Dialogue;
+import com.codependentvariables.aiandme.modules.router.Router;
+import com.codependentvariables.aiandme.modules.toast.Toast;
+import com.codependentvariables.aiandme.modules.toast.ToastMessageType;
+import com.codependentvariables.aiandme.modules.router.View;
 import com.codependentvariables.aiandme.services.UserService;
-import com.codependentvariables.aiandme.state.AppState;
-import javafx.event.ActionEvent;
+import com.codependentvariables.aiandme.modules.state.AppState;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -23,7 +21,6 @@ import javafx.scene.layout.StackPane;
  */
 public class LayoutController {
     private final UserService userService = UserService.getInstance();
-    private final CheckInService checkInService = CheckInService.getInstance();
     private final AppState appState = AppState.getInstance();
 
     @FXML
@@ -39,6 +36,8 @@ public class LayoutController {
 
     @FXML
     private StackPane contentRef;
+
+    private QuizLibraryController quizLibraryController;
 
     /**
      * Initialises layout bindings and navigation state.
@@ -73,13 +72,24 @@ public class LayoutController {
     /** Navigates to the quiz library page. */
     @FXML
     public void navigateQuizLibrary() {
-        Router.navigateLayout(View.QUIZ_LIBRARY);
+        navigateQuizLibrary(false);
     }
 
     /** Navigates to the puzzle library page. */
     @FXML
     public void navigatePuzzleLibrary() {
-        Router.navigateLayout(View.PUZZLE_LIBRARY);
+        navigateQuizLibrary(true);
+    }
+
+    private void navigateQuizLibrary(boolean isPuzzle) {
+        appState.setIsPuzzle(isPuzzle);
+        if (Router.getLayoutView() == View.QUIZ_LIBRARY) {
+            quizLibraryController.loadTemplates(isPuzzle);
+        } else {
+            quizLibraryController = (QuizLibraryController) Router.navigateLayout(View.QUIZ_LIBRARY);
+            assert quizLibraryController != null;
+            quizLibraryController.loadTemplates(isPuzzle);
+        }
     }
 
     /** Navigates to the login page. */

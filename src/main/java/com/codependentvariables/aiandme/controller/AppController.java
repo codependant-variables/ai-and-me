@@ -1,9 +1,9 @@
 package com.codependentvariables.aiandme.controller;
 
-import com.codependentvariables.aiandme.modules.Dialogue;
-import com.codependentvariables.aiandme.modules.Router;
-import com.codependentvariables.aiandme.modules.Toast;
-import com.codependentvariables.aiandme.modules.View;
+import com.codependentvariables.aiandme.modules.dialogue.Dialogue;
+import com.codependentvariables.aiandme.modules.router.Router;
+import com.codependentvariables.aiandme.modules.toast.Toast;
+import com.codependentvariables.aiandme.modules.router.View;
 import javafx.fxml.FXML;
 import javafx.scene.layout.StackPane;
 

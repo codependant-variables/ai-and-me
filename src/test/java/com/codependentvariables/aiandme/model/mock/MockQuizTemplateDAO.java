@@ -51,6 +51,20 @@ public class MockQuizTemplateDAO implements IQuizTemplateDAO {
     }
 
     @Override
+    public List<QuizTemplate> getAllQuizzes() {
+        return templates.stream()
+                .filter(x -> !x.isPuzzle())
+                .toList();
+    }
+
+    @Override
+    public List<QuizTemplate> getAllPuzzles() {
+        return templates.stream()
+                .filter(QuizTemplate::isPuzzle)
+                .toList();
+    }
+
+    @Override
     public List<QuizTemplate> getByCategoryId(int categoryId) {
         List<QuizTemplate> result = new ArrayList<>();
         for (QuizTemplate template : templates) {

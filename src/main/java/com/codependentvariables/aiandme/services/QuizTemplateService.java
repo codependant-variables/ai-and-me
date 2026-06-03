@@ -1,39 +1,35 @@
 package com.codependentvariables.aiandme.services;
 
+import com.codependentvariables.aiandme.database.dao.*;
 import com.codependentvariables.aiandme.model.*;
 import com.codependentvariables.aiandme.model.dao.*;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class QuizTemplateService {
-
     private static QuizTemplateService instance;
 
-    private final IQuizTemplateDAO templateDAO;
-    private final IQuizTemplateQuestionDAO questionDAO;
-    private final IQuizTemplateAnswerDAO answerDAO;
+    private final IQuizTemplateDAO quizTemplateDAO;
+    private final IQuizTemplateQuestionDAO quizTemplateQuestionDAO;
+    private final IQuizTemplateAnswerDAO quizTemplateAnswerDAO;
 
-    private QuizTemplateService() {
-        this(new SqliteQuizTemplateDAO(),
-             new SqliteQuizTemplateQuestionDAO(),
-             new SqliteQuizTemplateAnswerDAO());
-    }
+    private final Random random = new Random();
 
-    // Package-private constructor for unit tests
-    QuizTemplateService(IQuizTemplateDAO templateDAO,
-                        IQuizTemplateQuestionDAO questionDAO,
-                        IQuizTemplateAnswerDAO answerDAO) {
-        this.templateDAO = templateDAO;
-        this.questionDAO = questionDAO;
-        this.answerDAO   = answerDAO;
+    private QuizTemplateService(IQuizTemplateDAO quizTemplateDAO, IQuizTemplateQuestionDAO quizTemplateQuestionDAO, IQuizTemplateAnswerDAO quizTemplateAnswerDAO) {
+        this.quizTemplateDAO = quizTemplateDAO;
+        this.quizTemplateQuestionDAO = quizTemplateQuestionDAO;
+        this.quizTemplateAnswerDAO = quizTemplateAnswerDAO;
     }
 
     public static QuizTemplateService getInstance() {
         if (instance == null) {
-            instance = new QuizTemplateService();
+            instance = new QuizTemplateService(new SqliteQuizTemplateDAO(), new SqliteQuizTemplateQuestionDAO(), new SqliteQuizTemplateAnswerDAO());
         }
+        return instance;
+    }
+
+    public static QuizTemplateService createForTest(IQuizTemplateDAO quizTemplateDAO, IQuizTemplateQuestionDAO quizTemplateQuestionDAO, IQuizTemplateAnswerDAO quizTemplateAnswerDAO) {
+        instance = new QuizTemplateService(quizTemplateDAO, quizTemplateQuestionDAO, quizTemplateAnswerDAO);
         return instance;
     }
 
@@ -44,6 +40,7 @@ public class QuizTemplateService {
     public QuizTemplate createTemplate(String name, int categoryId, int userId) {
         return createTemplate(name, categoryId, userId, false);
     }
+
     public QuizTemplate createTemplate(String name, int categoryId, int userId, boolean isPuzzle) {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Template name must not be blank.");
@@ -53,7 +50,7 @@ public class QuizTemplateService {
         }
 
         QuizTemplate template = new QuizTemplate(name.trim(), categoryId, userId, isPuzzle, "draft");
-        templateDAO.add(template);
+        quizTemplateDAO.add(template);
         return template;
     }
 
@@ -62,43 +59,27 @@ public class QuizTemplateService {
      * @throws IllegalArgumentException if the new name is blank.
      */
     public void renameTemplate(QuizTemplate template, String newName) {
-        if (newName == null || newName.isBlank()) {
-            throw new IllegalArgumentException("Template name must not be blank.");
-        }
         template.setName(newName.trim());
-        templateDAO.update(template);
+        quizTemplateDAO.update(template);
     }
 
     /**
      * Deletes a template and all of its questions and answers.
      */
     public void deleteTemplate(QuizTemplate template) {
-        List<QuizTemplateQuestion> questions = questionDAO.getQuestionsByTemplate(template.getId());
+        List<QuizTemplateQuestion> questions = quizTemplateQuestionDAO.getByTemplateId(template.getId());
         for (QuizTemplateQuestion q : questions) {
             deleteQuestionAndAnswers(q);
         }
-        templateDAO.delete(template);
-    }
-
-    /**
-     * Returns the image bytes of the first question for the given template, null otherwise.
-     */
-    public byte[] getFirstQuestionImage(int templateId) {
-        List<QuizTemplateQuestion> questions = questionDAO.getQuestionsByTemplate(templateId);
-        if (questions == null || questions.isEmpty()) return null;
-        return questions.get(0).getImage();
+        quizTemplateDAO.delete(template);
     }
 
     public List<QuizTemplate> getAllTemplates() {
-        return templateDAO.getAll();
+        return quizTemplateDAO.getAll();
     }
 
-    public List<QuizTemplate> getTemplatesByCategory(int categoryId) {
-        return templateDAO.getByCategoryId(categoryId);
-    }
-
-    public List<QuizTemplate> getTemplatesByUser(int userId) {
-        return templateDAO.getByUserId(userId);
+    public List<QuizTemplate> getByUserId(int userId) {
+        return quizTemplateDAO.getByUserId(userId);
     }
 
     /**
@@ -106,31 +87,25 @@ public class QuizTemplateService {
      * Call this before displaying a template for editing.
      */
     public void loadQuestionsIntoTemplate(QuizTemplate template) {
-        List<QuizTemplateQuestion> questions = questionDAO.getQuestionsByTemplate(template.getId());
+        List<QuizTemplateQuestion> questions = quizTemplateQuestionDAO.getByTemplateId(template.getId());
         for (QuizTemplateQuestion q : questions) {
-            q.setAnswers(answerDAO.getAnswersByQuestion(q.getId()));
+            q.setAnswers(quizTemplateAnswerDAO.getByQuestionId(q.getId()));
         }
         template.setQuestions(questions);
     }
 
     /**
-     * Validates and persists the full set of questions and answers for a template,
+     * Validates and persists the full set of questions and answers,
      * deleting any questions that were removed during the editing session.
      * @throws IllegalArgumentException if any question fails validation.
      */
-    public void saveQuestions(QuizTemplate template,
-                              List<QuizTemplateQuestion> workingQuestions,
-                              List<QuizTemplateQuestion> removedQuestions) {
-
+    public void saveQuestions(List<QuizTemplateQuestion> workingQuestions, List<QuizTemplateQuestion> removedQuestions) {
         for (QuizTemplateQuestion q : workingQuestions) {
             if (q.getText() == null || q.getText().isBlank()) {
                 throw new IllegalArgumentException("Every question must have text.");
             }
             long nonBlankAnswers = q.getAnswers().stream()
                     .filter(a -> !a.getText().isBlank()).count();
-            if (nonBlankAnswers < 2) {
-                throw new IllegalArgumentException("Each question needs at least 2 answers.");
-            }
             boolean hasCorrect = q.getAnswers().stream().anyMatch(QuizTemplateAnswer::isCorrect);
             if (!hasCorrect) {
                 throw new IllegalArgumentException("Each question needs at least one correct answer marked.");
@@ -143,94 +118,68 @@ public class QuizTemplateService {
 
         for (QuizTemplateQuestion q : workingQuestions) {
             if (q.getId() == 0) {
-                questionDAO.addQuestion(q);
+                quizTemplateQuestionDAO.add(q);
                 for (QuizTemplateAnswer a : q.getAnswers()) {
                     a.setQuizTemplateQuestionId(q.getId());
-                    answerDAO.addAnswer(a);
+                    quizTemplateAnswerDAO.add(a);
                 }
             } else {
-                questionDAO.updateQuestion(q);
-                for (QuizTemplateAnswer old : answerDAO.getAnswersByQuestion(q.getId())) {
-                    answerDAO.deleteAnswer(old);
+                quizTemplateQuestionDAO.update(q);
+                for (QuizTemplateAnswer old : quizTemplateAnswerDAO.getByQuestionId(q.getId())) {
+                    quizTemplateAnswerDAO.delete(old);
                 }
                 for (QuizTemplateAnswer a : q.getAnswers()) {
                     a.setId(0);
                     a.setQuizTemplateQuestionId(q.getId());
-                    answerDAO.addAnswer(a);
+                    quizTemplateAnswerDAO.add(a);
                 }
             }
         }
     }
 
     private void deleteQuestionAndAnswers(QuizTemplateQuestion question) {
-        for (QuizTemplateAnswer a : answerDAO.getAnswersByQuestion(question.getId())) {
-            answerDAO.deleteAnswer(a);
+        for (QuizTemplateAnswer a : quizTemplateAnswerDAO.getByQuestionId(question.getId())) {
+            quizTemplateAnswerDAO.delete(a);
         }
-        questionDAO.deleteQuestion(question);
+        quizTemplateQuestionDAO.delete(question);
     }
 
-    public QuizTemplate getRandomTemplate() {
-
-        List<QuizTemplate> templates = templateDAO.getAll();
-        List<QuizTemplate> validTemplates = new ArrayList<>();
-
-        for (QuizTemplate template : templates) {
-
-            // Skip puzzles
-            if (template.isPuzzle()) {
-                continue;
-            }
-
-            loadQuestionsIntoTemplate(template);
-
-            if (template.getQuestions() != null && template.getQuestions().size() >= 2) {
-
-                validTemplates.add(template);
-            }
-        }
-
-        if (validTemplates.isEmpty()) {
-            return null;
-        }
-
-        Random random = new Random();
-
-        return validTemplates.get(
-                random.nextInt(validTemplates.size())
-        );
+    /**
+     * Gets any random quiz.
+     * @return The random quiz.
+     */
+    public QuizTemplate getRandomQuiz() {
+        List<QuizTemplate> quizTemplates = quizTemplateDAO.getAllQuizzes();
+        QuizTemplate quizTemplate = quizTemplates.get(random.nextInt(quizTemplates.size()));
+        loadQuestionsIntoTemplate(quizTemplate);
+        return quizTemplate;
     }
 
+    /**
+     * Gets any random puzzle.
+     * @return The random puzzle.
+     */
     public QuizTemplate getRandomPuzzle() {
+        List<QuizTemplate> quizTemplates = quizTemplateDAO.getAllPuzzles();
+        QuizTemplate quizTemplate = quizTemplates.get(random.nextInt(quizTemplates.size()));
+        loadQuestionsIntoTemplate(quizTemplate);
+        return quizTemplate;
+    }
 
-        List<QuizTemplate> templates = templateDAO.getAll();
-        List<QuizTemplate> validPuzzles = new ArrayList<>();
+    /**
+     * Retrieves all non-puzzle quiz templates.
+     * @return A list of all quiz templates.
+     */
+    public List<QuizTemplate> getAllQuizzes() {
+        return quizTemplateDAO.getAllQuizzes();
+    }
 
-        for (QuizTemplate template : templates) {
-
-            // Only puzzles
-            if (!template.isPuzzle()) {
-                continue;
-            }
-
-            // IMPORTANT
-            loadQuestionsIntoTemplate(template);
-
-            if (template.getQuestions() != null &&
-                    template.getQuestions().size() >= 2) {
-
-                validPuzzles.add(template);
-            }
-        }
-
-        if (validPuzzles.isEmpty()) {
-            return null;
-        }
-
-        Random random = new Random();
-
-        return validPuzzles.get(
-                random.nextInt(validPuzzles.size())
-        );
+    /**
+     * Retrieves all puzzle quiz templates.
+     * @return A list of all puzzle templates.
+     */
+    public List<QuizTemplate> getAllPuzzles() {
+        return quizTemplateDAO.getAllPuzzles();
     }
 }
 

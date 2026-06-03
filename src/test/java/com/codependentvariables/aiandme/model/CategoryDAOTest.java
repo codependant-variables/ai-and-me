@@ -15,7 +15,7 @@ public class CategoryDAOTest {
         Category category = new Category("Arithmetic");
         categoryDAO.add(category);
 
-        Category result = categoryDAO.get(1);
+        Category result = categoryDAO.get(category.getId());
         assertNotNull(result);
         assertEquals("Arithmetic", result.getName());
     }

@@ -1,16 +1,14 @@
 package com.codependentvariables.aiandme.services;
 
 import com.codependentvariables.aiandme.model.QuizTemplate;
-import com.codependentvariables.aiandme.model.QuizTemplateAnswer;
-import com.codependentvariables.aiandme.model.QuizTemplateQuestion;
 import com.codependentvariables.aiandme.model.dao.IQuizTemplateAnswerDAO;
+import com.codependentvariables.aiandme.model.dao.IQuizTemplateDAO;
 import com.codependentvariables.aiandme.model.dao.IQuizTemplateQuestionDAO;
 import com.codependentvariables.aiandme.model.mock.MockQuizTemplateDAO;
-import javafx.application.Platform;
-import org.junit.jupiter.api.BeforeEach;
+import com.codependentvariables.aiandme.model.mock.MockQuizTemplateQuestionDAO;
+import com.codependentvariables.aiandme.model.mock.MockQuizTemplateAnswerDAO;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,31 +17,32 @@ import static org.junit.jupiter.api.Assertions.*;
  * Tests for QuizTemplateService.createTemplate() focusing on user_id assignment,
  * covering the DAO-level null-substitution: getUserId()==0 implies SQL NULL, otherwise shows the user id.
  */
-class QuizTemplateServiceTest {
+public class QuizTemplateServiceTest {
+    private static QuizTemplateService quizTemplateService;
 
-    private MockQuizTemplateDAO templateDAO;
-    private QuizTemplateService service;
+    private static final IQuizTemplateDAO quizTemplateDAO = new MockQuizTemplateDAO();
+    private static final IQuizTemplateQuestionDAO quizTemplateQuestionDAO = new MockQuizTemplateQuestionDAO();
+    private static final IQuizTemplateAnswerDAO quizTemplateAnswerDAO = new MockQuizTemplateAnswerDAO();
 
-    @BeforeEach
-    void setUp() {
-        templateDAO = new MockQuizTemplateDAO();
-        service = new QuizTemplateService(templateDAO, stubQuestionDAO(), stubAnswerDAO());
+    @BeforeAll
+    public static void setup() {
+        quizTemplateService = QuizTemplateService.createForTest(quizTemplateDAO, quizTemplateQuestionDAO, quizTemplateAnswerDAO);
     }
 
     /**
-     * When a logged in user creates a template, their user Id must be stored on
+     * When a logged-in user creates a template, their user Id must be stored on
      * the returned template and retrievable from the DAO.
      */
     @Test
-    void storesUserId() {
+    public void storesUserId() {
         int loggedInUserId = 7;
 
-        QuizTemplate result = service.createTemplate("My Quiz", 1, loggedInUserId);
+        QuizTemplate result = quizTemplateService.createTemplate("My Quiz", 1, loggedInUserId);
 
         assertEquals(loggedInUserId, result.getUserId(),
                 "Returned template should carry the logged-in user's id");
 
-        QuizTemplate fromDAO = templateDAO.get(result.getId());
+        QuizTemplate fromDAO = quizTemplateDAO.get(result.getId());
         assertNotNull(fromDAO);
         assertEquals(loggedInUserId, fromDAO.getUserId(),
                 "Template persisted in DAO should carry the logged-in user's id");
@@ -55,15 +54,15 @@ class QuizTemplateServiceTest {
      * null replacement (i.e. if getUserId() == 0 then setNull(...).
      */
     @Test
-    void invokeNullId() {
+    public void invokeNullId() {
         int guestUserId = 0; // Placeholder variable for SQL NULL in SqliteQuizTemplateDAO
 
-        QuizTemplate result = service.createTemplate("Guest Quiz", 1, guestUserId);
+        QuizTemplate result = quizTemplateService.createTemplate("Guest Quiz", 1, guestUserId);
 
         assertEquals(0, result.getUserId(),
                 "Guest template should have userId=0 so the DAO writes SQL NULL");
 
-        QuizTemplate fromDAO = templateDAO.get(result.getId());
+        QuizTemplate fromDAO = quizTemplateDAO.get(result.getId());
         assertNotNull(fromDAO);
         assertEquals(0, fromDAO.getUserId(),
                 "Guest template in DAO should also have userId=0");
@@ -74,10 +73,10 @@ class QuizTemplateServiceTest {
      * flag and the correct userId.
      */
     @Test
-    void invokeUserPuzzle() {
+    public void invokeUserPuzzle() {
         int userId = 42;
 
-        QuizTemplate result = service.createTemplate("Pattern Puzzle", 2, userId, true);
+        QuizTemplate result = quizTemplateService.createTemplate("Pattern Puzzle", 2, userId, true);
 
         assertTrue(result.isPuzzle(), "Template should be flagged as a puzzle");
         assertEquals(userId, result.getUserId(),
@@ -89,8 +88,8 @@ class QuizTemplateServiceTest {
      * the puzzle flag.
      */
     @Test
-    void preserveUserPuzzle2() {
-        QuizTemplate result = service.createTemplate("Guest Puzzle", 2, 0, true);
+    public void preserveUserPuzzle2() {
+        QuizTemplate result = quizTemplateService.createTemplate("Guest Puzzle", 2, 0, true);
 
         assertTrue(result.isPuzzle(), "Template should be flagged as a puzzle");
         assertEquals(0, result.getUserId(),
@@ -102,38 +101,16 @@ class QuizTemplateServiceTest {
      * not templates with userId=0 (guest) or a different user.
      */
     @Test
-    void returnMatchUserId() {
-        service.createTemplate("User 5 Quiz", 1, 5);
-        service.createTemplate("User 9 Quiz", 1, 9);
-        service.createTemplate("Guest Quiz",  1, 0);
+    public void returnMatchUserId() {
+        quizTemplateService.createTemplate("User 5 Quiz", 1, 5);
+        quizTemplateService.createTemplate("User 9 Quiz", 1, 9);
+        quizTemplateService.createTemplate("Guest Quiz",  1, 0);
 
-        List<QuizTemplate> user5Templates = service.getTemplatesByUser(5);
+        List<QuizTemplate> user5Templates = quizTemplateService.getByUserId(5);
 
         assertEquals(1, user5Templates.size());
-        assertEquals("User 5 Quiz", user5Templates.get(0).getName());
-        assertEquals(5, user5Templates.get(0).getUserId());
-    }
-
-    /** non-operational, createTemplate() never touches questions. */
-    private static IQuizTemplateQuestionDAO stubQuestionDAO() {
-        return new IQuizTemplateQuestionDAO() {
-            public void addQuestion(QuizTemplateQuestion q) {}
-            public void updateQuestion(QuizTemplateQuestion q) {}
-            public void deleteQuestion(QuizTemplateQuestion q) {}
-            public QuizTemplateQuestion get(int id) { return null; }
-            public List<QuizTemplateQuestion> getQuestionsByTemplate(int tid) { return Collections.emptyList(); }
-        };
-    }
-
-    /** non-operational, createTemplate() never touches answers. */
-    private static IQuizTemplateAnswerDAO stubAnswerDAO() {
-        return new IQuizTemplateAnswerDAO() {
-            public void addAnswer(QuizTemplateAnswer a) {}
-            public void updateAnswer(QuizTemplateAnswer a) {}
-            public void deleteAnswer(QuizTemplateAnswer a) {}
-            public QuizTemplateAnswer get(int id) { return null; }
-            public List<QuizTemplateAnswer> getAnswersByQuestion(int qid) { return Collections.emptyList(); }
-        };
+        assertEquals("User 5 Quiz", user5Templates.getFirst().getName());
+        assertEquals(5, user5Templates.getFirst().getUserId());
     }
 }
 

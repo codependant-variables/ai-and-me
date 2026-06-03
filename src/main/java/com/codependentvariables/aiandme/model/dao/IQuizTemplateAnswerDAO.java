@@ -9,19 +9,19 @@ public interface IQuizTemplateAnswerDAO {
      * Adds a new answer to a question.
      * @param answer The answer to add.
      */
-    void addAnswer(QuizTemplateAnswer answer);
+    void add(QuizTemplateAnswer answer);
 
     /**
      * Updates an existing answer.
      * @param answer The answer to update.
      */
-    void updateAnswer(QuizTemplateAnswer answer);
+    void update(QuizTemplateAnswer answer);
 
     /**
      * Deletes an answer.
      * @param answer The answer to delete.
      */
-    void deleteAnswer(QuizTemplateAnswer answer);
+    void delete(QuizTemplateAnswer answer);
 
     /**
      * Retrieves an answer by id.
@@ -35,6 +35,6 @@ public interface IQuizTemplateAnswerDAO {
      * @param questionId The id of the question.
      * @return List of answers for that question.
      */
-    List<QuizTemplateAnswer> getAnswersByQuestion(int questionId);
+    List<QuizTemplateAnswer> getByQuestionId(int questionId);
 }
 

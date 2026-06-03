@@ -7,54 +7,28 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.Insets?>
 
 <BorderPane stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codependentvariables.aiandme.controller.LayoutController">
     <top>
-        <HBox alignment="CENTER" prefHeight="100.0" spacing="10.0" styleClass="navBar">
-         <Region maxWidth="30.0" HBox.hgrow="ALWAYS" />
-            <ImageView fx:id="logoRef" fitHeight="72.0" fitWidth="223.0" layoutY="10.0">
-                <Image url="@dark-logo.png" />
+        <HBox alignment="CENTER" prefHeight="100.0" styleClass="navbar, shadow">
+            <padding>
+                <Insets left="30" right="30" />
+            </padding>
+
+            <ImageView fx:id="logoRef" fitHeight="72.0" preserveRatio="true" layoutY="10.0">
+                <Image url="@Images/dark-logo.png" />
             </ImageView>
-         <Region HBox.hgrow="ALWAYS" />
-            <Button onAction="#navigateHome" prefHeight="48.0" prefWidth="86.0" styleClass="navButton" text="Home">
-            <font>
-               <Font size="10.0" />
-            </font></Button>
-            <Button onAction="#navigateQuizLibrary" prefHeight="48.0" prefWidth="137.0" styleClass="navButton" text="Quiz Library">
-            <font>
-               <Font size="10.0" />
-            </font></Button>
-         <Button layoutX="357.0" layoutY="36.0" onAction="#navigatePuzzleLibrary" prefHeight="48.0" prefWidth="154.0" styleClass="navButton" text="Puzzle Library">
-            <font>
-               <Font size="10.0" />
-            </font>
-         </Button>
-            <Button onAction="#navigateCheckin" prefHeight="48.0" prefWidth="158.0" styleClass="navButton" text="Daily Check-in">
-            <font>
-               <Font size="10.0" />
-            </font></Button>
-            <Button fx:id="loginButton" onAction="#navigateLogin" styleClass="navButton" text="Login">
-            <font>
-               <Font size="10.0" />
-            </font></Button>
-            <Button fx:id="signupButton" onAction="#navigateSignup" styleClass="navButton" text="Signup">
-            <font>
-               <Font size="10.0" />
-            </font></Button>
-            <Button fx:id="profileButton" onAction="#navigateProfile" styleClass="navButton" text="Profile">
-            <font>
-               <Font size="10.0" />
-            </font></Button>
-            <Button onAction="#navigateSettings" styleClass="navButton" text="Settings">
-            <font>
-               <Font size="10.0" />
-            </font></Button>
-            <Button fx:id="logoutButton" onAction="#handleLogout" styleClass="navButton" text="Logout">
-            <font>
-               <Font size="10.0" />
-            </font></Button>
-         <Region maxWidth="30.0" HBox.hgrow="ALWAYS" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Button onAction="#navigateHome" styleClass="nav-button" style="-fx-border-width: 0;" text="Home" wrapText="true" />
+            <Button onAction="#navigateQuizLibrary" styleClass="nav-button" text="Quiz Library" wrapText="true" />
+            <Button onAction="#navigatePuzzleLibrary" styleClass="nav-button" text="Puzzle Library" wrapText="true" />
+            <Button onAction="#navigateCheckin" styleClass="nav-button" text="Daily Check-In" wrapText="true" />
+            <Button fx:id="loginButton" onAction="#navigateLogin" styleClass="nav-button" text="Login" wrapText="true" />
+            <Button fx:id="signupButton" onAction="#navigateSignup" styleClass="nav-button" text="Signup" wrapText="true" />
+            <Button fx:id="profileButton" onAction="#navigateProfile" styleClass="nav-button" text="Profile" wrapText="true" />
+            <Button onAction="#navigateSettings" styleClass="nav-button" text="Settings" wrapText="true" />
+            <Button fx:id="logoutButton" onAction="#handleLogout" styleClass="nav-button" text="Logout" wrapText="true" />
         </HBox>
     </top>
     <center>

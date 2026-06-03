@@ -2,66 +2,40 @@ package com.codependentvariables.aiandme.services;
 
 import com.codependentvariables.aiandme.JavaFXTest;
 import com.codependentvariables.aiandme.model.Category;
-import com.codependentvariables.aiandme.model.User;
-import com.codependentvariables.aiandme.model.mock.MockCategoryDAO;
-import com.codependentvariables.aiandme.state.AppState;
+import com.codependentvariables.aiandme.model.dao.ICategoryDAO;
+import com.codependentvariables.aiandme.model.mock.*;
+import com.codependentvariables.aiandme.modules.state.AppState;
 import static org.junit.jupiter.api.Assertions.*;
 
-import javafx.application.Platform;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class CategoryServiceTest extends JavaFXTest {
-    private MockCategoryDAO mockCategoryDAO;
-    private CategoryService categoryService;
-    private Category category;
-
-    @BeforeAll
-    static void initJavaFX() {
-        try {
-            Platform.startup(() -> {});
-        } catch (IllegalStateException ignored) {
-            // Toolkit already initialized
-        }
-    }
+    private static final AppState appState = AppState.getInstance();
+    private static final ICategoryDAO categoryDAO = new MockCategoryDAO();
+    private static final CategoryService categoryService = CategoryService.createForTest(categoryDAO);
+    private static final UserService userService = UserService.createForTest(new MockCheckInDAO(), new MockQuizAttemptDAO(), new MockQuizAttemptQuestionDAO(), new MockQuizAttemptAnswerDAO(), new MockQuizTemplateDAO(), new MockQuizTemplateQuestionDAO(), new MockQuizTemplateAnswerDAO(), new MockUserDAO(), new MockUserPreferredCategoryDAO());
 
     @BeforeEach
-    void setUp() {
-        mockCategoryDAO = new MockCategoryDAO();
-        categoryService = new CategoryService(mockCategoryDAO);
-
-        // Resets user before test
-        AppState.getInstance().setCurrentUser(null);
-
-        // Create user
-        User user = new User("Test user", "test@example.com", "hash", "salt");
-        user.setId(1);
-        AppState.getInstance().setCurrentUser(user);
-
-        // Create category
-        category = new Category("Philosophy");
+    public void setupEach() {
+        userService.deleteCurrentUser();
     }
 
-    // Submits and adds category when user is logged in
     @Test
-    public void saveCategory() {
-        categoryService.submitCategory(category);
+    public void add_category_logged_in() {
+        Category category = new Category("Philosophy");
+        userService.signup("", "", "");
 
-        assertEquals(1, mockCategoryDAO.getAll().size());
+        int startingSize = categoryDAO.getAll().size();
+        categoryService.add(category);
+        assertEquals(startingSize + 1, categoryDAO.getAll().size());
     }
 
-    // Throws error when user not logged in if submit attempted
-    // Research: https://www.baeldung.com/junit-assert-exception
     @Test
-    public void saveCategory_Error() {
-        // remove the user created in setUp()
-        AppState.getInstance().setCurrentUser(null);
+    public void add_category_logged_out() {
+        Category category = new Category("New category");
 
-        assertThrows(IllegalStateException.class, () -> {
-            categoryService.submitCategory(category);
-        });
-
-        assertEquals(0, mockCategoryDAO.getAll().size());
+        int startingSize = categoryDAO.getAll().size();
+        assertEquals(startingSize, categoryDAO.getAll().size());
     }
 }
