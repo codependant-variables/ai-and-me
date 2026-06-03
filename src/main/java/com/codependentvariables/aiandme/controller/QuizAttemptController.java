@@ -1,12 +1,12 @@
 package com.codependentvariables.aiandme.controller;
 
 import com.codependentvariables.aiandme.model.*;
-import com.codependentvariables.aiandme.modules.Dialogue;
-import com.codependentvariables.aiandme.modules.Router;
-import com.codependentvariables.aiandme.modules.View;
+import com.codependentvariables.aiandme.modules.dialogue.Dialogue;
+import com.codependentvariables.aiandme.modules.router.Router;
+import com.codependentvariables.aiandme.modules.router.View;
 import com.codependentvariables.aiandme.services.QuizAttemptService;
 import com.codependentvariables.aiandme.services.QuizTemplateService;
-import com.codependentvariables.aiandme.state.AppState;
+import com.codependentvariables.aiandme.modules.state.AppState;
 import javafx.fxml.FXML;
 import java.util.logging.Logger;
 import javafx.scene.control.*;
@@ -96,12 +96,6 @@ public class QuizAttemptController {
             QuizTemplateService.getInstance().loadQuestionsIntoTemplate(template);
         }
         this.questions = template.getQuestions();
-
-        if (questions == null || questions.size() < 2) {
-            Dialogue.message("This quiz needs at least 2 questions before it can be attempted.");
-            navigateBack();
-            return;
-        }
 
         // Validate question answer lists before user starts quiz
         for (QuizTemplateQuestion question : questions) {
@@ -260,11 +254,12 @@ public class QuizAttemptController {
         controller.initialiseData(summary);
     }
 
-    /**
-     * Navigates back to the quiz library page.
-     */
     @FXML
     private void navigateBack() {
-        Router.navigateLayout(View.QUIZ_LIBRARY);
+        Dialogue.confirmationWithCancel(result -> {
+            if (result != null && result) {
+                Router.navigateBack();
+            }
+        });
     }
 }

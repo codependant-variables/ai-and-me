@@ -27,5 +27,5 @@ public interface IQuizAttemptAnswerDAO {
      * @param quizAttemptQuestionId the quiz attempt question id
      * @return all answers for that question
      */
-    List<QuizAttemptAnswer> getByQuizAttemptQuestionId(int quizAttemptQuestionId);
+    List<QuizAttemptAnswer> getByQuestionId(int quizAttemptQuestionId);
 }

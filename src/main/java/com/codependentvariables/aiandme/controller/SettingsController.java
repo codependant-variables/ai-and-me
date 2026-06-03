@@ -1,9 +1,9 @@
 package com.codependentvariables.aiandme.controller;
 
 import com.codependentvariables.aiandme.Icon;
-import com.codependentvariables.aiandme.modules.Router;
+import com.codependentvariables.aiandme.modules.router.Router;
 import com.codependentvariables.aiandme.services.UserService;
-import com.codependentvariables.aiandme.state.AppState;
+import com.codependentvariables.aiandme.modules.state.AppState;
 import javafx.fxml.FXML;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;

@@ -3,11 +3,11 @@ package com.codependentvariables.aiandme;
 import atlantafx.base.theme.NordDark;
 import atlantafx.base.theme.NordLight;
 import com.codependentvariables.aiandme.database.SqliteConnection;
-import com.codependentvariables.aiandme.modules.Toast;
-import com.codependentvariables.aiandme.modules.ToastMessageType;
-import com.codependentvariables.aiandme.modules.View;
-import com.codependentvariables.aiandme.modules.ViewUtils;
-import com.codependentvariables.aiandme.state.AppState;
+import com.codependentvariables.aiandme.modules.toast.Toast;
+import com.codependentvariables.aiandme.modules.toast.ToastMessageType;
+import com.codependentvariables.aiandme.modules.router.View;
+import com.codependentvariables.aiandme.modules.router.ViewUtils;
+import com.codependentvariables.aiandme.modules.state.AppState;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -30,8 +30,8 @@ public class AiAndMe extends Application {
 
     public static final String lightModeStylesheet = new NordLight().getUserAgentStylesheet();
     public static final String darkModeStylesheet = new NordDark().getUserAgentStylesheet();
-    public static final String lightLogoUrlString = Objects.requireNonNull(AiAndMe.class.getResource("dark-logo.png")).toString();
-    public static final String darkLogoUrlString = Objects.requireNonNull(AiAndMe.class.getResource("logo.png")).toString();
+    public static final String lightLogoUrlString = Objects.requireNonNull(AiAndMe.class.getResource("Images/dark-logo.png")).toString();
+    public static final String darkLogoUrlString = Objects.requireNonNull(AiAndMe.class.getResource("Images/logo.png")).toString();
 
     public static void main(String[] args) {
         launch(args);
@@ -42,7 +42,7 @@ public class AiAndMe extends Application {
         Thread.setDefaultUncaughtExceptionHandler((Thread t, Throwable e) -> {
             logger.log(Level.SEVERE, "Uncaught exception in thread: " + t.getName(), e);
 
-            if (Toast.isSetup()) {
+            if (Toast.isSetUp()) {
                 // If the UI is alive, push to the FX thread to show the toast
                 Platform.runLater(() -> {
                     Toast.addMessage("Error", "Oops, an unexpected error occurred. Please try again later.", ToastMessageType.ERROR);
