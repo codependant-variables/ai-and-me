@@ -20,7 +20,7 @@ public class Toast {
     private static final int STAY_SECONDS = 6;
     private static final int FADE_SECONDS = 1;
     private static final double MAX_WIDTH = 500.0;
-    private static final VBox toastContainer = new VBox(MAX_MESSAGES);
+    private static final VBox toastContainer = new VBox(5);
 
     public record ToastMessage(String title, String description, ToastMessageType type) {}
 
@@ -37,6 +37,7 @@ public class Toast {
      * @param toastRef Pane for toast messages.
      */
     public static void setRef(StackPane toastRef) {
+        toastContainer.getChildren().clear();
         toastContainer.setPickOnBounds(false);
         toastContainer.setAlignment(Pos.BOTTOM_RIGHT);
         toastContainer.setMaxWidth(MAX_WIDTH);
@@ -59,31 +60,29 @@ public class Toast {
      * @param message Toast message to add.
      */
     public static void addMessage(ToastMessage message) {
-        Platform.runLater(() -> {
-            if (toastContainer.getChildren().size() >= MAX_MESSAGES) {
-                toastContainer.getChildren().removeLast();
-            }
+        if (toastContainer.getChildren().size() >= MAX_MESSAGES) {
+            toastContainer.getChildren().removeLast();
+        }
 
-            HBox toastMessageUI = createToastMessageUI(message);
-            toastContainer.getChildren().addFirst(toastMessageUI);
+        HBox toastMessageUI = createToastMessageUI(message);
+        toastContainer.getChildren().addFirst(toastMessageUI);
 
-            PauseTransition stay = new PauseTransition(Duration.seconds(STAY_SECONDS));
+        PauseTransition stay = new PauseTransition(Duration.seconds(STAY_SECONDS));
 
-            FadeTransition fadeOut = new FadeTransition(Duration.seconds(FADE_SECONDS), toastMessageUI);
-            fadeOut.setFromValue(1.0);
-            fadeOut.setToValue(0.0);
+        FadeTransition fadeOut = new FadeTransition(Duration.seconds(FADE_SECONDS), toastMessageUI);
+        fadeOut.setFromValue(1.0);
+        fadeOut.setToValue(0.0);
 
-            fadeOut.setOnFinished(e -> toastContainer.getChildren().remove(toastMessageUI));
+        fadeOut.setOnFinished(e -> toastContainer.getChildren().remove(toastMessageUI));
 
-            SequentialTransition sequence = new SequentialTransition(stay, fadeOut);
+        SequentialTransition sequence = new SequentialTransition(stay, fadeOut);
 
-            toastMessageUI.setOnMouseClicked(e -> {
-                sequence.stop();
-                toastContainer.getChildren().remove(toastMessageUI);
-            });
-
-            sequence.play();
+        toastMessageUI.setOnMouseClicked(e -> {
+            sequence.stop();
+            toastContainer.getChildren().remove(toastMessageUI);
         });
+
+        sequence.play();
     }
 
     /**
@@ -94,13 +93,7 @@ public class Toast {
     private static HBox createToastMessageUI(ToastMessage message) {
         HBox box = new HBox();
 
-        String backgroundColour = switch (message.type) {
-            case INFORMATION -> "limegreen";
-            case WARNING -> "sandybrown";
-            case ERROR -> "orangered";
-            default -> throw new RuntimeException("Toast message type not implemented.");
-        };
-
+        String backgroundColour = getToastMessageTypeColour(message.type);
         box.setStyle(String.format("-fx-background-color: %s; -fx-spacing: 1em; -fx-padding: 10; -fx-background-radius: 5; -fx-cursor: hand;", backgroundColour));
 
         Label title = new Label(message.title());
@@ -118,5 +111,31 @@ public class Toast {
 
         box.getChildren().addAll(title, description);
         return box;
+    }
+
+    /**
+     * Get colour to use for a toast message from the provided type.
+     * @param type Type to get a colour for.
+     * @return Colour as string.
+     */
+    public static String getToastMessageTypeColour(ToastMessageType type) {
+        return switch (type) {
+            case INFORMATION -> "limegreen";
+            case WARNING -> "sandybrown";
+            case ERROR -> "orangered";
+            default -> throw new RuntimeException("Toast message type not implemented.");
+        };
+    }
+
+    public static int getStaySeconds() {
+        return STAY_SECONDS;
+    }
+
+    public static int getFadeSeconds() {
+        return FADE_SECONDS;
+    }
+
+    public static int getMaxMessages() {
+        return MAX_MESSAGES;
     }
 }
