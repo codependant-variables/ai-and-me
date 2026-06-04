@@ -36,7 +36,6 @@ public class QuizAttemptController {
     public final List<QuizTemplateAnswer> selectedAnswers = new ArrayList<>();
 
     private boolean testMode = false;
-    private boolean showImages = false;
     private int totalQuestions;
 
     @FXML
@@ -57,14 +56,6 @@ public class QuizAttemptController {
      */
     public void setTestMode(boolean testMode) {
         this.testMode = testMode;
-    }
-
-    /**
-     * When set to true, the question image is displayed during the attempt.
-     * Called by PuzzleLibraryController before initQuiz().
-     */
-    public void setShowImages(boolean showImages) {
-        this.showImages = showImages;
     }
 
     /**
@@ -144,7 +135,7 @@ public class QuizAttemptController {
         answersBox.getChildren().clear();
 
         // Show image for puzzle attempts
-        if (showImages && questionImageView != null) {
+        if (template.isPuzzle() && questionImageView != null) {
             byte[] imgBytes = question.getImage();
             if (imgBytes != null && imgBytes.length > 0) {
                 questionImageView.setImage(new Image(new ByteArrayInputStream(imgBytes)));
