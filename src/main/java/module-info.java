@@ -30,4 +30,5 @@ module com.codependentvariables.aiandme {
     opens com.codependentvariables.aiandme.modules.toast to javafx.fxml;
     opens com.codependentvariables.aiandme.modules.router to javafx.fxml;
     opens com.codependentvariables.aiandme.modules.dialogue to javafx.fxml;
+    exports com.codependentvariables.aiandme.services.user;
 }

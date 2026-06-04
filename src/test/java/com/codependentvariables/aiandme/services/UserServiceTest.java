@@ -5,6 +5,8 @@ import com.codependentvariables.aiandme.model.*;
 import com.codependentvariables.aiandme.model.dao.*;
 import com.codependentvariables.aiandme.model.mock.*;
 import com.codependentvariables.aiandme.modules.state.AppState;
+import com.codependentvariables.aiandme.services.user.LoginResult;
+import com.codependentvariables.aiandme.services.user.UserService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

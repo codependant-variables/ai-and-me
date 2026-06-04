@@ -1,9 +1,10 @@
-package com.codependentvariables.aiandme.services;
+package com.codependentvariables.aiandme.services.user;
 
 import com.codependentvariables.aiandme.database.dao.*;
 import com.codependentvariables.aiandme.model.*;
 import com.codependentvariables.aiandme.model.dao.*;
 import com.codependentvariables.aiandme.modules.state.AppState;
+import com.codependentvariables.aiandme.services.AuthService;
 import com.codependentvariables.aiandme.services.AuthService.HashResult;
 import javafx.stage.DirectoryChooser;
 import org.json.JSONArray;

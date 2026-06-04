@@ -11,7 +11,7 @@ import com.codependentvariables.aiandme.modules.toast.Toast;
 import com.codependentvariables.aiandme.modules.toast.ToastMessageType;
 import com.codependentvariables.aiandme.services.CategoryService;
 import com.codependentvariables.aiandme.services.QuizTemplateService;
-import com.codependentvariables.aiandme.services.UserService;
+import com.codependentvariables.aiandme.services.user.UserService;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

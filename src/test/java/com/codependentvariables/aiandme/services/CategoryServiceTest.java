@@ -7,6 +7,7 @@ import com.codependentvariables.aiandme.model.mock.*;
 import com.codependentvariables.aiandme.modules.state.AppState;
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.codependentvariables.aiandme.services.user.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
