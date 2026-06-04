@@ -96,7 +96,7 @@ public class QuizLibraryController {
      * @param isPuzzle Puzzles are loaded if true, else quizzes.
      */
     public void loadTemplates(boolean isPuzzle) {
-        quizTemplates = appState.getIsPuzzle() ? templateService.getAllPuzzles() : templateService.getAllTemplates();
+        quizTemplates = appState.getIsPuzzle() ? templateService.getAllPuzzles() : templateService.getAllQuizzes();
         refreshCards();
     }
 
