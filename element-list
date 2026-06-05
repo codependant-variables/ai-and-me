@@ -2,8 +2,14 @@ module:com.codependentvariables.aiandme
 com.codependentvariables.aiandme
 com.codependentvariables.aiandme.controller
 com.codependentvariables.aiandme.database
+com.codependentvariables.aiandme.database.dao
 com.codependentvariables.aiandme.model
-com.codependentvariables.aiandme.modules
+com.codependentvariables.aiandme.model.dao
+com.codependentvariables.aiandme.modules.dialogue
+com.codependentvariables.aiandme.modules.router
+com.codependentvariables.aiandme.modules.state
+com.codependentvariables.aiandme.modules.toast
+com.codependentvariables.aiandme.modules.validation
 com.codependentvariables.aiandme.services
-com.codependentvariables.aiandme.state
-com.codependentvariables.aiandme.validation
+com.codependentvariables.aiandme.services.home
+com.codependentvariables.aiandme.services.user
