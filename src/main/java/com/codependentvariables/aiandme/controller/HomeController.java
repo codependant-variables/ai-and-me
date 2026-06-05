@@ -38,8 +38,9 @@ public class HomeController {
     @FXML
     private QuizTemplate puzzleTemplate;
     @FXML
-    private Label checkInName;
-
+    private Label quizRecommendation;
+    @FXML
+    private Label puzzleRecommendation;
 
     @FXML
     public NumberAxis xAxisCheckin;
@@ -294,8 +295,13 @@ public class HomeController {
             System.out.println("Puzzle: " + puzzleTemplate);
 
             if (quizTemplate != null) {
-                checkInName.setText(quizTemplate.getName());
-            }
+                quizRecommendation.setText(quizTemplate.getName());
+            } else { quizRecommendation.setText("No quiz's available"); }
+
+
+            if (puzzleTemplate != null) {
+                puzzleRecommendation.setText(puzzleTemplate.getName());
+            } else { puzzleRecommendation.setText("No puzzle's available"); }
         }
     }
 

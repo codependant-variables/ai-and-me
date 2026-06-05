@@ -191,7 +191,7 @@
                      </font>
                   </Text>
                   <Separator minHeight="-Infinity" prefHeight="9.0" prefWidth="243.0" />
-                  <Label fx:id="checkInName">
+                  <Label fx:id="quizRecommendation">
                      <font>
                         <Font size="15.0" />
                      </font>
@@ -215,7 +215,7 @@
                      </font>
                   </Text>
                   <Separator minHeight="-Infinity" prefHeight="9.0" prefWidth="243.0" />
-                  <Label text="{recomendedPuzzle}">
+                  <Label fx:id="puzzleRecommendation">
                      <font>
                         <Font size="15.0" />
                      </font>
