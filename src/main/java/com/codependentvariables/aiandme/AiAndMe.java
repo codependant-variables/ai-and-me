@@ -20,6 +20,9 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Main entry point for the AI & Me application.
+ */
 public class AiAndMe extends Application {
     private static final Logger logger = Logger.getLogger(AiAndMe.class.getName());
     private static final AppState appState = AppState.getInstance();
@@ -33,10 +36,18 @@ public class AiAndMe extends Application {
     public static final String lightLogoUrlString = Objects.requireNonNull(AiAndMe.class.getResource("Images/dark-logo.png")).toString();
     public static final String darkLogoUrlString = Objects.requireNonNull(AiAndMe.class.getResource("Images/logo.png")).toString();
 
+    /**
+     * Launches the application.
+     */
     public static void main(String[] args) {
         launch(args);
     }
 
+    /**
+     * Initialises and starts the JavaFX application.
+     *
+     * @param stage the primary application stage
+     */
     @Override
     public void start(Stage stage) {
         Thread.setDefaultUncaughtExceptionHandler((Thread t, Throwable e) -> {

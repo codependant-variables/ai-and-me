@@ -10,6 +10,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Logger;
 
+/**
+ * Manages connections to the SQLite database.
+ */
 public class SqliteConnection {
     private static SqliteConnection instance;
     private final Connection connection;

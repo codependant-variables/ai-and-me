@@ -1,5 +1,8 @@
 package com.codependentvariables.aiandme.model;
 
+/**
+ * Represents a quiz category.
+ */
 public class Category {
     private int id;
     private String name;

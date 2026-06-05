@@ -15,6 +15,10 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
+/**
+ * SQLite implementation of the QuizTemplateQuestion data access object.
+ * Provides CRUD operations for quiz template questions.
+ */
 public class SqliteQuizTemplateQuestionDAO extends BaseSqliteDAO implements IQuizTemplateQuestionDAO, IDatabaseEntity {
     private static final String schemaQuery = """
                 CREATE TABLE IF NOT EXISTS quiz_template_questions (

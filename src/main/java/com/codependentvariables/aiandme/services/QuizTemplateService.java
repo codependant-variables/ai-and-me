@@ -6,6 +6,9 @@ import com.codependentvariables.aiandme.model.dao.*;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Provides services for creating, managing, and retrieving quiz templates.
+ */
 public class QuizTemplateService {
     private static QuizTemplateService instance;
 
@@ -21,6 +24,11 @@ public class QuizTemplateService {
         this.quizTemplateAnswerDAO = quizTemplateAnswerDAO;
     }
 
+    /**
+     * Returns the QuizTemplateService instance.
+     *
+     * @return the singleton QuizTemplateService instance
+     */
     public static QuizTemplateService getInstance() {
         if (instance == null) {
             instance = new QuizTemplateService(new SqliteQuizTemplateDAO(), new SqliteQuizTemplateQuestionDAO(), new SqliteQuizTemplateAnswerDAO());
@@ -28,6 +36,14 @@ public class QuizTemplateService {
         return instance;
     }
 
+    /**
+     * Creates a QuizTemplateService instance for unit testing.
+     *
+     * @param quizTemplateDAO DAO for quiz templates
+     * @param quizTemplateQuestionDAO DAO for quiz template questions
+     * @param quizTemplateAnswerDAO DAO for quiz template answers
+     * @return configured QuizTemplateService instance
+     */
     public static QuizTemplateService createForTest(IQuizTemplateDAO quizTemplateDAO, IQuizTemplateQuestionDAO quizTemplateQuestionDAO, IQuizTemplateAnswerDAO quizTemplateAnswerDAO) {
         instance = new QuizTemplateService(quizTemplateDAO, quizTemplateQuestionDAO, quizTemplateAnswerDAO);
         return instance;
@@ -41,6 +57,16 @@ public class QuizTemplateService {
         return createTemplate(name, categoryId, userId, false);
     }
 
+    /**
+     * Creates and persists a new quiz or puzzle template.
+     *
+     * @param name template name
+     * @param categoryId associated category identifier
+     * @param userId owner identifier
+     * @param isPuzzle true if the template is a puzzle
+     * @return the created template
+     * @throws IllegalArgumentException if the name is blank or categoryId is invalid
+     */
     public QuizTemplate createTemplate(String name, int categoryId, int userId, boolean isPuzzle) {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Template name must not be blank.");
@@ -74,10 +100,21 @@ public class QuizTemplateService {
         quizTemplateDAO.delete(template);
     }
 
+    /**
+     * Retrieves all quiz templates.
+     *
+     * @return list of quiz templates
+     */
     public List<QuizTemplate> getAllTemplates() {
         return quizTemplateDAO.getAll();
     }
 
+    /**
+     * Retrieves all templates created by a user.
+     *
+     * @param userId the user identifier
+     * @return the user's templates
+     */
     public List<QuizTemplate> getByUserId(int userId) {
         return quizTemplateDAO.getByUserId(userId);
     }
@@ -137,6 +174,11 @@ public class QuizTemplateService {
         }
     }
 
+    /**
+     * Deletes a question and all associated answers.
+     *
+     * @param question the question to delete
+     */
     private void deleteQuestionAndAnswers(QuizTemplateQuestion question) {
         for (QuizTemplateAnswer a : quizTemplateAnswerDAO.getByQuestionId(question.getId())) {
             quizTemplateAnswerDAO.delete(a);

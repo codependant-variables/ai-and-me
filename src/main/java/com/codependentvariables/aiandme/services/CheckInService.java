@@ -11,6 +11,9 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+/**
+ * Provides services for creating and retrieving user check-ins.
+ */
 public class CheckInService {
     private static CheckInService instance;
     private final ICheckInDAO checkInDAO;
@@ -21,6 +24,11 @@ public class CheckInService {
         this.checkInDAO = checkInDAO;
     }
 
+    /**
+     * Returns the CheckInService instance.
+     *
+     * @return the singleton CheckInService instance
+     */
     public static CheckInService getInstance() {
         if (instance == null) {
             instance = new CheckInService(new SqliteCheckInDAO());
@@ -28,11 +36,24 @@ public class CheckInService {
         return instance;
     }
 
+    /**
+     * Creates a CheckInService instance for unit testing.
+     *
+     * @param dao DAO implementation to use
+     * @return configured CheckInService instance
+     */
     public static CheckInService createForTest(ICheckInDAO dao) {
         instance = new CheckInService(dao);
         return instance;
     }
 
+    /**
+     * Submits a check-in for the current user.
+     *
+     * @param checkIn the check-in to submit
+     * @throws IllegalStateException if no user is logged in
+     * @throws IllegalArgumentException if the check-in is invalid
+     */
     public void submitCheckIn(CheckIn checkIn) {
         User currentUser = appState.getCurrentUser();
 
@@ -60,6 +81,12 @@ public class CheckInService {
         );
     }
 
+    /**
+     * Validates the values of a check-in.
+     *
+     * @param checkIn the check-in to validate
+     * @return true if the check-in is valid
+     */
     private boolean isValid(CheckIn checkIn) {
         return checkIn != null
                 && checkIn.getAiDependence() >= 0
@@ -70,14 +97,31 @@ public class CheckInService {
                 && checkIn.getAiUse() <= 10;
     }
 
+    /**
+     * Retrieves a check-in by its identifier.
+     *
+     * @param id the check-in identifier
+     * @return the matching check-in
+     */
     public CheckIn getById(int id) {
         return checkInDAO.get(id);
     }
 
+    /**
+     * Retrieves all check-ins for a user.
+     *
+     * @param userId the user identifier
+     * @return the user's check-ins
+     */
     public List<CheckIn> getAllByUserId(int userId) {
         return checkInDAO.getAllByUserId(userId);
     }
 
+    /**
+     * Checks whether the current user has already completed a check-in today.
+     *
+     * @return true if a check-in exists for today
+     */
     public boolean isExistingCheckInToday() {
         List<CheckIn> userCheckIns = checkInDAO.getAllByUserId(appState.getCurrentUser().getId());
         if (appState.getCurrentUser() != null && !userCheckIns.isEmpty()) {

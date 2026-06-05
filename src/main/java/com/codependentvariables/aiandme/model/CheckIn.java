@@ -3,6 +3,9 @@ package com.codependentvariables.aiandme.model;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+/**
+ * Represents a Check In
+ */
 public class CheckIn {
     private int id;
     private int userId;
