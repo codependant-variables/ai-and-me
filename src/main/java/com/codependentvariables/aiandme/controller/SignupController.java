@@ -2,12 +2,21 @@ package com.codependentvariables.aiandme.controller;
 
 import com.codependentvariables.aiandme.AiAndMe;
 import com.codependentvariables.aiandme.Icon;
-import com.codependentvariables.aiandme.modules.*;
-import com.codependentvariables.aiandme.services.UserService;
-import com.codependentvariables.aiandme.state.AppState;
-import com.codependentvariables.aiandme.validation.FormValidator;
-import com.codependentvariables.aiandme.validation.ValidationEntry;
-import com.codependentvariables.aiandme.validation.validators.*;
+import com.codependentvariables.aiandme.modules.dialogue.Dialogue;
+import com.codependentvariables.aiandme.modules.dialogue.DialogueMessage;
+import com.codependentvariables.aiandme.modules.dialogue.DialogueType;
+import com.codependentvariables.aiandme.modules.router.Router;
+import com.codependentvariables.aiandme.modules.router.View;
+import com.codependentvariables.aiandme.modules.toast.Toast;
+import com.codependentvariables.aiandme.modules.toast.ToastMessageType;
+import com.codependentvariables.aiandme.modules.validation.validators.DynamicValidator;
+import com.codependentvariables.aiandme.modules.validation.validators.EmailValidator;
+import com.codependentvariables.aiandme.modules.validation.validators.PasswordValidator;
+import com.codependentvariables.aiandme.modules.validation.validators.StringNotEmptyValidator;
+import com.codependentvariables.aiandme.services.user.UserService;
+import com.codependentvariables.aiandme.modules.state.AppState;
+import com.codependentvariables.aiandme.modules.validation.FormValidator;
+import com.codependentvariables.aiandme.modules.validation.ValidationEntry;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -16,6 +25,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 
+/**
+ * Controller for the signup page.
+ * Handles user registration and account creation.
+ */
 public class SignupController {
     @FXML
     public ImageView logoRef;
@@ -36,12 +49,17 @@ public class SignupController {
     private Runnable postSignupCallback;
     private String cancelCallbackMessage;
 
+    /**
+     * Initialises theme defaults and password visibility.
+     */
     @FXML
     private void initialize() {
         var darkModeObservable = appState.getObservableIsDarkMode();
+        // Update logo depending on dark/light mode
         logoRef.imageProperty().bind(darkModeObservable.map(isDark -> new Image(isDark ? AiAndMe.darkLogoUrlString : AiAndMe.lightLogoUrlString)));
         viewPasswordIcon.fillProperty().bind(darkModeObservable.map(isDark -> isDark ? Color.WHITE : Color.BLACK));
 
+        // Toggle between visible and hidden password fields
         passwordTextField.visibleProperty().bind(passwordField.visibleProperty().not());
         viewPasswordIcon.contentProperty().bind(passwordField.visibleProperty().map(visible -> visible ? Icon.OPEN_EYE : Icon.CLOSED_EYE));
 
@@ -51,16 +69,28 @@ public class SignupController {
         passwordTextField.managedProperty().bind(passwordTextField.visibleProperty());
     }
 
+    /**
+     * Sets callback actions used after signup or cancellation.
+     *
+     * @param postSignupCallback action to run after signup
+     * @param cancelCallbackMessage confirmation message text
+     */
     public void initialiseCallback(Runnable postSignupCallback, String cancelCallbackMessage) {
         this.postSignupCallback = postSignupCallback;
         this.cancelCallbackMessage = cancelCallbackMessage;
     }
 
+    /**
+     * Toggles password visibility.
+     */
     @FXML
     private void toggleViewPassword() {
         passwordField.setVisible(!passwordField.isVisible());
     }
 
+    /**
+     * Validates signup form input.
+     */
     private final FormValidator signupValidator = new FormValidator(
             new ValidationEntry<>(
                     () -> this.nameField.getText(),
@@ -80,6 +110,9 @@ public class SignupController {
             )
     );
 
+    /**
+     * Attempts to create a new user account.
+     */
     @FXML
     private void onSignup() {
         if (!signupValidator.validate()) {
@@ -95,6 +128,10 @@ public class SignupController {
         }
     }
 
+    /**
+     * Navigates back to the home page.
+     * Displays a confirmation dialogue if signup completed.
+     */
     @FXML
     private void navigateHome() {
         if (postSignupCallback != null) {
@@ -108,6 +145,9 @@ public class SignupController {
         }
     }
 
+    /**
+     * Opens the login page.
+     */
     @FXML
     private void navigateLogin() {
         LoginController loginController = (LoginController)Router.navigateApp(View.LOGIN);

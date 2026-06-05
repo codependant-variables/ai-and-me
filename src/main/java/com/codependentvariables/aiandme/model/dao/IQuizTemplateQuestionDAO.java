@@ -9,19 +9,19 @@ public interface IQuizTemplateQuestionDAO {
      * Adds a new question to a quiz template.
      * @param question The question to add.
      */
-    void addQuestion(QuizTemplateQuestion question);
+    void add(QuizTemplateQuestion question);
 
     /**
      * Updates an existing question.
      * @param question The question to update.
      */
-    void updateQuestion(QuizTemplateQuestion question);
+    void update(QuizTemplateQuestion question);
 
     /**
      * Deletes a question.
      * @param question The question to delete.
      */
-    void deleteQuestion(QuizTemplateQuestion question);
+    void delete(QuizTemplateQuestion question);
 
     /**
      * Retrieves a question by id.
@@ -35,6 +35,6 @@ public interface IQuizTemplateQuestionDAO {
      * @param quizTemplateId The id of the quiz template.
      * @return List of questions for that template.
      */
-    List<QuizTemplateQuestion> getQuestionsByTemplate(int quizTemplateId);
+    List<QuizTemplateQuestion> getByTemplateId(int quizTemplateId);
 }
 

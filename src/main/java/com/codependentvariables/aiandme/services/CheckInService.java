@@ -3,10 +3,10 @@ package com.codependentvariables.aiandme.services;
 import com.codependentvariables.aiandme.model.CheckIn;
 import com.codependentvariables.aiandme.model.User;
 import com.codependentvariables.aiandme.model.dao.ICheckInDAO;
-import com.codependentvariables.aiandme.model.dao.SqliteCheckInDAO;
-import com.codependentvariables.aiandme.modules.Toast;
-import com.codependentvariables.aiandme.modules.ToastMessageType;
-import com.codependentvariables.aiandme.state.AppState;
+import com.codependentvariables.aiandme.database.dao.SqliteCheckInDAO;
+import com.codependentvariables.aiandme.modules.toast.Toast;
+import com.codependentvariables.aiandme.modules.toast.ToastMessageType;
+import com.codependentvariables.aiandme.modules.state.AppState;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -63,11 +63,11 @@ public class CheckInService {
     private boolean isValid(CheckIn checkIn) {
         return checkIn != null
                 && checkIn.getAiDependence() >= 0
-                && checkIn.getAiDependence() <= 100
+                && checkIn.getAiDependence() <= 10
                 && checkIn.getAiHappiness() >= 0
-                && checkIn.getAiHappiness() <= 100
+                && checkIn.getAiHappiness() <= 10
                 && checkIn.getAiUse() >= 0
-                && checkIn.getAiUse() <= 100;
+                && checkIn.getAiUse() <= 10;
     }
 
     public CheckIn getById(int id) {
@@ -84,5 +84,19 @@ public class CheckInService {
             return ChronoUnit.DAYS.between(userCheckIns.getFirst().getCompletedAt().toLocalDate(), LocalDate.now()) < 1;
         }
         return false;
+    }
+
+    /**
+     * Gets the 5 most recent check-ins for a user.
+     *
+     * @param userId user ID
+     * @param limit maximum number of check-ins to return
+     * @return list of recent check-ins
+     */
+    public List<CheckIn> getRecentCheckInsByUserId(int userId, int limit) {
+        List<CheckIn> allCheckIns = getAllByUserId(userId);
+        int startIndex = Math.max(0, allCheckIns.size() - limit);
+
+        return allCheckIns.subList(startIndex, allCheckIns.size());
     }
 }

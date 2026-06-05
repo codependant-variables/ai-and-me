@@ -1,14 +1,14 @@
 package com.codependentvariables.aiandme.controller;
 
 import com.codependentvariables.aiandme.model.User;
-import com.codependentvariables.aiandme.modules.Router;
-import com.codependentvariables.aiandme.modules.Toast;
-import com.codependentvariables.aiandme.modules.ToastMessageType;
+import com.codependentvariables.aiandme.modules.router.Router;
+import com.codependentvariables.aiandme.modules.toast.Toast;
+import com.codependentvariables.aiandme.modules.toast.ToastMessageType;
 import com.codependentvariables.aiandme.services.AuthService;
-import com.codependentvariables.aiandme.services.UserService;
-import com.codependentvariables.aiandme.state.AppState;
-import com.codependentvariables.aiandme.validation.ValidationEntry;
-import com.codependentvariables.aiandme.validation.validators.DynamicValidator;
+import com.codependentvariables.aiandme.services.user.UserService;
+import com.codependentvariables.aiandme.modules.state.AppState;
+import com.codependentvariables.aiandme.modules.validation.ValidationEntry;
+import com.codependentvariables.aiandme.modules.validation.validators.DynamicValidator;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
@@ -21,14 +21,19 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import javafx.util.converter.DefaultStringConverter;
 
-
+/**
+ * Controller for the MFA setup page.
+ * Handles QR code generation and TOTP verification.
+ */
 public class SetupMfaController {
     private final AuthService authService = AuthService.getInstance();
     private final UserService userService = UserService.getInstance();
 
     private User currentUser;
+    // Temporary secret used during MFA setup
     private String currentSecret;
 
+    // QR code image size
     private static final int SIDE = 200;
 
     @FXML
@@ -37,6 +42,9 @@ public class SetupMfaController {
     @FXML
     public TextField totpField;
 
+    /**
+     * Restricts TOTP input to numeric values with the correct maximum length.
+     */
     private final TextFormatter<String> totpTextFormatter = new TextFormatter<>(
             new DefaultStringConverter(),
             "",
@@ -55,12 +63,18 @@ public class SetupMfaController {
             }
     );
 
+    /**
+     * Validates the entered one-time password.
+     */
     private final ValidationEntry<String> totpValidator = new ValidationEntry<>(
             () -> this.totpField.getText(),
             "One-time password",
             new DynamicValidator<>((value, display) -> value.length() == AuthService.TOTP_SIZE ? null : String.format("%s must be %d characters.", display, AuthService.TOTP_SIZE))
     );
 
+    /**
+     * Initialises the MFA setup screen.
+     */
     @FXML
     public void initialize() {
         currentUser = AppState.getInstance().getCurrentUser();
@@ -74,6 +88,9 @@ public class SetupMfaController {
         refreshQrCode();
     }
 
+    /**
+     * Generates a new QR code for MFA setup.
+     */
     @FXML
     public void refreshQrCode() {
         currentSecret = authService.createTotpSecret();
@@ -90,6 +107,7 @@ public class SetupMfaController {
             Color main = isDarkMode ? Color.WHITE : Color.BLACK;
             Color secondary = isDarkMode ? Color.BLACK : Color.WHITE;
 
+            // Draw QR code pixels
             for (int y = 0; y < matrix.getHeight(); y++) {
                 for (int x = 0; x < matrix.getWidth(); x++) {
                     writer.setColor(x, y, matrix.get(x, y) ? main : secondary);
@@ -102,6 +120,9 @@ public class SetupMfaController {
         }
     }
 
+    /**
+     * Verifies the entered TOTP code and enables MFA for the user.
+     */
     public void submit() {
         if (!totpValidator.validate(x -> Toast.addMessage("Invalid", x, ToastMessageType.WARNING))) {
             return;
@@ -118,6 +139,9 @@ public class SetupMfaController {
         navigateBack();
     }
 
+    /**
+     * Navigates back to the previous page.
+     */
     @FXML
     public void navigateBack() {
         Router.navigateBack();

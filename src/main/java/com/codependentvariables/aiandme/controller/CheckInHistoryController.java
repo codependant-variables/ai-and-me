@@ -2,10 +2,10 @@ package com.codependentvariables.aiandme.controller;
 
 import com.codependentvariables.aiandme.model.CheckIn;
 import com.codependentvariables.aiandme.model.User;
-import com.codependentvariables.aiandme.modules.Router;
-import com.codependentvariables.aiandme.modules.View;
+import com.codependentvariables.aiandme.modules.router.Router;
+import com.codependentvariables.aiandme.modules.router.View;
 import com.codependentvariables.aiandme.services.CheckInService;
-import com.codependentvariables.aiandme.state.AppState;
+import com.codependentvariables.aiandme.modules.state.AppState;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
@@ -15,14 +15,26 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Controller for the check-in history view.
+ * Displays previous check-ins for the current user.
+ */
 public class CheckInHistoryController {
     private final AppState appState = AppState.getInstance();
     private final CheckInService checkInService;
 
+    /**
+     * Creates a controller with a custom CheckInService.
+     *
+     * @param checkInService service used to retrieve check-in data
+     */
     public CheckInHistoryController(CheckInService checkInService) {
         this.checkInService = checkInService;
     }
 
+    /**
+     * Creates a controller using the default CheckInService instance.
+     */
     public CheckInHistoryController() {
         this(CheckInService.getInstance());
     }
@@ -50,6 +62,9 @@ public class CheckInHistoryController {
     @FXML
     private TableColumn<CheckIn, LocalDateTime> colCompletedAt;
 
+    /**
+     * Initialises table columns and loads user check-ins.
+     */
     @FXML
     public void initialize() {
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -64,6 +79,8 @@ public class CheckInHistoryController {
 
     /**
      * Loads CheckIns for current user into the table
+     * Loads all check-ins belonging to the current user.
+     * Redirects to the home page if no user is logged in.
      */
     public void loadCheckIns() {
         User currentUser = appState.getCurrentUser();

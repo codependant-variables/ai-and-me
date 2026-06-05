@@ -66,7 +66,7 @@ public class MockQuizAttemptQuestionDAO implements IQuizAttemptQuestionDAO {
      * Retrieves all questions for a given quiz attempt.
      */
     @Override
-    public List<QuizAttemptQuestion> getByQuizAttemptId(int quizAttemptId) {
+    public List<QuizAttemptQuestion> getByAttemptId(int quizAttemptId) {
         List<QuizAttemptQuestion> results = new ArrayList<>();
 
         for (QuizAttemptQuestion question : questions) {

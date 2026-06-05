@@ -1,7 +1,7 @@
 package com.codependentvariables.aiandme;
 
-import com.codependentvariables.aiandme.modules.View;
-import com.codependentvariables.aiandme.modules.ViewUtils;
+import com.codependentvariables.aiandme.modules.router.View;
+import com.codependentvariables.aiandme.modules.router.ViewUtils;
 import javafx.fxml.FXMLLoader;
 import javafx.util.Callback;
 

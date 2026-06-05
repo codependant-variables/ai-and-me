@@ -2,7 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.geometry.Rectangle2D?>
-<?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.chart.PieChart?>
@@ -17,13 +16,13 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox fx:id="background" alignment="CENTER" prefHeight="738.0" prefWidth="879.0" styleClass="background-VBox" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codependentvariables.aiandme.controller.HomeController">
+<VBox fx:id="background" alignment="CENTER" prefHeight="738.0" prefWidth="879.0" styleClass="shadow" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codependentvariables.aiandme.controller.HomeController">
    <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
       <VBox fx:id="dashboardWidgetData" alignment="TOP_CENTER" prefHeight="538.0" prefWidth="375.0" spacing="10.0" styleClass="widget-VBox">
          <children>
             <VBox alignment="CENTER" prefWidth="400" spacing="10.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Check in data:">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Your Statistics:">
                      <font>
                         <Font size="21.0" />
                      </font>
@@ -34,31 +33,39 @@
                   <Separator minHeight="-Infinity" prefHeight="9.0" prefWidth="243.0" />
                </children>
             </VBox>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+            <VBox alignment="CENTER" prefHeight="250.0" prefWidth="100.0">
                <children>
-                  <LineChart fx:id="checkInChart" prefHeight="201.0" prefWidth="231.0">
+                  <LineChart fx:id="checkInChart" title="Check-in Data" titleSide="TOP" legendSide="RIGHT" legendVisible="true">
                      <xAxis>
-                        <CategoryAxis side="BOTTOM" />
+                        <NumberAxis autoRanging="false" forceZeroInRange="false"  lowerBound="1.0" minorTickLength="0.0" side="BOTTOM" tickLabelsVisible="false" upperBound="5" fx:id="xAxisCheckin">
+                           <tickLabelFont>
+                              <Font size="10.0" />
+                           </tickLabelFont></NumberAxis>
                      </xAxis>
                      <yAxis>
-                        <NumberAxis side="LEFT" />
+                         <NumberAxis fx:id="yAxisCheckin" autoRanging="false" side="LEFT" tickLabelGap="2.0" tickLength="10.0" upperBound="10.0">
+                           <tickLabelFont>
+                              <Font size="10.0" />
+                           </tickLabelFont></NumberAxis>
                      </yAxis>
                   </LineChart>
                </children>
             </VBox>
-            <VBox prefHeight="200.0" prefWidth="100.0">
+            <VBox prefHeight="250.0" prefWidth="100.0">
                <children>
-                  <LineChart fx:id="attemptChart" prefHeight="201.0" prefWidth="231.0">
+                  <LineChart fx:id="attemptChart" title="Quiz/Puzzle Scores" legendVisible="false">
                      <xAxis>
-                        <CategoryAxis side="BOTTOM" />
+                        <NumberAxis forceZeroInRange="false" autoRanging="false" minorTickVisible="false" side="BOTTOM" tickLabelsVisible="false" visible="false" tickUnit="1" lowerBound="1.0" upperBound="5.0" fx:id="xAxisQuizAttempts" />
                      </xAxis>
                      <yAxis>
-                        <NumberAxis side="LEFT" />
+                        <NumberAxis fx:id="yAxisQuizAttempts" autoRanging="false" side="LEFT" upperBound="10" />
                      </yAxis>
                   </LineChart>
                </children>
             </VBox>
-            <PieChart fx:id="ratioPie" prefHeight="213.0" prefWidth="266.0" />
+            <VBox>
+            <PieChart fx:id="ratioPie" labelLineLength="0.0" legendSide="LEFT" />
+            </VBox>
          </children>
          <HBox.margin>
             <Insets />
@@ -184,7 +191,7 @@
                      </font>
                   </Text>
                   <Separator minHeight="-Infinity" prefHeight="9.0" prefWidth="243.0" />
-                  <Label fx:id="checkInName">
+                  <Label fx:id="quizRecommendation">
                      <font>
                         <Font size="15.0" />
                      </font>
@@ -200,7 +207,7 @@
                   </ImageView>
                </children>
             </VBox>
-            <VBox fx:id="dashboardWidgetPuzzle" alignment="TOP_CENTER" prefWidth="288.0" styleClass="recomendedPuzzle">
+            <VBox fx:id="dashboardWidgetPuzzle" alignment="TOP_CENTER" onMouseClicked="#handleAttemptPuzzle" prefWidth="288.0" styleClass="recomendedPuzzle">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Puzzle for you!" textAlignment="CENTER" wrappingWidth="231.13000106811523">
                      <font>
@@ -208,7 +215,7 @@
                      </font>
                   </Text>
                   <Separator minHeight="-Infinity" prefHeight="9.0" prefWidth="243.0" />
-                  <Label text="{recomendedPuzzle}">
+                  <Label fx:id="puzzleRecommendation">
                      <font>
                         <Font size="15.0" />
                      </font>

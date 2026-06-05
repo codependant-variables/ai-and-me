@@ -3,9 +3,9 @@ package com.codependentvariables.aiandme.controllers;
 import com.codependentvariables.aiandme.JavaFXControllerLoader;
 import com.codependentvariables.aiandme.JavaFXTest;
 import com.codependentvariables.aiandme.controller.DialogueController;
-import com.codependentvariables.aiandme.modules.DialogueMessage;
-import com.codependentvariables.aiandme.modules.DialogueType;
-import com.codependentvariables.aiandme.modules.View;
+import com.codependentvariables.aiandme.modules.dialogue.DialogueMessage;
+import com.codependentvariables.aiandme.modules.dialogue.DialogueType;
+import com.codependentvariables.aiandme.modules.router.View;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

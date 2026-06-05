@@ -78,7 +78,6 @@ public class QuizTemplateQuestion {
      */
     public boolean isValid() {
         if (text == null || text.isBlank()) return false;
-        if (answers.size() < 2) return false;
         return hasCorrectAnswer();
     }
 

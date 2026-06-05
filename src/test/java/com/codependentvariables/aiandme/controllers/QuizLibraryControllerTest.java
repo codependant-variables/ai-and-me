@@ -2,15 +2,14 @@ package com.codependentvariables.aiandme.controllers;
 
 import com.codependentvariables.aiandme.controller.QuizLibraryController;
 import com.codependentvariables.aiandme.model.QuizTemplate;
-import com.codependentvariables.aiandme.model.QuizTemplateDAOTest;
 import com.codependentvariables.aiandme.model.QuizTemplateQuestion;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class QuizLibraryControllerTest {
 

@@ -9,72 +9,33 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" prefWidth="600.0" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="CENTER" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codependentvariables.aiandme.controller.QuizLibraryController">
     <padding>
         <Insets topRightBottomLeft="20" />
     </padding>
 
-    <Label fx:id="pageTitle" alignment="CENTER_RIGHT" contentDisplay="RIGHT" style="-fx-font-size: 22px; -fx-font-weight: bold;" text="Quiz Library" textAlignment="RIGHT" />
-    <HBox alignment="CENTER_LEFT" prefHeight="20.0" prefWidth="760.0">
-        <Label layoutX="400.0" layoutY="20.0" minWidth="78.0" prefHeight="20.0" prefWidth="78.0" style="-fx-font-weight: bold; -fx-font-size: 14px;" text="Participate">
-            <HBox.margin>
-                <Insets right="10.0" />
-            </HBox.margin>
-        </Label>
-        <Button fx:id="btnAttemptQuiz" maxWidth="Infinity" minWidth="95.0" onAction="#handleAttemptQuiz" prefHeight="39.0" prefWidth="95.0" style="-fx-padding: 10;" styleClass="libraryButtonPrimary" text="Start Quiz">
-            <HBox.margin>
-                <Insets bottom="10.0" right="10.0" top="10.0" />
-            </HBox.margin>
-        </Button>
-        <Button maxWidth="Infinity" minWidth="120.0" onAction="#handleModify" prefHeight="39.0" prefWidth="120.0" style="-fx-padding: 10;" styleClass="libraryButtonSecondary" text="Reset Attempt">
-            <HBox.margin>
-                <Insets bottom="10.0" top="10.0" />
-            </HBox.margin>
-        </Button>
-        <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-        <Label minWidth="60.0" prefHeight="20.0" prefWidth="60.0" style="-fx-font-weight: bold; -fx-font-size: 14px;" text="Options">
-            <HBox.margin>
-                <Insets right="10.0" />
-            </HBox.margin>
-        </Label>
-        <Button fx:id="btnCreate" maxWidth="Infinity" minWidth="65.0" onAction="#handleCreate" prefHeight="39.0" prefWidth="65.0" style="-fx-padding: 10;" styleClass="libraryButtonPrimary" text="Create">
-            <HBox.margin>
-                <Insets bottom="10.0" right="10.0" top="10.0" />
-            </HBox.margin>
-        </Button>
-        <Button fx:id="btnModify" maxWidth="Infinity" minWidth="75.0" onAction="#handleModify" prefHeight="39.0" prefWidth="75.0" style="-fx-padding: 10;" styleClass="libraryButtonSecondary" text="Modify">
-            <HBox.margin>
-                <Insets bottom="10.0" right="10.0" top="10.0" />
-            </HBox.margin>
-        </Button>
-        <Button fx:id="btnDelete" maxWidth="Infinity" minWidth="65.0" onAction="#handleDelete" prefHeight="39.0" prefWidth="65.0" style="-fx-padding: 10;" styleClass="libraryButtonSecondary" text="Delete">
-            <HBox.margin>
-                <Insets bottom="10.0" right="10.0" top="10.0" />
-            </HBox.margin>
-        </Button>
-        <Button fx:id="btnEditQuestions" maxWidth="Infinity" minWidth="120.0" onAction="#handleEditQuestions" prefHeight="20.0" prefWidth="120.0" style="-fx-font-size: 13px; -fx-padding: 10;" styleClass="libraryButtonSecondary" text="Edit Questions">
-            <font>
-                <Font size="7.0" />
-            </font>
-            <HBox.margin>
-                <Insets bottom="10.0" top="10.0" />
-            </HBox.margin>
-        </Button>
-    </HBox>
-    <HBox alignment="CENTER_LEFT" spacing="10">
-        <Label style="-fx-font-weight: bold;" text="Filter by Category:" />
+    <Label fx:id="pageTitle" styleClass="title" text="Quiz Library" />
 
-        <ComboBox fx:id="categoryFilter" onAction="#handleCategoryFilter" prefWidth="200.0" />
-      <VBox.margin>
-         <Insets bottom="10.0" />
-      </VBox.margin>
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label styleClass="bold" text="Category:" />
+        <ComboBox fx:id="categoryFilter" onAction="#refreshCards" />
+
+        <Region HBox.hgrow="ALWAYS" />
+
+        <Label styleClass="bold" text="Options" />
+        <Button fx:id="btnCreate" onAction="#handleCreate" styleClass="call-to-action" text="Create" />
+        <Button fx:id="btnEdit" onAction="#handleEdit" styleClass="submission" text="Edit" />
+        <Button fx:id="btnRename" onAction="#handleRename" styleClass="submission" text="Rename" />
+        <Button fx:id="btnDelete" onAction="#handleDelete" styleClass="submission" text="Delete" />
     </HBox>
+
     <!-- ScrollPane allows overflow when many categories are added -->
-    <ScrollPane fitToWidth="true" prefHeight="288.0" prefWidth="568.0" styleClass="innerDropshadow" VBox.vgrow="ALWAYS">
-        <FlowPane fx:id="categoryContainer" hgap="15" style="-fx-padding: 10; -fx-background-color: transparent;" vgap="15">
+    <ScrollPane fitToWidth="true" styleClass="shadow" VBox.vgrow="ALWAYS">
+        <FlowPane fx:id="cardContainer" hgap="15" style="-fx-padding: 10;" vgap="15">
             <!-- Category boxes are injected here dynamically via controller -->
         </FlowPane>
     </ScrollPane>
+
+    <Button fx:id="btnStart" maxWidth="Infinity" onAction="#handleStart" prefHeight="39.0" style="-fx-padding: 10;" styleClass="call-to-action" text="Start Quiz" />
 </VBox>

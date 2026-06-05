@@ -1,0 +1,20 @@
+package com.codependentvariables.aiandme.modules.validation.validators;
+
+import java.util.function.BiFunction;
+
+/**
+ * A flexible validator that allows each instance to define the validation function
+ * @param <T>
+ */
+public class DynamicValidator<T> implements IValidator<T> {
+    private final BiFunction<T, String, String> validationMethod;
+
+    public DynamicValidator(BiFunction<T, String, String> validationMethod) {
+        this.validationMethod = validationMethod;
+    }
+
+    @Override
+    public String validate(T value, String display) {
+        return validationMethod.apply(value, display);
+    }
+}

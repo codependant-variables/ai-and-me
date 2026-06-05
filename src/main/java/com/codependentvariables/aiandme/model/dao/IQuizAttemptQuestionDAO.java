@@ -34,5 +34,5 @@ public interface IQuizAttemptQuestionDAO {
      * @param quizAttemptId the quiz attempt id
      * @return all questions for that quiz attempt
      */
-    List<QuizAttemptQuestion> getByQuizAttemptId(int quizAttemptId);
+    List<QuizAttemptQuestion> getByAttemptId(int quizAttemptId);
 }
