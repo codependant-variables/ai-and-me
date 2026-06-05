@@ -14,8 +14,8 @@ import com.codependentvariables.aiandme.modules.validation.validators.DynamicVal
 import com.codependentvariables.aiandme.modules.validation.validators.EmailValidator;
 import com.codependentvariables.aiandme.modules.validation.validators.StringNotEmptyValidator;
 import com.codependentvariables.aiandme.services.AuthService;
-import com.codependentvariables.aiandme.services.LoginResult;
-import com.codependentvariables.aiandme.services.UserService;
+import com.codependentvariables.aiandme.services.user.LoginResult;
+import com.codependentvariables.aiandme.services.user.UserService;
 import com.codependentvariables.aiandme.modules.state.AppState;
 import com.codependentvariables.aiandme.modules.validation.FormValidator;
 import com.codependentvariables.aiandme.modules.validation.ValidationEntry;

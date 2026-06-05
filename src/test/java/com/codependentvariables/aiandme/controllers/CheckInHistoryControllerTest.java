@@ -9,7 +9,7 @@ import com.codependentvariables.aiandme.model.mock.*;
 import com.codependentvariables.aiandme.modules.router.Router;
 import com.codependentvariables.aiandme.modules.router.View;
 import com.codependentvariables.aiandme.services.CheckInService;
-import com.codependentvariables.aiandme.services.UserService;
+import com.codependentvariables.aiandme.services.user.UserService;
 import com.codependentvariables.aiandme.modules.state.AppState;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;

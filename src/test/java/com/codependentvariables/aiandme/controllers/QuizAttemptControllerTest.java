@@ -1,5 +1,6 @@
 package com.codependentvariables.aiandme.controllers;
 
+import com.codependentvariables.aiandme.JavaFXTest;
 import com.codependentvariables.aiandme.controller.QuizAttemptController;
 import com.codependentvariables.aiandme.model.QuizTemplate;
 import com.codependentvariables.aiandme.model.QuizTemplateAnswer;
@@ -28,31 +29,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 * https://docs.oracle.com/javase/8/javafx/api/javafx/scene/control/ToggleGroup.html
 * https://openjfx.io/javadoc/21/javafx.controls/javafx/scene/control/RadioButton.html
  */
-public class QuizAttemptControllerTest {
+public class QuizAttemptControllerTest extends JavaFXTest {
     private QuizAttemptController quizAttemptController;
     private final ToggleGroup answerGroup = new ToggleGroup();
-
-    @BeforeAll
-    static void disableUI() {
-        Dialogue.disable(); // if you add this method
-    }
-
-    @BeforeAll
-    static void initUI() throws Exception {
-        // Starts JavaFX before running any unit tests as it needs its own UI thread which isn't started by default in JUnit tests
-
-        try {
-            // Starts JavaFX runtime and creates the JavaFX application thread
-            Platform.startup(new Runnable() {
-                @Override
-                public void run() {
-                }
-            });
-        } catch (IllegalStateException ignored) {
-            // Toolkit already initialized, ignore
-        }
-        Dialogue.disable();
-    }
 
     @BeforeEach
     void setUp() {

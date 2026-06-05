@@ -1,4 +1,4 @@
-package com.codependentvariables.aiandme.services;
+package com.codependentvariables.aiandme.services.user;
 
 public enum LoginResult {
     INVALID,
