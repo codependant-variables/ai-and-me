@@ -1,5 +1,8 @@
 package com.codependentvariables.aiandme.modules.router;
 
+/**
+ * Defines the available views.
+ */
 public enum View {
     APP,
     CHECK_IN,

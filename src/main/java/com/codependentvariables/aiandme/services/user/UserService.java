@@ -16,6 +16,9 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Provides user authentication, account management, and user data operations.
+ */
 public class UserService {
     private static UserService instance;
 
@@ -245,6 +248,12 @@ public class UserService {
         }
     }
 
+    /**
+     * Exports quiz templates created by the specified user.
+     *
+     * @param userId the user identifier
+     * @return quiz templates and their associated questions and answers as JSON
+     */
     private JSONArray exportQuizTemplates(int userId) {
         List<QuizTemplate> quizTemplates = quizTemplateDAO.getByUserId(userId);
         return new JSONArray(quizTemplates.stream().map(x -> {
@@ -260,6 +269,12 @@ public class UserService {
         }).toList());
     }
 
+    /**
+     * Exports quiz attempts completed by the specified user.
+     *
+     * @param userId the user identifier
+     * @return quiz attempts and their associated questions and answers as JSON
+     */
     private JSONArray exportQuizAttempts(int userId) {
         List<QuizAttempt> quizAttempts = quizAttemptDAO.getByUserId(userId);
         return new JSONArray(quizAttempts.stream().map(x -> {
@@ -275,18 +290,38 @@ public class UserService {
         }).toList());
     }
 
+    /**
+     * Adds a preferred category for the current user.
+     *
+     * @param userPreferredCategory the preferred category to add
+     */
     public void addCurrentUserPreferredCategory(UserPreferredCategory userPreferredCategory) {
         userPreferredCategoryDAO.add(userPreferredCategory);
     }
 
+    /**
+     * Removes a preferred category from the current user.
+     *
+     * @param userPreferredCategory the preferred category to remove
+     */
     public void deleteCurrentUserPreferredCategory(UserPreferredCategory userPreferredCategory) {
         userPreferredCategoryDAO.delete(userPreferredCategory);
     }
 
+    /**
+     * Gets all preferred categories for the current user.
+     *
+     * @return the current user's preferred categories
+     */
     public List<UserPreferredCategory> getCurrentUserPreferredCategories() {
         return userPreferredCategoryDAO.getByUserId(appState.getCurrentUser().getId());
     }
 
+    /**
+     * Removes a preferred category from the database.
+     *
+     * @param userPreferredCategory the preferred category to remove
+     */
     public void removeUserPreferredCategory(UserPreferredCategory userPreferredCategory) {
         userPreferredCategoryDAO.delete(userPreferredCategory);
     }

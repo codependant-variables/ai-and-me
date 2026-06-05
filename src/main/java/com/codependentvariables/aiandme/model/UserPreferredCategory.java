@@ -1,5 +1,8 @@
 package com.codependentvariables.aiandme.model;
 
+/**
+ * Stores information about a user's preferred quiz categories
+ */
 public class UserPreferredCategory {
     private int userId;
     private int categoryId;

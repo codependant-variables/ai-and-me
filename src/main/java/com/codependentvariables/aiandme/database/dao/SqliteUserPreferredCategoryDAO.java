@@ -6,6 +6,10 @@ import com.codependentvariables.aiandme.model.dao.IUserPreferredCategoryDAO;
 
 import java.util.List;
 
+/**
+ * SQLite implementation of the user preferred category data access object.
+ * Provides CRUD operations for user preferred categories.
+ */
 public class SqliteUserPreferredCategoryDAO extends BaseSqliteDAO implements IUserPreferredCategoryDAO, IDatabaseEntity {
     private static final String schemaQuery = """
                 CREATE TABLE IF NOT EXISTS user_preferred_categories (

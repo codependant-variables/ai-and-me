@@ -10,6 +10,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+/**
+ * Provides home screen data related to user check-ins.
+ */
 public class HomeService {
     private static HomeService instance;
     private final ICheckInDAO checkInDAO;
@@ -20,6 +23,11 @@ public class HomeService {
         this.checkInDAO = checkInDAO;
     }
 
+    /**
+     * Returns the HomeService instance.
+     *
+     * @return the singleton HomeService instance
+     */
     public static HomeService getInstance() {
         if (instance == null) {
             instance = new HomeService(new SqliteCheckInDAO());
@@ -27,6 +35,11 @@ public class HomeService {
         return instance;
     }
 
+    /**
+     * Returns the date and time of the user's most recent check-in.
+     *
+     * @return the last check-in date, or a message if no check-ins exist
+     */
     public String getLastCheckInDate() {
         if (appState.getCurrentUser() != null) {
             if (checkInDAO.getAllByUserId(appState.getCurrentUser().getId()).isEmpty()) {
@@ -39,6 +52,11 @@ public class HomeService {
         return "Sign in to complete a check-in!";
     }
 
+    /**
+     * Calculates the user's current check-in streak.
+     *
+     * @return the current streak count
+     */
     public String getCheckInStreak() {
         if (appState.getCurrentUser() != null) {
             List<CheckIn> userCheckIns = checkInDAO.getAllByUserId(appState.getCurrentUser().getId());

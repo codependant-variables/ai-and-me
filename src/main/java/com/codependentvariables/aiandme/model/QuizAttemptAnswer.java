@@ -1,5 +1,8 @@
 package com.codependentvariables.aiandme.model;
 
+/**
+ * Stores information about a quiz attempt answer
+ */
 public class QuizAttemptAnswer {
     private int id;
     private int quizAttemptQuestionId;

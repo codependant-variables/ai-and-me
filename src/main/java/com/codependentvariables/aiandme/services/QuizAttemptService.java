@@ -11,7 +11,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-/****
+/**
  * Service layer for handling quiz attempts.
  * Coordinates between the UI and the data access layer to save and retrieve quiz attempt data.
  */
@@ -30,6 +30,11 @@ public class QuizAttemptService {
         this.categoryDAO = categoryDAO;
     }
 
+    /**
+     * Returns the QuizAttemptService instance.
+     *
+     * @return the singleton QuizAttemptService instance
+     */
     public static QuizAttemptService getInstance() {
         if (instance == null) {
             instance = new QuizAttemptService(new SqliteQuizAttemptDAO(), new SqliteQuizAttemptQuestionDAO(), new SqliteQuizAttemptAnswerDAO(), new SqliteCategoryDAO());
@@ -37,11 +42,28 @@ public class QuizAttemptService {
         return instance;
     }
 
+    /**
+     * Creates a QuizAttemptService instance for unit testing.
+     *
+     * @param quizAttemptDAO DAO for quiz attempts
+     * @param quizAttemptQuestionDAO DAO for quiz attempt questions
+     * @param quizAttemptAnswerDAO DAO for quiz attempt answers
+     * @param categoryDAO DAO for categories
+     * @return configured QuizAttemptService instance
+     */
     public static QuizAttemptService createForTest(IQuizAttemptDAO quizAttemptDAO, IQuizAttemptQuestionDAO quizAttemptQuestionDAO, IQuizAttemptAnswerDAO quizAttemptAnswerDAO, ICategoryDAO categoryDAO) {
         instance = new QuizAttemptService(quizAttemptDAO, quizAttemptQuestionDAO, quizAttemptAnswerDAO, categoryDAO);
         return instance;
     }
 
+    /**
+     * Saves a completed quiz attempt and its selected answers.
+     *
+     * @param template the quiz template that was attempted
+     * @param userId the user who completed the attempt
+     * @param selectedAnswers the answers selected by the user
+     * @return the number of correct answers
+     */
     public int saveAttempt(QuizTemplate template,
                            int userId,
                            List<QuizTemplateAnswer> selectedAnswers) {
@@ -104,12 +126,21 @@ public class QuizAttemptService {
         return correct;
     }
 
-    /** Returns all attempts ever recorded (useful for history views). */
+    /**
+     * Returns all recorded quiz attempts.
+     *
+     * @return list of quiz attempts
+     */
     public List<QuizAttempt> getAllAttempts() {
         return quizAttemptDAO.getAll();
     }
 
-    /** Returns all attempts for a specific user. */
+    /**
+     * Returns all quiz attempts for a specific user.
+     *
+     * @param userId the user identifier
+     * @return list of the user's quiz attempts
+     */
     public List<QuizAttempt> getByUserId(int userId) {
         return quizAttemptDAO.getByUserId(userId);
     }

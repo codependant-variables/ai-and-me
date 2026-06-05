@@ -7,6 +7,10 @@ import com.codependentvariables.aiandme.model.dao.IQuizTemplateAnswerDAO;
 
 import java.util.List;
 
+/**
+ * SQLite implementation of the QuizTemplateAnswer data access object.
+ * Provides CRUD operations for quiz template answers.
+ */
 public class SqliteQuizTemplateAnswerDAO extends BaseSqliteDAO implements IQuizTemplateAnswerDAO, IDatabaseEntity {
     private static final String schemaQuery = """
                 CREATE TABLE IF NOT EXISTS quiz_template_answers (

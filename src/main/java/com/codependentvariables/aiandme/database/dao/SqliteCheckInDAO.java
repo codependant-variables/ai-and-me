@@ -7,7 +7,14 @@ import com.codependentvariables.aiandme.model.dao.ICheckInDAO;
 import java.util.List;
 import java.time.LocalDateTime;
 
+/**
+ * SQLite implementation of the CheckIn data access object.
+ * Provides CRUD operations for check-in records.
+ */
 public class SqliteCheckInDAO extends BaseSqliteDAO implements ICheckInDAO, IDatabaseEntity {
+    /**
+     * SQL statement used to create the check_ins table.
+     */
     private static final String schemaQuery = """
                 CREATE TABLE IF NOT EXISTS check_ins (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -20,19 +27,35 @@ public class SqliteCheckInDAO extends BaseSqliteDAO implements ICheckInDAO, IDat
                 );
             """;
 
+    /**
+     * Initial seed data inserted into the check_ins table.
+     */
     private static final String seedDataQuery = """
                 INSERT INTO check_ins (user_id, ai_use, ai_happiness, ai_dependence, comment, completed_at) VALUES (1, 5.0, 5.0, 5.0, "Feel good about AI usage", '2026-04-14T17:28:00');
                 INSERT INTO check_ins (user_id, ai_use, ai_happiness, ai_dependence, comment, completed_at) VALUES (2, 7.5, 2.5, 7.5, "Could rely on ai less", '2026-04-16T14:16:00');
             """;
 
+    /**
+     * Returns the SQL statement used to create the check_ins table.
+     *
+     * @return create table SQL statement
+     */
     public String getSchemaQuery() {
         return schemaQuery;
     }
 
+    /**
+     * Returns the SQL statement used to seed initial check-in data.
+     *
+     * @return seed data SQL statement
+     */
     public String getSeedDataQuery() {
         return seedDataQuery;
     }
 
+    /**
+     * Converts rows returned from the check_ins table into CheckIn objects.
+     */
     private static final IRowMapper<CheckIn> CHECKIN_MAPPER = (resultSet) -> {
         CheckIn checkin = new CheckIn(
                 resultSet.getInt("user_id"),
@@ -49,6 +72,11 @@ public class SqliteCheckInDAO extends BaseSqliteDAO implements ICheckInDAO, IDat
         return checkin;
     };
 
+    /**
+     * Adds a new check-in to the database.
+     *
+     * @param checkIn the check-in to add
+     */
     public void add(CheckIn checkIn) {
         final String query = """
                 INSERT INTO check_ins (
@@ -73,23 +101,44 @@ public class SqliteCheckInDAO extends BaseSqliteDAO implements ICheckInDAO, IDat
         checkIn.setId(id);
     }
 
+    /**
+     * Deletes a check-in from the database.
+     *
+     * @param checkIn the check-in to delete
+     */
     public void delete(CheckIn checkIn) {
         final String query = "DELETE FROM check_ins WHERE id = ?";
 
         executeSql(query, statement -> statement.setInt(1, checkIn.getId()));
     }
 
+    /**
+     * Deletes all check-ins associated with a user.
+     *
+     * @param userId the user identifier
+     */
     public void deleteByUserId(int userId) {
         final String query = "DELETE FROM check_ins WHERE user_id = ?";
 
         executeSql(query, statement -> statement.setInt(1, userId));
     }
 
+    /**
+     * Retrieves all check-ins ordered by completion date descending.
+     *
+     * @return list of all check-ins
+     */
     public List<CheckIn> getAll() {
         final String query = "SELECT * FROM check_ins ORDER BY completed_at DESC";
         return executeQuery(query, CHECKIN_MAPPER);
     }
 
+    /**
+     * Retrieves a check-in by its identifier.
+     *
+     * @param id the check-in identifier
+     * @return the matching check-in, or null if not found
+     */
     public CheckIn get(int id) {
         final String query = "SELECT * FROM check_ins WHERE id = ? LIMIT 1";
 
@@ -97,6 +146,12 @@ public class SqliteCheckInDAO extends BaseSqliteDAO implements ICheckInDAO, IDat
         return firstOrNull(checkIns);
     }
 
+    /**
+     * Retrieves all check-ins for a specific user.
+     *
+     * @param userId the user identifier
+     * @return list of check-ins belonging to the user
+     */
     @Override
     public List<CheckIn> getAllByUserId(int userId) {
         final String query = "SELECT * FROM check_ins WHERE user_id = ? ORDER BY completed_at DESC";

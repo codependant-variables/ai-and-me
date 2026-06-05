@@ -7,6 +7,9 @@ import javafx.scene.layout.StackPane;
 import java.io.IOException;
 import java.net.URL;
 
+/**
+ * Utility methods for loading and resolving application views.
+ */
 public final class ViewUtils {
     private ViewUtils() {} // Prevent instantiation
 
@@ -37,6 +40,7 @@ public final class ViewUtils {
 
     /**
      * Gets resource name for a view
+     * @param view the view to resolve
      * @return Resource name
      */
     public static String getResourceName(View view) {

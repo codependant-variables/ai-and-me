@@ -4,6 +4,9 @@ import com.codependentvariables.aiandme.services.AuthService;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+/**
+ * Stores information about a user
+ */
 public class User {
     private int id;
     private String name;

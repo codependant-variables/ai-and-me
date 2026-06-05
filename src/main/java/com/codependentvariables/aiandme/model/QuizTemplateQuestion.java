@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Stores information about a quiz template question
+ */
 public class QuizTemplateQuestion {
     private int id;
     private int quizTemplateId;

@@ -17,6 +17,9 @@ import java.security.spec.KeySpec;
 import java.util.Base64;
 import java.util.Objects;
 
+/**
+ * Provides password hashing, password verification, and TOTP authentication services.
+ */
 public class AuthService {
     private static AuthService instance;
     private final SecureRandom random = new SecureRandom();
@@ -30,6 +33,11 @@ public class AuthService {
         }
     }
 
+    /**
+     * Returns the AuthService instance.
+     *
+     * @return the singleton AuthService instance
+     */
     public static AuthService getInstance() {
         if (instance == null) {
             instance = new AuthService();
@@ -37,12 +45,24 @@ public class AuthService {
         return instance;
     }
 
+    /**
+     * Generates a cryptographically secure random byte array.
+     *
+     * @param num number of bytes to generate
+     * @return random byte array
+     */
     private byte[] getRandomBytes(int num) {
         byte[] bytes = new byte[num];
         random.nextBytes(bytes);
         return bytes;
     }
 
+    /**
+     * Stores the result of a password hash operation.
+     *
+     * @param hash the generated hash
+     * @param salt the salt used to generate the hash
+     */
     public record HashResult(String hash, String salt) {}
 
     /**
@@ -104,25 +124,44 @@ public class AuthService {
     private final static String TOTP_LABEL = "AI and Me";
     private final Mac hmac;
 
+    /**
+     * Creates a new TOTP secret.
+     *
+     * @return a Base32-encoded TOTP secret
+     */
     public String createTotpSecret() {
         byte[] bytes = getRandomBytes(16);
         // TODO: encrypt?
         return base32.encodeAsString(bytes).replace("=", "");
     }
 
+    /**
+     * Creates an otpauth URI for use with authenticator applications.
+     *
+     * @param totpSecret the user's TOTP secret
+     * @param userEmail the user's email address
+     * @return the generated otpauth URI
+     */
     public String createTotpUri(String totpSecret, String userEmail) {
         return String.format("otpauth://totp/%s:%s?secret=%s&algorithm=%s&digits=%s&period=%d&issuer=%s", TOTP_LABEL, userEmail, totpSecret, TOTP_ALGORITHM, TOTP_SIZE, STEP_SECONDS, TOTP_LABEL);
     }
 
     /**
-     * Get TOTP from current time.
+     * Generates the current TOTP code for a secret.
+     *
+     * @param totpSecret the TOTP secret
+     * @return the current TOTP code
      */
     public String getTotp(String totpSecret) {
         return getTotp(totpSecret, 0);
     }
 
     /**
-     * Get TOTP from time adding a number of steps.
+     * Generates a TOTP code using a time offset.
+     *
+     * @param totpSecret the TOTP secret
+     * @param addSteps number of time steps to offset
+     * @return the generated TOTP code
      */
     public String getTotp(String totpSecret, int addSteps) {
         byte[] totpSecretBytes = base32.decode(totpSecret);
@@ -161,10 +200,24 @@ public class AuthService {
         }
     }
 
+    /**
+     * Verifies a TOTP code against a user's secret.
+     *
+     * @param user the user to verify
+     * @param totp the code to verify
+     * @return true if the code is valid
+     */
     public boolean compareTotp(User user, String totp) {
         return compareTotp(user.getTotpSecret(), totp);
     }
 
+    /**
+     * Verifies a TOTP code against a secret, allowing for minor clock drift.
+     *
+     * @param totpSecret the TOTP secret
+     * @param totp the code to verify
+     * @return true if the code is valid
+     */
     public boolean compareTotp(String totpSecret, String totp) {
         String currentTotp = getTotp(totpSecret);
         if (Objects.equals(currentTotp, totp)) {

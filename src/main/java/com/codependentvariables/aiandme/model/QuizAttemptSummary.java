@@ -5,6 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Stores information about a quiz attempt summary
+ */
 public class QuizAttemptSummary {
 
     private final String quizName;

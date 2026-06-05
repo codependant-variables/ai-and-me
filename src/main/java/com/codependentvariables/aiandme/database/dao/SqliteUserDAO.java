@@ -8,6 +8,10 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * SQLite implementation of the User data access object.
+ * Provides CRUD operations for users.
+ */
 public class SqliteUserDAO extends BaseSqliteDAO implements IUserDAO, IDatabaseEntity {
     private static final String schemaQuery = """
             CREATE TABLE IF NOT EXISTS users (

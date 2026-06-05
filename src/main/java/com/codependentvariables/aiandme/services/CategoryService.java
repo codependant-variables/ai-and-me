@@ -10,6 +10,9 @@ import com.codependentvariables.aiandme.modules.state.AppState;
 
 import java.util.List;
 
+/**
+ * Provides operations for creating and retrieving categories.
+ */
 public class CategoryService {
     private static CategoryService instance;
 
@@ -20,6 +23,11 @@ public class CategoryService {
         this.categoryDAO = categoryDAO;
     }
 
+    /**
+     * Returns the CategoryService instance.
+     *
+     * @return the singleton CategoryService instance
+     */
     public static CategoryService getInstance() {
         if (instance == null) {
             instance = new CategoryService(new SqliteCategoryDAO());
@@ -27,6 +35,12 @@ public class CategoryService {
         return instance;
     }
 
+    /**
+     * Creates a CategoryService instance for unit testing.
+     *
+     * @param categoryDAO DAO implementation to use
+     * @return configured CategoryService instance
+     */
     public static CategoryService createForTest(ICategoryDAO categoryDAO) {
         instance = new CategoryService(categoryDAO);
         return instance;
